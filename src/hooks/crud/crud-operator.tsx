@@ -12,8 +12,8 @@ interface Props {
     viewUrl: string
     state_properties: any[]
     callBackFunction?: (selectedCard: string, id?: string) => void
-    selectedViewCard?: string
-
+    selectedViewCard?: string,
+    emailNotificationBody?: any
 }
 
 export const useCrudOperator = (
@@ -25,9 +25,9 @@ export const useCrudOperator = (
         state_properties,
         callBackFunction,
         selectedViewCard,
+        emailNotificationBody: incomingEmailNotificationBody,
     }: Props
 ) => {
-
     const router = useRouter()
     const [selected, setSelected] = useState<any>()
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -37,6 +37,7 @@ export const useCrudOperator = (
     const [modalTitle, setModalTitle] = useState(incomingModalTitle)
     const [modalBodyArray, setModalBodyArray] = useState<any[]>(formInputData)
     const [modalBodyString, setModalBodyString] = useState('')
+    const [emailNotificationBody, setEmailNotificationBody] = useState(incomingEmailNotificationBody)
     const [isButtonDisabled, setIsButtonDisabled] = useState(false)
     const [isForm, setIsForm] = useState(true)
     const onCloseModal = () => setIsModalOpen(false)
@@ -55,13 +56,13 @@ export const useCrudOperator = (
         onSaveButtonName: onSaveButtonName,
         payloadForEdit: selected,
         state_properties: state_properties,
+        emailNotificationBody: emailNotificationBody
     }
 
     const {
         createdForm,
         isStateChanged,
     } = useCrudFormCreator(formPayload)
-
 
     const parseDate = (value: any) => {
         const dateArray = value.split('-')
@@ -102,6 +103,13 @@ export const useCrudOperator = (
     }, [...state_properties])
 
 
+    const handleNotificationPayload = (type: string) => {
+        if (emailNotificationBody && Object.keys(emailNotificationBody).length > 0) {
+            const newEmailNotificationBody = { ...emailNotificationBody, operation: type }
+            setEmailNotificationBody(newEmailNotificationBody)
+        }
+    }
+
     const handleClick = (type: string, payload?: any) => {
         if (type.toLowerCase() === 'create') {
             setIsModalOpen(true)
@@ -110,6 +118,7 @@ export const useCrudOperator = (
             setOnSaveButtonName('Save')
             setUrl(`${incomingUrl}/store`)
             setHttpMethod('post')
+            handleNotificationPayload('create')
         }
 
         if (type.toLowerCase() === 'edit') {
@@ -121,6 +130,7 @@ export const useCrudOperator = (
             setSelected(payload)
             setUrl(`${incomingUrl}/update/${payload?.id}`)
             setHttpMethod('put')
+            handleNotificationPayload('edit')
         }
 
         if (type.toLowerCase() === 'delete') {
@@ -131,9 +141,12 @@ export const useCrudOperator = (
             setIsForm(false)
             setOnSaveButtonName('Yes')
             setModalBodyString(`Are You Sure You Want to Delete this ${incomingModalTitle} ${payload.name}`)
+            handleNotificationPayload('delete')
         }
 
         if (type.toLowerCase() === 'show') {
+            handleNotificationPayload("show")
+
             if (callBackFunction) {
 
                 if (selectedViewCard === 'goal/show') {

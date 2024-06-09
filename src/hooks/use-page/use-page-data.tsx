@@ -23,6 +23,9 @@ interface Props {
     isHideShow?: boolean;
     isHideDelete?: boolean;
     isHideEdit?: boolean;
+    isCreateAndSend?: string;
+    emailNotificationBody?: any,
+
 }
 
 export const usePageData = ({
@@ -39,7 +42,8 @@ export const usePageData = ({
     permission,
     isHideShow,
     isHideDelete,
-    isHideEdit
+    isHideEdit,
+    emailNotificationBody
 }: Props
 
 ) => {
@@ -67,6 +71,7 @@ export const usePageData = ({
         state_properties: state_properties,
         selectedViewCard: selectedViewCard,
         callBackFunction: callBackFunction,
+        emailNotificationBody: emailNotificationBody
     })
 
     const { tabular } = usePopulateTable({

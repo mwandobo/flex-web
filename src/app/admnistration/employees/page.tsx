@@ -149,14 +149,13 @@ function Employees({
         modalTitle: 'Employee',
         viewUrl: '/admnistration/employees/',
         state_properties: [],
-        permission: permission
+        permission: permission,
+        emailNotificationBody: { code: 'create-employee', operation: null, id: null },
     })
     return (
         <ProtectedRoute>
             <>{
                 !checkPermissions(`${permission}-list`) ? <p>You are not authorized</p> : <>
-
-
                     {
                         loading ? <p>Loading...</p>
                             :

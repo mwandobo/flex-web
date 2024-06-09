@@ -5,9 +5,11 @@ import TextArea from "@/components/inputs/text-area"
 import TextFieldComponent from "@/components/inputs/text-field"
 import PopupModal from "@/components/modal/popup-modal"
 import { getValueFromLocalStorage } from "@/utils/actions/local-starage"
+import { send_email } from "@/utils/actions/send-email"
 import { post, put, remove } from "@/utils/api"
 import { CheckCircle2 } from "lucide-react"
 import { useEffect, useState } from "react"
+import Swal from "sweetalert2"
 import swal from 'sweetalert2';
 
 
@@ -24,7 +26,8 @@ interface Props {
     isButtonDisabled?: boolean
     isForm?: boolean
     state_properties: any[]
-    isMultipart?: boolean
+    isMultipart?: boolean,
+    emailNotificationBody?: any
 }
 
 export const useCrudFormCreator = ({
@@ -39,8 +42,8 @@ export const useCrudFormCreator = ({
     isButtonDisabled,
     isForm,
     state_properties = [],
+    emailNotificationBody
 }: Props) => {
-
     const createPayload = (body: any[]) => {
         const payload: any = {};
         body?.forEach((input) => {
@@ -101,7 +104,6 @@ export const useCrudFormCreator = ({
                 if (input.name === 'name') {
                     return { ...input, isRemoved: true }
                 }
-
                 return input
             }
             if (Number(value) === 11) {
@@ -114,8 +116,6 @@ export const useCrudFormCreator = ({
                 return input
             }
             return input
-
-
         });
         return newformInputs; // Return the modified array
     };
@@ -240,6 +240,17 @@ export const useCrudFormCreator = ({
         return validation
     }
 
+    const sendEmail = async (emailBody: any) => {
+        const emailresponse = await send_email(emailBody)
+        if (emailresponse.status === 200) {
+            Swal.fire({
+                title: "Email Sent SuccessFully",
+                text: "Email was sent successfully",
+                icon: "success"
+            })
+        }
+    }
+
     const handleSubmit = async () => {
         try {
 
@@ -265,9 +276,6 @@ export const useCrudFormCreator = ({
                         formData['d_o_b'] = `${convertedDateArray[1]}-${convertedDateArray[0]}-${convertedDateArray[2]}`
                     }
 
-
-                    console.log(formData)
-
                     if (httpMethod === 'post') {
                         response = await post<any>(url, formData, token)
                     }
@@ -278,6 +286,24 @@ export const useCrudFormCreator = ({
                 }
             }
             if (response?.status === 200) {
+
+                if (emailNotificationBody &&
+                    Object.keys(emailNotificationBody).length > 0 &&
+                    emailNotificationBody['code'] === 'create-employee' &&
+                    emailNotificationBody['operation'] === 'create'
+                ) {
+                    // const emailBody = {
+                    //     receipient_name: "Boniface Mwandobo",
+                    //     receipient_email: "breezojr@gmail.com",
+                    //     subject: "Approval",
+                    //     body: ["body"]
+                    // }
+
+                    console.log(response)
+
+                    const emailBody = { ...emailNotificationBody, id: response?.data?.data?.id }
+                    sendEmail(emailBody)
+                }
                 setIsStateChanged(!isStateChanged)
                 closeModel()
             }
