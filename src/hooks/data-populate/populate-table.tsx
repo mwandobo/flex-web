@@ -1,0 +1,141 @@
+import CrudButtonsComponent from "@/components/crud-operator-buttons"
+import FormattedMoney from "@/components/moneyFormater"
+import ProgressStatus from "@/components/status/progress"
+import MuiTable from "@/components/tables/mui-table"
+import { statusFormatter } from "@/utils/actions/status-formatter"
+
+interface Props {
+    columns: any[]
+    data: any[]
+    handleClick: (typr: string, payload: any) => void
+    show_assign?: boolean
+    permission?: string;
+    isHideShow?: boolean;
+    isHideDelete?: boolean;
+    isHideEdit?: boolean;
+}
+
+export const usePopulateTable = ({
+    columns,
+    data,
+    handleClick,
+    show_assign,
+    permission,
+    isHideShow,
+    isHideDelete,
+    isHideEdit
+}: Props) => {
+    const createRowHeader = () => {
+        let newColumns: any[] = []
+
+        columns.forEach(column => {
+            if (!column.isHidden) {
+                newColumns = [...newColumns, column]
+            }
+        })
+
+        return [
+            ...newColumns,
+            {
+                id: 'actions',
+                numeric: false,
+                disablePadding: false,
+                label: 'Actions',
+                width: '5%',
+            },
+        ]
+    }
+
+    const createRowHeaderArray = () => {
+        let newColumns: any[] = []
+
+        createRowHeader().forEach(column => {
+            if (!column.isHidden) {
+                newColumns = [...newColumns, column.id]
+            }
+        })
+
+        return newColumns
+    }
+
+    function sortObjectValuesByHeaders(obj: any, headers: any[]) {
+        return headers.map(header => obj[header]);
+    }
+
+    const createRowData = () => {
+        let newData: any = []
+
+        if (data && data.length > 0) {
+            // Array to hold sorted data
+
+            newData = data.map(obj => {
+                if (obj.has_url) {
+                    obj = { ...obj, file: <p className="mb-1"><a href={obj.location} className="text-blue-600 border-b border-gray-300">{obj.name}</a></p> }
+                }
+
+                if (obj.has_progress_status) {
+                    obj = { ...obj, progress_status: <p className="mb-1"> {statusFormatter(obj.progress_status)} </p> }
+                }
+
+                if (obj.has_progress_status_task) {
+                    obj = { ...obj, progress_status: <ProgressStatus status={obj.progress_status} /> }
+                }
+
+                if (obj.cost) {
+                    obj = { ...obj, cost: <FormattedMoney amount={obj.cost} /> }
+                }
+
+                if (obj.resource_cost) {
+                    obj = { ...obj, resource_cost: <FormattedMoney amount={obj.resource_cost} /> }
+                }
+
+                if (obj.total_cost) {
+                    obj = { ...obj, total_cost: <FormattedMoney amount={obj.total_cost} /> }
+                }
+
+                if (obj.total_direct_cost) {
+                    obj = { ...obj, total_direct_cost: <FormattedMoney amount={obj.total_direct_cost} /> }
+                }
+
+                if (obj.total_resource_cost) {
+                    obj = { ...obj, total_resource_cost: <FormattedMoney amount={obj.total_resource_cost} /> }
+                }
+
+                if (obj.grand_total_cost) {
+                    obj = { ...obj, grand_total_cost: <FormattedMoney amount={obj.grand_total_cost} /> }
+                }
+
+                obj.actions = <CrudButtonsComponent
+                    hide_approve={true}
+                    handleClick={handleClick}
+                    input={obj}
+                    show_assign={show_assign}
+                    permission={permission}
+                    hide_view={isHideShow}
+                    hide_edit={isHideDelete}
+                    hide_delete={isHideDelete}
+                />
+
+                return sortObjectValuesByHeaders(obj, createRowHeaderArray())
+            })
+
+        }
+        return newData
+    }
+
+
+    const tabular = () => {
+        return (
+            <div className="w-96" style={{ width: '100%' }}>
+                <MuiTable
+                    data={createRowData()}
+                    columns={createRowHeader()}
+                />
+            </div>
+        )
+    }
+
+    return {
+        tabular
+    }
+}
