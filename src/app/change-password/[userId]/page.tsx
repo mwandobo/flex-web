@@ -8,11 +8,12 @@ import { BackgroundDiv, FormContainer, LogoContainer, Image } from './login.styl
 import { Card } from '@mui/material'
 import TextFieldComponent from '@/components/inputs/text-field'
 
-export default function ChangePasswordPage() {
+const ChangePasswordPage = ({ params }: { params: { userId: string } }) => {
     const [new_password, setNewPassword] = useState('')
     const [new_password_confirmation, setNewPasswordConformation] = useState('')
-    // const searchParams = useSearchParams()
     const [loading, setLoading] = useState(false)
+    const userId = params.userId
+
     const email = ''
 
     const router = useRouter()
@@ -30,7 +31,8 @@ export default function ChangePasswordPage() {
         try {
             setLoading(!loading)
             const payload = {
-                new_password, new_password_confirmation, email
+                new_password, new_password_confirmation, user_id: userId
+
             }
 
             if (!new_password) {
@@ -41,12 +43,16 @@ export default function ChangePasswordPage() {
                 throw ('new_password_confirmation Not Found')
             }
 
+            if (new_password !== new_password_confirmation) {
+                throw ('password mismatch')
+            }
+
             const response = await post<any>('user/changePassword', payload)
 
             if (response.status === 200) {
                 setLoading(!loading)
 
-                router.push('login')
+                router.push('/login')
             }
 
         } catch (error) {
@@ -56,7 +62,7 @@ export default function ChangePasswordPage() {
 
     return (
 
-        <BackgroundDiv>
+        <div className='w-screen flex fixed top-0 left-0 h-screen shadow-lg z-20 -mr-64 flex-col items-center justify-center bg-white '>
             <Image src="/background.png" />
 
             <FormContainer>
@@ -102,8 +108,8 @@ export default function ChangePasswordPage() {
                         </Card>
                 }
             </FormContainer>
-
-
-        </BackgroundDiv>
+        </div>
     )
 }
+
+export default ChangePasswordPage

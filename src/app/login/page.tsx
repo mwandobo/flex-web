@@ -39,30 +39,43 @@ export default function LoginPage() {
             }
 
             if (!password || password.length < 6) {
-                throw ('Password required and mus be greater than 6')
+                throw ('Password required and it was greater than 6')
             }
 
             const response = await post<any>('login', { email, password })
-            const user = response?.data?.user
-            const role = response?.data?.role
-            const permissions = response?.data?.permissions
-            const token = JSON.stringify(user?.token);
 
-            // dispatch 
-            dispatch({ type: 'SET_CURRENT_USER', payload: user })
+            if (response.status === 200) {
+                const user = response?.data?.user
+                const role = response?.data?.role
+                const permissions = response?.data?.permissions
+                const token = JSON.stringify(user?.token);
 
-            if (setValueLocalStorage('token', token) === 1 &&
-                setValueLocalStorage('user', JSON.stringify(user)) &&
-                setValueLocalStorage('role', JSON.stringify(role)) &&
-                setValueLocalStorage('permissions', JSON.stringify(permissions))
-            ) {
-                setLoading(!loading)
-                router.push('/')
+                if (Number(user.is_otp_verified) === 0) {
+                    router.push(`/verify-otp/${user.id}`)
+                    return;
+                }
 
-            } else {
-                alert('error setting value to local storage')
+                if (Number(user.is_password_changed) === 0) {
+                    router.push(`/change-password/${user.id}`)
+                    return;
+                }
 
+                // dispatch 
+                dispatch({ type: 'SET_CURRENT_USER', payload: user })
+                if (setValueLocalStorage('token', token) === 1 &&
+                    setValueLocalStorage('user', JSON.stringify(user)) &&
+                    setValueLocalStorage('role', JSON.stringify(role)) &&
+                    setValueLocalStorage('permissions', JSON.stringify(permissions))
+                ) {
+                    setLoading(!loading)
+                    router.push('/')
+
+                } else {
+                    alert('error setting value to local storage')
+
+                }
             }
+
 
         } catch (error) {
             console.error('Error storing data in localStorage:', error);
