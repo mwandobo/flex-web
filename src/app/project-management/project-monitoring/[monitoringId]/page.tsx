@@ -73,9 +73,17 @@ const ProjectShow = ({ params }: { params: { monitoringId: string } }) => {
         setIsCollecting(!isCollecting)
     }
 
-    const handleFormInputChange = (e: any, indicator: any) => {
-        setFormPayload({ indicator_id: indicator.id, quantity: e.target.value, name: "collected_data" })
+    const handleFormInputChange = (e: any, indicator: any, from: string) => {
+        switch (from) {
+            case 'progress':
+                setFormPayload({ ...formPayload, indicator_id: indicator.id, quantity: e.target.value, name: "collected_data", }); break;
+            case 'cost':
+                setFormPayload({ ...formPayload, indicator_id: indicator.id, cost: e.target.value, name: "collected_data" }); break;
+            default: break;
+        }
     }
+
+    console.log(formPayload)
     const handleSubmitCollectedData = async () => {
         if (formPayload) {
             const response = await post<any>('collected_data/store', formPayload, token)
@@ -119,7 +127,7 @@ const ProjectShow = ({ params }: { params: { monitoringId: string } }) => {
             <div className="w-11/12 mx-auto border border-gray-300 flex flex-col px-2">
                 <div className="font-semibold text-sm py-1"><h5>Indicators List</h5></div>
                 <div className="mb-1">
-                    <div className="grid grid-cols-9 gap-4 text-xs border-b border-gray-300">
+                    <div className="grid grid-cols-10 gap-4 text-xs border-b border-gray-300">
                         <p className="" >#</p>
                         <p className="">Code</p>
                         <p className="">Indicator Name</p>
@@ -128,6 +136,7 @@ const ProjectShow = ({ params }: { params: { monitoringId: string } }) => {
                         <p className="">Target Data</p>
                         <p className="">Collected Data</p>
                         <p className="">Progress</p>
+                        <p className="">Cost</p>
                         <p className=""></p>
                     </div>
                 </div>
@@ -135,7 +144,7 @@ const ProjectShow = ({ params }: { params: { monitoringId: string } }) => {
                     {
                         payload.map((item: any, index: any) =>
                             <div key={index} className="flex ">
-                                <div className="grid grid-cols-9 gap-4 w-full text-xs p-1 border-b border-gray-300 ">
+                                <div className="grid grid-cols-10 gap-4 w-full text-xs p-1 border-b border-gray-300 ">
                                     <p>{index + 1}</p>
                                     <p>{item.formatted_code}</p>
                                     <p>{item.name}</p>
@@ -143,9 +152,20 @@ const ProjectShow = ({ params }: { params: { monitoringId: string } }) => {
                                     <p>{item.baseline_data}</p>
                                     <p>{item.target_data}</p>
                                     <p>{item.collected_data}</p>
+
                                     {isCollecting ?
-                                        <input type="text" placeholder="Enter Data" className="ps-1 h-7 w-20" onChange={(e) => handleFormInputChange(e, item)} /> :
-                                        <p className="">{progresRender(item.progress)}</p>
+                                        <>
+                                            <input type="text" placeholder="Enter Data" className="ps-1 h-7 w-20" onChange={(e) => handleFormInputChange(e, item, 'progress')} />
+                                            {item.from === 'activity' &&
+                                                <input type="text" placeholder="Enter Data" className="ps-1 h-7 w-20" onChange={(e) => handleFormInputChange(e, item, 'cost')} />
+
+                                            }
+                                        </> :
+                                        <>
+                                            <p className="">{progresRender(item.progress)}</p>
+                                            <p className="">{item.cost}</p>
+                                        </>
+
                                     }
 
                                     {isCollecting &&
