@@ -91,7 +91,6 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
             project_id={id}
             isHideAdd={true}
         />,
-
         <Risk
             key={'risk'}
             project_id={id}
@@ -113,7 +112,6 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
             isHideAdd={true}
         />
     ];
-
 
     return (
         <ProtectedRoute>
@@ -147,7 +145,6 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                                 titleA="Project"
                                 titleB={data?.name}
                             />
-
                         </MuiCardComponent>
                         <MuiCardComponent>
                             <MuiTab
@@ -156,11 +153,12 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                                     "Pillars",
                                     "Sponsors",
                                     "Stakeholders",
+                                    "Costs",
                                     "Risks",
                                     "Assumptions & constraints",
-                                    "Deliverables",
-                                    "Direct Costs",
-                                    "Resource Costs",
+                                    "Resources Budget",
+                                    "Direct Budget",
+                                    "Deliverable"
                                 ]}
                                 nodes={nodes}
                             >

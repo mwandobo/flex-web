@@ -261,7 +261,7 @@ export const useCrudFormCreator = ({
                 response = await remove<any>(url, token)
             } else {
                 if (validator()) {
-                    if (formData['start_date']) {
+                    if (formData['start_date']) {            
                         const convertedDateArray = formData['start_date'].split('-')
                         formData['start_date'] = `${convertedDateArray[1]}-${convertedDateArray[0]}-${convertedDateArray[2]}`
                     }

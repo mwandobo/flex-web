@@ -15,6 +15,9 @@ next.js
 .next
 /out/
 
+Arch*.zip
+
+
 # production
 /build
 

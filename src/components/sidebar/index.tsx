@@ -79,6 +79,12 @@ const items: ISidebarItem[] = [
                 permission: 'projects-list',
                 icon: FolderOpenDot
             },
+            {
+                name: 'Learning Reports',
+                path: '/report/learning-report',
+                permission: 'projects-list',
+                icon: FolderOpenDot
+            },
         ]
     },
     {

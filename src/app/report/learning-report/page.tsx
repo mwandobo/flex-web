@@ -6,18 +6,6 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 
-const deptFormInputs = [
-    {
-        name: 'name',
-        type: 'text',
-        label: 'Name',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    }
-]
-
 const columns = [
     {
         id: 'code',
@@ -55,10 +43,9 @@ function EvaluationReport() {
 
     } = usePageData({
         columns: columns,
-        formInputs: deptFormInputs,
-        url: 'project_evaluation_report',
+        url: 'project_learning_report',
         modalTitle: 'Role',
-        viewUrl: '/report/evaluation-report/',
+        viewUrl: '/report/learning-report/',
         state_properties: [],
         permission: permission,
         isHideDelete: true,
@@ -76,7 +63,7 @@ function EvaluationReport() {
                             <>
                                 <PageHeader
                                     handleClick={handleClick}
-                                    links={[{ name: 'Project Evaluation Report / List', linkTo: '/report/evaluation-report', permission: '' }]}
+                                    links={[{ name: 'Project Learning Report / List', linkTo: '/report/learning-report', permission: '' }]}
                                     isHideAdd={true}
                                 />
                                 {tabular()}
