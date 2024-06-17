@@ -10,8 +10,9 @@ import LeadsChart from "../comps/buget";
 import { getValueFromLocalStorage, setValueLocalStorage } from "@/utils/actions/local-starage";
 import { Activity, ChevronDown, ChevronUp, CircleCheckBig, ClipboardCheck } from "lucide-react";
 import { useGlobalContextHook } from "@/hooks/useGlobalContextHook";
+import FormattedMoney from "@/components/moneyFormater";
 
-const ProjectShow = ({ params }: { params: { monitoringId: string } }) => {
+const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } }) => {
     const router = useRouter()
     const [data, setData] = useState<any>([])
     const [payload, setPayload] = useState<any[]>([])
@@ -76,9 +77,9 @@ const ProjectShow = ({ params }: { params: { monitoringId: string } }) => {
     const handleFormInputChange = (e: any, indicator: any, from: string) => {
         switch (from) {
             case 'progress':
-                setFormPayload({ ...formPayload, indicator_id: indicator.id, quantity: e.target.value, name: "collected_data", }); break;
+                setFormPayload({ ...formPayload, indicator_id: indicator.id, quantity: e.target.value }); break;
             case 'cost':
-                setFormPayload({ ...formPayload, indicator_id: indicator.id, cost: e.target.value, name: "collected_data" }); break;
+                setFormPayload({ ...formPayload, indicator_id: indicator.id, cost: e.target.value }); break;
             default: break;
         }
     }
@@ -127,7 +128,7 @@ const ProjectShow = ({ params }: { params: { monitoringId: string } }) => {
             <div className="w-11/12 mx-auto border border-gray-300 flex flex-col px-2">
                 <div className="font-semibold text-sm py-1"><h5>Indicators List</h5></div>
                 <div className="mb-1">
-                    <div className="grid grid-cols-10 gap-4 text-xs border-b border-gray-300">
+                    <div className="grid grid-cols-9 gap-4 text-xs border-b border-gray-300">
                         <p className="" >#</p>
                         <p className="">Code</p>
                         <p className="">Indicator Name</p>
@@ -136,7 +137,6 @@ const ProjectShow = ({ params }: { params: { monitoringId: string } }) => {
                         <p className="">Target Data</p>
                         <p className="">Collected Data</p>
                         <p className="">Progress</p>
-                        <p className="">Cost</p>
                         <p className=""></p>
                     </div>
                 </div>
@@ -144,7 +144,7 @@ const ProjectShow = ({ params }: { params: { monitoringId: string } }) => {
                     {
                         payload.map((item: any, index: any) =>
                             <div key={index} className="flex ">
-                                <div className="grid grid-cols-10 gap-4 w-full text-xs p-1 border-b border-gray-300 ">
+                                <div className="grid grid-cols-9 gap-4 w-full text-xs p-1 border-b border-gray-300 ">
                                     <p>{index + 1}</p>
                                     <p>{item.formatted_code}</p>
                                     <p>{item.name}</p>
@@ -156,14 +156,9 @@ const ProjectShow = ({ params }: { params: { monitoringId: string } }) => {
                                     {isCollecting ?
                                         <>
                                             <input type="text" placeholder="Enter Data" className="ps-1 h-7 w-20" onChange={(e) => handleFormInputChange(e, item, 'progress')} />
-                                            {item.from === 'activity' &&
-                                                <input type="text" placeholder="Enter Data" className="ps-1 h-7 w-20" onChange={(e) => handleFormInputChange(e, item, 'cost')} />
-
-                                            }
                                         </> :
                                         <>
                                             <p className="">{progresRender(item.progress)}</p>
-                                            <p className="">{item.cost}</p>
                                         </>
 
                                     }
@@ -202,11 +197,12 @@ const ProjectShow = ({ params }: { params: { monitoringId: string } }) => {
                 return <div className="flex">
                     <div className="w-full flex flex-col">
                         <div className=" bg-gray-300 p-2">
-                            <div className="grid grid-cols-5  ">
+                            <div className="grid grid-cols-6">
                                 <p className="text-start">#</p>
                                 <p className="text-start">Code</p>
                                 <p className="text-start">Name</p>
                                 <p className="text-start">Progress</p>
+                                <p className="text-end">Cost</p>
                                 <p className="text-start"></p>
                             </div>
                         </div>
@@ -215,18 +211,35 @@ const ProjectShow = ({ params }: { params: { monitoringId: string } }) => {
                                 {
                                     payload.data.map((item: any, index: any) =>
                                         <div key={index} className="flex flex-col odd:bg-gray-200 px-2 " >
-                                            <div className="grid grid-cols-5 w-full p-1 text-sm font-light"
-                                                onClick={() => handleItemExpand(item, index)}
+                                            <div className="grid grid-cols-6 w-full p-1 text-sm font-light"
                                             >
                                                 <p>{index + 1}</p>
                                                 <p>{item.formatted_code}</p>
                                                 <p>{item.name}</p>
                                                 <p className="">{progresRender(item.progress)}</p>
-                                                <p className={`flex justify-end `}>
-                                                    {expandedItem === index && progresRender(item.progress) !== "No Indicator" ?
-                                                        <ChevronUp className="text-gray-900" size={22} /> :
-                                                        <ChevronDown className="text-gray-400" size={20} />}
-                                                </p>
+                                                <>
+                                                    {item.from === 'activity' && isCollecting ?
+                                                        <div className="flex justify-end gap-1 ">
+                                                            <input type="text" placeholder="Enter Cost" className="ps-1 h-7 w-full" onChange={(e) => handleFormInputChange(e, item, 'cost')} />
+                                                            <button
+                                                                className={`h-7 w-16 flex justify-center items-center px-1 text-white border border-gray-300 bg-gray-500  shadow-md hover:shadow-lg transition-shadow duration-300`}
+                                                                onClick={() => handleSubmitCollectedData()}
+                                                            >
+                                                                <CircleCheckBig className="mr-1" />
+                                                                Submit</button>
+
+                                                        </div>
+                                                        : <p className="text-end">{FormattedMoney({ amount: item.occured_cost })}</p>
+                                                    }
+
+                                                    <p className={`flex justify-end `}
+                                                        onClick={() => handleItemExpand(item, index)}
+                                                    >
+                                                        {expandedItem === index && progresRender(item.progress) !== "No Indicator" ?
+                                                            <ChevronUp className="text-gray-900" size={22} /> :
+                                                            <ChevronDown className="text-gray-400" size={20} />}
+                                                    </p>
+                                                </>
                                             </div>
                                             <>
                                                 {expandedItem === index && progresRender(item.progress) !== "No Indicator" &&
@@ -340,4 +353,4 @@ const ProjectShow = ({ params }: { params: { monitoringId: string } }) => {
     );
 };
 
-export default ProjectShow;
+export default ProjectMonitoringShow;

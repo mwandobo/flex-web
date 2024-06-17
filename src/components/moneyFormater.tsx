@@ -12,7 +12,7 @@ const FormattedMoney = ({ amount, currency = 'Tzs' }: Props) => {
         currencyDisplay: 'symbol',
     });
 
-    const formattedAmount = formatter.format(amount);
+    const formattedAmount = formatter.format(Number(amount));
 
     const symbol = formattedAmount.replace(/[0-9,.]/g, '').trim();
     const amountStr = formattedAmount.replace(/[^0-9.,]/g, '').trim();

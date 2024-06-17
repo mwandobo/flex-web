@@ -8,7 +8,7 @@ import LinearWithValueLabel from "@/components/bars/progressBar";
 import CircularWithValueLabel from "@/components/bars/circularBar";
 import LeadsChart from "../comps/buget";
 import { getValueFromLocalStorage, setValueLocalStorage } from "@/utils/actions/local-starage";
-import { Check, ChevronDown, ChevronUp, CircleCheckBig, ClipboardCheck } from "lucide-react";
+import { Check, ChevronDown, ChevronUp, CircleCheckBig, ClipboardCheck, OctagonX } from "lucide-react";
 import { useGlobalContextHook } from "@/hooks/useGlobalContextHook";
 import swal from 'sweetalert2';
 
@@ -32,8 +32,8 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
         const monitoringPayload = [
             { name: "Project Goals", data: input.goals, type: 'goals', progress: input.goals_progress },
             { name: "Project Outcomes", data: input.outcomes, type: 'outcomes', progress: input.outcomes_progress },
-            { name: "Project Output", data: input.outputs, type: 'outputs', progress: input.outputs_progress },
-            { name: "Project Activity", data: input.activities, type: 'activities', progress: input.activities_progress },
+            // { name: "Project Output", data: input.outputs, type: 'outputs', progress: input.outputs_progress },
+            // { name: "Project Activity", data: input.activities, type: 'activities', progress: input.activities_progress },
         ]
 
         setPayload(monitoringPayload)
@@ -137,12 +137,24 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                     text: "You Have Not Filled All The Evaluations Data. Please Try Again",
                     icon: 'error',
                 });
-
             }
         }
-
-
     }
+
+    const buttonActive = () => {
+        let isActive = true
+        if (evaluationForm.data.length > 0) {
+            evaluationForm.data.forEach(item => {
+                if (item.value) {
+                    isActive = false
+                }
+            })
+        }
+
+        return isActive
+    }
+
+    console.log(evaluationForm)
 
     const validator = () => {
         const pass = evaluationForm.data.every(item => item.value && item.value > 0)
@@ -301,7 +313,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
             {
                 loading ? <p>Loading...</p>
                     :
-                    <div className="flex flex-col">
+                    <div className="flex flex-col h-full">
                         <PageHeader
                             links={[
                                 { name: 'Project Evaluation', linkTo: '/project-monitoring', permission: '' },
@@ -309,12 +321,12 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                             ]}
                             isShowPage={true}
                         />
-                        <div className="bg-white ">
+                        <div className="bg-white h-full ">
                             <div className="flex ">
                                 <div className="flex flex-col w-64 mt-4 ml-4 p-2">
                                     <h4 className="text-sm font-semibold mb-2">Evaluation Items</h4>
                                     <div className="flex flex-col justify-between h-full">
-                                        <div className="flex flex-col ml-3 text-sm gap-1 cursor-pointer">
+                                        <div className="flex flex-col ml-3 text-sm gap-1 cursor-pointer py-5">
                                             <p
                                                 className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'goals' && 'bg-sidebar-background text-sidebar-active'} `}
                                                 onClick={() => handleMonitoringItemChange('goals')}>
@@ -325,71 +337,67 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                                                 onClick={() => handleMonitoringItemChange('outcomes')}>
                                                 Outcomes
                                             </p>
-                                            <p
-                                                className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'outputs' && 'bg-sidebar-background text-sidebar-active'}`}
-                                                onClick={() => handleMonitoringItemChange('outputs')}>
-                                                Outputs
-                                            </p>
-                                            <p
-                                                className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'activities' && 'bg-sidebar-background text-sidebar-active'}`}
-                                                onClick={() => handleMonitoringItemChange('activities')}>
-                                                Activities
-                                            </p>
                                         </div>
                                     </div>
 
-                                    <div className="flex justify-between ">
-                                        <button
+                                    <div className="flex justify-end">
+                                        {/* <button
                                             className={`border flex items-center text-sm text-red-900 border-gray-300 px-2 py-1 ${isCollecting ? 'bg-gray-400' : 'bg-gray-400 '} shadow-md hover:shadow-lg transition-shadow duration-300`}
                                             onClick={() => { }}
                                         >
                                             Cancel
-                                        </button>
+                                        </button> */}
 
-                                        <button
-                                            className={`border flex items-center text-sm text-white  border-gray-300 px-2 py-1 ${isCollecting ? 'bg-gray-400' : 'bg-gray-500 '} shadow-md hover:shadow-lg transition-shadow duration-300`}
-                                            onClick={() => handleSubmitEvaluationsdData()}
-                                        >
-                                            Submit
-                                        </button>
+                                        {
+                                            evaluationForm.data.length > 0 &&
+                                            <button
+                                                className={`border flex items-center text-sm text-white  border-gray-300 px-2 py-1 ${isCollecting ? 'bg-gray-400' : 'bg-gray-500 '} shadow-md hover:shadow-lg transition-shadow duration-300`}
+                                                onClick={() => handleSubmitEvaluationsdData()}
+                                                disabled={buttonActive()}
+                                            >
+                                                Submit
+                                            </button>
+                                        }
+
+
                                     </div>
                                 </div>
                                 <div className="flex flex-col p-4 h-full w-full bg-white">
                                     {
                                         payload.map((pay, index) =>
-                                            <div key={index} className="">
+                                            <div key={index} className="h-full">
                                                 {pay.type === selected &&
-                                                    <div key={index} className="h-full relative bg-gray-100 shadow-md w-full p-3">
-                                                        <div className="flex justify-between">
-                                                            <h3 className="p-1 font-semibold">{pay.name}</h3>
-                                                            <div className="flex justify-center gap-3 items-center p-2">
-                                                                <button
-                                                                    className={`border flex items-center text-sm text-white  border-gray-300 px-2 py-1 ${isCollecting ? 'bg-gray-400' : 'bg-gray-500 '} shadow-md hover:shadow-lg transition-shadow duration-300`}
-                                                                    onClick={() => handleCollectAction()}
-                                                                >
-                                                                    {isCollecting ? <Check size={10} className="mr-1" /> : <ClipboardCheck size={15} className="mr-1" />}
-                                                                    {isCollecting ? 'Evaluating ...' : 'Evaluate'}
-                                                                </button>
-                                                                <CircularWithValueLabel value={Number(pay.progress)} />
+                                                    <>  {pay.data.length > 0 ?
+
+                                                        <div key={index} className="h-full relative bg-gray-100 shadow-md w-full p-3">
+                                                            <div className="flex justify-between">
+                                                                <h3 className="p-1 font-semibold">{pay.name}</h3>
+                                                                <div className="flex justify-center gap-3 items-center p-2">
+                                                                    <button
+                                                                        className={`border flex items-center text-sm text-white  border-gray-300 px-2 py-1 ${isCollecting ? 'bg-gray-400' : 'bg-gray-500 '} shadow-md hover:shadow-lg transition-shadow duration-300`}
+                                                                        onClick={() => handleCollectAction()}
+                                                                    >
+                                                                        {isCollecting ? <Check size={10} className="mr-1" /> : <ClipboardCheck size={15} className="mr-1" />}
+                                                                        {isCollecting ? 'Evaluating ...' : 'Evaluate'}
+                                                                    </button>
+                                                                    <CircularWithValueLabel value={Number(pay.progress)} />
+                                                                </div>
+                                                            </div>
+                                                            {pay.data?.length > 0 &&
+                                                                <>
+                                                                    {pageRender(pay, pay.type)}
+                                                                </>
+                                                            }
+                                                        </div>
+                                                        :
+                                                        <div className="w-full h-48 flex justify-center items-center ">
+                                                            <div className="animate-pulse">
+                                                                <OctagonX />
+                                                                <p>No data</p>
                                                             </div>
                                                         </div>
-                                                        {pay.data?.length > 0 ?
-                                                            <>
-                                                                {pageRender(pay, pay.type)}
-                                                            </>
-                                                            :
-                                                            (<>
-                                                                {
-                                                                    pay.type === 'budget' ?
-                                                                        <>{pageRender(pay, 'budget')}</> :
-                                                                        <div className="flex h-3/4 justify-center items-center">
-                                                                            <p>No data</p>
-                                                                        </div>
-                                                                }
-                                                            </>
-                                                            )
-                                                        }
-                                                    </div>
+                                                    }
+                                                    </>
                                                 }
                                             </div>
                                         )
