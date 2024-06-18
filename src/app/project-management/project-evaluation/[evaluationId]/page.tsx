@@ -239,14 +239,12 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
             <div className="w-11/12 mx-auto border border-gray-300 flex flex-col px-2">
                 <div className="font-semibold text-sm py-1"><h5>Indicators List</h5></div>
                 <div className="mb-1">
-                    <div className="grid grid-cols-8 gap-4 text-xs border-b border-gray-300">
+                    <div className="grid grid-cols-6 gap-4 text-xs border-b border-gray-300">
                         <p className="" >#</p>
                         <p className="">Code</p>
                         <p className="">Indicator Name</p>
                         <p className="">Verify By</p>
                         <p className="">Baseline Data</p>
-                        <p className="">Target Data</p>
-                        <p className="">Collected Data</p>
                         <p className="">Evaluation Data</p>
                     </div>
                 </div>
@@ -254,15 +252,17 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                     {
                         payload.map((item: any, index: any) =>
                             <div key={index} className="flex ">
-                                <div className="grid grid-cols-8 gap-4 w-full text-xs p-1 border-b border-gray-300 ">
+                                <div className="grid grid-cols-6 gap-4 w-full text-xs p-1 border-b border-gray-300 ">
                                     <p>{index + 1}</p>
                                     <p>{item.formatted_code}</p>
                                     <p>{item.name}</p>
                                     <p>{item.mov}</p>
                                     <p>{item.baseline_data}</p>
-                                    <p>{item.target_data}</p>
-                                    <p>{item.collected_data}</p>
-                                    <input type="text" placeholder="Enter Data" value={valueFinder(item.id, 'progress')} className="ps-1 h-7 w-20" onChange={(e) => handleFormInputChange(e, item, 'progress')} />
+                                    {
+                                        !isCollecting ? <p>waiting...</p> :
+                                            <input type="text" placeholder="Enter Data" value={valueFinder(item.id, 'progress')} className="ps-1 h-7 w-20" onChange={(e) => handleFormInputChange(e, item, 'progress')} />
+
+                                    }
                                 </div>
                             </div>
                         )
@@ -312,7 +312,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                                                     isCollecting && (progresRender(item.progress) !== "No Indicator" || Number(item.occured_cost) > 0) ?
                                                         <input type="text" placeholder="Enter Cost" value={valueFinder(item.id, 'cost', payload.type)} className="ps-1 h-7 w-full" onChange={(e) => handleFormInputChange(e, item, 'cost', payload.type)} />
                                                         :
-                                                        <p>{FormattedMoney({ amount: item.occured_cost })}</p>
+                                                        <p className="text-end">{FormattedMoney({ amount: item.occured_cost })}</p>
 
                                                 }
 
