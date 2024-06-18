@@ -8,7 +8,7 @@ import LinearWithValueLabel from "@/components/bars/progressBar";
 import CircularWithValueLabel from "@/components/bars/circularBar";
 import LeadsChart from "../comps/buget";
 import { getValueFromLocalStorage, setValueLocalStorage } from "@/utils/actions/local-starage";
-import { Activity, ChevronDown, ChevronUp, CircleCheckBig, ClipboardCheck } from "lucide-react";
+import { Activity, ChevronDown, ChevronUp, CircleCheckBig, ClipboardCheck, OctagonX } from "lucide-react";
 import { useGlobalContextHook } from "@/hooks/useGlobalContextHook";
 import FormattedMoney from "@/components/moneyFormater";
 
@@ -202,7 +202,7 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                                 <p className="text-start">Code</p>
                                 <p className="text-start">Name</p>
                                 <p className="text-start">Progress</p>
-                                <p className="text-end">Cost</p>
+                                <p className="text-center">Cost</p>
                                 <p className="text-start"></p>
                             </div>
                         </div>
@@ -277,7 +277,7 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                                 <div className="flex flex-col w-64 mt-4 ml-4 p-2">
                                     <h4 className="text-sm font-semibold mb-2">Monitoring Items</h4>
                                     <div className="flex flex-col ml-3 text-sm gap-1 cursor-pointer">
-                                        <p
+                                        {/* <p
                                             className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'goals' && 'bg-sidebar-background text-sidebar-active'} `}
                                             onClick={() => handleMonitoringItemChange('goals')}>
                                             Goals
@@ -286,7 +286,7 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                                             className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'outcomes' && 'bg-sidebar-background text-sidebar-active'}`}
                                             onClick={() => handleMonitoringItemChange('outcomes')}>
                                             Outcomes
-                                        </p>
+                                        </p> */}
                                         <p
                                             className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'outputs' && 'bg-sidebar-background text-sidebar-active'}`}
                                             onClick={() => handleMonitoringItemChange('outputs')}>
@@ -300,7 +300,7 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                                         <p
                                             className="p-1  hover:bg-sidebar-background hover:text-sidebar-active "
                                             onClick={() => handleMonitoringItemChange('budget')}>
-                                            Budget
+                                            Inputs
                                         </p>
                                     </div>
                                 </div>
@@ -309,37 +309,46 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                                         payload.map((pay, index) =>
                                             <div key={index} className="">
                                                 {pay.type === selected &&
-                                                    <div key={index} className="h-full relative bg-gray-100 shadow-md w-full p-3">
-                                                        <div className="flex justify-between">
-                                                            <h3 className="p-1 font-semibold">{pay.name}</h3>
-                                                            <div className="flex justify-center gap-3 items-center p-2">
-                                                                <button
-                                                                    className={`border flex items-center text-sm text-white  border-gray-300 px-2 py-1 ${isCollecting ? 'bg-gray-400' : 'bg-gray-500 '} shadow-md hover:shadow-lg transition-shadow duration-300`}
-                                                                    onClick={() => handleCollectAction()}
-                                                                >
-                                                                    {isCollecting ? <Activity size={10} className="mr-1" /> : <ClipboardCheck size={15} className="mr-1" />}
-                                                                    {isCollecting ? 'Monitoring ...' : 'Collect'}
-                                                                </button>
-                                                                <CircularWithValueLabel value={Number(pay.progress)} />
+                                                    <>  {pay.data.length > 0 ?
+                                                        <div key={index} className="h-full relative bg-gray-100 shadow-md w-full p-3">
+                                                            <div className="flex justify-between">
+                                                                <h3 className="p-1 font-semibold">{pay.name}</h3>
+                                                                <div className="flex justify-center gap-3 items-center p-2">
+                                                                    <button
+                                                                        className={`border flex items-center text-sm text-white  border-gray-300 px-2 py-1 ${isCollecting ? 'bg-gray-400' : 'bg-gray-500 '} shadow-md hover:shadow-lg transition-shadow duration-300`}
+                                                                        onClick={() => handleCollectAction()}
+                                                                    >
+                                                                        {isCollecting ? <Activity size={10} className="mr-1" /> : <ClipboardCheck size={15} className="mr-1" />}
+                                                                        {isCollecting ? 'Monitoring ...' : 'Collect'}
+                                                                    </button>
+                                                                    <CircularWithValueLabel value={Number(pay.progress)} />
+                                                                </div>
+                                                            </div>
+                                                            {pay.data?.length > 0 ?
+                                                                <>
+                                                                    {pageRender(pay, pay.type)}
+                                                                </>
+                                                                :
+                                                                (<>
+                                                                    {
+                                                                        pay.type === 'budget' ?
+                                                                            <>{pageRender(pay, 'budget')}</> :
+                                                                            <div className="flex h-3/4 justify-center items-center">
+                                                                                <p>No data</p>
+                                                                            </div>
+                                                                    }
+                                                                </>
+                                                                )
+                                                            }
+                                                        </div> :
+                                                        <div className="w-full h-36 flex justify-center items-center ">
+                                                            <div className="animate-pulse">
+                                                                <OctagonX />
+                                                                <p>No data</p>
                                                             </div>
                                                         </div>
-                                                        {pay.data?.length > 0 ?
-                                                            <>
-                                                                {pageRender(pay, pay.type)}
-                                                            </>
-                                                            :
-                                                            (<>
-                                                                {
-                                                                    pay.type === 'budget' ?
-                                                                        <>{pageRender(pay, 'budget')}</> :
-                                                                        <div className="flex h-3/4 justify-center items-center">
-                                                                            <p>No data</p>
-                                                                        </div>
-                                                                }
-                                                            </>
-                                                            )
-                                                        }
-                                                    </div>
+                                                    }
+                                                    </>
                                                 }
                                             </div>
                                         )

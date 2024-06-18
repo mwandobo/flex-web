@@ -11,6 +11,7 @@ import { getValueFromLocalStorage, setValueLocalStorage } from "@/utils/actions/
 import { Check, ChevronDown, ChevronUp, CircleCheckBig, ClipboardCheck, OctagonX } from "lucide-react";
 import { useGlobalContextHook } from "@/hooks/useGlobalContextHook";
 import swal from 'sweetalert2';
+import FormattedMoney from "@/components/moneyFormater";
 
 
 const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } }) => {
@@ -21,7 +22,6 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
     const [loading, setLoading] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [isCollecting, setIsCollecting] = useState(false)
-    const [formPayload, setFormPayload] = useState<any[]>([])
     const token = getValueFromLocalStorage('token')
     const { state, dispatch } = useGlobalContextHook()
     const { selectedMonitoringItem, evaluationForm } = state;
@@ -32,21 +32,12 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
         const monitoringPayload = [
             { name: "Project Goals", data: input.goals, type: 'goals', progress: input.goals_progress },
             { name: "Project Outcomes", data: input.outcomes, type: 'outcomes', progress: input.outcomes_progress },
-            // { name: "Project Output", data: input.outputs, type: 'outputs', progress: input.outputs_progress },
-            // { name: "Project Activity", data: input.activities, type: 'activities', progress: input.activities_progress },
         ]
 
         setPayload(monitoringPayload)
 
         setAllIndicators(input.all_indicators)
 
-        if (allIndicators && allIndicators.length > 0) {
-            const newFormPayload = allIndicators.map(item => {
-                return { id: item.id, value: '', for: item.for }
-            })
-            setFormPayload(newFormPayload)
-
-        }
 
         const selcted_monitoring_item = getValueFromLocalStorage('selected_monitoring_item')
         const expanded_monitoring_item = getValueFromLocalStorage('expanded_monitoring_item')
@@ -66,9 +57,24 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
         }
     }
 
-    const valueFinder = (indicatorId: any) => {
-        const fountItem = evaluationForm.data.find(item => item.id.toString() === indicatorId.toString())
-        return fountItem?.value
+    const valueFinder = (indicatorId: any, from: string, type?: string) => {
+        let value = null
+        switch (from) {
+            case 'progress':
+                const fountItem = evaluationForm.data.find(item => item.id.toString() === indicatorId.toString())
+                value = fountItem?.value;
+                break;
+            case 'cost':
+
+                console.log('here')
+                console.log(evaluationForm)
+                console.log(indicatorId, from, type)
+                const fountCost = evaluationForm.data.find(item => item.id.toString() === indicatorId.toString() && item.for === type)
+                value = fountCost?.value;
+                break;
+
+        }
+        return value
     }
 
     const formRefresh = () => {
@@ -95,12 +101,21 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
         setIsCollecting(!isCollecting)
     }
 
-    const handleFormInputChange = (e: any, indicator: any) => {
+    const handleFormInputChange = (e: any, body: any, from: string, type?: string) => {
         const newPayload = evaluationForm.data.map(item => {
-            if (item.id.toString() === indicator.id.toString()) {
-                return { ...item, value: e.target.value }
+            switch (from) {
+                case 'progress':
+                    if (item.id.toString() === body.id.toString()) {
+                        return { ...item, value: e.target.value }
+                    }
+                    return item;
+                case 'cost':
+                    if (item.for === type && item.id.toString() === body.id.toString() && item.parent) {
+                        return { ...item, value: e.target.value }
+                    }
+                    return item;
+                default: break;
             }
-            return item
         })
 
         setValueLocalStorage('evaluation_form', JSON.stringify(newPayload))
@@ -115,7 +130,6 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
 
                 if (response?.status === 200) {
                     setIsSubmitted(!isSubmitted)
-                    setFormPayload(null)
                 } else {
                     console.log('errorHappened')
                 }
@@ -154,8 +168,6 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
         return isActive
     }
 
-    console.log(evaluationForm)
-
     const validator = () => {
         const pass = evaluationForm.data.every(item => item.value && item.value > 0)
         return pass
@@ -163,9 +175,21 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
 
     useEffect(() => {
         if (allIndicators && allIndicators.length > 0) {
-            const newFormPayload = allIndicators.map(item => {
+            let newFormPayload = allIndicators.map(item => {
                 const body = { id: item.id, value: '', for: item.from }
                 return body
+            })
+
+            payload.map(item => {
+                if (item?.data && item.data.length > 0) {
+                    item.data.map(innerItem => {
+                        console.log(innerItem)
+                        if (progresRender(innerItem.progress) !== "No Indicator") {
+                            const body = { id: innerItem.id, value: '', for: item.type, parent: true }
+                            newFormPayload = [...newFormPayload, body]
+                        }
+                    })
+                }
             })
 
             const evaluationForm = getValueFromLocalStorage('evaluation_form')
@@ -238,7 +262,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                                     <p>{item.baseline_data}</p>
                                     <p>{item.target_data}</p>
                                     <p>{item.collected_data}</p>
-                                    <input type="text" placeholder="Enter Data" value={valueFinder(item.id)} className="ps-1 h-7 w-20" onChange={(e) => handleFormInputChange(e, item)} />
+                                    <input type="text" placeholder="Enter Data" value={valueFinder(item.id, 'progress')} className="ps-1 h-7 w-20" onChange={(e) => handleFormInputChange(e, item, 'progress')} />
                                 </div>
                             </div>
                         )
@@ -264,11 +288,12 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                 return <div className="flex">
                     <div className="w-full flex flex-col">
                         <div className=" bg-gray-300 p-2">
-                            <div className="grid grid-cols-5  ">
+                            <div className="grid grid-cols-6  ">
                                 <p className="text-start">#</p>
                                 <p className="text-start">Code</p>
                                 <p className="text-start">Name</p>
                                 <p className="text-start">Progress</p>
+                                <p className="text-center">Cost</p>
                                 <p className="text-start"></p>
                             </div>
                         </div>
@@ -277,14 +302,23 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                                 {
                                     payload.data.map((item: any, index: any) =>
                                         <div key={index} className="flex flex-col odd:bg-gray-200 px-2 " >
-                                            <div className="grid grid-cols-5 w-full p-1 text-sm font-light"
-                                                onClick={() => handleItemExpand(item, index)}
+                                            <div className="grid grid-cols-6 w-full p-1 text-sm font-light"
                                             >
                                                 <p>{index + 1}</p>
                                                 <p>{item.formatted_code}</p>
                                                 <p>{item.name}</p>
                                                 <p className="">{progresRender(item.progress)}</p>
-                                                <p className={`flex justify-end `}>
+                                                {
+                                                    isCollecting && (progresRender(item.progress) !== "No Indicator" || Number(item.occured_cost) > 0) ?
+                                                        <input type="text" placeholder="Enter Cost" value={valueFinder(item.id, 'cost', payload.type)} className="ps-1 h-7 w-full" onChange={(e) => handleFormInputChange(e, item, 'cost', payload.type)} />
+                                                        :
+                                                        <p>{FormattedMoney({ amount: item.occured_cost })}</p>
+
+                                                }
+
+                                                <p className={`flex justify-end `}
+                                                    onClick={() => handleItemExpand(item, index)}
+                                                >
                                                     {expandedItem === index && progresRender(item.progress) !== "No Indicator" ?
                                                         <ChevronUp className="text-gray-900" size={22} /> :
                                                         <ChevronDown className="text-gray-400" size={20} />}
@@ -349,7 +383,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                                         </button> */}
 
                                         {
-                                            evaluationForm.data.length > 0 &&
+                                            !buttonActive() &&
                                             <button
                                                 className={`border flex items-center text-sm text-white  border-gray-300 px-2 py-1 ${isCollecting ? 'bg-gray-400' : 'bg-gray-500 '} shadow-md hover:shadow-lg transition-shadow duration-300`}
                                                 onClick={() => handleSubmitEvaluationsdData()}
@@ -378,7 +412,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                                                                         onClick={() => handleCollectAction()}
                                                                     >
                                                                         {isCollecting ? <Check size={10} className="mr-1" /> : <ClipboardCheck size={15} className="mr-1" />}
-                                                                        {isCollecting ? 'Evaluating ...' : 'Evaluate'}
+                                                                        {isCollecting ? 'Exit Evaluating' : 'Evaluate'}
                                                                     </button>
                                                                     <CircularWithValueLabel value={Number(pay.progress)} />
                                                                 </div>
@@ -390,7 +424,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                                                             }
                                                         </div>
                                                         :
-                                                        <div className="w-full h-48 flex justify-center items-center ">
+                                                        <div className="w-full h-36 flex justify-center items-center ">
                                                             <div className="animate-pulse">
                                                                 <OctagonX />
                                                                 <p>No data</p>
