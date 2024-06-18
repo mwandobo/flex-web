@@ -95,8 +95,11 @@ function ProjectEvaluation() {
                                 <PageHeader
                                     handleClick={handleClick}
                                     links={[{ name: 'Project Evaluation / List', linkTo: '/project-management/project-evaluation', permission: '' }]}
+                                    isHideAdd={true}
+
                                 />
                                 {tabular()}
+
                                 {createdForm()}
                             </>
                     }

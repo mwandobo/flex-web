@@ -4,10 +4,7 @@ import PageHeader from "@/components/header/page-header";
 import { get, post } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import LinearWithValueLabel from "@/components/bars/progressBar";
-import CircularWithValueLabel from "@/components/bars/circularBar";
-import { getValueFromLocalStorage, setValueLocalStorage } from "@/utils/actions/local-starage";
-import { Activity, ChevronDown, ChevronUp, CircleCheckBig, ClipboardCheck } from "lucide-react";
+import { getValueFromLocalStorage, } from "@/utils/actions/local-starage";
 import { useGlobalContextHook } from "@/hooks/useGlobalContextHook";
 import MuiTable from "@/components/tables/mui-table";
 import CrudButtonsComponent from "@/components/crud-operator-buttons";
@@ -15,15 +12,8 @@ import CrudButtonsComponent from "@/components/crud-operator-buttons";
 const EvaluationReportShow = ({ params }: { params: { evaluationReportId: string } }) => {
     const router = useRouter()
     const [data, setData] = useState<any>([])
-    const [payload, setPayload] = useState<any[]>([])
     const [loading, setLoading] = useState(false)
-    const [isSubmitted, setIsSubmitted] = useState(false)
-    const [isCollecting, setIsCollecting] = useState(false)
-    const [formPayload, setFormPayload] = useState<any>()
     const token = getValueFromLocalStorage('token')
-    const { state, dispatch } = useGlobalContextHook()
-    const { selectedMonitoringItem } = state;
-    const { selected, expandedItem } = selectedMonitoringItem
     const id = params.evaluationReportId
 
 
@@ -51,7 +41,7 @@ const EvaluationReportShow = ({ params }: { params: { evaluationReportId: string
             }
         };
         fetchData()
-    }, [id, token, isSubmitted])
+    }, [id, token])
 
     const columns = [
         {
@@ -84,7 +74,6 @@ const EvaluationReportShow = ({ params }: { params: { evaluationReportId: string
         }
     }
 
-
     const createRow = (input: any,) => {
         let row: any;
         row = [
@@ -114,7 +103,7 @@ const EvaluationReportShow = ({ params }: { params: { evaluationReportId: string
         return payload
     }
 
-
+    console.log(data)
 
     return (
         <ProtectedRoute>
@@ -124,8 +113,8 @@ const EvaluationReportShow = ({ params }: { params: { evaluationReportId: string
                     <div className="flex flex-col">
                         <PageHeader
                             links={[
-                                { name: 'Project Evaluation Report', linkTo: '/report/evaluation-report', permission: '' },
-                                { name: 'Show', linkTo: '/projects/show', permission: '' },
+                                { name: `Reports / Project Evaluation Reports`, linkTo: '/report/evaluation-report', permission: '' },
+                                { name: 'List', linkTo: '/projects/show', permission: '' },
                             ]}
                             isShowPage={true}
                         />

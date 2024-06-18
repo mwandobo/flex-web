@@ -76,7 +76,7 @@ function EvaluationReport() {
                             <>
                                 <PageHeader
                                     handleClick={handleClick}
-                                    links={[{ name: 'Project Evaluation Report / List', linkTo: '/report/evaluation-report', permission: '' }]}
+                                    links={[{ name: 'Reports / Evaluated Projects / List', linkTo: '/report/evaluation-report', permission: '' }]}
                                     isHideAdd={true}
                                 />
                                 {tabular()}
