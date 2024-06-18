@@ -185,7 +185,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                     item.data.map(innerItem => {
                         console.log(innerItem)
                         if (progresRender(innerItem.progress) !== "No Indicator") {
-                            const body = { id: innerItem.id, value: '', for: item.type, parent: true }
+                            const body = { id: innerItem.id, value: '', for: item.type, parent: "parent" }
                             newFormPayload = [...newFormPayload, body]
                         }
                     })
@@ -319,9 +319,15 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                                                 <p className={`flex justify-end `}
                                                     onClick={() => handleItemExpand(item, index)}
                                                 >
-                                                    {expandedItem === index && progresRender(item.progress) !== "No Indicator" ?
-                                                        <ChevronUp className="text-gray-900" size={22} /> :
-                                                        <ChevronDown className="text-gray-400" size={20} />}
+                                                    {progresRender(item.progress) !== "No Indicator" ?
+                                                        <>
+                                                            {expandedItem === index ?
+                                                                <ChevronUp className="text-gray-900 cursor-pointer" size={22} /> :
+                                                                <ChevronDown className="text-gray-400 cursor-pointer" size={20} />
+                                                            }
+                                                        </> :
+                                                        <p>-</p>
+                                                    }
                                                 </p>
                                             </div>
                                             <>
