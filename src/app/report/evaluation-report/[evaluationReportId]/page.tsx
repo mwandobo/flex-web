@@ -119,11 +119,13 @@ const EvaluationReportShow = ({ params }: { params: { evaluationReportId: string
                             isShowPage={true}
                         />
                         <div className="bg-white ">
+                            <h3>Indicator Evaluation</h3>
                             <MuiTable
                                 data={customTableFunction()}
                                 columns={columns}
                             />
                         </div>
+
                     </div>
             }
         </ProtectedRoute>

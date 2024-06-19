@@ -1,30 +1,24 @@
 "use client"
 import ProtectedRoute from "@/components/authentication/protected-route";
 import PageHeader from "@/components/header/page-header";
-import { get, post } from "@/utils/api";
+import { get } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getValueFromLocalStorage, setValueLocalStorage } from "@/utils/actions/local-starage";
-import { useGlobalContextHook } from "@/hooks/useGlobalContextHook";
+import { getValueFromLocalStorage, } from "@/utils/actions/local-starage";
 import MuiReportTable from "@/components/tables/mui-report-table";
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
-
+import NoDataComponent from "@/components/status/no-data";
+import FormattedMoney from "@/components/moneyFormater";
 
 const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
     const router = useRouter()
     const [data, setData] = useState<any>([])
-    const [payload, setPayload] = useState<any[]>([])
     const [loading, setLoading] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
-    const [isCollecting, setIsCollecting] = useState(false)
-    const [formPayload, setFormPayload] = useState<any>()
+    const [evaluatedItem, setEvaluatedItem] = useState('')
     const token = getValueFromLocalStorage('token')
-    const { state, dispatch } = useGlobalContextHook()
-    const { selectedMonitoringItem } = state;
-    const { selected, expandedItem } = selectedMonitoringItem
     const id = params.reportId
-
 
     const url = `project_evaluation_report/show_single/${id}`
     const navigateToLogin = () => {
@@ -39,7 +33,6 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                 const res = await get(url, token)
 
                 if (res.status === 200) {
-                    console.log(res)
                     setData(res.data.data)
                     setLoading(false)
                 }
@@ -74,7 +67,6 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
             label: 'Indicator Name',
         },
         {
-
             id: 'baseline_data',
             numeric: false,
             disablePadding: false,
@@ -94,36 +86,161 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
         },
     ]
 
-    const handleClick = (type: string, payload?: any) => {
-        if (type.toLowerCase() === 'view') {
-            return router.push(`/report/evaluation-report/${id}/show/${payload.id}`)
+    const costColumns = [
+        {
+            id: 'for',
+            numeric: false,
+            hasUrl: true,
+            disablePadding: false,
+            label: 'Evaluation For',
+        },
+        {
+            id: 'for_name',
+            numeric: false,
+            disablePadding: false,
+            label: 'Item Name',
+        },
+        {
+            id: 'Budget',
+            numeric: false,
+            disablePadding: false,
+            label: 'budget',
+        },
+        {
+            id: 'expense',
+            numeric: false,
+            disablePadding: false,
+            label: 'Expense',
+        },
+        {
+            id: 'evaluated_expense',
+            numeric: false,
+            disablePadding: false,
+            label: 'Evaluated Expense',
+        },
+        {
+            id: 'evaluation',
+            numeric: false,
+            disablePadding: false,
+            label: 'Evaluation Mark',
+        },
+    ]
+
+    const combinedColumns = [
+        {
+            id: 'for',
+            numeric: false,
+            hasUrl: true,
+            disablePadding: false,
+            label: 'Evaluation For',
+        },
+        {
+            id: 'for_name',
+            numeric: false,
+            disablePadding: false,
+            label: 'Item Name',
+        },
+        {
+            id: 'Budget',
+            numeric: false,
+            disablePadding: false,
+            label: 'budget',
+        },
+        {
+            id: 'expense',
+            numeric: false,
+            disablePadding: false,
+            label: 'Expense',
+        },
+        {
+            id: 'evaluated_expense',
+            numeric: false,
+            disablePadding: false,
+            label: 'Evaluated Expense',
+        },
+        {
+            id: 'evaluation',
+            numeric: false,
+            disablePadding: false,
+            label: 'Evaluation Mark',
+        },
+    ]
+
+    const createRow = (input: any) => {
+        let row: any;
+
+        switch (evaluatedItem) {
+            case "indicator":
+
+                row = [
+                    input.for,
+                    input.for_name,
+                    input.indicator,
+                    input.baseline_data,
+                    input.target_data,
+                    input.evaluation_data,
+                ]; break;
+            case "input":
+                row = [
+                    input.for,
+                    input.code + ' - ' + input.name,
+                    FormattedMoney({ amount: input.cost }),
+                    FormattedMoney({ amount: input.occured_cost }),
+                    FormattedMoney({ amount: input.evaluated_cost }),
+                    input.evaluation,
+                ]; break;
+            case "combined":
+                row = [
+                    input.for,
+                    input.code, + '-' + input.name,
+                    input.indicator,
+                    input.baseline_data,
+                    input.target_data,
+                    input.evaluation_data,
+                ]; break;
+        }
+        return row
+    }
+
+    const _columns = () => {
+        switch (evaluatedItem) {
+            case 'indicator':
+                return columns
+            case 'input':
+                return costColumns
+            case 'combined':
+                return combinedColumns
         }
     }
 
-
-    const createRow = (input: any,) => {
-        let row: any;
-        row = [
-            input.for,
-            input.for_name,
-            input.indicator,
-            input.baseline_data,
-            input.target_data,
-            input.evaluation_data,
-        ]
-
-        return row
+    const reportHeader = () => {
+        console.log(evaluatedItem)
+        switch (evaluatedItem) {
+            case 'indicator': return "Indicators Project Evaluation";
+            case 'input': return "Inputs Project Evaluation"
+            case 'combined': return "Combined Report Project Evaluation"
+            default: break
+        }
     }
 
     const customTableFunction = () => {
         let payload: any[] = []
+        let someData: any[] = []
 
-        console.log(data)
+        switch (evaluatedItem) {
+            case 'indicator': someData = data?.indicator_evaluation?.evaluation_data; break
+            case 'input': someData = data?.input_evaluation?.evaluation_data; break
+            case 'combined': someData = data?.combined_evaluation?.evaluation_data; break
+            default: break
+        }
 
-        data?.evaluation_data?.forEach((item: any) => {
-            const row = createRow(item)
-            payload.push(row)
-        })
+        if (someData.length > 0) {
+            someData.forEach((item: any) => {
+                const row = createRow(item)
+                console.log(item)
+                payload.push(row)
+            })
+        }
 
         return payload
     }
@@ -131,22 +248,35 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
     const handleHeadeClick = () => {
         const doc = new jsPDF();
 
-        // Customize the document title, font, etc.
         doc.setFontSize(11);
         doc.text(`Project: ${data.project_name} Evaluation Report`, 14, 22);
 
-        // Add a table with the data
         autoTable(doc, {
             startY: 30,
             head: [['SN', 'Evaluation For', 'Item Name', 'Indicator Name', 'Baseline Data', 'Target Data', 'Evaluation Data']],
             body: data.evaluation_data.map((item, index) => [index + 1, item.for, item.for_name, item.indicator, item.baseline_data, item.target_data, item.evaluation_data]),
         });
 
-        // Save the generated PDF
         doc.save(`${data?.project_name?.trim()}_evaluation_report.pdf`);
     }
 
+    const handleMonitoringItemChange = (item: string) => {
+        setEvaluatedItem(item)
+    }
 
+    const evaluationsItems = [
+        {
+            name: "Indicators",
+            from: "indicator"
+        },
+        {
+            name: "Inputs",
+            from: "input"
+        }, {
+            name: "Combined Report",
+            from: "combined"
+        }
+    ]
 
     return (
         <ProtectedRoute>
@@ -163,12 +293,43 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                             isDownload={true}
                             handleClick={handleHeadeClick}
                         />
-                        <div className="bg-white px-2 ">
-                            <MuiReportTable
-                                data={customTableFunction()}
-                                columns={columns}
-                                from="monitoring"
-                            />
+
+
+                        <div className="bg-white h-full ">
+                            <div className="flex ">
+                                <div className="flex flex-col w-36 mt-4 ml-4 p-2">
+                                    <h4 className="text-sm font-semibold mb-2">Evaluation Items</h4>
+                                    <div className="flex flex-col justify-between h-full">
+                                        <div className="flex flex-col ml-3 text-xs gap-1 cursor-pointer py-5">
+                                            {
+                                                evaluationsItems.map((item, index) =>
+                                                    <p
+                                                        key={index}
+                                                        className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${evaluatedItem === item.from && 'bg-sidebar-background text-sidebar-active'} `}
+                                                        onClick={() => handleMonitoringItemChange(item.from)}>
+                                                        {item.name}
+                                                    </p>
+                                                )
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col p-4 h-full w-full bg-white">
+
+                                    <div className="bg-white px-2 ">
+                                        <h3 className="text-center"> {reportHeader()} </h3>
+                                        {
+                                            customTableFunction().length > 0 ?
+                                                < MuiReportTable
+                                                    data={customTableFunction()}
+                                                    columns={_columns()}
+                                                    from="monitoring"
+                                                /> : <NoDataComponent />
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
             }

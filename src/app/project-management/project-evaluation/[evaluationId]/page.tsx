@@ -30,8 +30,8 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
 
     const handleMonotiringPayload = (input: any) => {
         const monitoringPayload = [
-            { name: "Project Goals", data: input.goals, type: 'goals', progress: input.goals_progress },
-            { name: "Project Outcomes", data: input.outcomes, type: 'outcomes', progress: input.outcomes_progress },
+            { name: "Project Goals", data: input.goals, type: 'goal', progress: input.goals_progress },
+            { name: "Project Outcomes", data: input.outcomes, type: 'outcome', progress: input.outcomes_progress },
         ]
 
         setPayload(monitoringPayload)
@@ -65,10 +65,6 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                 value = fountItem?.value;
                 break;
             case 'cost':
-
-                console.log('here')
-                console.log(evaluationForm)
-                console.log(indicatorId, from, type)
                 const fountCost = evaluationForm.data.find(item => item.id.toString() === indicatorId.toString() && item.for === type)
                 value = fountCost?.value;
                 break;
@@ -183,7 +179,6 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
             payload.map(item => {
                 if (item?.data && item.data.length > 0) {
                     item.data.map(innerItem => {
-                        console.log(innerItem)
                         if (progresRender(innerItem.progress) !== "No Indicator") {
                             const body = { id: innerItem.id, value: '', for: item.type, parent: "parent" }
                             newFormPayload = [...newFormPayload, body]
@@ -368,13 +363,13 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                                     <div className="flex flex-col justify-between h-full">
                                         <div className="flex flex-col ml-3 text-sm gap-1 cursor-pointer py-5">
                                             <p
-                                                className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'goals' && 'bg-sidebar-background text-sidebar-active'} `}
-                                                onClick={() => handleMonitoringItemChange('goals')}>
+                                                className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'goal' && 'bg-sidebar-background text-sidebar-active'} `}
+                                                onClick={() => handleMonitoringItemChange('goal')}>
                                                 Goals
                                             </p>
                                             <p
-                                                className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'outcomes' && 'bg-sidebar-background text-sidebar-active'}`}
-                                                onClick={() => handleMonitoringItemChange('outcomes')}>
+                                                className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'outcome' && 'bg-sidebar-background text-sidebar-active'}`}
+                                                onClick={() => handleMonitoringItemChange('outcome')}>
                                                 Outcomes
                                             </p>
                                         </div>
