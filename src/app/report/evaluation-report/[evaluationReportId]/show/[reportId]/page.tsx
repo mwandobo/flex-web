@@ -67,6 +67,24 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
             label: 'Indicator Name',
         },
         {
+            id: 'start_date',
+            numeric: false,
+            disablePadding: false,
+            label: 'Start Date',
+        },
+        {
+            id: 'end_date',
+            numeric: false,
+            disablePadding: false,
+            label: 'End Date',
+        },
+        {
+            id: 'evaluation_date',
+            numeric: false,
+            disablePadding: false,
+            label: 'Evaluation Date',
+        },
+        {
             id: 'baseline_data',
             numeric: false,
             disablePadding: false,
@@ -84,6 +102,24 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
             disablePadding: false,
             label: 'Evaluation Data',
         },
+        {
+            id: 'evaluation_target',
+            numeric: false,
+            disablePadding: false,
+            label: 'Evaluation Against Target',
+        },
+        {
+            id: 'evaluation_time',
+            numeric: false,
+            disablePadding: false,
+            label: 'Evaluation Against Time',
+        },
+        {
+            id: 'evaluation_input',
+            numeric: false,
+            disablePadding: false,
+            label: 'Evaluation Against Inputs',
+        },
     ]
 
     const costColumns = [
@@ -99,6 +135,24 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
             numeric: false,
             disablePadding: false,
             label: 'Item Name',
+        },
+        {
+            id: 'start_date',
+            numeric: false,
+            disablePadding: false,
+            label: 'Start Date',
+        },
+        {
+            id: 'end_date',
+            numeric: false,
+            disablePadding: false,
+            label: 'End Date',
+        },
+        {
+            id: 'evaluation_date',
+            numeric: false,
+            disablePadding: false,
+            label: 'Evaluation Date',
         },
         {
             id: 'Budget',
@@ -166,28 +220,64 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
         },
     ]
 
+    const styler = (amount: number) => {
+        amount = Number(amount)
+        switch (true) {
+            case (amount < 100 && amount > 50):
+                return 'bg-yellow-300'
+            case (amount <= 50):
+                return 'bg-red-500'
+            case (amount > 200):
+                return 'bg-green-600';
+            case (amount === 300):
+                return 'bg-green-300';
+            default:
+                return '';
+
+        }
+    }
+
     const createRow = (input: any) => {
         let row: any;
 
         switch (evaluatedItem) {
             case "indicator":
-
                 row = [
-                    input.for,
-                    input.for_name,
-                    input.indicator,
-                    input.baseline_data,
-                    input.target_data,
-                    input.evaluation_data,
+                    { name: input.for, style: "" },
+                    { name: input.for_name, style: "" },
+                    { name: input.indicator, style: "" },
+                    { name: input.start_date, style: "" },
+                    { name: input.end_date, style: "" },
+                    { name: input.evaluation_date, style: "" },
+                    { name: input.baseline_data, style: "" },
+                    { name: input.target_data, style: "" },
+                    { name: input.evaluation_data, style: "" },
+                    { name: input.evaluation_target, style: styler(input.evaluation_target) },
+                    { name: input.evaluation_time, style: styler(input.evaluation_time) },
+                    { name: input.evaluation_input, style: styler(input.evaluation_input) }
+                    // input.for,
+                    // input.for_name,
+                    // input.indicator,
+                    // input.start_date,
+                    // input.end_date,
+                    // input.evaluation_date,
+                    // input.baseline_data,
+                    // input.target_data,
+                    // input.evaluation_data,
+                    // input.evaluation_target,
+                    // input.evaluation_time,
                 ]; break;
             case "input":
                 row = [
                     input.for,
                     input.code + ' - ' + input.name,
+                    input.start_date,
+                    input.end_date,
+                    input.evaluation_date,
                     FormattedMoney({ amount: input.cost }),
                     FormattedMoney({ amount: input.occured_cost }),
                     FormattedMoney({ amount: input.evaluated_cost }),
-                    input.evaluation,
+                    input.evaluation ?? "---",
                 ]; break;
             case "combined":
                 row = [
@@ -293,8 +383,6 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                             isDownload={true}
                             handleClick={handleHeadeClick}
                         />
-
-
                         <div className="bg-white h-full ">
                             <div className="flex ">
                                 <div className="flex flex-col w-36 mt-4 ml-4 p-2">
@@ -315,7 +403,6 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                     </div>
                                 </div>
                                 <div className="flex flex-col p-4 h-full w-full bg-white">
-
                                     <div className="bg-white px-2 ">
                                         <h3 className="text-center"> {reportHeader()} </h3>
                                         {
@@ -326,7 +413,6 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                     from="monitoring"
                                                 /> : <NoDataComponent />
                                         }
-
                                     </div>
                                 </div>
                             </div>

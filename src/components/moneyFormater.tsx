@@ -6,18 +6,26 @@ interface Props {
 
 const FormattedMoney = ({ amount, currency = 'Tzs' }: Props) => {
 
-    const formatter = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: currency,
-        currencyDisplay: 'symbol',
-    });
+    if (amount) {
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: currency,
+            currencyDisplay: 'symbol',
+        });
 
-    const formattedAmount = formatter.format(Number(amount));
+        const formattedAmount = formatter.format(Number(amount));
 
-    const symbol = formattedAmount.replace(/[0-9,.]/g, '').trim();
-    const amountStr = formattedAmount.replace(/[^0-9.,]/g, '').trim();
+        const symbol = formattedAmount.replace(/[0-9,.]/g, '').trim();
+        const amountStr = formattedAmount.replace(/[^0-9.,]/g, '').trim();
 
-    return <p>{amountStr} <span className="text-xs"> {symbol}</span></p>
+        return <p>{amountStr} <span className="text-xs"> {symbol}</span></p>
+    } else {
+        return <p>---</p>
+
+    }
+
+
+
 };
 
 export default FormattedMoney;

@@ -38,7 +38,6 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
 
         setAllIndicators(input.all_indicators)
 
-
         const selcted_monitoring_item = getValueFromLocalStorage('selected_monitoring_item')
         const expanded_monitoring_item = getValueFromLocalStorage('expanded_monitoring_item')
 
@@ -172,7 +171,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
     useEffect(() => {
         if (allIndicators && allIndicators.length > 0) {
             let newFormPayload = allIndicators.map(item => {
-                const body = { id: item.id, value: '', for: item.from }
+                const body = { id: item.id, value: '', for: item.from, parent: null }
                 return body
             })
 

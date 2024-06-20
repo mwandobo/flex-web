@@ -245,13 +245,14 @@ export default function MuiReportTable({
                                             <TableCell
                                                 id={`enhanced-table-checkbox-${colIndex}`}
                                                 key={colIndex}
+                                                className={column.style}
                                                 padding="normal"
                                                 style={{
                                                     borderLeft: '1px solid #d1d1d1',
-                                                    fontSize: "12px"
+                                                    fontSize: "12px",
                                                 }}
                                             >
-                                                {column}
+                                                {column.name}
                                             </TableCell>
                                         ))
                                     }
