@@ -307,7 +307,6 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                                     </p>
                                                                 </div>
                                                             )
-
                                                         }
                                                         )}
                                                     </div>
