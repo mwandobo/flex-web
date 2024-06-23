@@ -187,23 +187,25 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                     return ''
             }
         }
-
     }
 
     const stylerInput = (amount: any) => {
-        amount = Number(amount.replace(/,/g, ''));
+        if (amount) {
 
-        switch (true) {
-            case (amount < 0):
-                return 'bg-red-400';
-            case (amount > 0 && amount < 5):
-                return 'bg-green-400';
-            case (amount > 6 && amount > 10):
-                return 'bg-green-600';
-            case (amount > 10 && amount < 300):
-                return 'bg-green-700';
-            default:
-                return ''
+            amount = Number(amount.replace(/,/g, ''));
+
+            switch (true) {
+                case (amount < 0):
+                    return 'bg-red-400';
+                case (amount > 0 && amount < 5):
+                    return 'bg-green-400';
+                case (amount > 6 && amount > 10):
+                    return 'bg-green-600';
+                case (amount > 10 && amount < 300):
+                    return 'bg-green-700';
+                default:
+                    return ''
+            }
         }
     }
 
@@ -218,7 +220,7 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
     const customTableFunction = () => {
         switch (evaluatedItem) {
             case 'goal': return { data: data?.goals, inputs_data: data?.goal_inputs }
-            case 'outcome': return { data: data?.outcemse, inputs_data: data?.outcome_inputs }
+            case 'outcome': return { data: data?.outcomes, inputs_data: data?.outcome_inputs }
             default: break
         }
     }

@@ -224,6 +224,12 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
         fetchData()
     }, [id, token, isSubmitted])
 
+
+    useEffect(() => {
+        dispatch({ type: "UPDATE_SELECTED_MONITORING_ITEM", payload: { for: 'selected', value: 'goal' } })
+        setValueLocalStorage('selected_monitoring_item', 'goal')
+    }, [])
+
     const indicatorBodyCreator = (payload: any[]) => {
         if (payload?.length <= 0) {
             return <p>No Indicators</p>
