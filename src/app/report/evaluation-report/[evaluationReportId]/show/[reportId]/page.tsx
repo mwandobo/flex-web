@@ -5,18 +5,17 @@ import { get } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getValueFromLocalStorage, } from "@/utils/actions/local-starage";
-import MuiReportTable from "@/components/tables/mui-report-table";
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import NoDataComponent from "@/components/status/no-data";
-import FormattedMoney from "@/components/moneyFormater";
+import { capitalizeFirstWord } from "@/utils/actions/string-manipulations";
 
 const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
     const router = useRouter()
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
-    const [evaluatedItem, setEvaluatedItem] = useState('')
+    const [evaluatedItem, setEvaluatedItem] = useState('goal')
     const token = getValueFromLocalStorage('token')
     const id = params.reportId
 
@@ -47,18 +46,12 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
     }, [id, token, isSubmitted])
 
     const columns = [
-        {
-            id: 'for',
-            numeric: false,
-            hasUrl: true,
-            disablePadding: false,
-            label: 'Evaluation For',
-        },
+
         {
             id: 'for_name',
             numeric: false,
             disablePadding: false,
-            label: 'Item Name',
+            label: `${capitalizeFirstWord(evaluatedItem)} Name`,
         },
         {
             id: 'indicator',
@@ -114,13 +107,8 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
             disablePadding: false,
             label: 'Evaluation Against Time',
         },
-        {
-            id: 'evaluation_input',
-            numeric: false,
-            disablePadding: false,
-            label: 'Evaluation Against Inputs',
-        },
     ]
+
 
     const costColumns = [
         {
@@ -128,13 +116,7 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
             numeric: false,
             hasUrl: true,
             disablePadding: false,
-            label: 'Evaluation For',
-        },
-        {
-            id: 'for_name',
-            numeric: false,
-            disablePadding: false,
-            label: 'Item Name',
+            label: `${capitalizeFirstWord(evaluatedItem)} Name`,
         },
         {
             id: 'start_date',
@@ -158,7 +140,7 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
             id: 'Budget',
             numeric: false,
             disablePadding: false,
-            label: 'budget',
+            label: 'Budget',
         },
         {
             id: 'expense',
@@ -173,166 +155,72 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
             label: 'Evaluated Expense',
         },
         {
-            id: 'evaluation',
+            id: 'evaluation_target',
             numeric: false,
             disablePadding: false,
-            label: 'Evaluation Mark',
+            label: 'Evaluation Against Target',
+        },
+        {
+            id: 'evaluation_time',
+            numeric: false,
+            disablePadding: false,
+            label: 'Evaluation Against Time',
         },
     ]
 
-    const combinedColumns = [
-        {
-            id: 'for',
-            numeric: false,
-            hasUrl: true,
-            disablePadding: false,
-            label: 'Evaluation For',
-        },
-        {
-            id: 'for_name',
-            numeric: false,
-            disablePadding: false,
-            label: 'Item Name',
-        },
-        {
-            id: 'Budget',
-            numeric: false,
-            disablePadding: false,
-            label: 'budget',
-        },
-        {
-            id: 'expense',
-            numeric: false,
-            disablePadding: false,
-            label: 'Expense',
-        },
-        {
-            id: 'evaluated_expense',
-            numeric: false,
-            disablePadding: false,
-            label: 'Evaluated Expense',
-        },
-        {
-            id: 'evaluation',
-            numeric: false,
-            disablePadding: false,
-            label: 'Evaluation Mark',
-        },
-    ]
+    const styler = (amount: any) => {
+        if (amount) {
+            amount = Number(amount.replace(/,/g, ''));
 
-    const styler = (amount: number) => {
-        amount = Number(amount)
+            switch (true) {
+                case (amount <= 50):
+                    return 'bg-red-400';
+                case (amount < 100 && amount > 50):
+                    return 'bg-yellow-300';
+                case (amount > 100 && amount < 300):
+                    return 'bg-green-400';
+                case (amount > 300 && amount < 500):
+                    return 'bg-green-500';
+                case (amount > 500):
+                    return 'bg-green-600';
+                default:
+                    return ''
+            }
+        }
+
+    }
+
+    const stylerInput = (amount: any) => {
+        amount = Number(amount.replace(/,/g, ''));
+
         switch (true) {
-            case (amount < 100 && amount > 50):
-                return 'bg-yellow-300'
-            case (amount <= 50):
-                return 'bg-red-500'
-            case (amount > 200):
+            case (amount < 0):
+                return 'bg-red-400';
+            case (amount > 0 && amount < 5):
+                return 'bg-green-400';
+            case (amount > 6 && amount > 10):
                 return 'bg-green-600';
-            case (amount === 300):
-                return 'bg-green-300';
+            case (amount > 10 && amount < 300):
+                return 'bg-green-700';
             default:
-                return '';
-
-        }
-    }
-
-    const createRow = (input: any) => {
-        let row: any;
-
-        switch (evaluatedItem) {
-            case "indicator":
-                row = [
-                    { name: input.for, style: "" },
-                    { name: input.for_name, style: "" },
-                    { name: input.indicator, style: "" },
-                    { name: input.start_date, style: "" },
-                    { name: input.end_date, style: "" },
-                    { name: input.evaluation_date, style: "" },
-                    { name: input.baseline_data, style: "" },
-                    { name: input.target_data, style: "" },
-                    { name: input.evaluation_data, style: "" },
-                    { name: input.evaluation_target, style: styler(input.evaluation_target) },
-                    { name: input.evaluation_time, style: styler(input.evaluation_time) },
-                    { name: input.evaluation_input, style: styler(input.evaluation_input) }
-                    // input.for,
-                    // input.for_name,
-                    // input.indicator,
-                    // input.start_date,
-                    // input.end_date,
-                    // input.evaluation_date,
-                    // input.baseline_data,
-                    // input.target_data,
-                    // input.evaluation_data,
-                    // input.evaluation_target,
-                    // input.evaluation_time,
-                ]; break;
-            case "input":
-                row = [
-                    input.for,
-                    input.code + ' - ' + input.name,
-                    input.start_date,
-                    input.end_date,
-                    input.evaluation_date,
-                    FormattedMoney({ amount: input.cost }),
-                    FormattedMoney({ amount: input.occured_cost }),
-                    FormattedMoney({ amount: input.evaluated_cost }),
-                    input.evaluation ?? "---",
-                ]; break;
-            case "combined":
-                row = [
-                    input.for,
-                    input.code, + '-' + input.name,
-                    input.indicator,
-                    input.baseline_data,
-                    input.target_data,
-                    input.evaluation_data,
-                ]; break;
-        }
-        return row
-    }
-
-    const _columns = () => {
-        switch (evaluatedItem) {
-            case 'indicator':
-                return columns
-            case 'input':
-                return costColumns
-            case 'combined':
-                return combinedColumns
+                return ''
         }
     }
 
     const reportHeader = () => {
-        console.log(evaluatedItem)
         switch (evaluatedItem) {
-            case 'indicator': return "Indicators Project Evaluation";
-            case 'input': return "Inputs Project Evaluation"
-            case 'combined': return "Combined Report Project Evaluation"
+            case 'goal': return "Indicators Evaluation";
+            case 'outcome': return "Indicators Evaluation"
             default: break
         }
     }
 
     const customTableFunction = () => {
-        let payload: any[] = []
-        let someData: any[] = []
-
         switch (evaluatedItem) {
-            case 'indicator': someData = data?.indicator_evaluation?.evaluation_data; break
-            case 'input': someData = data?.input_evaluation?.evaluation_data; break
-            case 'combined': someData = data?.combined_evaluation?.evaluation_data; break
+            case 'goal': return { data: data?.goals, inputs_data: data?.goal_inputs }
+            case 'outcome': return { data: data?.outcemse, inputs_data: data?.outcome_inputs }
             default: break
         }
-
-        if (someData.length > 0) {
-            someData.forEach((item: any) => {
-                const row = createRow(item)
-                console.log(item)
-                payload.push(row)
-            })
-        }
-
-        return payload
     }
 
     const handleHeadeClick = () => {
@@ -356,16 +244,13 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
 
     const evaluationsItems = [
         {
-            name: "Indicators",
-            from: "indicator"
+            name: "Goals",
+            from: "goal"
         },
         {
-            name: "Inputs",
-            from: "input"
-        }, {
-            name: "Combined Report",
-            from: "combined"
-        }
+            name: "Outcomes",
+            from: "outcome"
+        },
     ]
 
     return (
@@ -404,22 +289,181 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                 </div>
                                 <div className="flex flex-col p-4 h-full w-full bg-white">
                                     <div className="bg-white px-2 ">
-                                        <h3 className="text-center"> {reportHeader()} </h3>
+                                        <h3 className="text-left font-semibold mb-1"> {reportHeader()} </h3>
                                         {
-                                            customTableFunction().length > 0 ?
-                                                < MuiReportTable
-                                                    data={customTableFunction()}
-                                                    columns={_columns()}
-                                                    from="monitoring"
-                                                /> : <NoDataComponent />
+                                            customTableFunction()?.data?.length > 0 ?
+                                                <div>
+                                                    <div className="grid grid-cols-10 border border-gray-500  bg-gray-200 ">
+                                                        {columns.map((item, index) =>
+                                                            <div key={index} className="flex flex-col justify-center items-center border-r border-gray-500 pl-1">
+                                                                <p className="text-xs ">
+                                                                    {item.label}
+                                                                </p>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    {customTableFunction()?.data?.map((item2, index) =>
+                                                        <>
+                                                            <div key={index} className="grid grid-cols-10  border-b border-r border-l border-gray-500">
+                                                                <>
+                                                                    <div className="flex flex-col  justify-center items-center  border-r border-gray-500 p-1" >
+                                                                        <p className="text-xs ">
+                                                                            {item2.name}
+                                                                        </p>
+                                                                    </div>
+                                                                </>
+                                                                <>
+                                                                    <div className="flex flex-col col-span-9  justify-center items-center  border-r border-gray-500 p-1" >
+                                                                        <p className="text-xs ">
+                                                                            Indicators
+                                                                        </p>
+                                                                    </div>
+                                                                </>
+
+                                                            </div>
+                                                            <div key={index} className="grid grid-cols-10  border-b border-r border-l border-gray-500">
+                                                                <>
+                                                                    {item2?.indicators.map((item2, index) =>
+                                                                        <>
+                                                                            <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
+
+                                                                            </div>
+                                                                            <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
+                                                                                <p className="text-xs ">
+                                                                                    {item2.indicator}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
+                                                                                <p className="text-xs ">
+                                                                                    {item2.start_date}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
+                                                                                <p className="text-xs ">
+                                                                                    {item2.end_date}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
+                                                                                <p className="text-xs ">
+                                                                                    {item2.evaluation_date}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
+                                                                                <p className="text-xs ">
+                                                                                    {item2.baseline_data}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
+                                                                                <p className="text-xs ">
+                                                                                    {item2.target_data}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
+                                                                                <p className="text-xs ">
+                                                                                    {item2.evaluation_data}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className={`flex flex-col justify-center items-center  border-r border-gray-500 p-1 ${styler(item2.evaluation_target)}`}>
+                                                                                <p className="text-xs ">
+                                                                                    {item2.evaluation_target}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className={`flex flex-col justify-center items-center  border-r border-gray-500 p-1 ${styler(item2.evaluation_time)}`}>
+                                                                                <p className="text-xs ">
+                                                                                    {item2.evaluation_time}
+                                                                                </p>
+                                                                            </div>
+
+                                                                        </>
+
+                                                                    )}
+
+                                                                </>
+
+                                                            </div>
+                                                        </>
+
+                                                    )}
+                                                    <div className="bg-white w-4/5 mt-5 ">
+                                                        <h3 className="text-start font-semibold mb-1"> Inputs Evaluation </h3>
+                                                        {
+                                                            customTableFunction()?.inputs_data?.length > 0 ?
+                                                                <div>
+                                                                    <div className="grid grid-cols-9 border border-gray-500  bg-gray-200 ">
+                                                                        {costColumns.map((item, index) =>
+                                                                            <div key={index} className="flex flex-col justify-center items-center border-r border-gray-500 pl-1">
+                                                                                <p className="text-xs ">
+                                                                                    {item.label}
+                                                                                </p>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                    {customTableFunction()?.inputs_data?.map((item2, index) =>
+                                                                        <div key={index} className="grid grid-cols-9  border-b border-r border-l border-gray-500">
+                                                                            <>
+                                                                                <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
+                                                                                    <p className="text-xs ">
+                                                                                        {item2.for_name}
+                                                                                    </p>
+                                                                                </div>
+                                                                                <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
+                                                                                    <p className="text-xs ">
+                                                                                        {item2.start_date}
+                                                                                    </p>
+                                                                                </div>
+                                                                                <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
+                                                                                    <p className="text-xs ">
+                                                                                        {item2.end_date}
+                                                                                    </p>
+                                                                                </div>
+                                                                                <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
+                                                                                    <p className="text-xs ">
+                                                                                        {item2.evaluation_date}
+                                                                                    </p>
+                                                                                </div>
+                                                                                <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
+                                                                                    <p className="text-xs ">
+                                                                                        {item2.budget}
+                                                                                    </p>
+                                                                                </div>
+                                                                                <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
+                                                                                    <p className="text-xs ">
+                                                                                        {item2.occured_cost}
+                                                                                    </p>
+                                                                                </div>
+                                                                                <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
+                                                                                    <p className="text-xs ">
+                                                                                        {item2.cost}
+                                                                                    </p>
+                                                                                </div>
+                                                                                <div className={`flex flex-col justify-center items-center  border-r border-gray-500 p-1 ${stylerInput(item2.evaluation_target)}`}>
+                                                                                    <p className="text-xs ">
+                                                                                        {item2.evaluation_target}
+                                                                                    </p>
+                                                                                </div>
+                                                                                <div className={`flex flex-col justify-center items-center  border-r border-gray-500 p-1 ${stylerInput(item2.evaluation_time)}`}>
+                                                                                    <p className="text-xs ">
+                                                                                        {item2.evaluation_time}
+                                                                                    </p>
+                                                                                </div>
+                                                                            </>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                                : <NoDataComponent />
+                                                        }
+                                                    </div>
+                                                </div>
+                                                : <NoDataComponent />
                                         }
                                     </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
             }
-        </ProtectedRoute>
+        </ProtectedRoute >
     );
 };
 
