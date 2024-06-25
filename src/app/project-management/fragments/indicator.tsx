@@ -47,6 +47,7 @@ function Indicator({
             isError: false,
             errorMessage: ''
         },
+        ['goal', 'outcome'].includes(from) &&
         {
             name: 'baseline_data',
             type: 'text',
@@ -101,6 +102,7 @@ function Indicator({
             numeric: false,
             disablePadding: false,
             label: 'Baseline Data',
+            isHidden: ['output', 'activity'].includes(from)
         },
         {
             id: 'target_data',

@@ -28,11 +28,9 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
 
     const handleMonotiringPayload = (input: any) => {
         const monitoringPayload = [
-            { name: "Project Goals", data: input.goals, type: 'goals', progress: input.goals_progress },
-            { name: "Project Outcomes", data: input.outcomes, type: 'outcomes', progress: input.outcomes_progress },
             { name: "Project Output", data: input.outputs, type: 'outputs', progress: input.outputs_progress },
             { name: "Project Activity", data: input.activities, type: 'activities', progress: input.activities_progress },
-            { name: "Project Budget", data: [], type: 'budget', progress: 1 }
+            { name: "Project Budget", data: input.inputs, type: 'budget', progress: 1 }
         ]
 
         setPayload(monitoringPayload)
@@ -79,12 +77,13 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
             case 'progress':
                 setFormPayload({ ...formPayload, indicator_id: indicator.id, quantity: e.target.value }); break;
             case 'cost':
-                setFormPayload({ ...formPayload, indicator_id: indicator.id, cost: e.target.value }); break;
+                setFormPayload({ ...formPayload, indicator_id: indicator.activity_id, cost: e.target.value, from: indicator.from, from_id: indicator.from_id }); break;
             default: break;
         }
+
+        console.log('indicator', indicator)
     }
 
-    console.log(formPayload)
     const handleSubmitCollectedData = async () => {
         if (formPayload) {
             const response = await post<any>('collected_data/store', formPayload, token)
@@ -118,6 +117,11 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
         };
         fetchData()
     }, [id, token, isSubmitted])
+
+    useEffect(() => {
+        dispatch({ type: "UPDATE_SELECTED_MONITORING_ITEM", payload: { for: 'selected', value: 'goal' } })
+        setValueLocalStorage('selected_monitoring_item', 'outputs')
+    }, [])
 
     const indicatorBodyCreator = (payload: any[]) => {
         if (payload.length <= 0) {
@@ -182,17 +186,62 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
 
     const pageRender = (payload: any, from?: string) => {
         if (from === 'budget') {
-            return <div className="flex  bg-white">
-                <div className="flex-1  h-full  bg-gray-100 px-2">
-                    <LeadsChart
-                        title={data.project?.name}
-                        directCost={data.direct_cost}
-                        resourceCost={data.resource_cost}
-                    />
-                </div>
-            </div>
-        } else {
+            if (payload && Object.keys(payload).length > 0 && payload.data && payload.data.length > 0) {
+                return <div className="flex">
+                    <div className="w-full flex flex-col">
+                        <div className=" bg-gray-300 p-2">
+                            <div className="grid grid-cols-6">
+                                <p className="text-start">#</p>
+                                <p className="text-start">Activity Name</p>
+                                <p className="text-start">Input Type</p>
+                                <p className="text-start">Budget</p>
+                                <p className="text-start">Expense</p>
+                                <p className="text-start"></p>
+                            </div>
+                        </div>
+                        <div className="" >
+                            <div className="">
+                                {
+                                    payload.data.map((item: any, index: any) =>
+                                        <div key={index} className="flex flex-col odd:bg-gray-200 px-2 " >
+                                            <div className="grid grid-cols-6 w-full p-1 text-sm font-light"
+                                            >
+                                                <p className="bg-green-200">{index + 1}</p>
+                                                <p>{item.activity}</p>
+                                                <p>{item.type}</p>
+                                                <p>{item.amount}</p>
+                                                <div className="flex justify-start col-span-2 w-full gap-5" >
+                                                    {isCollecting ?
+                                                        <input type="text" placeholder="Enter Expense" className="ps-1 h-7 w-full" onChange={(e) => handleFormInputChange(e, item, 'cost')} />
+                                                        :
+                                                        <p className="text-end">{item.occured_cost}</p>
+                                                    }
+                                                    <div>
+                                                        {isCollecting &&
+                                                            <button
+                                                                className={`h-100 w-16 flex justify-center items-center px-1 text-white border border-gray-300 bg-gray-500  shadow-md hover:shadow-lg transition-shadow duration-300`}
+                                                                onClick={() => handleSubmitCollectedData()}
+                                                            >
+                                                                <CircleCheckBig style={{ width: '30px', height: '30px', marginRight: '5px' }} />
+                                                                Submit
+                                                            </button>
+                                                        }
+                                                    </div>
+                                                </div>
 
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+
+        } else {
             if (payload && Object.keys(payload).length > 0 && payload.data && payload.data.length > 0) {
                 return <div className="flex">
                     <div className="w-full flex flex-col">
@@ -217,29 +266,14 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                                                 <p>{item.formatted_code}</p>
                                                 <p>{item.name}</p>
                                                 <p className="">{progresRender(item.progress)}</p>
-                                                <>
-                                                    {item.from === 'activity' && isCollecting ?
-                                                        <div className="flex justify-end gap-1 ">
-                                                            <input type="text" placeholder="Enter Cost" className="ps-1 h-7 w-full" onChange={(e) => handleFormInputChange(e, item, 'cost')} />
-                                                            <button
-                                                                className={`h-7 w-16 flex justify-center items-center px-1 text-white border border-gray-300 bg-gray-500  shadow-md hover:shadow-lg transition-shadow duration-300`}
-                                                                onClick={() => handleSubmitCollectedData()}
-                                                            >
-                                                                <CircleCheckBig className="mr-1" />
-                                                                Submit</button>
-
-                                                        </div>
-                                                        : <p className="text-end">{FormattedMoney({ amount: item.occured_cost })}</p>
-                                                    }
-
-                                                    <p className={`flex justify-end `}
-                                                        onClick={() => handleItemExpand(item, index)}
-                                                    >
-                                                        {expandedItem === index && progresRender(item.progress) !== "No Indicator" ?
-                                                            <ChevronUp className="text-gray-900" size={22} /> :
-                                                            <ChevronDown className="text-gray-400" size={20} />}
-                                                    </p>
-                                                </>
+                                                <p className="text-end">{FormattedMoney({ amount: item.occured_cost })}</p>
+                                                <p className={`flex justify-end `}
+                                                    onClick={() => handleItemExpand(item, index)}
+                                                >
+                                                    {expandedItem === index && progresRender(item.progress) !== "No Indicator" ?
+                                                        <ChevronUp className="text-gray-900" size={22} /> :
+                                                        <ChevronDown className="text-gray-400" size={20} />}
+                                                </p>
                                             </div>
                                             <>
                                                 {expandedItem === index && progresRender(item.progress) !== "No Indicator" &&
@@ -277,16 +311,6 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                                 <div className="flex flex-col w-64 mt-4 ml-4 p-2">
                                     <h4 className="text-sm font-semibold mb-2">Monitoring Items</h4>
                                     <div className="flex flex-col ml-3 text-sm gap-1 cursor-pointer">
-                                        {/* <p
-                                            className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'goals' && 'bg-sidebar-background text-sidebar-active'} `}
-                                            onClick={() => handleMonitoringItemChange('goals')}>
-                                            Goals
-                                        </p>
-                                        <p
-                                            className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'outcomes' && 'bg-sidebar-background text-sidebar-active'}`}
-                                            onClick={() => handleMonitoringItemChange('outcomes')}>
-                                            Outcomes
-                                        </p> */}
                                         <p
                                             className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'outputs' && 'bg-sidebar-background text-sidebar-active'}`}
                                             onClick={() => handleMonitoringItemChange('outputs')}>
@@ -319,26 +343,17 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                                                                         onClick={() => handleCollectAction()}
                                                                     >
                                                                         {isCollecting ? <Activity size={10} className="mr-1" /> : <ClipboardCheck size={15} className="mr-1" />}
-                                                                        {isCollecting ? 'Monitoring ...' : 'Collect'}
+                                                                        {isCollecting ? 'Monitoring ...' : 'Start Monitoring'}
                                                                     </button>
                                                                     <CircularWithValueLabel value={Number(pay.progress)} />
                                                                 </div>
                                                             </div>
-                                                            {pay.data?.length > 0 ?
+                                                            {pay.data?.length > 0 &&
                                                                 <>
                                                                     {pageRender(pay, pay.type)}
                                                                 </>
-                                                                :
-                                                                (<>
-                                                                    {
-                                                                        pay.type === 'budget' ?
-                                                                            <>{pageRender(pay, 'budget')}</> :
-                                                                            <div className="flex h-3/4 justify-center items-center">
-                                                                                <p>No data</p>
-                                                                            </div>
-                                                                    }
-                                                                </>
-                                                                )
+
+
                                                             }
                                                         </div> :
                                                         <div className="w-full h-36 flex justify-center items-center ">

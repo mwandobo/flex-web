@@ -13,7 +13,6 @@ import { useGlobalContextHook } from "@/hooks/useGlobalContextHook";
 import swal from 'sweetalert2';
 import FormattedMoney from "@/components/moneyFormater";
 
-
 const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } }) => {
     const router = useRouter()
     const [data, setData] = useState<any>([])
