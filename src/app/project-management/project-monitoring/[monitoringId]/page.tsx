@@ -27,9 +27,9 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
 
     const handleMonotiringPayload = (input: any) => {
         const monitoringPayload = [
-            { name: "Project Output", data: input.outputs, type: 'outputs', progress: input.outputs_progress },
-            { name: "Project Activity", data: input.activities, type: 'activities', progress: input.activities_progress },
-            { name: "Project Budget", data: input.inputs, type: 'budget', progress: 1 }
+            { name: "Project Output", data: input.outputs, type: 'outputs', progress: input.output_progress },
+            { name: "Project Activity", data: input.activities, type: 'activities', progress: input.activity_progress },
+            { name: "Project Budget", data: input.inputs, type: 'budget', progress: input.input_progress }
         ]
 
         setPayload(monitoringPayload)
@@ -186,46 +186,51 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
             if (payload && Object.keys(payload).length > 0 && payload.data && payload.data.length > 0) {
                 return <div className="flex">
                     <div className="w-full flex flex-col">
-                        <div className=" bg-gray-300 p-2">
-                            <div className="grid grid-cols-6">
-                                <p className="text-start">#</p>
-                                <p className="text-start">Activity Name</p>
-                                <p className="text-start">Input Type</p>
-                                <p className="text-start">Budget</p>
-                                <p className="text-start">Expense</p>
-                                <p className="text-start"></p>
+                        <div className=" bg-gray-300">
+                            <div className="grid grid-cols-7">
+                                <p className="border-r border-gray-400 ps-2 py-2">#</p>
+                                <p className="border-r border-gray-400 ps-2 py-2">Activity Name</p>
+                                <p className="border-r border-gray-400 ps-2 py-2">Input Type</p>
+                                <p className="border-r border-gray-400 ps-2 py-2">Input Name</p>
+                                <p className="border-r border-gray-400 ps-2 py-2">Budget</p>
+                                <p className="border-r border-gray-400 ps-2 py-2">Expense</p>
+                                <p className="ps-2 py-2">Progress</p>
                             </div>
                         </div>
                         <div className="" >
                             <div className="">
                                 {
                                     payload.data.map((item: any, index: any) =>
-                                        <div key={index} className="flex flex-col odd:bg-gray-200 px-2 " >
-                                            <div className="grid grid-cols-6 w-full p-1 text-sm font-light"
+                                        <div key={index} className="flex flex-col odd:bg-gray-200" >
+                                            <div className="grid grid-cols-7 w-full text-sm font-light"
                                             >
-                                                <p className="bg-green-200">{index + 1}</p>
-                                                <p>{item.activity}</p>
-                                                <p>{item.type}</p>
-                                                <p>{item.amount}</p>
-                                                <div className="flex justify-start col-span-2 w-full gap-5" >
-                                                    {isCollecting ?
-                                                        <input type="text" placeholder="Enter Expense" className="ps-1 h-7 w-full" onChange={(e) => handleFormInputChange(e, item, 'cost')} />
-                                                        :
-                                                        <p className="text-end">{item.occured_cost}</p>
-                                                    }
-                                                    <div>
-                                                        {isCollecting &&
-                                                            <button
-                                                                className={`h-100 w-16 flex justify-center items-center px-1 text-white border border-gray-300 bg-gray-500  shadow-md hover:shadow-lg transition-shadow duration-300`}
-                                                                onClick={() => handleSubmitCollectedData()}
-                                                            >
-                                                                <CircleCheckBig style={{ width: '30px', height: '30px', marginRight: '5px' }} />
-                                                                Submit
-                                                            </button>
-                                                        }
-                                                    </div>
-                                                </div>
+                                                <p className="border-r border-gray-300 ps-2 py-1">{index + 1}</p>
+                                                <p className="border-r border-gray-300 ps-2 py-1">{item.activity}</p>
+                                                <p className="border-r border-gray-300 ps-2 py-1">{item.type}</p>
+                                                <p className="border-r border-gray-300 ps-2 py-1">{item.name}</p>
+                                                <p className="border-r border-gray-300 ps-2 py-1">{item.amount}</p>
 
+                                                {isCollecting ?
+                                                    <div className="px-3 border-r border-gray-300 py-1 w-full">
+                                                        <input type="text" placeholder="Enter Expense" className="ps-1 h-7 w-full" onChange={(e) => handleFormInputChange(e, item, 'cost')} />
+                                                    </div>
+                                                    :
+                                                    <p className="border-r border-gray-300 ps-2 py-1">{item.occured_cost}</p>
+                                                }
+
+                                                {isCollecting ?
+                                                    <div className="mx-auto py-1 ">
+                                                        <button
+                                                            className={`h-7 w-16 flex justify-center items-center px-1 text-white border border-gray-300 bg-gray-500  shadow-md hover:shadow-lg transition-shadow duration-300`}
+                                                            onClick={() => handleSubmitCollectedData()}
+                                                        >
+                                                            <CircleCheckBig className="mr-1" />
+                                                            Submit</button>
+                                                    </div> :
+                                                    <>
+                                                        <p className="px-3 py-1">{progresRender(item.utilization)}</p>
+                                                    </>
+                                                }
                                             </div>
                                         </div>
                                     )
@@ -235,9 +240,6 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                     </div>
                 </div>
             }
-
-
-
         } else {
             if (payload && Object.keys(payload).length > 0 && payload.data && payload.data.length > 0) {
                 return <div className="flex">
