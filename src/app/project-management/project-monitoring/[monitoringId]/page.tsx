@@ -127,18 +127,17 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
         }
 
         return <div className="flex ">
-            <div className="w-11/12 mx-auto border border-gray-300 flex flex-col px-2">
-                <div className="font-semibold text-sm py-1"><h5>Indicators List</h5></div>
-                <div className="mb-1">
-                    <div className="grid grid-cols-9 gap-4 text-xs border-b border-gray-300">
-                        <p className="" >#</p>
-                        <p className="">Code</p>
-                        <p className="">Indicator Name</p>
-                        <p className="">Verify By</p>
-                        <p className="">Baseline Data</p>
-                        <p className="">Target Data</p>
-                        <p className="">Collected Data</p>
-                        <p className="">Progress</p>
+            <div className="w-11/12 mx-auto border border-gray-300 flex flex-col">
+                <div className="font-semibold text-sm py-2 ps-2"><h5>Indicators List</h5></div>
+                <div className="">
+                    <div className="grid grid-cols-7 text-xs border-b border-t border-gray-300">
+                        <p className="border-r border-gray-300 ps-2 py-2">#</p>
+                        <p className="border-r border-gray-300 ps-2 py-2 ">Code</p>
+                        <p className="border-r border-gray-300 ps-2  py-2">Indicator Name</p>
+                        <p className="border-r border-gray-300 ps-2 py-2">Verify By</p>
+                        <p className="border-r border-gray-300 ps-2 py-2">Target Data</p>
+                        <p className="border-r border-gray-300 ps-2 py-2">Collected Data</p>
+                        <p className="ps-2 py-2">  {!isCollecting ? "Progress" : "Action"}</p>
                         <p className=""></p>
                     </div>
                 </div>
@@ -146,31 +145,32 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                     {
                         payload.map((item: any, index: any) =>
                             <div key={index} className="flex ">
-                                <div className="grid grid-cols-9 gap-4 w-full text-xs p-1 border-b border-gray-300 ">
-                                    <p>{index + 1}</p>
-                                    <p>{item.formatted_code}</p>
-                                    <p>{item.name}</p>
-                                    <p>{item.mov}</p>
-                                    <p>{item.baseline_data}</p>
-                                    <p>{item.target_data}</p>
-                                    <p>{item.collected_data}</p>
-
+                                <div className="grid grid-cols-7 w-full text-xs border-b border-gray-300 ">
+                                    <p className="border-r border-gray-300 ps-3  py-1">{index + 1}</p>
+                                    <p className="border-r border-gray-300 ps-3 py-1">{item.formatted_code}</p>
+                                    <p className="border-r border-gray-300 ps-3 py-1">{item.name}</p>
+                                    <p className="border-r border-gray-300 ps-3 py-1">{item.mov}</p>
+                                    <p className="text-end border-r pe-3 border-gray-300 ps-2 py-1">{item.target_data}</p>
                                     {isCollecting ?
-                                        <>
+                                        <div className="ps-3 border-r border-gray-300 py-1">
                                             <input type="text" placeholder="Enter Data" className="ps-1 h-7 w-20" onChange={(e) => handleFormInputChange(e, item, 'progress')} />
-                                        </> :
-                                        <>
-                                            <p className="">{progresRender(item.progress)}</p>
-                                        </>
+                                        </div>
+                                        :
+                                        <p className="text-end pe-3 border-r border-gray-300 ps-2 py-1">{item.collected_data}</p>
                                     }
 
-                                    {isCollecting &&
-                                        <button
-                                            className={`h-7 w-16 flex justify-center items-center px-1 text-white border border-gray-300 bg-gray-500  shadow-md hover:shadow-lg transition-shadow duration-300`}
-                                            onClick={() => handleSubmitCollectedData()}
-                                        >
-                                            <CircleCheckBig className="mr-1" />
-                                            Submit</button>
+                                    {isCollecting ?
+                                        <div className="ps-3 py-1 border-r border-gray-300">
+                                            <button
+                                                className={`h-7 w-16 flex justify-center items-center px-1 text-white border border-gray-300 bg-gray-500  shadow-md hover:shadow-lg transition-shadow duration-300`}
+                                                onClick={() => handleSubmitCollectedData()}
+                                            >
+                                                <CircleCheckBig className="mr-1" />
+                                                Submit</button>
+                                        </div> :
+                                        <>
+                                            <p className="ps-3">{progresRender(item.progress)}</p>
+                                        </>
                                     }
                                 </div>
                             </div>
@@ -242,33 +242,35 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
             if (payload && Object.keys(payload).length > 0 && payload.data && payload.data.length > 0) {
                 return <div className="flex">
                     <div className="w-full flex flex-col">
-                        <div className=" bg-gray-300 p-2">
-                            <div className="grid grid-cols-6">
-                                <p className="text-start">#</p>
-                                <p className="text-start">Code</p>
-                                <p className="text-start">Name</p>
-                                <p className="text-start">Progress</p>
-                                <p className="text-center">Cost</p>
-                                <p className="text-start"></p>
+                        <div className=" bg-gray-300 ">
+                            <div className="grid grid-cols-7">
+                                <p className="text-center border-r border-gray-400 py-2 ">#</p>
+                                <p className="text-center border-r border-gray-400 py-2">Code</p>
+                                <p className="text-center border-r border-gray-400 py-2 ">Name</p>
+                                <p className="text-center border-r border-gray-400 py-2">Budget (Tzs)</p>
+                                <p className="text-center border-r border-gray-400 py-2">Expense(Tzs)</p>
+                                <p className="text-center border-gray-400 py-2">Progress</p>
+                                <p className="text-center ps-1 py-2"></p>
                             </div>
                         </div>
                         <div className="" >
                             <div className="">
                                 {
                                     payload.data.map((item: any, index: any) =>
-                                        <div key={index} className="flex flex-col odd:bg-gray-200 px-2 " >
-                                            <div className="grid grid-cols-6 w-full p-1 text-sm font-light"
+                                        <div key={index} className="flex flex-col odd:bg-gray-200 " >
+                                            <div className="grid grid-cols-7 w-full text-sm font-light"
                                             >
-                                                <p>{index + 1}</p>
-                                                <p>{item.formatted_code}</p>
-                                                <p>{item.name}</p>
-                                                <p className="">{progresRender(item.progress)}</p>
-                                                <p className="text-end">{FormattedMoney({ amount: item.occured_cost })}</p>
-                                                <p className={`flex justify-end `}
+                                                <p className="border-r border-gray-300 ps-2 py-2">{index + 1}</p>
+                                                <p className="border-r border-gray-300 ps-2 py-2">{item.formatted_code}</p>
+                                                <p className="border-r border-gray-300 ps-2 py-2">{item.name}</p>
+                                                <p className="text-end border-r border-gray-300 pe-2 py-2">{FormattedMoney({ amount: item.cost, isHideCurrency: true })}</p>
+                                                <p className="text-end border-r border-gray-300 pe-2 py-2">{FormattedMoney({ amount: item.occured_cost, isHideCurrency: true })}</p>
+                                                <p className="ps-2 py-2">{progresRender(item.progress)}</p>
+                                                <p className={`flex justify-end me-12 py-2`}
                                                     onClick={() => handleItemExpand(item, index)}
                                                 >
                                                     {expandedItem === index && progresRender(item.progress) !== "No Indicator" ?
-                                                        <ChevronUp className="text-gray-900" size={22} /> :
+                                                        <ChevronUp className="text-gray-900" size={18} /> :
                                                         <ChevronDown className="text-gray-400" size={20} />}
                                                 </p>
                                             </div>
@@ -340,7 +342,7 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                                                                         onClick={() => handleCollectAction()}
                                                                     >
                                                                         {isCollecting ? <Activity size={10} className="mr-1" /> : <ClipboardCheck size={15} className="mr-1" />}
-                                                                        {isCollecting ? 'Monitoring ...' : 'Start Monitoring'}
+                                                                        {isCollecting ? 'Stop Monitoring ...' : 'Start Monitoring'}
                                                                     </button>
                                                                     <CircularWithValueLabel value={Number(pay.progress)} />
                                                                 </div>
