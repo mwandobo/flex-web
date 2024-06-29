@@ -91,7 +91,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
             id: 'learning_target',
             numeric: false,
             disablePadding: false,
-            label: 'Learning Against Target',
+            label: 'Learning Against Target (%)',
         },
         {
             id: 'learning_time',
@@ -101,26 +101,62 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
         },
     ]
 
-    const styler = (amount: any) => {
-        console.log(amount)
-        if (amount) {
-            if (typeof amount === 'string' && amount.includes(',')) {
-                amount = Number(amount.replace(/,/g, ''));
-            } else {
-                amount = Number(amount);
-            }
+    const costColumns = [
 
+        {
+            id: 'activity',
+            numeric: false,
+            disablePadding: false,
+            label: "Activity Name",
+        },
+        {
+            id: 'type',
+            numeric: false,
+            disablePadding: false,
+            label: 'Input Type',
+        },
+        {
+            id: 'name',
+            numeric: false,
+            disablePadding: false,
+            label: 'Input Name',
+        },
+        {
+            id: 'budget',
+            numeric: false,
+            disablePadding: false,
+            label: 'Budget',
+        },
+        {
+            id: 'expense',
+            numeric: false,
+            disablePadding: false,
+            label: 'Expense',
+        },
+        {
+            id: 'learning_target',
+            numeric: false,
+            disablePadding: false,
+            label: 'Learning Against Target (%)',
+        },
+        {
+            id: 'learning_time',
+            numeric: false,
+            disablePadding: false,
+            label: 'Learning Against Time',
+        },
+    ]
+
+    const styler = (progress: string) => {
+        console.log(progress)
+        if (progress) {
             switch (true) {
-                case (amount <= 50):
+                case (progress === 'fail'):
                     return 'bg-red-400';
-                case (amount < 100 && amount > 50):
-                    return 'bg-yellow-300';
-                case (amount > 100 && amount < 300):
+                case (progress === "equal"):
+                    return 'bg-yellow-400';
+                case (progress === 'pass'):
                     return 'bg-green-400';
-                case (amount > 300 && amount < 500):
-                    return 'bg-green-500';
-                case (amount > 500):
-                    return 'bg-green-600';
                 default:
                     return ''
             }
@@ -128,12 +164,12 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
     }
 
     const reportHeader = () => {
-        // switch (evaluatedItem) {
-        //     case 'output': return `Project: ${data.project.name} Indicators Learning Report`;
-        //     case 'activity': return <p className="flex items-center"><span className='font-normal text-xs'>Project - {data?.project?.code}:{data?.project?.name} </span> <pre>   </pre> Indicators Learning Report;</p>
-        //     default: break
-        //      return <p className="flex items-center"><span className='font-normal text-xs'>Project - {data?.project?.code}:{data?.project?.name} </span> <pre>   </pre> Indicators Learning Report;</p>
-        // }
+        switch (evaluatedItem) {
+            case 'output': return <p className="flex items-center"><span className='font-normal text-xs me-3'>Project - {data?.project?.code}:{data?.project?.name} </span>  Indicators Learning Report</p>
+            case 'activity': <p className="flex items-center"><span className='font-normal text-xs me-3'>Project - {data?.project?.code}:{data?.project?.name} </span>  Indicators Learning Report</p>
+            case 'input': <p className="flex items-center"><span className='font-normal text-xs me-3'>Project - {data?.project?.code}:{data?.project?.name} </span>  Inputs Learning Report</p>
+            default: break
+        }
 
         return <p className="flex items-center"><span className='font-normal text-xs me-3'>Project - {data?.project?.code}:{data?.project?.name} </span>  Indicators Learning Report</p>
 
@@ -143,6 +179,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
         switch (evaluatedItem) {
             case 'output': return { data: data?.outputs }
             case 'activity': return { data: data?.activities }
+            case 'input': return { data: data?.inputs }
             default: break
         }
     }
@@ -175,10 +212,10 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
             name: "Activity",
             from: "activity"
         },
-        // {
-        //     name: "Input",
-        //     from: "input"
-        // },
+        {
+            name: "Input",
+            from: "input"
+        },
     ]
 
     return (
@@ -220,103 +257,175 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                                         <h3 className="text-left font-semibold mb-1"> {reportHeader()} </h3>
                                         {
                                             customTableFunction()?.data?.length > 0 ?
-                                                <div>
-                                                    <div className="grid grid-cols-8 border border-gray-500  bg-gray-200 ">
-                                                        {columns.map((item, index) => {
-                                                            const isLast = index === columns.length - 1;
-                                                            return (
+                                                <>{evaluatedItem !== 'input' ?
+                                                    <div>
+                                                        <div className="grid grid-cols-8 border border-gray-500  bg-gray-200 ">
+                                                            {columns.map((item, index) => {
+                                                                const isLast = index === columns.length - 1;
+                                                                return (
 
-                                                                <div key={index} className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
-                                                                    <p className="text-xs ">
-                                                                        {item.label}
-                                                                    </p>
-                                                                </div>
-                                                            )
-                                                        }
-                                                        )}
-                                                    </div>
-                                                    <div className="border-b border-gray-500">
-                                                        {customTableFunction()?.data?.map((item1, index) => {
-                                                            const isFirst = index === 0;
-                                                            return (
-                                                                < >
-                                                                    <div key={index} className={`grid grid-cols-8 ${!isFirst ? 'border-t' : ''} border-b border-r border-l border-gray-500`}>
-                                                                        <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1" >
-                                                                            <p className="text-xs ">
-                                                                                {item1.name}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div className="flex flex-col justify-center items-center border-r border-gray-500 p-1">
-                                                                            <p className="text-xs ">
-                                                                                {item1.start_date}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div className="flex flex-col justify-center items-center border-r border-gray-500 p-1">
-                                                                            <p className="text-xs ">
-                                                                                {item1.end_date}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div className="flex flex-col col-span-3 justify-center  border-r border-gray-500 items-start p-1" >
-                                                                            <p className="text-xs font-semibold">
-                                                                                Indicators
-                                                                            </p>
-                                                                        </div>
-
-                                                                        <div className="flex flex-col justify-center border-r border-gray-500 items-end p-1" >
-                                                                            <p className="text-xs">
-                                                                                {item1.learning_target}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div className="flex flex-col justify-center  items-end p-1" >
-                                                                            <p className="text-xs text-end">
-                                                                                {item1.learning_time}
-                                                                            </p>
-                                                                        </div>
-
+                                                                    <div key={index} className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
+                                                                        <p className="text-xs ">
+                                                                            {item.label}
+                                                                        </p>
                                                                     </div>
-                                                                    <>
-                                                                        {item1?.indicators.map((item2, index) => {
-                                                                            const isLast = index === item1?.indicators.length - 1;
-                                                                            return (
-                                                                                <div key={index} className={`grid grid-cols-8 border-r border-l border-gray-500`}>
-                                                                                    <div className="flex flex-col col-span-3 justify-center items-center border-r border-gray-500 p-1">
-                                                                                    </div>
-                                                                                    <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 ${!isLast ? 'border-b' : ''}`}>
-                                                                                        <p className="text-xs ">
-                                                                                            {item2?.formatted_code + " - " + item2?.name}
-                                                                                        </p>
-                                                                                    </div>
-                                                                                    <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 ${!isLast ? 'border-b' : ''}`}>
-                                                                                        <p className="text-xs ">
-                                                                                            {item2.target_data}
-                                                                                        </p>
-                                                                                    </div>
-                                                                                    <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 ${!isLast ? 'border-b' : ''}`}>
-                                                                                        <p className="text-xs ">
-                                                                                            {item2.collected_data}
-                                                                                        </p>
-                                                                                    </div>
+                                                                )
+                                                            }
+                                                            )}
+                                                        </div>
+                                                        <div className="border-b border-gray-500">
+                                                            {customTableFunction()?.data?.map((item1, index) => {
+                                                                const isFirst = index === 0;
+                                                                return (
+                                                                    < >
+                                                                        <div key={index} className={`grid grid-cols-8 ${!isFirst ? 'border-t' : ''} border-b border-r border-l border-gray-500`}>
+                                                                            <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1" >
+                                                                                <p className="text-xs ">
+                                                                                    {item1.name}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className="flex flex-col justify-center items-center border-r border-gray-500 p-1">
+                                                                                <p className="text-xs ">
+                                                                                    {item1.start_date}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className="flex flex-col justify-center items-center border-r border-gray-500 p-1">
+                                                                                <p className="text-xs ">
+                                                                                    {item1.end_date}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className="flex flex-col col-span-3 justify-center  border-r border-gray-500 items-start p-1" >
+                                                                                <p className="text-xs font-semibold">
+                                                                                    Indicators
+                                                                                </p>
+                                                                            </div>
 
-                                                                                    <div className={`flex flex-col justify-center items-end border-r border-gray-500 p-1 ${styler(item2.progress)} ${!isLast ? 'border-b' : ''}`}>
-                                                                                        <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>
-                                                                                            {item2.progress}
-                                                                                        </p>
+                                                                            <div className="flex flex-col justify-center border-r border-gray-500 items-end p-1" >
+                                                                                <p className="text-xs">
+                                                                                    {item1.learning_target}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className={`flex flex-col justify-center  items-end p-1 ${styler(item1.learning_time)}`} >
+                                                                                <p className="text-xs text-end">
+                                                                                </p>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <>
+                                                                            {item1?.indicators.map((item2, index) => {
+                                                                                const isLast = index === item1?.indicators.length - 1;
+                                                                                return (
+                                                                                    <div key={index} className={`grid grid-cols-8 border-r border-l border-gray-500`}>
+                                                                                        <div className="flex flex-col col-span-3 justify-center items-center border-r border-gray-500 p-1">
+                                                                                        </div>
+                                                                                        <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 ${!isLast ? 'border-b' : ''}`}>
+                                                                                            <p className="text-xs ">
+                                                                                                {item2?.formatted_code + " - " + item2?.name}
+                                                                                            </p>
+                                                                                        </div>
+                                                                                        <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 ${!isLast ? 'border-b' : ''}`}>
+                                                                                            <p className="text-xs ">
+                                                                                                {item2.target_data}
+                                                                                            </p>
+                                                                                        </div>
+                                                                                        <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 ${!isLast ? 'border-b' : ''}`}>
+                                                                                            <p className="text-xs ">
+                                                                                                {item2.collected_data}
+                                                                                            </p>
+                                                                                        </div>
+
+                                                                                        <div className={`flex flex-col justify-center items-end border-r border-gray-500 p-1 ${!isLast ? 'border-b' : ''}`}>
+                                                                                            <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>
+                                                                                                {item2.progress}
+                                                                                            </p>
+                                                                                        </div>
+                                                                                        <div className={`flex flex-col justify-center items-end p-1 ${styler(item2.learning_time)} ${!isLast ? 'border-b' : ''}`}>
+                                                                                            <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>
+                                                                                            </p>
+                                                                                        </div>
                                                                                     </div>
-                                                                                    <div className={`flex flex-col justify-center items-end p-1 ${styler(item2.learning_time)} ${!isLast ? 'border-b' : ''}`}>
-                                                                                        <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>
-                                                                                            {item2.learning_time}
-                                                                                        </p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            );
-                                                                        })}
+                                                                                );
+                                                                            })}
+                                                                        </>
                                                                     </>
-                                                                </>
-                                                            )
-                                                        }
-                                                        )}
+                                                                )
+                                                            }
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    :
+                                                    <div>
+                                                        <div className="grid grid-cols-7 border border-gray-500  bg-gray-200 ">
+                                                            {costColumns.map((item, index) => {
+                                                                const isLast = index === costColumns.length - 1;
+                                                                return (
+
+                                                                    <div key={index} className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
+                                                                        <p className="text-xs ">
+                                                                            {item.label}
+                                                                        </p>
+                                                                    </div>
+                                                                )
+                                                            }
+                                                            )}
+                                                        </div>
+                                                        <div className="">
+                                                            {customTableFunction()?.data?.map((item1, index) => {
+                                                                const isFirst = index === 0;
+                                                                return (
+                                                                    < >
+                                                                        <div key={index} className={`grid grid-cols-7 ${!isFirst ? 'border-t' : ''} border-b border-r border-l border-gray-500`}>
+                                                                            <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1" >
+                                                                                <p className="text-xs ">
+                                                                                    {item1.activity}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className="flex flex-col justify-center items-center border-r border-gray-500 p-1">
+                                                                                <p className="text-xs ">
+                                                                                    {item1.from}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className="flex flex-col justify-center items-center border-r border-gray-500 p-1">
+                                                                                <p className="text-xs ">
+                                                                                    {item1.name}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className="flex flex-col justify-center  border-r border-gray-500 items-end p-1" >
+                                                                                <p className="text-xs">
+                                                                                    {item1.amount}
+                                                                                </p>
+                                                                            </div>
+
+                                                                            <div className="flex flex-col justify-center items-end p-1 border-r border-gray-500" >
+                                                                                <p className="text-xs">
+                                                                                    {item1.occured_cost}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className="flex flex-col justify-center items-end p-1 border-r border-gray-500" >
+                                                                                <p className="text-xs">
+                                                                                    {item1.progress}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div className={`flex flex-col justify-center items-end p-1 ${styler(item1.learning_time)}`} >
+                                                                                <p className="text-xs text-end">
+                                                                                </p>
+                                                                            </div>
+
+
+                                                                        </div>
+                                                                    </>
+                                                                )
+                                                            }
+                                                            )}
+                                                        </div>
+                                                    </div>
+
+
+
+                                                }
+
+                                                </>
+
                                                 : <NoDataComponent />
                                         }
                                     </div>
