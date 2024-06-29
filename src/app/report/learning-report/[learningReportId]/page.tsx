@@ -1,27 +1,22 @@
 "use client"
 import ProtectedRoute from "@/components/authentication/protected-route";
 import PageHeader from "@/components/header/page-header";
-import { get, post } from "@/utils/api";
+import { get } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import LinearWithValueLabel from "@/components/bars/progressBar";
-import CircularWithValueLabel from "@/components/bars/circularBar";
-import { getValueFromLocalStorage, setValueLocalStorage } from "@/utils/actions/local-starage";
-import { Activity, ChevronDown, ChevronUp, CircleCheckBig, ClipboardCheck } from "lucide-react";
-import { useGlobalContextHook } from "@/hooks/useGlobalContextHook";
-import MuiTable from "@/components/tables/mui-table";
-import CrudButtonsComponent from "@/components/crud-operator-buttons";
+import { getValueFromLocalStorage, } from "@/utils/actions/local-starage";
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import NoDataComponent from "@/components/status/no-data";
+import { capitalizeFirstWord } from "@/utils/actions/string-manipulations";
 
-const EvaluationReportShow = ({ params }: { params: { learningReportId: string } }) => {
+const LearningReportShow = ({ params }: { params: { learningReportId: string } }) => {
     const router = useRouter()
     const [data, setData] = useState<any>([])
-    const [payload, setPayload] = useState<any[]>([])
     const [loading, setLoading] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
+    const [evaluatedItem, setEvaluatedItem] = useState('goal')
     const token = getValueFromLocalStorage('token')
-    const { state, dispatch } = useGlobalContextHook()
-    const { selectedMonitoringItem } = state;
-    const { selected, expandedItem } = selectedMonitoringItem
     const id = params.learningReportId
 
     const url = `project_learning_report/show/${id}`
@@ -36,7 +31,7 @@ const EvaluationReportShow = ({ params }: { params: { learningReportId: string }
                 setLoading(true)
                 const res = await get(url, token)
 
-                if (data && res.status === 200) {
+                if (res.status === 200) {
                     setData(res.data.data)
                     setLoading(false)
                 }
@@ -50,65 +45,141 @@ const EvaluationReportShow = ({ params }: { params: { learningReportId: string }
         fetchData()
     }, [id, token, isSubmitted])
 
+    useEffect(() => {
+        setEvaluatedItem('output')
+    }, [])
+
     const columns = [
+
         {
-            id: 'formaated_code',
+            id: 'for_name',
             numeric: false,
-            hasUrl: true,
             disablePadding: false,
-            label: 'Evaluation Code',
-            width: '30%',
+            label: `${capitalizeFirstWord(evaluatedItem)} Name`,
         },
         {
-            id: 'project_name',
+            id: 'start_date',
             numeric: false,
             disablePadding: false,
-            label: 'Project Name',
-            width: '65%',
+            label: 'Start Date',
         },
         {
-            id: 'actions',
+            id: 'end_date',
             numeric: false,
             disablePadding: false,
-            label: 'Actions',
-            width: '65%',
+            label: 'End Date',
+        },
+        {
+            id: 'indicator',
+            numeric: false,
+            disablePadding: false,
+            label: 'Indicator Name',
+        },
+        {
+            id: 'target_data',
+            numeric: false,
+            disablePadding: false,
+            label: 'Target Data',
+        },
+        {
+            id: 'collected_data',
+            numeric: false,
+            disablePadding: false,
+            label: 'Monitoring Data',
+        },
+        {
+            id: 'learning_target',
+            numeric: false,
+            disablePadding: false,
+            label: 'Learning Against Target',
+        },
+        {
+            id: 'learning_time',
+            numeric: false,
+            disablePadding: false,
+            label: 'Learning Against Time',
         },
     ]
 
-    const handleClick = (type: string, payload?: any) => {
-        if (type.toLowerCase() === 'show') {
-            return router.push(`/report/learning-report/${id}/show/${payload.id}`)
+    const styler = (amount: any) => {
+        console.log(amount)
+        if (amount) {
+            if (typeof amount === 'string' && amount.includes(',')) {
+                amount = Number(amount.replace(/,/g, ''));
+            } else {
+                amount = Number(amount);
+            }
+
+            switch (true) {
+                case (amount <= 50):
+                    return 'bg-red-400';
+                case (amount < 100 && amount > 50):
+                    return 'bg-yellow-300';
+                case (amount > 100 && amount < 300):
+                    return 'bg-green-400';
+                case (amount > 300 && amount < 500):
+                    return 'bg-green-500';
+                case (amount > 500):
+                    return 'bg-green-600';
+                default:
+                    return ''
+            }
         }
     }
 
-    const createRow = (input: any,) => {
-        let row: any;
-        row = [
-            input.formatted_code,
-            input.project_name,
-            <CrudButtonsComponent
-                key={input.id + 'cr'}
-                hide_approve={true}
-                hide_edit={true}
-                hide_delete={true}
-                handleClick={handleClick}
-                input={input}
-            />
-        ]
+    const reportHeader = () => {
+        // switch (evaluatedItem) {
+        //     case 'output': return `Project: ${data.project.name} Indicators Learning Report`;
+        //     case 'activity': return <p className="flex items-center"><span className='font-normal text-xs'>Project - {data?.project?.code}:{data?.project?.name} </span> <pre>   </pre> Indicators Learning Report;</p>
+        //     default: break
+        //      return <p className="flex items-center"><span className='font-normal text-xs'>Project - {data?.project?.code}:{data?.project?.name} </span> <pre>   </pre> Indicators Learning Report;</p>
+        // }
 
-        return row
+        return <p className="flex items-center"><span className='font-normal text-xs me-3'>Project - {data?.project?.code}:{data?.project?.name} </span>  Indicators Learning Report</p>
+
     }
 
     const customTableFunction = () => {
-        let payload: any[] = []
-
-        data.forEach((item: any) => {
-            const row = createRow(item)
-            payload.push(row)
-        })
-
-        return payload
+        switch (evaluatedItem) {
+            case 'output': return { data: data?.outputs }
+            case 'activity': return { data: data?.activities }
+            default: break
+        }
     }
+
+    const handleHeadeClick = () => {
+        const doc = new jsPDF();
+
+        doc.setFontSize(11);
+        doc.text(`Project: ${data.project_name} Learning Report`, 14, 22);
+
+        autoTable(doc, {
+            startY: 30,
+            head: [['SN', 'Evaluation For', 'Item Name', 'Indicator Name', 'Baseline Data', 'Target Data', 'Evaluation Data']],
+            body: data.evaluation_data.map((item, index) => [index + 1, item.for, item.for_name, item.indicator, item.baseline_data, item.target_data, item.evaluation_data]),
+        });
+
+        doc.save(`${data?.project_name?.trim()}_evaluation_report.pdf`);
+    }
+
+    const handleMonitoringItemChange = (item: string) => {
+        setEvaluatedItem(item)
+    }
+
+    const learningItems = [
+        {
+            name: "Output",
+            from: "output"
+        },
+        {
+            name: "Activity",
+            from: "activity"
+        },
+        // {
+        //     name: "Input",
+        //     from: "input"
+        // },
+    ]
 
     return (
         <ProtectedRoute>
@@ -122,17 +193,141 @@ const EvaluationReportShow = ({ params }: { params: { learningReportId: string }
                                 { name: 'Show', linkTo: '/projects/show', permission: '' },
                             ]}
                             isShowPage={true}
+                            isDownload={true}
+                            handleClick={handleHeadeClick}
                         />
-                        <div className="bg-white ">
-                            <MuiTable
-                                data={customTableFunction()}
-                                columns={columns}
-                            />
+                        <div className="bg-white h-full ">
+                            <div className="flex ">
+                                <div className="flex flex-col w-36 mt-4 ml-4 p-2">
+                                    <h4 className="text-sm font-semibold mb-2">Evaluation Items</h4>
+                                    <div className="flex flex-col justify-between h-full">
+                                        <div className="flex flex-col ml-3 text-xs gap-1 cursor-pointer py-5">
+                                            {
+                                                learningItems.map((item, index) =>
+                                                    <p
+                                                        key={index}
+                                                        className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${evaluatedItem === item.from && 'bg-sidebar-background text-sidebar-active'} `}
+                                                        onClick={() => handleMonitoringItemChange(item.from)}>
+                                                        {item.name}
+                                                    </p>
+                                                )
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col p-4 h-full w-full bg-white">
+                                    <div className="bg-white px-2 ">
+                                        <h3 className="text-left font-semibold mb-1"> {reportHeader()} </h3>
+                                        {
+                                            customTableFunction()?.data?.length > 0 ?
+                                                <div>
+                                                    <div className="grid grid-cols-8 border border-gray-500  bg-gray-200 ">
+                                                        {columns.map((item, index) => {
+                                                            const isLast = index === columns.length - 1;
+                                                            return (
+
+                                                                <div key={index} className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
+                                                                    <p className="text-xs ">
+                                                                        {item.label}
+                                                                    </p>
+                                                                </div>
+                                                            )
+                                                        }
+                                                        )}
+                                                    </div>
+                                                    <div className="border-b border-gray-500">
+                                                        {customTableFunction()?.data?.map((item1, index) => {
+                                                            const isFirst = index === 0;
+                                                            return (
+                                                                < >
+                                                                    <div key={index} className={`grid grid-cols-8 ${!isFirst ? 'border-t' : ''} border-b border-r border-l border-gray-500`}>
+                                                                        <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1" >
+                                                                            <p className="text-xs ">
+                                                                                {item1.name}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div className="flex flex-col justify-center items-center border-r border-gray-500 p-1">
+                                                                            <p className="text-xs ">
+                                                                                {item1.start_date}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div className="flex flex-col justify-center items-center border-r border-gray-500 p-1">
+                                                                            <p className="text-xs ">
+                                                                                {item1.end_date}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div className="flex flex-col col-span-3 justify-center  border-r border-gray-500 items-start p-1" >
+                                                                            <p className="text-xs font-semibold">
+                                                                                Indicators
+                                                                            </p>
+                                                                        </div>
+
+                                                                        <div className="flex flex-col justify-center border-r border-gray-500 items-end p-1" >
+                                                                            <p className="text-xs">
+                                                                                {item1.learning_target}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div className="flex flex-col justify-center  items-end p-1" >
+                                                                            <p className="text-xs text-end">
+                                                                                {item1.learning_time}
+                                                                            </p>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <>
+                                                                        {item1?.indicators.map((item2, index) => {
+                                                                            const isLast = index === item1?.indicators.length - 1;
+                                                                            return (
+                                                                                <div key={index} className={`grid grid-cols-8 border-r border-l border-gray-500`}>
+                                                                                    <div className="flex flex-col col-span-3 justify-center items-center border-r border-gray-500 p-1">
+                                                                                    </div>
+                                                                                    <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 ${!isLast ? 'border-b' : ''}`}>
+                                                                                        <p className="text-xs ">
+                                                                                            {item2?.formatted_code + " - " + item2?.name}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 ${!isLast ? 'border-b' : ''}`}>
+                                                                                        <p className="text-xs ">
+                                                                                            {item2.target_data}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 ${!isLast ? 'border-b' : ''}`}>
+                                                                                        <p className="text-xs ">
+                                                                                            {item2.collected_data}
+                                                                                        </p>
+                                                                                    </div>
+
+                                                                                    <div className={`flex flex-col justify-center items-end border-r border-gray-500 p-1 ${styler(item2.progress)} ${!isLast ? 'border-b' : ''}`}>
+                                                                                        <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>
+                                                                                            {item2.progress}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    <div className={`flex flex-col justify-center items-end p-1 ${styler(item2.learning_time)} ${!isLast ? 'border-b' : ''}`}>
+                                                                                        <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>
+                                                                                            {item2.learning_time}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            );
+                                                                        })}
+                                                                    </>
+                                                                </>
+                                                            )
+                                                        }
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                : <NoDataComponent />
+                                        }
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
             }
-        </ProtectedRoute>
+        </ProtectedRoute >
     );
 };
 
-export default EvaluationReportShow;
+export default LearningReportShow;

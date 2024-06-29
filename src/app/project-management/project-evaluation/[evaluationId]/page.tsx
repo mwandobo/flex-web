@@ -118,7 +118,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
 
     const handleSubmitEvaluationsdData = async () => {
         if (evaluationForm) {
-            if (validator()) {
+            if (true) {
                 const newForm = { project_id: id, ...evaluationForm }
                 const response = await post<any>('project_evaluation_report/store', newForm, token)
 

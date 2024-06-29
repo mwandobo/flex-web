@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import LinearWithValueLabel from "@/components/bars/progressBar";
 import CircularWithValueLabel from "@/components/bars/circularBar";
-import LeadsChart from "../comps/buget";
 import { getValueFromLocalStorage, setValueLocalStorage } from "@/utils/actions/local-starage";
 import { Activity, ChevronDown, ChevronUp, CircleCheckBig, ClipboardCheck, OctagonX } from "lucide-react";
 import { useGlobalContextHook } from "@/hooks/useGlobalContextHook";
@@ -81,7 +80,6 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
             default: break;
         }
 
-        console.log('indicator', indicator)
     }
 
     const handleSubmitCollectedData = async () => {
@@ -164,7 +162,6 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                                         <>
                                             <p className="">{progresRender(item.progress)}</p>
                                         </>
-
                                     }
 
                                     {isCollecting &&
