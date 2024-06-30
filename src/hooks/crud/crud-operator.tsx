@@ -64,11 +64,12 @@ export const useCrudOperator = (
         isStateChanged,
     } = useCrudFormCreator(formPayload)
 
+    // TO DO bypass the
     const parseDate = (value: any) => {
         const dateArray = value.split('-')
         const newDate = `${dateArray[1]}-${dateArray[0]}-${dateArray[2]}`
 
-        return newDate
+        return value
     }
 
     const populateFormForEdit = (payload: any) => {

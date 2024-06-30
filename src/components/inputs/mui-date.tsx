@@ -4,6 +4,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from 'dayjs';
 
+
 interface Props {
     handleDateChange: (date: any, from: string) => void
     from: string
@@ -47,18 +48,17 @@ export default function MuiDate({
     }
 
     const onChange = (date: any) => {
-        let _date = date.$d.toString()
-        const dateArray = _date.split(' ')
+        if (date && date.isValid()) {
+            const formattedDate = date.format('YYYY-MM-DD');
 
-        const finalDate = `${dateMapper[dateArray[1]]}-${dateArray[2]}-${dateArray[3]}`
+            const event = {
+                target: {
+                    value: formattedDate
+                }
+            };
 
-        let event = {
-            target: {
-                value: finalDate
-            }
+            handleDateChange(event, from);
         }
-
-        return handleDateChange(event, from)
     }
 
     return (

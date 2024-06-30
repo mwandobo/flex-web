@@ -11,8 +11,6 @@ import { CheckCircle2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import Swal from "sweetalert2"
 import swal from 'sweetalert2';
-
-
 interface Props {
     isModalOpen: boolean
     onCloseModal: () => void
@@ -177,7 +175,6 @@ export const useCrudFormCreator = ({
         return newformInputs; // Return the modified array
     };
 
-
     const updateFormDataPayload = (from?: string, value?: string, clear?: string, error?: string, control_for?: string) => {
         let newformInputs = [...formInputs]; // Copy the formInputs array
 
@@ -206,7 +203,6 @@ export const useCrudFormCreator = ({
         if (control_for === 'resource') {
             newformInputs = sideUpdatePayloadResource(value); // Update inputs for sponsors
         }
-
 
         if (from) {
             newformInputs = newformInputs.map(input => {
@@ -253,7 +249,6 @@ export const useCrudFormCreator = ({
 
     const handleSubmit = async () => {
         try {
-
             setIsDisabled(true)
             let response;
             const token = getValueFromLocalStorage('token')
@@ -261,25 +256,9 @@ export const useCrudFormCreator = ({
                 response = await remove<any>(url, token)
             } else {
                 if (validator()) {
-                    if (formData['start_date']) {            
-                        const convertedDateArray = formData['start_date'].split('-')
-                        formData['start_date'] = `${convertedDateArray[1]}-${convertedDateArray[0]}-${convertedDateArray[2]}`
-                    }
-
-                    if (formData['end_date']) {
-                        const convertedDateArray = formData['end_date'].split('-')
-                        formData['end_date'] = `${convertedDateArray[1]}-${convertedDateArray[0]}-${convertedDateArray[2]}`
-                    }
-
-                    if (formData['d_o_b']) {
-                        const convertedDateArray = formData['d_o_b'].split('-')
-                        formData['d_o_b'] = `${convertedDateArray[1]}-${convertedDateArray[0]}-${convertedDateArray[2]}`
-                    }
-
                     if (httpMethod === 'post') {
                         response = await post<any>(url, formData, token)
                     }
-
                     if (httpMethod === 'put') {
                         response = await put<any>(url, formData, token)
                     }
@@ -292,15 +271,6 @@ export const useCrudFormCreator = ({
                     emailNotificationBody['code'] === 'create-employee' &&
                     emailNotificationBody['operation'] === 'create'
                 ) {
-                    // const emailBody = {
-                    //     receipient_name: "Boniface Mwandobo",
-                    //     receipient_email: "breezojr@gmail.com",
-                    //     subject: "Approval",
-                    //     body: ["body"]
-                    // }
-
-                    console.log(response)
-
                     const emailBody = { ...emailNotificationBody, id: response?.data?.data?.id }
                     sendEmail(emailBody)
                 }

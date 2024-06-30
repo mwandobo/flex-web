@@ -18,6 +18,7 @@
     "@tanstack/react-table": "^8.15.3",
     "apexcharts": "^3.49.0",
     "axios": "^1.6.8",
+    "date-fns": "^3.6.0",
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.5",
     "jspdf": "^2.5.1",

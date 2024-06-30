@@ -132,11 +132,11 @@ function Project() {
             label: 'Prepared By',
         },
         {
-            id: 'progress_status',
+            id: 'progress',
             numeric: false,
             has_progressStatus: true,
             disablePadding: false,
-            label: 'Status',
+            label: 'Status (%)',
         },
     ]
 

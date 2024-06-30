@@ -140,7 +140,7 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                                     { label: 'Total Resource Cost', value: <FormattedMoney amount={data.total_resource_cost} /> },
                                     { label: 'Grand Total Cost', value: <FormattedMoney amount={data.grand_total_cost} /> },
                                     { label: 'Prepared By', value: data?.prepared_by },
-                                    { label: 'Status', value: data.progress_status },
+                                    { label: 'Status (%)', value: data.progress },
                                 ]}
                                 titleA="Project"
                                 titleB={data?.name}
