@@ -273,7 +273,6 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                     <div className="grid grid-cols-10 border border-gray-500  bg-gray-200 ">
                                                         {columns.map((item, index) => {
                                                             const isLast = index === columns.length - 1;
-
                                                             return (
 
                                                                 <div key={index} className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
@@ -288,8 +287,6 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                     <div className="border-b border-gray-500">
                                                         {customTableFunction()?.data?.map((item1, index) => {
                                                             const isFirst = index === 0;
-
-
                                                             return (
                                                                 < >
                                                                     <div key={index} className={`grid grid-cols-10 ${!isFirst ? 'border-t' : ''} border-b border-r border-l border-gray-500`}>
@@ -315,10 +312,10 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                                         </div>
                                                                         <div className="flex flex-col justify-center items-center border-r border-gray-500 p-1">
                                                                             <p className="text-xs ">
-                                                                                {item1.progress}
+                                                                                {item1.evaluation_target}
                                                                             </p>
                                                                         </div>
-                                                                        <div className="flex flex-col justify-center items-center border-r p-1">
+                                                                        <div className={`flex flex-col ${styler(item1.evaluation_time)}  justify-center items-center border-r p-1`}>
                                                                             <p className="text-xs ">
                                                                                 {item1.evaluation_time}
                                                                             </p>
@@ -429,7 +426,7 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                                                 </div>
                                                                                 <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
                                                                                     <p className="text-xs ">
-                                                                                        {item2.cost}
+                                                                                        {item2.total_cost}
                                                                                     </p>
                                                                                 </div>
                                                                                 <div className={`flex flex-col justify-center items-center  border-r border-gray-500 p-1`}>
