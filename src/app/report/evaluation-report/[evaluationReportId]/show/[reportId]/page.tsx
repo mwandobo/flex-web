@@ -168,41 +168,16 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
         },
     ]
 
-    const styler = (amount: any) => {
-        if (amount) {
-            amount = Number(amount.replace(/,/g, ''));
-
+    const styler = (progress: string) => {
+        console.log(progress)
+        if (progress) {
             switch (true) {
-                case (amount <= 50):
+                case (progress === 'fail'):
                     return 'bg-red-400';
-                case (amount < 100 && amount > 50):
-                    return 'bg-yellow-300';
-                case (amount > 100 && amount < 300):
+                case (progress === "equal"):
+                    return 'bg-yellow-400';
+                case (progress === 'pass'):
                     return 'bg-green-400';
-                case (amount > 300 && amount < 500):
-                    return 'bg-green-500';
-                case (amount > 500):
-                    return 'bg-green-600';
-                default:
-                    return ''
-            }
-        }
-    }
-
-    const stylerInput = (amount: any) => {
-        if (amount) {
-
-            amount = Number(amount.replace(/,/g, ''));
-
-            switch (true) {
-                case (amount < 0):
-                    return 'bg-red-400';
-                case (amount > 0 && amount < 5):
-                    return 'bg-green-400';
-                case (amount > 6 && amount > 10):
-                    return 'bg-green-600';
-                case (amount > 10 && amount < 300):
-                    return 'bg-green-700';
                 default:
                     return ''
             }
@@ -382,7 +357,7 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                                                             {item2.evaluation_data}
                                                                                         </p>
                                                                                     </div>
-                                                                                    <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 ${styler(item2.evaluation_target)} ${!isLast ? 'border-b' : ''}`}>
+                                                                                    <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 ${!isLast ? 'border-b' : ''}`}>
                                                                                         <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>
                                                                                             {item2.evaluation_target}
                                                                                         </p>
@@ -399,12 +374,8 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                                 </>
                                                             )
                                                         }
-
                                                         )}
                                                     </div>
-
-
-
                                                     <div className="bg-white w-4/5 mt-5 ">
                                                         <h3 className="text-start font-semibold mb-1"> Inputs Evaluation </h3>
                                                         {
@@ -461,12 +432,12 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                                                         {item2.cost}
                                                                                     </p>
                                                                                 </div>
-                                                                                <div className={`flex flex-col justify-center items-center  border-r border-gray-500 p-1 ${stylerInput(item2.evaluation_target)}`}>
+                                                                                <div className={`flex flex-col justify-center items-center  border-r border-gray-500 p-1`}>
                                                                                     <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>
                                                                                         {item2.evaluation_target ?? "No Activity"}
                                                                                     </p>
                                                                                 </div>
-                                                                                <div className={`flex flex-col justify-center items-center  border-gray-500 p-1 ${stylerInput(item2.evaluation_time)}`}>
+                                                                                <div className={`flex flex-col justify-center items-center  border-gray-500 p-1 ${styler(item2.evaluation_time)}`}>
                                                                                     <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>
                                                                                         {item2.evaluation_time ?? "No Activity"}
                                                                                     </p>

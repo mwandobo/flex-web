@@ -228,7 +228,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                     <div className="flex flex-col">
                         <PageHeader
                             links={[
-                                { name: 'Project Evaluation Report', linkTo: '/report/evaluation-report', permission: '' },
+                                { name: 'Project Learning Report', linkTo: '/report/learning-report', permission: '' },
                                 { name: 'Show', linkTo: '/projects/show', permission: '' },
                             ]}
                             isShowPage={true}
@@ -238,7 +238,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                         <div className="bg-white h-full ">
                             <div className="flex ">
                                 <div className="flex flex-col w-36 mt-4 ml-4 p-2">
-                                    <h4 className="text-sm font-semibold mb-2">Evaluation Items</h4>
+                                    <h4 className="text-sm font-semibold mb-2">Learning Items</h4>
                                     <div className="flex flex-col justify-between h-full">
                                         <div className="flex flex-col ml-3 text-xs gap-1 cursor-pointer py-5">
                                             {

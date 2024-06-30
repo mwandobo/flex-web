@@ -62,7 +62,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                 value = fountItem?.value;
                 break;
             case 'cost':
-                const fountCost = evaluationForm.data.find(item => item.id.toString() === indicatorId.toString() && item.for === type)
+                const fountCost = evaluationForm.data.find(item => item.id.toString() === indicatorId.toString() && item.for === type && item.parent)
                 value = fountCost?.value;
                 break;
         }
@@ -91,15 +91,17 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
     }
 
     const handleFormInputChange = (e: any, body: any, from: string, type?: string) => {
+
         const newPayload = evaluationForm.data.map(item => {
             switch (from) {
                 case 'progress':
-                    if (item.id.toString() === body.id.toString()) {
+                    if (item.id.toString() === body.id.toString() && !item.parent) {
                         return { ...item, value: e.target.value }
                     }
                     return item;
                 case 'cost':
                     if (item.for === type && item.id.toString() === body.id.toString() && item.parent) {
+
                         return { ...item, value: e.target.value }
                     }
                     return item;
@@ -109,6 +111,8 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
 
         setValueLocalStorage('evaluation_form', JSON.stringify(newPayload))
         dispatch({ type: 'UPDATE_EVALUATION_FORM', payload: newPayload })
+
+        console.log(evaluationForm)
     }
 
     const handleSubmitEvaluationsdData = async () => {
@@ -220,12 +224,13 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
             <div className="w-11/12 mx-auto border border-gray-300 flex flex-col px-2">
                 <div className="text-sm py-2 font-semibold"><h5>Indicators List</h5></div>
                 <div className="mb-1">
-                    <div className="grid grid-cols-6 gap-4 text-xs border-b border-t border-gray-300">
+                    <div className="grid grid-cols-7 gap-4 text-xs border-b border-t border-gray-300">
                         <p className="text-start border-r border-gray-300 p-2">#</p>
                         <p className="text-start border-r border-gray-300 p-2">Code</p>
                         <p className="text-start border-r border-gray-300 p-2">Indicator Name</p>
                         <p className="text-start border-r border-gray-300 p-2">Verify By</p>
                         <p className="text-start border-r border-gray-300 p-2">Baseline Data</p>
+                        <p className="text-start border-r border-gray-300 p-2">Target Data</p>
                         <p className="">Evaluation Data</p>
                     </div>
                 </div>
@@ -233,12 +238,13 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                     {
                         payload.map((item: any, index: any) =>
                             <div key={index} className="flex ">
-                                <div className="grid grid-cols-6 gap-4 w-full text-xs border-b border-gray-300 ">
+                                <div className="grid grid-cols-7 gap-4 w-full text-xs border-b border-gray-300 ">
                                     <p className="text-start border-r border-gray-300 p-1">{index + 1}</p>
                                     <p className="text-start border-r border-gray-300 p-1">{item.formatted_code}</p>
                                     <p className="text-start border-r border-gray-300 p-1">{item.name}</p>
                                     <p className="text-start border-r border-gray-300 p-1">{item.mov}</p>
                                     <p className="text-start border-r border-gray-300 p-1">{item.baseline_data}</p>
+                                    <p className="text-start border-r border-gray-300 p-1">{item.target_data}</p>
                                     {
                                         !isCollecting ? <p>waiting...</p> :
                                             <input type="text" placeholder="Enter Evaluated Data" value={valueFinder(item.id, 'progress')} className="ps-1 h-7 w-full" onChange={(e) => handleFormInputChange(e, item, 'progress')} />
@@ -294,7 +300,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                                                 <div className="text-end border-r border-gray-300 p-1">
                                                     {
                                                         isCollecting && (progresRender(item.progress) !== "No Indicator" || Number(item.occured_cost) > 0) ?
-                                                            <input type="text" placeholder="Enter Evaluated Expense" value={valueFinder(item.id, 'cost', payload.type)} className="ps-1 h-7 w-full text-xs" onChange={(e) => handleFormInputChange(e, item, 'cost', payload.type)} />
+                                                            <input type="text" placeholder="Enter Evaluated Expense" value={valueFinder(item.id, 'cost', from)} className="ps-1 h-7 w-full text-xs" onChange={(e) => handleFormInputChange(e, item, 'cost', from)} />
                                                             :
                                                             <p className="text-end">{FormattedMoney({ amount: item.occured_cost, isHideCurrency: true })}</p>
                                                     }
