@@ -317,7 +317,6 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                                         </div>
                                                                         <div className={`flex flex-col ${styler(item1.evaluation_time)}  justify-center items-center border-r p-1`}>
                                                                             <p className="text-xs ">
-                                                                                {item1.evaluation_time}
                                                                             </p>
                                                                         </div>
 
@@ -361,7 +360,6 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                                                     </div>
                                                                                     <div className={`flex flex-col justify-center items-center p-1 ${styler(item2.evaluation_time)} ${!isLast ? 'border-b' : ''}`}>
                                                                                         <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>
-                                                                                            {item2.evaluation_time}
                                                                                         </p>
                                                                                     </div>
                                                                                 </div>
