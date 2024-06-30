@@ -431,12 +431,11 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                                                 </div>
                                                                                 <div className={`flex flex-col justify-center items-center  border-r border-gray-500 p-1`}>
                                                                                     <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>
-                                                                                        {item2.evaluation_target ?? "No Activity"}
+                                                                                        {item2.evaluation_target}
                                                                                     </p>
                                                                                 </div>
                                                                                 <div className={`flex flex-col justify-center items-center  border-gray-500 p-1 ${styler(item2.evaluation_time)}`}>
                                                                                     <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>
-                                                                                        {item2.evaluation_time ?? "No Activity"}
                                                                                     </p>
                                                                                 </div>
                                                                             </>
