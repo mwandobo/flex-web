@@ -21,7 +21,7 @@ const FormattedMoney = ({ amount, currency = 'Tzs', isHideCurrency }: Props) => 
 
         return <p>{amountStr} <span className="text-xs"> {!isHideCurrency && symbol}</span></p>
     } else {
-        return <p>---</p>
+        return <p>0.00</p>
 
     }
 

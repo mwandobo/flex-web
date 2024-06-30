@@ -192,8 +192,8 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                                 <p className="border-r border-gray-400 ps-2 py-2">Activity Name</p>
                                 <p className="border-r border-gray-400 ps-2 py-2">Input Type</p>
                                 <p className="border-r border-gray-400 ps-2 py-2">Input Name</p>
-                                <p className="border-r border-gray-400 ps-2 py-2">Budget</p>
-                                <p className="border-r border-gray-400 ps-2 py-2">Expense</p>
+                                <p className="border-r border-gray-400 ps-2 py-2">Budget (Tzs)</p>
+                                <p className="border-r border-gray-400 ps-2 py-2">Expense (Tzs)</p>
                                 <p className="ps-2 py-2">Progress</p>
                             </div>
                         </div>
@@ -208,14 +208,15 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                                                 <p className="border-r border-gray-300 ps-2 py-1">{item.activity}</p>
                                                 <p className="border-r border-gray-300 ps-2 py-1">{item.type}</p>
                                                 <p className="border-r border-gray-300 ps-2 py-1">{item.name}</p>
-                                                <p className="border-r border-gray-300 ps-2 py-1">{item.amount}</p>
+                                                <p className="border-r border-gray-300 ps-2 py-1">{FormattedMoney({ amount: item.amount, isHideCurrency: true })}</p>
 
                                                 {isCollecting ?
                                                     <div className="px-3 border-r border-gray-300 py-1 w-full">
                                                         <input type="text" placeholder="Enter Expense" className="ps-1 h-7 w-full" onChange={(e) => handleFormInputChange(e, item, 'cost')} />
                                                     </div>
                                                     :
-                                                    <p className="border-r border-gray-300 ps-2 py-1">{item.occured_cost}</p>
+                                                    <p className="border-r border-gray-300 ps-2 py-1">{FormattedMoney({ amount: item.occured_cost, isHideCurrency: true })}</p>
+
                                                 }
 
                                                 {isCollecting ?
@@ -265,7 +266,7 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                                                 <p className="border-r border-gray-300 ps-2 py-2">{index + 1}</p>
                                                 <p className="border-r border-gray-300 ps-2 py-2">{item.formatted_code}</p>
                                                 <p className="border-r border-gray-300 ps-2 py-2">{item.name}</p>
-                                                <p className="text-end border-r border-gray-300 pe-2 py-2">{FormattedMoney({ amount: item.cost, isHideCurrency: true })}</p>
+                                                <p className="text-end border-r border-gray-300 pe-2 py-2">{FormattedMoney({ amount: item.total_cost, isHideCurrency: true })}</p>
                                                 <p className="text-end border-r border-gray-300 pe-2 py-2">{FormattedMoney({ amount: item.occured_cost, isHideCurrency: true })}</p>
                                                 <p className="ps-2 py-2">{progresRender(item.progress)}</p>
                                                 <p className={`flex justify-end me-12 py-2`}

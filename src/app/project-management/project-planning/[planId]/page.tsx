@@ -103,8 +103,6 @@ const ProjectShow = ({ params }: { params: { planId: string } }) => {
         setSelctedId(id)
     }
 
-
-
     const nodes: React.ReactNode[] = [
         <ExternalUsers
             key={'sponsor'}

@@ -9,6 +9,8 @@ import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import NoDataComponent from "@/components/status/no-data";
 import { capitalizeFirstWord } from "@/utils/actions/string-manipulations";
+import { format } from "path";
+import FormattedMoney from "@/components/moneyFormater";
 
 const LearningReportShow = ({ params }: { params: { learningReportId: string } }) => {
     const router = useRouter()
@@ -125,13 +127,13 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
             id: 'budget',
             numeric: false,
             disablePadding: false,
-            label: 'Budget',
+            label: 'Budget (Tzs)',
         },
         {
             id: 'expense',
             numeric: false,
             disablePadding: false,
-            label: 'Expense',
+            label: 'Expense (Tzs)',
         },
         {
             id: 'learning_target',
@@ -392,13 +394,13 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                                                                             </div>
                                                                             <div className="flex flex-col justify-center  border-r border-gray-500 items-end p-1" >
                                                                                 <p className="text-xs">
-                                                                                    {item1.amount}
+                                                                                    {FormattedMoney({ amount: item1.amount, isHideCurrency: true })}
                                                                                 </p>
                                                                             </div>
 
                                                                             <div className="flex flex-col justify-center items-end p-1 border-r border-gray-500" >
                                                                                 <p className="text-xs">
-                                                                                    {item1.occured_cost}
+                                                                                    {FormattedMoney({ amount: item1.occured_cost, isHideCurrency: true })}
                                                                                 </p>
                                                                             </div>
                                                                             <div className="flex flex-col justify-center items-end p-1 border-r border-gray-500" >

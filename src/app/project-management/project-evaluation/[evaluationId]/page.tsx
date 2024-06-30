@@ -290,7 +290,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                                                 <p className="text-start border-r border-gray-300 p-1"> {item.formatted_code}</p>
                                                 <p className="text-start border-r border-gray-300 p-1">{item.name}</p>
                                                 <p className="text-start border-r border-gray-300 p-1">{progresRender(item.progress)}</p>
-                                                <p className="text-end border-r border-gray-300 p-1" >{FormattedMoney({ amount: item.cost, isHideCurrency: true })}</p>
+                                                <p className="text-end border-r border-gray-300 p-1" >{FormattedMoney({ amount: item.total_cost, isHideCurrency: true })}</p>
                                                 <div className="text-end border-r border-gray-300 p-1">
                                                     {
                                                         isCollecting && (progresRender(item.progress) !== "No Indicator" || Number(item.occured_cost) > 0) ?
