@@ -32,7 +32,6 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
             { name: "Project Goals", data: input.goals, type: 'goal', progress: input.goals_progress },
             { name: "Project Outcomes", data: input.outcomes, type: 'outcome', progress: input.outcomes_progress },
         ]
-
         setPayload(monitoringPayload)
 
         setAllIndicators(input.all_indicators)
@@ -66,7 +65,6 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                 const fountCost = evaluationForm.data.find(item => item.id.toString() === indicatorId.toString() && item.for === type)
                 value = fountCost?.value;
                 break;
-
         }
         return value
     }
@@ -76,9 +74,6 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
         dispatch({ type: 'UPDATE_EVALUATION_FORM', payload: form })
         setValueLocalStorage('evaluation_form', JSON.stringify(form))
     }
-
-    const url = `project_evaluation/show/${id}`
-
 
     const handleMonitoringItemChange = (item: string) => {
         dispatch({ type: "UPDATE_SELECTED_MONITORING_ITEM", payload: { for: 'selected', value: item } })
@@ -118,7 +113,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
 
     const handleSubmitEvaluationsdData = async () => {
         if (evaluationForm) {
-            if (true) {
+            if (validator()) {
                 const newForm = { project_id: id, ...evaluationForm }
                 const response = await post<any>('project_evaluation_report/store', newForm, token)
 
@@ -170,21 +165,9 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
     useEffect(() => {
         if (allIndicators && allIndicators.length > 0) {
             let newFormPayload = allIndicators.map(item => {
-                const body = { id: item.id, value: '', for: item.from, parent: null }
+                const body = { id: item.id, value: '', for: item.from, parent: item.parent }
                 return body
             })
-
-            payload.map(item => {
-                if (item?.data && item.data.length > 0) {
-                    item.data.map(innerItem => {
-                        if (progresRender(innerItem.progress) !== "No Indicator") {
-                            const body = { id: innerItem.id, value: '', for: item.type, parent: "parent" }
-                            newFormPayload = [...newFormPayload, body]
-                        }
-                    })
-                }
-            })
-
             const evaluationForm = getValueFromLocalStorage('evaluation_form')
             const form = JSON.parse(evaluationForm)
             if (form && form.length > 0) {
@@ -196,7 +179,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
         }
     }, [allIndicators])
 
-
+    const url = `project_evaluation/show/${id}`
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -223,7 +206,6 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
         fetchData()
     }, [id, token, isSubmitted])
 
-
     useEffect(() => {
         dispatch({ type: "UPDATE_SELECTED_MONITORING_ITEM", payload: { for: 'selected', value: 'goal' } })
         setValueLocalStorage('selected_monitoring_item', 'goal')
@@ -236,14 +218,14 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
 
         return <div className="flex ">
             <div className="w-11/12 mx-auto border border-gray-300 flex flex-col px-2">
-                <div className="font-semibold text-sm py-1"><h5>Indicators List</h5></div>
+                <div className="text-sm py-2 font-semibold"><h5>Indicators List</h5></div>
                 <div className="mb-1">
-                    <div className="grid grid-cols-6 gap-4 text-xs border-b border-gray-300">
-                        <p className="" >#</p>
-                        <p className="">Code</p>
-                        <p className="">Indicator Name</p>
-                        <p className="">Verify By</p>
-                        <p className="">Baseline Data</p>
+                    <div className="grid grid-cols-6 gap-4 text-xs border-b border-t border-gray-300">
+                        <p className="text-start border-r border-gray-300 p-2">#</p>
+                        <p className="text-start border-r border-gray-300 p-2">Code</p>
+                        <p className="text-start border-r border-gray-300 p-2">Indicator Name</p>
+                        <p className="text-start border-r border-gray-300 p-2">Verify By</p>
+                        <p className="text-start border-r border-gray-300 p-2">Baseline Data</p>
                         <p className="">Evaluation Data</p>
                     </div>
                 </div>
@@ -251,15 +233,15 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                     {
                         payload.map((item: any, index: any) =>
                             <div key={index} className="flex ">
-                                <div className="grid grid-cols-6 gap-4 w-full text-xs p-1 border-b border-gray-300 ">
-                                    <p>{index + 1}</p>
-                                    <p>{item.formatted_code}</p>
-                                    <p>{item.name}</p>
-                                    <p>{item.mov}</p>
-                                    <p>{item.baseline_data}</p>
+                                <div className="grid grid-cols-6 gap-4 w-full text-xs border-b border-gray-300 ">
+                                    <p className="text-start border-r border-gray-300 p-1">{index + 1}</p>
+                                    <p className="text-start border-r border-gray-300 p-1">{item.formatted_code}</p>
+                                    <p className="text-start border-r border-gray-300 p-1">{item.name}</p>
+                                    <p className="text-start border-r border-gray-300 p-1">{item.mov}</p>
+                                    <p className="text-start border-r border-gray-300 p-1">{item.baseline_data}</p>
                                     {
                                         !isCollecting ? <p>waiting...</p> :
-                                            <input type="text" placeholder="Enter Data" value={valueFinder(item.id, 'progress')} className="ps-1 h-7 w-20" onChange={(e) => handleFormInputChange(e, item, 'progress')} />
+                                            <input type="text" placeholder="Enter Evaluated Data" value={valueFinder(item.id, 'progress')} className="ps-1 h-7 w-full" onChange={(e) => handleFormInputChange(e, item, 'progress')} />
 
                                     }
                                 </div>
@@ -285,37 +267,39 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
         } else {
             if (payload && Object.keys(payload).length > 0 && payload.data && payload.data.length > 0) {
                 return <div className="flex">
-                    <div className="w-full flex flex-col">
-                        <div className=" bg-gray-300 p-2">
-                            <div className="grid grid-cols-6  ">
-                                <p className="text-start">#</p>
-                                <p className="text-start">Code</p>
-                                <p className="text-start">Name</p>
-                                <p className="text-start">Progress</p>
-                                <p className="text-center">Cost</p>
-                                <p className="text-start"></p>
+                    <div className="w-full flex flex-col border-b border-gray-300">
+                        <div className=" bg-gray-300 border-t border-gray-400 ">
+                            <div className="grid grid-cols-7  ">
+                                <p className="text-start border-r border-gray-400 p-2">#</p>
+                                <p className="text-start border-r border-gray-400 p-2">Code</p>
+                                <p className="text-start  border-r border-gray-400 p-2">Name</p>
+                                <p className="text-start border-r border-gray-400 p-2">Progress</p>
+                                <p className="text-start border-r border-gray-400 p-2">Budget (Tzs)</p>
+                                <p className="text-start border-r border-gray-400 p-2">Expenses (Tzs)</p>
+                                <p className="text-start p-2"></p>
                             </div>
                         </div>
-                        <div className="" >
+                        <div className=" " >
                             <div className="">
                                 {
                                     payload.data.map((item: any, index: any) =>
-                                        <div key={index} className="flex flex-col odd:bg-gray-200 px-2 " >
-                                            <div className="grid grid-cols-6 w-full p-1 text-sm font-light"
+                                        <div key={index} className="flex flex-col odd:bg-gray-200 border-b border-gray-300" >
+                                            <div className="grid grid-cols-7 w-full text-sm font-light "
                                             >
-                                                <p>{index + 1}</p>
-                                                <p>{item.formatted_code}</p>
-                                                <p>{item.name}</p>
-                                                <p className="">{progresRender(item.progress)}</p>
-                                                {
-                                                    isCollecting && (progresRender(item.progress) !== "No Indicator" || Number(item.occured_cost) > 0) ?
-                                                        <input type="text" placeholder="Enter Cost" value={valueFinder(item.id, 'cost', payload.type)} className="ps-1 h-7 w-full" onChange={(e) => handleFormInputChange(e, item, 'cost', payload.type)} />
-                                                        :
-                                                        <p className="text-end">{FormattedMoney({ amount: item.occured_cost })}</p>
-
-                                                }
-
-                                                <p className={`flex justify-end `}
+                                                <p className="text-start border-r border-gray-300 p-1">{index + 1}</p>
+                                                <p className="text-start border-r border-gray-300 p-1"> {item.formatted_code}</p>
+                                                <p className="text-start border-r border-gray-300 p-1">{item.name}</p>
+                                                <p className="text-start border-r border-gray-300 p-1">{progresRender(item.progress)}</p>
+                                                <p className="text-end border-r border-gray-300 p-1" >{FormattedMoney({ amount: item.cost, isHideCurrency: true })}</p>
+                                                <div className="text-end border-r border-gray-300 p-1">
+                                                    {
+                                                        isCollecting && (progresRender(item.progress) !== "No Indicator" || Number(item.occured_cost) > 0) ?
+                                                            <input type="text" placeholder="Enter Evaluated Expense" value={valueFinder(item.id, 'cost', payload.type)} className="ps-1 h-7 w-full text-xs" onChange={(e) => handleFormInputChange(e, item, 'cost', payload.type)} />
+                                                            :
+                                                            <p className="text-end">{FormattedMoney({ amount: item.occured_cost, isHideCurrency: true })}</p>
+                                                    }
+                                                </div>
+                                                <p className={`flex justify-center `}
                                                     onClick={() => handleItemExpand(item, index)}
                                                 >
                                                     {progresRender(item.progress) !== "No Indicator" ?
@@ -380,12 +364,6 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                                     </div>
 
                                     <div className="flex justify-end">
-                                        {/* <button
-                                            className={`border flex items-center text-sm text-red-900 border-gray-300 px-2 py-1 ${isCollecting ? 'bg-gray-400' : 'bg-gray-400 '} shadow-md hover:shadow-lg transition-shadow duration-300`}
-                                            onClick={() => { }}
-                                        >
-                                            Cancel
-                                        </button> */}
 
                                         {
                                             !buttonActive() &&

@@ -333,9 +333,19 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                                                 {item1.end_date}
                                                                             </p>
                                                                         </div>
-                                                                        <div className="flex flex-col col-span-7 justify-center items-start p-1" >
+                                                                        <div className="flex flex-col col-span-5 justify-center items-start p-1 border-r border-gray-500 " >
                                                                             <p className="text-sm font-semibold ">
                                                                                 Indicators
+                                                                            </p>
+                                                                        </div>
+                                                                        <div className="flex flex-col justify-center items-center border-r border-gray-500 p-1">
+                                                                            <p className="text-xs ">
+                                                                                {item1.progress}
+                                                                            </p>
+                                                                        </div>
+                                                                        <div className="flex flex-col justify-center items-center border-r p-1">
+                                                                            <p className="text-xs ">
+                                                                                {item1.evaluation_time}
                                                                             </p>
                                                                         </div>
 
@@ -374,12 +384,12 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                                                     </div>
                                                                                     <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 ${styler(item2.evaluation_target)} ${!isLast ? 'border-b' : ''}`}>
                                                                                         <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>
-                                                                                            {item2.evaluation_target ?? "No Activity"}
+                                                                                            {item2.evaluation_target}
                                                                                         </p>
                                                                                     </div>
                                                                                     <div className={`flex flex-col justify-center items-center p-1 ${styler(item2.evaluation_time)} ${!isLast ? 'border-b' : ''}`}>
                                                                                         <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>
-                                                                                            {item2.evaluation_time ?? "No Activity"}
+                                                                                            {item2.evaluation_time}
                                                                                         </p>
                                                                                     </div>
                                                                                 </div>
