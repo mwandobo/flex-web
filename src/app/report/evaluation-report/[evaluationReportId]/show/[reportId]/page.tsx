@@ -424,9 +424,10 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                                                         {item2.occured_cost}
                                                                                     </p>
                                                                                 </div>
+
                                                                                 <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
                                                                                     <p className="text-xs ">
-                                                                                        {item2.total_cost}
+                                                                                        {item2.cost}
                                                                                     </p>
                                                                                 </div>
                                                                                 <div className={`flex flex-col justify-center items-center  border-r border-gray-500 p-1`}>
