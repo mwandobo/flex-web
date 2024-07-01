@@ -9,6 +9,8 @@ import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import NoDataComponent from "@/components/status/no-data";
 import { capitalizeFirstWord } from "@/utils/actions/string-manipulations";
+import { ReusableButton } from "@/components/button/reusable-button";
+import { Download, FileDown } from "lucide-react";
 
 const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
     const router = useRouter()
@@ -17,6 +19,9 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [evaluatedItem, setEvaluatedItem] = useState('goal')
     const token = getValueFromLocalStorage('token')
+    const [isDownloading, setIsDownloading] = useState(false)
+    const [isloadingGenaratePdf, setIsLoadingGeneratePdf] = useState(false)
+    const [pdfData, setPdfData] = useState<any>(null);
     const id = params.reportId
 
     const url = `project_evaluation_report/show_single/${id}`
@@ -169,7 +174,6 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
     ]
 
     const styler = (progress: string) => {
-        console.log(progress)
         if (progress) {
             switch (true) {
                 case (progress === 'fail'):
@@ -200,23 +204,52 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
         }
     }
 
-    const handleHeadeClick = () => {
-        const doc = new jsPDF();
+    // const handleHeadeClick = () => {
+    //     const doc = new jsPDF();
 
-        doc.setFontSize(11);
-        doc.text(`Project: ${data.project_name} Evaluation Report`, 14, 22);
+    //     doc.setFontSize(11);
+    //     doc.text(`Project: ${data.project_name} Evaluation Report`, 14, 22);
 
-        autoTable(doc, {
-            startY: 30,
-            head: [['SN', 'Evaluation For', 'Item Name', 'Indicator Name', 'Baseline Data', 'Target Data', 'Evaluation Data']],
-            body: data.evaluation_data.map((item, index) => [index + 1, item.for, item.for_name, item.indicator, item.baseline_data, item.target_data, item.evaluation_data]),
+    //     autoTable(doc, {
+    //         startY: 30,
+    //         head: [['SN', 'Evaluation For', 'Item Name', 'Indicator Name', 'Baseline Data', 'Target Data', 'Evaluation Data']],
+    //         body: data.evaluation_data.map((item, index) => [index + 1, item.for, item.for_name, item.indicator, item.baseline_data, item.target_data, item.evaluation_data]),
+    //     });
+
+    //     doc.save(`${data?.project_name?.trim()}_evaluation_report.pdf`);
+    // }
+
+    const handleClick = async () => {
+        return await generatePdf()
+    }
+
+    const generatePdf = async () => {
+        setIsLoadingGeneratePdf(true)
+        const content = <p>Hey</p>; // Replace with your content
+        const response = await fetch('/api/generate-pdf', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content }),
         });
 
-        doc.save(`${data?.project_name?.trim()}_evaluation_report.pdf`);
-    }
+        if (response.ok) {
+            const pdfBlob = await response.blob();
+            setPdfData(URL.createObjectURL(pdfBlob));
+            setIsDownloading(true)
+            setIsLoadingGeneratePdf(false)
+
+        } else {
+            console.error('Error generating PDF');
+        }
+
+    };
 
     const handleMonitoringItemChange = (item: string) => {
         setEvaluatedItem(item)
+    }
+
+    const refreshDownloadButton = () => {
+        setIsDownloading(false)
     }
 
     const evaluationsItems = [
@@ -229,6 +262,38 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
             from: "outcome"
         },
     ]
+
+    const ButtonDownloadComponent = () => {
+        return (
+            <>
+                {
+                    isloadingGenaratePdf ?
+                        <p className="text-xs">Generating PDF ...</p>
+                        :
+                        <>
+                            {
+                                isDownloading ?
+                                    <div className="flex gap-3 items-center">
+                                        <p className="text-xs">{`${data.project_name}.pdf`}</p>
+                                        <a className="flex text-xs items-center text-blue-700 shadow px-2 py-1 hover:bg-green-600 hover:text-white hover:px-3  hover:py-1" href={pdfData} download={`${data.project_name}.pdf`} onClick={refreshDownloadButton}>
+                                            <Download className="me-1" size={15} />  Download PDF
+                                        </a>
+                                    </div>
+                                    :
+                                    < div className=''>
+                                        <ReusableButton
+                                            name={'Download'}
+                                            onClick={() => handleClick()}
+                                        >
+                                            <FileDown size={15} />
+                                        </ReusableButton>
+                                    </div>
+                            }
+                        </>
+                }
+            </>
+        )
+    }
 
     return (
         <ProtectedRoute>
@@ -243,7 +308,7 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                             ]}
                             isShowPage={true}
                             isDownload={true}
-                            handleClick={handleHeadeClick}
+                            ButtonDownloadComponent={ButtonDownloadComponent}
                         />
                         <div className="bg-white h-full ">
                             <div className="flex ">
