@@ -225,7 +225,7 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
 
     const generatePdf = async () => {
         setIsLoadingGeneratePdf(true)
-        const content = '<p>Hey</p>'; // Replace with your content
+        const content = pageRenderHtml(); // Replace with your content
         const response = await fetch('/api/generate-pdf', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -245,6 +245,7 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
         }
 
     };
+
 
     const handleMonitoringItemChange = (item: string) => {
         setEvaluatedItem(item)
@@ -297,8 +298,9 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
         )
     }
 
-    return (
-        <ProtectedRoute>
+    const pageRender = () => {
+        console.log('in here')
+        return <ProtectedRoute>
             {
                 loading ? <p>Loading...</p>
                     :
@@ -522,6 +524,21 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                     </div>
             }
         </ProtectedRoute >
+    }
+
+    const pageRenderHtml = () => {
+        return `
+        <p style='color: yellow' >Some test</p>
+        
+        `
+
+    }
+
+
+    return (
+        <>
+            {pageRender()}
+        </>
     );
 };
 

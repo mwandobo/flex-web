@@ -80,6 +80,7 @@ export const useCrudFormCreator = ({
     };
 
     const sideUpdatePayload = (payload?: any, value?: string) => {
+        console.log(value)
         const newformInputs = formInputs?.map((input) => {
             if (input.name === payload.name) {
                 const splited = payload.optionsUrlData.split('/');
