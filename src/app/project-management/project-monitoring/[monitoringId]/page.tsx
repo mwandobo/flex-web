@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import LinearWithValueLabel from "@/components/bars/progressBar";
 import CircularWithValueLabel from "@/components/bars/circularBar";
 import { getValueFromLocalStorage, setValueLocalStorage } from "@/utils/actions/local-starage";
-import { Activity, BetweenHorizontalStart, ChevronDown, ChevronUp, CircleCheckBig, ClipboardCheck, OctagonX } from "lucide-react";
+import { BetweenHorizontalStart, ChevronDown, ChevronUp, CircleCheckBig, ClipboardCheck, OctagonX } from "lucide-react";
 import { useGlobalContextHook } from "@/hooks/useGlobalContextHook";
 import FormattedMoney from "@/components/moneyFormater";
 
@@ -17,7 +17,6 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
     const [payload, setPayload] = useState<any[]>([])
     const [loading, setLoading] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
-    const [isCollecting, setIsCollecting] = useState(false)
     const [monitoredItemState, setMonitoredItemState] = useState<any>()
     const [formPayload, setFormPayload] = useState<any>()
     const token = getValueFromLocalStorage('token')
@@ -66,10 +65,6 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
     const handleItemExpand = (item: string, index: any) => {
         dispatch({ type: "UPDATE_SELECTED_MONITORING_ITEM", payload: { for: 'expanded', value: index } })
         setValueLocalStorage('expanded_monitoring_item', index)
-    }
-
-    const handleCollectAction = async () => {
-        setIsCollecting(!isCollecting)
     }
 
     const handleFormInputChange = (e: any, indicator: any, from: string) => {

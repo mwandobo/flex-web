@@ -228,8 +228,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
     }
 
     const pageRenderHtml = () => {
-        return `
-        <p style='color: yellow' >Some test</p> `
+        return "<p  >Some test</p>"
     }
     const refreshDownloadButton = () => {
         setIsDownloading(false)

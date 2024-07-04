@@ -225,11 +225,11 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
 
     const generatePdf = async () => {
         setIsLoadingGeneratePdf(true)
-        const content = pageRenderHtml(); // Replace with your content
+        const content = pageRender(); // Replace with your content
         const response = await fetch('/api/generate-pdf', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ content }),
+            body: JSON.stringify("hi"),
         });
 
         console.log(response)
