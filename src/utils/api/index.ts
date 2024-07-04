@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-// export const baseURL = 'https://flexprojectsapi.int.cits.co.tz/api';
-export const baseURL = 'http://127.0.0.1:8000/api';
+export const baseURL = 'https://flexprojectsapi.int.cits.co.tz/api';
+// export const baseURL = 'http://127.0.0.1:8000/api';
 
 const api = axios.create({
     baseURL,
@@ -27,8 +27,7 @@ const get = async <T>(url?: string, token?: string | null): Promise<any> => {
 };
 
 const post = async <T>(url: string, data: any, token?: string | null): Promise<any> => {
-    const response = await api.post(url, data, config(token));
-    return response;
+    const response = await api.post(url, data, config(token)); return response;
 };
 
 const put = async <T>(url: string, data: any, token?: string | null): Promise<any> => {
