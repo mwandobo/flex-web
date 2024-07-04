@@ -9,7 +9,6 @@ import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import NoDataComponent from "@/components/status/no-data";
 import { capitalizeFirstWord } from "@/utils/actions/string-manipulations";
-import { format } from "path";
 import FormattedMoney from "@/components/moneyFormater";
 import { Download, FileDown } from "lucide-react";
 import { ReusableButton } from "@/components/button/reusable-button";
@@ -179,7 +178,6 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
         }
 
         return <p className="flex items-center"><span className='font-normal text-xs me-3'>Project - {data?.project?.code}:{data?.project?.name} </span>  Indicators Learning Report</p>
-
     }
 
     const customTableFunction = () => {
@@ -229,7 +227,6 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
         return await generatePdf()
     }
 
-
     const pageRenderHtml = () => {
         return `
         <p style='color: yellow' >Some test</p> `
@@ -260,9 +257,6 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
         }
 
     };
-
-
-
 
     const ButtonDownloadComponent = () => {
         return (

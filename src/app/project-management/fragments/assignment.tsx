@@ -101,13 +101,13 @@ function Assignment({
             label: 'Description',
         },
         {
-            id: 'start_date',
+            id: 'formatted_start_date',
             numeric: false,
             disablePadding: false,
             label: 'Start Date',
         },
         {
-            id: 'end_date',
+            id: 'formatted_end_date',
             numeric: false,
             disablePadding: false,
             label: 'End Date',
