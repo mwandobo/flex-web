@@ -1,7 +1,4 @@
-import { ReusableButton } from '@/components/button/reusable-button';
 import puppeteer from 'puppeteer';
-import prettier from 'prettier';
-import ReactDOMServer from 'react-dom/server';
 
 export default async function handler(req, res) {
     const content = req.body.content; // Replace with your content fetching logic
@@ -9,9 +6,8 @@ export default async function handler(req, res) {
     try {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
-        const html = ReactDOMServer.renderToStaticMarkup(content);
-
-        const formattedHtml = await prettier.format(html, { parser: 'html' });
+        // const html = ReactDOMServer.renderToStaticMarkup(content);
+        // const formattedHtml = await prettier.format(html, { parser: 'html' });
 
         await page.setContent(content, { waitUntil: 'networkidle0' }); // Wait for page to load
 

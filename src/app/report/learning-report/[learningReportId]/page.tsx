@@ -12,6 +12,7 @@ import { capitalizeFirstWord } from "@/utils/actions/string-manipulations";
 import FormattedMoney from "@/components/moneyFormater";
 import { Download, FileDown } from "lucide-react";
 import { ReusableButton } from "@/components/button/reusable-button";
+import { learningReportRenderHtml } from "../fragments/learning-report-html";
 
 const LearningReportShow = ({ params }: { params: { learningReportId: string } }) => {
     const router = useRouter()
@@ -227,16 +228,14 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
         return await generatePdf()
     }
 
-    const pageRenderHtml = () => {
-        return "<p  >Some test</p>"
-    }
+
     const refreshDownloadButton = () => {
         setIsDownloading(false)
     }
 
     const generatePdf = async () => {
         setIsLoadingGeneratePdf(true)
-        const content = pageRenderHtml(); // Replace with your content
+        const content = learningReportRenderHtml(); // Replace with your content
         const response = await fetch('/api/generate-pdf', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
