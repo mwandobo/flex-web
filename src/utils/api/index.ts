@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-// export const baseURL = 'https://flexprojectsapi.int.cits.co.tz/api';
-export const baseURL = 'http://127.0.0.1:8000/api';
+export const baseURL = 'https://flexprojectsapi.int.cits.co.tz/api';
+// export const baseURL = 'http://127.0.0.1:8000/api';
 
 const api = axios.create({
     baseURL,

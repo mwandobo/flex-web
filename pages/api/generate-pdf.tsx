@@ -1,22 +1,27 @@
 import puppeteer from 'puppeteer';
 
 export default async function handler(req, res) {
-    const content = req.body.content; // Replace with your content fetching logic
-
     try {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        // const html = ReactDOMServer.renderToStaticMarkup(content);
-        // const formattedHtml = await prettier.format(html, { parser: 'html' });
+        const response = await fetch('http://127.0.0.1:8000/api/documents/generate-pdf', {
+            headers: {
+                'Authorization': `Bearer ${req.headers.authorization}`, // Pass the token if needed
+                'Content-Type': 'application/json',
+            },
+        });
 
-        await page.setContent(content, { waitUntil: 'networkidle0' }); // Wait for page to load
+        if (!response.ok) {
+            res.status(response.status).json({ message: 'Error generating PDF' });
+            return;
+        }
 
-        const pdfBuffer = await page.pdf({ format: 'A4' }); // Adjust format as needed
+        const pdfBlob = await response.blob();
+        const buffer = Buffer.from(await pdfBlob.arrayBuffer());
 
-        await browser.close();
+
 
         res.setHeader('Content-Type', 'application/pdf');
-        res.send(pdfBuffer);
+        res.setHeader('Content-Disposition', 'attachment; filename=document.pdf');
+        res.send(buffer);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error generating PDF' });

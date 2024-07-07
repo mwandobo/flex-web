@@ -103,8 +103,6 @@ const TaskShow = (
         fetchData()
     }, [refresh])
 
-    console.log(data)
-
     // const nodes: React.ReactNode[] = [
     //     <Assignment
     //         project={project}

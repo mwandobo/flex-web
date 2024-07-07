@@ -95,10 +95,6 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
     }
 
     const checkIsMonitoredItem = (from: string, id: string) => {
-        console.log(monitoredItemState)
-        console.log(from)
-        console.log(id)
-
         let check = false
         if (from === monitoredItemState?.from && id === monitoredItemState.id) {
             check = true
@@ -106,8 +102,6 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
 
         return check
     }
-
-    console.log(monitoredItemState)
 
     useEffect(() => {
         const fetchData = async () => {
