@@ -23,6 +23,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
     const token = getValueFromLocalStorage('token')
     const id = params.learningReportId
     const [isDownloading, setIsDownloading] = useState(false)
+    const [reportToDownload, setReportToDownload] = useState<any>()
     const [isloadingGenaratePdf, setIsLoadingGeneratePdf] = useState(false)
     const [pdfData, setPdfData] = useState<any>(null);
 
@@ -155,7 +156,6 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
     ]
 
     const styler = (progress: string) => {
-        console.log(progress)
         if (progress) {
             switch (true) {
                 case (progress === 'fail'):
@@ -190,19 +190,10 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
         }
     }
 
-    const handleHeadeClick = () => {
-        const doc = new jsPDF();
+    const handleSelectReportToDownload = async (reportName: string) => {
+        setReportToDownload(reportName)
 
-        doc.setFontSize(11);
-        doc.text(`Project: ${data.project_name} Learning Report`, 14, 22);
-
-        autoTable(doc, {
-            startY: 30,
-            head: [['SN', 'Evaluation For', 'Item Name', 'Indicator Name', 'Baseline Data', 'Target Data', 'Evaluation Data']],
-            body: data.evaluation_data.map((item, index) => [index + 1, item.for, item.for_name, item.indicator, item.baseline_data, item.target_data, item.evaluation_data]),
-        });
-
-        doc.save(`${data?.project_name?.trim()}_evaluation_report.pdf`);
+        return await generatePdf(reportName)
     }
 
     const handleMonitoringItemChange = (item: string) => {
@@ -225,20 +216,21 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
     ]
 
     const handleClick = async () => {
-        return await generatePdf()
+        setIsDownloading(true)
     }
 
 
     const refreshDownloadButton = () => {
         setIsDownloading(false)
+        setReportToDownload(null)
     }
 
-    const generatePdf = async () => {
+    const generatePdf = async (reportName: string) => {
         const strippedToken = token?.substring(1, token.length - 1)
 
         setIsLoadingGeneratePdf(true);
         try {
-            const response = await fetch(`${baseURL}/documents/generate-pdf`, {
+            const response = await fetch(`${baseURL}/documents/generate-pdf/${data.project.id}/${reportName}`, {
                 headers: {
                     'Authorization': `Bearer ${strippedToken}`, // Include token if authentication is required
                     'Content-Type': 'application/json',
@@ -260,6 +252,8 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
         }
     };
 
+    console.log(reportToDownload)
+
 
     const ButtonDownloadComponent = () => {
         return (
@@ -271,12 +265,29 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                         <>
                             {
                                 isDownloading ?
-                                    <div className="flex gap-3 items-center">
-                                        <p className="text-xs">{`${data.project_name}.pdf`}</p>
-                                        <a className="flex text-xs items-center text-blue-700 shadow px-2 py-1 hover:bg-green-600 hover:text-white hover:px-3  hover:py-1" href={pdfData} download={`${data.project_name}.pdf`} onClick={refreshDownloadButton}>
-                                            <Download className="me-1" size={15} />  Download PDF
-                                        </a>
-                                    </div>
+
+                                    <>
+                                        {
+                                            reportToDownload ? <div className="flex gap-3 items-center">
+                                                <p className="text-xs">{`${data.project_name}.pdf`}</p>
+                                                <a className="flex text-xs items-center text-blue-700 shadow px-2 py-1 hover:bg-green-600 hover:text-white hover:px-3  hover:py-1" href={pdfData} download={`${data.project.name}.pdf`} onClick={refreshDownloadButton}>
+                                                    <Download className="me-1" size={15} />  Download PDF
+                                                </a>
+                                            </div> :
+                                                <div className="flex gap-3 items-center">
+                                                    <p className="text-xs cursor-pointer" onClick={() => handleSelectReportToDownload('output')}>Output</p>
+                                                    <p className="text-xs cursor-pointer" onClick={() => handleSelectReportToDownload('activity')}>Activity</p>
+                                                    <p className="text-xs cursor-pointer" onClick={() => handleSelectReportToDownload('combined')}>Combined</p>
+                                                </div>
+                                        }
+
+
+                                    </>
+
+
+
+
+
                                     :
                                     < div className=''>
                                         <ReusableButton

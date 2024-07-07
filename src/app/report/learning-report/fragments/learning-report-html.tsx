@@ -1,24 +1,24 @@
 export const learningReportRenderHtml = () => {
 
-    const columns = [
-        "Output Name", "Start Date", "End Date", "Indicator Name", "Target Data",
-        "Monitoring Data", "Learning Against Target (%)", "Learning Against Time"
-    ];
-    const data = [
-        {
-            name: "Output 1", start_date: "2021-01-01", end_date: "2021-12-31",
-            indicators: [
-                { formatted_code: "IND-001", name: "Indicator 1", target_data: "100", collected_data: "90", progress: "90%", learning_target: "80", learning_time: "On Track" },
-                { formatted_code: "IND-001", name: "Indicator 1", target_data: "100", collected_data: "90", progress: "90%", learning_target: "70", learning_time: "On Track" },
-                { formatted_code: "IND-001", name: "Indicator 1", target_data: "100", collected_data: "90", progress: "90%", learning_target: "100", learning_time: "On Track" }
+  const columns = [
+    "Output Name", "Start Date", "End Date", "Indicator Name", "Target Data",
+    "Monitoring Data", "Learning Against Target (%)", "Learning Against Time"
+  ];
+  const data = [
+    {
+      name: "Output 1", start_date: "2021-01-01", end_date: "2021-12-31",
+      indicators: [
+        { formatted_code: "IND-001", name: "Indicator 1", target_data: "100", collected_data: "90", progress: "90%", learning_target: "80", learning_time: "On Track" },
+        { formatted_code: "IND-001", name: "Indicator 1", target_data: "100", collected_data: "90", progress: "90%", learning_target: "70", learning_time: "On Track" },
+        { formatted_code: "IND-001", name: "Indicator 1", target_data: "100", collected_data: "90", progress: "90%", learning_target: "100", learning_time: "On Track" }
 
-            ],
-            learning_target: "90", learning_time: "On Track"
-        },
-        // Add more data objects as needed
-    ];
+      ],
+      learning_target: "90", learning_time: "On Track"
+    },
+    // Add more data objects as needed
+  ];
 
-    const tableHTML = `
+  const tableHTML = `
         <div style="padding: 16px; font-family: Arial, sans-serif;">
           <h3 style="margin-bottom: 16px;">Project Learning Report</h3>
           <div>
@@ -39,9 +39,9 @@ export const learningReportRenderHtml = () => {
                       <td colspan="3" style="padding: 8px; border: 1px solid #6b7280;">
                         ${row.indicators.map(indicator => `
                           <div style="border-bottom: 1px solid #6b7280; padding: 4px;">
-                            <p>${indicator.formatted_code} - ${indicator.name}</p>
-                            <p>Target: ${indicator.target_data}</p>
-                            <p>Collected: ${indicator.collected_data}</p>
+                            <p>Indicator Name: ${indicator.formatted_code} - ${indicator.name}</p>
+                            <p>Target Data: ${indicator.target_data}</p>
+                            <p>Collected Data: ${indicator.collected_data}</p>
                             <p>Progress: ${indicator.progress}</p>
                             <p>Learning Against Target: ${indicator.learning_target}</p>
                             <p>Learning Against Time: ${indicator.learning_time}</p>
@@ -59,7 +59,7 @@ export const learningReportRenderHtml = () => {
         </div>
       `;
 
-    return tableHTML;
+  return tableHTML;
 
 
 }
