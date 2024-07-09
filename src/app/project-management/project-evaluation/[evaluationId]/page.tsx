@@ -259,82 +259,118 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
         </div>
     }
 
-    const pageRender = (payload: any, from?: string) => {
-        if (from === 'budget') {
-            return <div className="flex  bg-white">
-                <div className="flex-1  h-full  bg-gray-100 px-2">
-                    <LeadsChart
-                        title={data.project?.name}
-                        directCost={data.direct_cost}
-                        resourceCost={data.resource_cost}
-                    />
+    const inputBodyCreator = (item: any, from: string) => {
+
+        if (!item) {
+            return <p>No Inputs</p>
+        }
+
+        return <div className="flex">
+            <div className="w-11/12 mx-auto border border-gray-300 flex flex-col">
+                <div className="font-semibold text-sm py-2 ps-2"><h5>Input Evaluation</h5></div>
+
+                <div className="">
+                    <div className="grid grid-cols-4 text-xs border-b border-t border-gray-300">
+                        <p className="border-r border-gray-300 ps-2 py-2">Direct Cost (Tzs)</p>
+                        <p className="border-r border-gray-300 ps-2 py-2">Resource Cost (Tzs)</p>
+                        <p className="border-r border-gray-300 ps-2 py-2">Total Cost (Tzs)</p>
+                        <p className="ps-2 py-2">{isCollecting && 'Evaluated'} Expense</p>
+                    </div>
+                </div>
+                <div className="" >
+                    <div className="">
+
+                        <div className="flex flex-col odd:bg-gray-200" >
+                            <div className="grid grid-cols-4 w-full text-xs border-b border-gray-300 ">
+                                <p className="border-r border-gray-300 ps-2 py-1">{FormattedMoney({ amount: item.cost, isHideCurrency: true })}</p>
+                                <p className="border-r border-gray-300 ps-2 py-1">{FormattedMoney({ amount: item.resource_cost, isHideCurrency: true })}</p>
+                                <p className="border-r border-gray-300 ps-2 py-1">{FormattedMoney({ amount: item.total_cost, isHideCurrency: true })}</p>
+                                <div className="text-end border-r border-gray-300 p-1">
+                                    {
+                                        isCollecting && Number(item.total_cost) > 0 ?
+                                            <input type="text" placeholder="Enter Evaluated Expense" value={valueFinder(item.id, 'cost', from)} className="ps-1 h-7 w-full text-xs" onChange={(e) => handleFormInputChange(e, item, 'cost', from)} />
+                                            :
+                                            <p className="text-end">{FormattedMoney({ amount: item.occured_cost, isHideCurrency: true })}</p>
+                                    }
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
                 </div>
             </div>
-        } else {
-            if (payload && Object.keys(payload).length > 0 && payload.data && payload.data.length > 0) {
-                return <div className="flex">
-                    <div className="w-full flex flex-col border-b border-gray-300">
-                        <div className=" bg-gray-300 border-t border-gray-400 ">
-                            <div className="grid grid-cols-7  ">
-                                <p className="text-start border-r border-gray-400 p-2">#</p>
-                                <p className="text-start border-r border-gray-400 p-2">Code</p>
-                                <p className="text-start  border-r border-gray-400 p-2">Name</p>
-                                <p className="text-start border-r border-gray-400 p-2">Progress</p>
-                                <p className="text-start border-r border-gray-400 p-2">Budget (Tzs)</p>
-                                <p className="text-start border-r border-gray-400 p-2">Expenses (Tzs)</p>
-                                <p className="text-start p-2"></p>
-                            </div>
-                        </div>
-                        <div className=" " >
-                            <div className="">
-                                {
-                                    payload.data.map((item: any, index: any) =>
-                                        <div key={index} className="flex flex-col odd:bg-gray-200 border-b border-gray-300" >
-                                            <div className="grid grid-cols-7 w-full text-sm font-light "
-                                            >
-                                                <p className="text-start border-r border-gray-300 p-1">{index + 1}</p>
-                                                <p className="text-start border-r border-gray-300 p-1"> {item.formatted_code}</p>
-                                                <p className="text-start border-r border-gray-300 p-1">{item.name}</p>
-                                                <p className="text-start border-r border-gray-300 p-1">{progresRender(item.progress)}</p>
-                                                <p className="text-end border-r border-gray-300 p-1" >{FormattedMoney({ amount: item.total_cost, isHideCurrency: true })}</p>
-                                                <div className="text-end border-r border-gray-300 p-1">
-                                                    {
-                                                        isCollecting && (progresRender(item.progress) !== "No Indicator" || Number(item.occured_cost) > 0) ?
-                                                            <input type="text" placeholder="Enter Evaluated Expense" value={valueFinder(item.id, 'cost', from)} className="ps-1 h-7 w-full text-xs" onChange={(e) => handleFormInputChange(e, item, 'cost', from)} />
-                                                            :
-                                                            <p className="text-end">{FormattedMoney({ amount: item.occured_cost, isHideCurrency: true })}</p>
-                                                    }
-                                                </div>
-                                                <p className={`flex justify-center `}
-                                                    onClick={() => handleItemExpand(item, index)}
-                                                >
-                                                    {progresRender(item.progress) !== "No Indicator" ?
-                                                        <>
-                                                            {expandedItem === index ?
-                                                                <ChevronUp className="text-gray-900 cursor-pointer" size={22} /> :
-                                                                <ChevronDown className="text-gray-400 cursor-pointer" size={20} />
-                                                            }
-                                                        </> :
-                                                        <p>-</p>
-                                                    }
-                                                </p>
-                                            </div>
-                                            <>
-                                                {expandedItem === index && selected === payload.type && progresRender(item.progress) !== "No Indicator" &&
-                                                    < div className="mb-6">
-                                                        {indicatorBodyCreator(item.indicators)}
-                                                    </div>
-                                                }
-                                            </>
-                                        </div>
-                                    )
-                                }
-                            </div>
+        </div>
+    }
+
+
+
+
+    const pageRender = (payload: any, from?: string) => {
+
+        if (payload && Object.keys(payload).length > 0 && payload.data && payload.data.length > 0) {
+            return <div className="flex">
+                <div className="w-full flex flex-col border-b border-gray-300">
+                    <div className=" bg-gray-300 border-t border-gray-400 ">
+                        <div className="grid grid-cols-7  ">
+                            <p className="text-start border-r border-gray-400 p-2">#</p>
+                            <p className="text-start border-r border-gray-400 p-2">Code</p>
+                            <p className="text-start  border-r border-gray-400 p-2">Name</p>
+                            <p className="text-start border-r border-gray-400 p-2">Progress</p>
+                            <p className="text-start border-r border-gray-400 p-2">Budget (Tzs)</p>
+                            <p className="text-start border-r border-gray-400 p-2">Expenses (Tzs)</p>
+                            <p className="text-start p-2"></p>
                         </div>
                     </div>
-                </div >
-            }
+                    <div className=" " >
+                        <div className="">
+                            {
+                                payload.data.map((item: any, index: any) =>
+                                    <div key={index} className="flex flex-col odd:bg-gray-200 border-b border-gray-300" >
+                                        <div className="grid grid-cols-7 w-full text-sm font-light "
+                                        >
+                                            <p className="text-start border-r border-gray-300 p-1">{index + 1}</p>
+                                            <p className="text-start border-r border-gray-300 p-1"> {item.formatted_code}</p>
+                                            <p className="text-start border-r border-gray-300 p-1">{item.name}</p>
+                                            <p className="text-start border-r border-gray-300 p-1">{progresRender(item.progress)}</p>
+                                            <p className="text-end border-r border-gray-300 p-1" >{FormattedMoney({ amount: item.total_cost, isHideCurrency: true })}</p>
+                                            <p className="text-end border-r border-gray-300 p-1">{FormattedMoney({ amount: item.occured_cost, isHideCurrency: true })}</p>
+                                            <p className={`flex justify-center `}
+                                                onClick={() => handleItemExpand(item, index)}
+                                            >
+                                                {progresRender(item.progress) !== "No Indicator" ?
+                                                    <>
+                                                        {expandedItem === index ?
+                                                            <ChevronUp className="text-gray-900 cursor-pointer" size={22} /> :
+                                                            <ChevronDown className="text-gray-400 cursor-pointer" size={20} />
+                                                        }
+                                                    </> :
+                                                    <p>-</p>
+                                                }
+                                            </p>
+                                        </div>
+                                        <>
+                                            {expandedItem === index && selected === payload.type && progresRender(item.progress) !== "No Indicator" &&
+                                                < div className="mb-6">
+                                                    {indicatorBodyCreator(item.indicators)}
+                                                </div>
+                                            }
+                                            {expandedItem === index && selected === payload.type &&
+                                                < div className="mb-6">
+                                                    {inputBodyCreator(item, from)}
+                                                </div>
+                                            }
+                                        </>
+                                    </div>
+                                )
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div >
         }
+
     }
 
     return (
