@@ -190,12 +190,6 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
         }
     }
 
-    const handleSelectReportToDownload = async (reportName: string) => {
-        setReportToDownload(reportName)
-
-        return await generatePdf(reportName)
-    }
-
     const handleMonitoringItemChange = (item: string) => {
         setEvaluatedItem(item)
     }
@@ -210,27 +204,30 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
             from: "activity"
         },
         {
-            name: "Input",
-            from: "input"
+            name: "Combined",
+            from: "combined"
         },
+        // {
+        //     name: "Input",
+        //     from: "input"
+        // },
     ]
 
     const handleClick = async () => {
-        setIsDownloading(true)
+        return await generatePdf()
     }
-
 
     const refreshDownloadButton = () => {
         setIsDownloading(false)
         setReportToDownload(null)
     }
 
-    const generatePdf = async (reportName: string) => {
+    const generatePdf = async () => {
         const strippedToken = token?.substring(1, token.length - 1)
 
         setIsLoadingGeneratePdf(true);
         try {
-            const response = await fetch(`${baseURL}/documents/generate-pdf/${data.project.id}/${reportName}`, {
+            const response = await fetch(`${baseURL}/documents/generate-pdf/${data.project.id}/${evaluatedItem}`, {
                 headers: {
                     'Authorization': `Bearer ${strippedToken}`, // Include token if authentication is required
                     'Content-Type': 'application/json',
@@ -265,29 +262,12 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                         <>
                             {
                                 isDownloading ?
-
-                                    <>
-                                        {
-                                            reportToDownload ? <div className="flex gap-3 items-center">
-                                                <p className="text-xs">{`${data.project_name}.pdf`}</p>
-                                                <a className="flex text-xs items-center text-blue-700 shadow px-2 py-1 hover:bg-green-600 hover:text-white hover:px-3  hover:py-1" href={pdfData} download={`${data.project.name}.pdf`} onClick={refreshDownloadButton}>
-                                                    <Download className="me-1" size={15} />  Download PDF
-                                                </a>
-                                            </div> :
-                                                <div className="flex gap-3 items-center">
-                                                    <p className="text-xs cursor-pointer" onClick={() => handleSelectReportToDownload('output')}>Output</p>
-                                                    <p className="text-xs cursor-pointer" onClick={() => handleSelectReportToDownload('activity')}>Activity</p>
-                                                    <p className="text-xs cursor-pointer" onClick={() => handleSelectReportToDownload('combined')}>Combined</p>
-                                                </div>
-                                        }
-
-
-                                    </>
-
-
-
-
-
+                                    <div className="flex gap-3 items-center">
+                                        <p className="text-xs">{`${data.project.name}.pdf`}</p>
+                                        <a className="flex text-xs items-center text-blue-700 shadow px-2 py-1 hover:bg-green-600 hover:text-white hover:px-3  hover:py-1" href={pdfData} download={`${data.project.name}.pdf`} onClick={refreshDownloadButton}>
+                                            <Download className="me-1" size={15} />  Download PDF
+                                        </a>
+                                    </div>
                                     :
                                     < div className=''>
                                         <ReusableButton

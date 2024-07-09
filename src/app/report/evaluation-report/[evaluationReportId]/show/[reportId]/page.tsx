@@ -1,7 +1,7 @@
 "use client"
 import ProtectedRoute from "@/components/authentication/protected-route";
 import PageHeader from "@/components/header/page-header";
-import { get } from "@/utils/api";
+import { baseURL, get } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getValueFromLocalStorage, } from "@/utils/actions/local-starage";
@@ -204,46 +204,35 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
         }
     }
 
-    // const handleHeadeClick = () => {
-    //     const doc = new jsPDF();
-
-    //     doc.setFontSize(11);
-    //     doc.text(`Project: ${data.project_name} Evaluation Report`, 14, 22);
-
-    //     autoTable(doc, {
-    //         startY: 30,
-    //         head: [['SN', 'Evaluation For', 'Item Name', 'Indicator Name', 'Baseline Data', 'Target Data', 'Evaluation Data']],
-    //         body: data.evaluation_data.map((item, index) => [index + 1, item.for, item.for_name, item.indicator, item.baseline_data, item.target_data, item.evaluation_data]),
-    //     });
-
-    //     doc.save(`${data?.project_name?.trim()}_evaluation_report.pdf`);
-    // }
-
     const handleClick = async () => {
         return await generatePdf()
     }
 
     const generatePdf = async () => {
-        setIsLoadingGeneratePdf(true)
-        const content = pageRender(); // Replace with your content
-        const response = await fetch('/api/generate-pdf', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify("hi"),
-        });
+        const strippedToken = token?.substring(1, token.length - 1)
 
-        console.log(response)
+        setIsLoadingGeneratePdf(true);
+        try {
+            const response = await fetch(`${baseURL}/project_evaluation_report/generate_pdf/${id}/${evaluatedItem}`, {
+                headers: {
+                    'Authorization': `Bearer ${strippedToken}`, // Include token if authentication is required
+                    'Content-Type': 'application/json',
+                },
+            });
 
-        if (response.ok) {
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} ${response.statusText}`);
+            }
+
             const pdfBlob = await response.blob();
+
             setPdfData(URL.createObjectURL(pdfBlob));
-            setIsDownloading(true)
-            setIsLoadingGeneratePdf(false)
-
-        } else {
-            console.error('Error generating PDF');
+            setIsDownloading(true);
+        } catch (error) {
+            console.error('Error in testFetch', error);
+        } finally {
+            setIsLoadingGeneratePdf(false);
         }
-
     };
 
 
@@ -263,6 +252,10 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
         {
             name: "Outcomes",
             from: "outcome"
+        },
+        {
+            name: "Combined",
+            from: "combined"
         },
     ]
 
