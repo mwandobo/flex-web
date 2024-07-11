@@ -111,8 +111,6 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
 
         setValueLocalStorage('evaluation_form', JSON.stringify(newPayload))
         dispatch({ type: 'UPDATE_EVALUATION_FORM', payload: newPayload })
-
-        console.log(evaluationForm)
     }
 
     const handleSubmitEvaluationsdData = async () => {
@@ -135,10 +133,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                     text: "You Have Submitted your report  Successfully",
                     icon: 'success'
                 });
-            }
-
-
-            else {
+            } else {
                 swal.fire({
                     title: 'Error Occured!',
                     text: "You Have Not Filled All The Evaluations Data. Please Try Again",
@@ -157,7 +152,6 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                 }
             })
         }
-
         return isActive
     }
 
@@ -293,19 +287,13 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                                             <p className="text-end">{FormattedMoney({ amount: item.occured_cost, isHideCurrency: true })}</p>
                                     }
                                 </div>
-
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>
         </div>
     }
-
-
-
 
     const pageRender = (payload: any, from?: string) => {
 
@@ -370,7 +358,6 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                 </div>
             </div >
         }
-
     }
 
     return (
@@ -404,9 +391,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                                             </p>
                                         </div>
                                     </div>
-
                                     <div className="flex justify-end">
-
                                         {
                                             !buttonActive() &&
                                             <button
@@ -417,8 +402,6 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                                                 Submit
                                             </button>
                                         }
-
-
                                     </div>
                                 </div>
                                 <div className="flex flex-col p-4 h-full w-full bg-white">
