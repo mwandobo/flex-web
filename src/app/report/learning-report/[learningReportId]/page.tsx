@@ -440,16 +440,20 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                                                                                 </p>
                                                                             </div>
                                                                             <div className="grid grid-cols-6 border border-gray-500  bg-gray-200 ">
-                                                                                {indicatorColumns.map((item, index) => {
-                                                                                    const isLast = index === indicatorColumns.length - 1;
-                                                                                    return (
-                                                                                        <div key={index} className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
-                                                                                            <p className="text-xs ">
-                                                                                                {item.label}
-                                                                                            </p>
-                                                                                        </div>
-                                                                                    )
-                                                                                })}
+                                                                                {
+                                                                                    item1.indicators.length <= 0 ?
+                                                                                        <p className="text-xs bold text-center w-full p-1 font-semibold ">No Data </p>
+                                                                                        :
+                                                                                        indicatorColumns.map((item, index) => {
+                                                                                            const isLast = index === indicatorColumns.length - 1;
+                                                                                            return (
+                                                                                                <div key={index} className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
+                                                                                                    <p className="text-xs ">
+                                                                                                        {item.label}
+                                                                                                    </p>
+                                                                                                </div>
+                                                                                            )
+                                                                                        })}
                                                                             </div>
                                                                             {item1?.indicators.map((item2, index) => {
                                                                                 const isLast = index === item1?.indicators.length - 1;
@@ -498,16 +502,21 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                                                                                 </p>
                                                                             </div>
                                                                             <div className={`grid grid-cols-${item1.learning_type === "output" ? "6" : "5"} border border-gray-500  bg-gray-200 `}>
-                                                                                {inputColumns(item1.learning_type).map((item, index) => {
-                                                                                    const isLast = index === inputColumns(item1.learning_type).length - 1;
-                                                                                    return (
-                                                                                        <div key={index} className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
-                                                                                            <p className="text-xs ">
-                                                                                                {item.label}
-                                                                                            </p>
-                                                                                        </div>
-                                                                                    )
-                                                                                })}
+                                                                                {
+                                                                                    item1.learning_type === "activity" && item1.inputs.length <= 0 ?
+                                                                                        <p className="text-xs bold text-center w-full p-1 font-semibold ">No Data </p>
+                                                                                        :
+                                                                                        inputColumns(item1.learning_type).map((item, index) => {
+                                                                                            const isLast = index === inputColumns(item1.learning_type).length - 1;
+                                                                                            return (
+                                                                                                <div key={index} className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
+                                                                                                    <p className="text-xs ">
+                                                                                                        {item.label}
+                                                                                                    </p>
+                                                                                                </div>
+                                                                                            )
+                                                                                        })
+                                                                                }
                                                                             </div>
                                                                             {
                                                                                 item1.inputs ?
