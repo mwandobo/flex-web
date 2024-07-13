@@ -5,8 +5,6 @@ import { baseURL, get } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getValueFromLocalStorage, } from "@/utils/actions/local-starage";
-import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import NoDataComponent from "@/components/status/no-data";
 import { capitalizeFirstWord } from "@/utils/actions/string-manipulations";
 import { ReusableButton } from "@/components/button/reusable-button";
@@ -52,18 +50,17 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
     }, [id, token, isSubmitted])
 
     const columns = [
-
         {
             id: 'for_code',
             numeric: false,
             disablePadding: false,
-            label: `${capitalizeFirstWord(evaluatedItem)} Code`,
+            label: `${evaluatedItem !== "combined" ? capitalizeFirstWord(evaluatedItem) : ""} Code`,
         },
         {
             id: 'for_name',
             numeric: false,
             disablePadding: false,
-            label: `${capitalizeFirstWord(evaluatedItem)} Name`,
+            label: `${evaluatedItem !== "combined" ? capitalizeFirstWord(evaluatedItem) : ""} Name`,
         },
         {
             id: 'start_date',
@@ -143,13 +140,51 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
     ]
 
     const costColumns = [
-        // {
-        //     id: 'for',
-        //     numeric: false,
-        //     hasUrl: true,
-        //     disablePadding: false,
-        //     label: `${capitalizeFirstWord(evaluatedItem)} Name`,
-        // },
+        {
+            id: 'direct_cost',
+            numeric: false,
+            disablePadding: false,
+            label: 'Direct Inputs',
+        },
+        {
+            id: 'resource_cost',
+            numeric: false,
+            disablePadding: false,
+            label: 'Resource Inputs',
+        },
+        {
+            id: 'total_cost',
+            numeric: false,
+            disablePadding: false,
+            label: 'Total Inputs',
+        },
+        {
+            id: 'expense',
+            numeric: false,
+            disablePadding: false,
+            label: 'Expense',
+        },
+        {
+            id: 'evaluated_expense',
+            numeric: false,
+            disablePadding: false,
+            label: 'Evaluated Expense',
+        },
+        {
+            id: 'evaluation_budget',
+            numeric: false,
+            disablePadding: false,
+            label: 'Evaluation Against Budget',
+        },
+        {
+            id: 'evaluation_target',
+            numeric: false,
+            disablePadding: false,
+            label: 'Evaluation Against Target',
+        },
+    ]
+
+    const outputColumns = [
         {
             id: 'direct_cost',
             numeric: false,
@@ -219,8 +254,9 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
 
     const customTableFunction = () => {
         switch (evaluatedItem) {
-            case 'goal': return { data: data?.goals, inputs_data: data?.goal_inputs }
-            case 'outcome': return { data: data?.outcomes, inputs_data: data?.outcome_inputs }
+            case 'goal': return { data: data?.goals }
+            case 'outcome': return { data: data?.outcomes }
+            case 'combined': return { data: [...data?.goals, ...data?.outcomes] }
             default: break
         }
     }
@@ -353,7 +389,7 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                         {
                                             customTableFunction()?.data?.length > 0 ?
                                                 <div>
-                                                    <div className="grid grid-cols-10 border border-gray-500  bg-gray-200 ">
+                                                    <div className="grid grid-cols-7 border border-gray-500  bg-gray-200 ">
                                                         {columns.map((item, index) => {
                                                             const isLast = index === columns.length - 1;
                                                             return (
@@ -372,7 +408,7 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                             const isFirst = index === 0;
                                                             return (
                                                                 < >
-                                                                    <div key={index} className={`grid grid-cols-10 ${!isFirst ? 'border-t' : ''} border-b border-r border-l border-gray-500`}>
+                                                                    <div key={index} className={`grid grid-cols-7 ${!isFirst ? 'border-t' : ''} border-b border-r border-l border-gray-500`}>
                                                                         <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1" >
                                                                             <p className="text-xs ">
                                                                                 {item1.formatted_code}
@@ -409,13 +445,13 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                                         </div>
                                                                     </div>
                                                                     <div className="border-l border-gray-500" >
-                                                                        <div className="border-b border-gray-500" style={{ marginLeft: "180px" }}>
+                                                                        <div className="border-b border-gray-500" style={{ marginLeft: "240px" }}>
                                                                             <div className="flex flex-col col-span-5 justify-center items-start p-1 border-r border-l border-gray-500 " >
                                                                                 <p className="text-sm font-semibold ">
                                                                                     Indicators Evaluation
                                                                                 </p>
                                                                             </div>
-                                                                            <div className="grid grid-cols-10 border border-gray-500  bg-gray-200 ">
+                                                                            <div className="grid grid-cols-7 border border-gray-500  bg-gray-200 ">
                                                                                 {indicatorColumns.map((item, index) => {
                                                                                     const isLast = index === indicatorColumns.length - 1;
                                                                                     return (
@@ -430,7 +466,7 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                                             {item1?.indicators.map((item2, index) => {
                                                                                 const isLast = index === item1?.indicators.length - 1;
                                                                                 return (
-                                                                                    <div key={index} className={`grid grid-cols-10 border-r border-l border-gray-500`}>
+                                                                                    <div key={index} className={`grid grid-cols-7 border-r border-l border-gray-500`}>
                                                                                         {/* <div className="flex flex-col col-span-3 justify-center items-center border-r border-gray-500 p-1">
                                                                                     </div> */}
                                                                                         <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 ${!isLast ? 'border-b' : ''}`}>
@@ -473,13 +509,13 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                                         </div>
                                                                     </div>
                                                                     <div className="border-l border-gray-500" >
-                                                                        <div className="" style={{ marginLeft: "180px" }}>
+                                                                        <div className="" style={{ marginLeft: "240px" }}>
                                                                             <div className="flex flex-col col-span-5 justify-center items-start p-1 border-r border-l border-gray-500 " >
                                                                                 <p className="text-sm font-semibold ">
                                                                                     Input Evaluation
                                                                                 </p>
                                                                             </div>
-                                                                            <div className="grid grid-cols-10 border border-gray-500  bg-gray-200 ">
+                                                                            <div className="grid grid-cols-7 border border-gray-500  bg-gray-200 ">
                                                                                 {costColumns.map((item, index) => {
                                                                                     const isLast = index === costColumns.length - 1;
                                                                                     return (
@@ -491,7 +527,7 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                                                     )
                                                                                 })}
                                                                             </div>
-                                                                            <div className={`grid grid-cols-10 border-r border-l border-gray-500`}>
+                                                                            <div className={`grid grid-cols-7 border-r border-l border-gray-500`}>
                                                                                 <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 }`}>
                                                                                     <p className="text-xs">{FormattedMoney({ amount: item1.cost, isHideCurrency: true })}</p>
                                                                                 </div>
@@ -530,79 +566,6 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                         }
                                                         )}
                                                     </div>
-                                                    {/* <div className="bg-white w-4/5 mt-5 ">
-                                                        <h3 className="text-start font-semibold mb-1"> Inputs Evaluation </h3>
-                                                        {
-                                                            customTableFunction()?.inputs_data?.length > 0 ?
-                                                                <div>
-                                                                    <div className="grid grid-cols-9 border border-gray-500  bg-gray-200 ">
-                                                                        {costColumns.map((item, index) => {
-                                                                            const isLast = index === costColumns.length - 1;
-                                                                            return (
-                                                                                <div key={index} className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''} border-gray-500 pl-1`}>
-                                                                                    <p className="text-xs ">
-                                                                                        {item.label}
-                                                                                    </p>
-                                                                                </div>
-                                                                            )
-                                                                        }
-                                                                        )}
-                                                                    </div>
-                                                                    {customTableFunction()?.inputs_data?.map((item2, index) =>
-                                                                        <div key={index} className="grid grid-cols-9  border-b border-r border-l border-gray-500">
-                                                                            <>
-                                                                                <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
-                                                                                    <p className="text-xs ">
-                                                                                        {item2.for_name}
-                                                                                    </p>
-                                                                                </div>
-                                                                                <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
-                                                                                    <p className="text-xs ">
-                                                                                        {item2.start_date}
-                                                                                    </p>
-                                                                                </div>
-                                                                                <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
-                                                                                    <p className="text-xs ">
-                                                                                        {item2.end_date}
-                                                                                    </p>
-                                                                                </div>
-                                                                                <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
-                                                                                    <p className="text-xs ">
-                                                                                        {item2.evaluation_date}
-                                                                                    </p>
-                                                                                </div>
-                                                                                <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
-                                                                                    <p className="text-xs ">
-                                                                                        {item2.budget}
-                                                                                    </p>
-                                                                                </div>
-                                                                                <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
-                                                                                    <p className="text-xs ">
-                                                                                        {item2.occured_cost}
-                                                                                    </p>
-                                                                                </div>
-
-                                                                                <div className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
-                                                                                    <p className="text-xs ">
-                                                                                        {item2.cost}
-                                                                                    </p>
-                                                                                </div>
-                                                                                <div className={`flex flex-col justify-center items-center  border-r border-gray-500 p-1`}>
-                                                                                    <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>
-                                                                                        {item2.evaluation_target}
-                                                                                    </p>
-                                                                                </div>
-                                                                                <div className={`flex flex-col justify-center items-center  border-gray-500 p-1 ${styler(item2.evaluation_time)}`}>
-                                                                                    <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>
-                                                                                    </p>
-                                                                                </div>
-                                                                            </>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                                : <NoDataComponent />
-                                                        }
-                                                    </div> */}
                                                 </div>
                                                 : <NoDataComponent />
                                         }
