@@ -566,7 +566,6 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                     </div>
                                                     <div className="border-b border-gray-500">
                                                         {customTableFunction()?.data?.map((item1, index) => {
-                                                            console.log(item1.outcomes)
                                                             return (
                                                                 < >
                                                                     {itemRender(item1, index)}
@@ -576,7 +575,6 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                                                         </>
                                                                     })}
                                                                 </>
-
                                                             )
                                                         }
                                                         )}

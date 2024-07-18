@@ -298,7 +298,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
 
         setIsLoadingGeneratePdf(true);
         try {
-            const response = await fetch(`${baseURL}/documents/generate-pdf/${data.project.id}/${evaluatedItem}`, {
+            const response = await fetch(`${baseURL}/project_learning_report/generate_pdf/${data.project.id}/${evaluatedItem}`, {
                 headers: {
                     'Authorization': `Bearer ${strippedToken}`, // Include token if authentication is required
                     'Content-Type': 'application/json',
@@ -512,8 +512,8 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                         item1.inputs ?
                             <>
                                 {
-                                    item1.inputs?.map(item =>
-                                        <div
+                                    item1.inputs?.map((item, index) =>
+                                        <div key={index}
                                             className={`grid grid-cols-5 border-r border-l border-gray-500`}>
                                             <div
                                                 className="flex flex-col justify-center items-center border-r border-gray-500 p-1">
