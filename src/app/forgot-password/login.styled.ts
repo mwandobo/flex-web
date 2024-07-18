@@ -35,7 +35,7 @@ export const LogoContainer = styled.div`
 
 export const FormContainer = styled.div`
   position: absolute;
-  margin-top: 20%;
+  margin: auto 20%;
   border: 1px solid #ccc;
   border: radius
   background-color: #FFFFFF;

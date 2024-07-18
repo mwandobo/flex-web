@@ -94,9 +94,7 @@ export default function LoginPage() {
         <>
             <div className='w-screen flex fixed top-0 left-0 h-screen shadow-lg z-20 -mr-64 flex-col items-center justify-center bg-white '>
                 <Image src="/background.png" />
-
                 <FormContainer>
-
                     {loading ? <p>..... Loading......</p> :
 
                         <Card
