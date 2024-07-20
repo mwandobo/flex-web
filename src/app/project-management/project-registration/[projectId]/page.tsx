@@ -7,18 +7,16 @@ import ViewCardComponent from "@/components/card/view.card.component";
 import PageHeader from "@/components/header/page-header";
 import MuiTab from "@/components/tabs/mui-tab";
 import { get } from "@/utils/api";
-import { dateFormatterHelper } from "@/utils/mapper/date-format";
 import { useEffect, useState } from "react";
 import Indicator from "../../fragments/indicator";
 import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
 import Assumption from "../../fragments/assumption";
 import Cost from "../../fragments/costs";
-import Deliverable from "../../fragments/deliverable";
-import Pillar from "../../fragments/pillar";
 import Resource from "../../fragments/resource";
 import Risk from "../../fragments/risk";
 import { useRouter } from "next/navigation";
 import FormattedMoney from "@/components/moneyFormater";
+import LogFrame from "../../fragments/logframe";
 
 const ProjectShow = ({ params }: { params: { projectId: string } }) => {
     const [data, setData] = useState<any>([])
@@ -62,15 +60,17 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
 
 
     const nodes: React.ReactNode[] = [
+        <LogFrame
+            key={'logframe'}
+            project_id={id}
+            isHideAdd={true}
+        />,
         <Indicator
             key={'indicator'}
             project_id={id}
             isHideAdd={true}
         />,
-        // <Pillar
-        //     key={'pillars'}
-        //     project_id={id}
-        // />,
+
         <ExternalUsers
             key={'sponsor'}
             groupProp="sponsor"
@@ -149,8 +149,8 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                         <MuiCardComponent>
                             <MuiTab
                                 columns={[
+                                    "LogFrame",
                                     "Indicators",
-                                    // "Pillars",
                                     "Sponsors",
                                     "Stakeholders",
                                     "Inputs",
