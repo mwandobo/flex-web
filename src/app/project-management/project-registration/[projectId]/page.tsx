@@ -98,8 +98,10 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
         />,
         <Assumption
             key={'assumption'}
+            from={'project'}
+            from_id={id}
             project_id={id}
-            isHideAdd={true}
+            isHideAdd={false}
         />,
         <Resource
             key={'resource'}

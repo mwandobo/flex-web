@@ -13,6 +13,7 @@ import Outcome from "../outcome/outcome";
 import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
 import { statusFormatter } from "@/utils/actions/status-formatter";
 import FormattedMoney from "@/components/moneyFormater";
+import Assumption from "@/app/project-management/fragments/assumption";
 
 interface Props {
     callBackFunction?: (selectedCard: string, id?: string) => void
@@ -62,7 +63,13 @@ const GoalShow = (
             from='goal'
             from_id={goal_id}
             means_of_verification={data.measurement_type_id}
-        />
+        />,
+        <Assumption
+            key={'assumption'}
+            from_id={goal_id}
+            from="goal"
+            project_id={project_id}
+        />,
     ];
 
 

@@ -45,21 +45,24 @@ const columns = [
 ]
 
 interface Props {
-    activity_id?: any
+    from_id?: any
     project_id?: any
+    from?: any
     isHideAdd?: boolean
 
 }
 
 function Assumption({
-    activity_id,
+    from_id,
     project_id,
-    isHideAdd,
+    from,
+    isHideAdd
+
 
 
 }: Props) {
 
-    const url = `assumptions_contsraints/${project_id}/activity/${activity_id}`
+    const url = `assumptions_contsraints/${project_id}/${from}/${from_id}`
 
     const {
         loading,

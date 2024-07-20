@@ -87,7 +87,8 @@ const ActivityShow = (
         />,
         <Assumption
             key={'assumption'}
-            activity_id={activity_id}
+            from={'activity'}
+            from_id={activity_id}
             project_id={project_id}
         />,
         <Risk
