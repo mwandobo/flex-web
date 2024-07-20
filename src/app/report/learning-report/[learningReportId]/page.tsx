@@ -83,13 +83,13 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
             id: 'learning_target',
             numeric: false,
             disablePadding: false,
-            label: 'Learning Against Target (%)',
+            label: 'Progress Against Target (%)',
         },
         {
             id: 'learning_time',
             numeric: false,
             disablePadding: false,
-            label: 'Learning Against Time',
+            label: 'Time Utilization Efficiency',
         },
     ]
 
@@ -122,13 +122,13 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
             id: 'evaluation_target',
             numeric: false,
             disablePadding: false,
-            label: 'Learning Against Target',
+            label: 'Progress Against Target (%)',
         },
         {
             id: 'evaluation_time',
             numeric: false,
             disablePadding: false,
-            label: 'Leaning Against Time',
+            label: 'Time Utilization Efficiency',
         },
     ]
 
@@ -161,7 +161,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
             id: 'utilization',
             numeric: false,
             disablePadding: false,
-            label: 'Fund Utilization',
+            label: 'Budget Utilization (%)',
         },
     ]
 
@@ -194,13 +194,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
             id: 'evaluation_budget',
             numeric: false,
             disablePadding: false,
-            label: 'Evaluation Against Budget',
-        },
-        {
-            id: 'evaluation_target',
-            numeric: false,
-            disablePadding: false,
-            label: 'Evaluation Against Target',
+            label: 'Budget Utilization (%)',
         },
     ]
 
@@ -489,7 +483,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                         </p>
                     </div>
                     <div
-                        className={`grid grid-cols-${item1.learning_type === "output" ? "6" : "5"} border border-gray-500  bg-gray-200 `}>
+                        className={`grid grid-cols-${item1.learning_type === "output" ? "5" : "5"} border border-gray-500  bg-gray-200 `}>
                         {
                             item1.learning_type === "activity" && item1.inputs.length <= 0 ?
                                 <p className="text-xs bold text-center w-full p-1 font-semibold ">No
@@ -557,7 +551,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                             </>
                             :
                             <div
-                                className={`grid grid-cols-6 border-r border-l border-gray-500`}>
+                                className={`grid grid-cols-5 border-r border-l border-gray-500`}>
                                 <div
                                     className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 }`}>
                                     <p className="text-xs">{FormattedMoney({
@@ -593,15 +587,6 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                                         fontWeight: 600
                                     }}>
                                         {item1.evaluation_against_budget}
-                                    </p>
-                                </div>
-                                <div
-                                    className={`flex flex-col justify-center items-center p-1 ${styler(item1.evaluation_against_target)} }`}>
-                                    <p style={{
-                                        fontSize: '0.625rem',
-                                        fontWeight: 600
-                                    }}>
-                                        {/* {item1.evaluation_against_target} */}
                                     </p>
                                 </div>
                             </div>

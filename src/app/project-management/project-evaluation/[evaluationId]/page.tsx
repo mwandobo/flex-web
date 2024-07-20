@@ -218,7 +218,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
             <div className="w-11/12 mx-auto border border-gray-300 flex flex-col px-2">
                 <div className="text-sm py-2 font-semibold"><h5>Indicators List</h5></div>
                 <div className="mb-1">
-                    <div className="grid grid-cols-7 gap-4 text-xs border-b border-t border-gray-300">
+                    <div className="grid grid-cols-7 gap-4 text-xs border-b border-t border-gray-300 font-semibold">
                         <p className="text-start border-r border-gray-300 p-2">#</p>
                         <p className="text-start border-r border-gray-300 p-2">Code</p>
                         <p className="text-start border-r border-gray-300 p-2">Indicator Name</p>
@@ -264,7 +264,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                 <div className="font-semibold text-sm py-2 ps-2"><h5>Input Evaluation</h5></div>
 
                 <div className="">
-                    <div className="grid grid-cols-4 text-xs border-b border-t border-gray-300">
+                    <div className="grid grid-cols-4 text-xs border-b border-t border-gray-300 font-semibold">
                         <p className="border-r border-gray-300 ps-2 py-2">Direct Cost (Tzs)</p>
                         <p className="border-r border-gray-300 ps-2 py-2">Resource Cost (Tzs)</p>
                         <p className="border-r border-gray-300 ps-2 py-2">Total Cost (Tzs)</p>

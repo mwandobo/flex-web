@@ -138,7 +138,7 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
             <div className="w-11/12 mx-auto border border-gray-300 flex flex-col">
                 <div className="font-semibold text-sm py-2 ps-2"><h5>Indicators List</h5></div>
                 <div className="">
-                    <div className="grid grid-cols-8 text-xs border-b border-t border-gray-300">
+                    <div className="grid grid-cols-8 text-xs border-b border-t border-gray-300 font-semibold">
                         <p className="border-r border-gray-300 ps-2 py-2">#</p>
                         <p className="border-r border-gray-300 ps-2 py-2 ">Code</p>
                         <p className="border-r border-gray-300 ps-2  py-2">Indicator Name</p>
@@ -211,7 +211,7 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                 <div className="font-semibold text-sm py-2 ps-2"><h5>Inputs List</h5></div>
 
                 <div className="">
-                    <div className="grid grid-cols-7 text-xs border-b border-t border-gray-300">
+                    <div className="grid grid-cols-7 text-xs border-b border-t border-gray-300 font-semibold">
                         <p className="border-r border-gray-300 ps-2 py-2">#</p>
                         <p className="border-r border-gray-300 ps-2 py-2">Input Type</p>
                         <p className="border-r border-gray-300 ps-2 py-2">Input Name</p>
