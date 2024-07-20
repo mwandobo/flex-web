@@ -23,6 +23,15 @@ const formInputs = [
         required: true,
         isError: false,
         errorMessage: ''
+    },
+    {
+        name: 'control_measure',
+        type: 'textArea',
+        label: 'Control Measure',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
     }
 ]
 
@@ -32,14 +41,21 @@ const columns = [
         numeric: false,
         disablePadding: false,
         label: 'Risk Name',
-        width: '30%',
+        width: '20%',
     },
     {
         id: 'purpose',
         numeric: false,
         disablePadding: false,
         label: 'Description',
-        width: '65%',
+        width: '35%',
+    },
+    {
+        id: 'control_measure',
+        numeric: false,
+        disablePadding: false,
+        label: 'Control Measure',
+        width: '35%',
     },
 ]
 

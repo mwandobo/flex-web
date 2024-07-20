@@ -49,20 +49,25 @@ const formInputs = [
 
 const columns = [
     {
+        id: 'type',
+        numeric: false,
+        disablePadding: false,
+        label: 'Input Type',
+    },
+    {
         id: 'name',
         numeric: false,
         disablePadding: false,
-        label: 'Cost Name',
+        label: 'Input Name',
     },
     {
-        id: 'from',
+        id: 'activity',
         numeric: false,
         disablePadding: false,
-        label: 'From',
+        label: 'Activity Name',
     },
-
     {
-        id: 'purpose',
+        id: 'description',
         numeric: false,
         disablePadding: false,
         label: 'Description',
@@ -71,7 +76,13 @@ const columns = [
         id: 'amount',
         numeric: false,
         disablePadding: false,
-        label: 'Amount',
+        label: 'Budget',
+    },
+    {
+        id: 'occured_cost',
+        numeric: false,
+        disablePadding: false,
+        label: 'Expense',
     },
 
 ]
@@ -118,7 +129,7 @@ function Cost(
                     <>
                         <PageHeader
                             handleClick={handleClick}
-                            subHeader='Costs / List'
+                            subHeader='Inputs / List'
                             links={[{ name: 'Cost', linkTo: `/admnistration/external/` }]}
                             isHideAdd={isHideAdd}
 

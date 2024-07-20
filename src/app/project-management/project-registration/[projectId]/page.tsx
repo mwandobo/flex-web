@@ -67,10 +67,10 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
             project_id={id}
             isHideAdd={true}
         />,
-        <Pillar
-            key={'pillars'}
-            project_id={id}
-        />,
+        // <Pillar
+        //     key={'pillars'}
+        //     project_id={id}
+        // />,
         <ExternalUsers
             key={'sponsor'}
             groupProp="sponsor"
@@ -106,11 +106,11 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
             project_id={id}
             isHideAdd={true}
         />,
-        <Deliverable
-            key={'deliverable'}
-            project_id={id}
-            isHideAdd={true}
-        />
+        // <Deliverable
+        //     key={'deliverable'}
+        //     project_id={id}
+        //     isHideAdd={true}
+        // />
     ];
 
     return (
@@ -150,15 +150,13 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                             <MuiTab
                                 columns={[
                                     "Indicators",
-                                    "Pillars",
+                                    // "Pillars",
                                     "Sponsors",
                                     "Stakeholders",
-                                    "Costs",
+                                    "Inputs",
                                     "Risks",
-                                    "Assumptions & constraints",
-                                    "Resources Budget",
-                                    "Direct Budget",
-                                    "Deliverable"
+                                    "Assumptions & constraints"
+                                    // "Deliverable"
                                 ]}
                                 nodes={nodes}
                             >

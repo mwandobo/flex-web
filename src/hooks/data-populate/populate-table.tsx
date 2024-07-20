@@ -66,15 +66,9 @@ export const usePopulateTable = ({
         let newData: any = []
 
         if (data && data.length > 0) {
-            // Array to hold sorted data
-
             newData = data.map(obj => {
                 if (obj.has_url) {
                     obj = { ...obj, file: <p className="mb-1"><a href={obj.location} className="text-blue-600 border-b border-gray-300">{obj.name}</a></p> }
-                }
-
-                if (obj.has_progress_status) {
-                    obj = { ...obj, progress_status: <p className="mb-1"> {statusFormatter(obj.progress_status)} </p> }
                 }
 
                 if (obj.has_progress_status_task) {
