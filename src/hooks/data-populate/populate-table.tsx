@@ -13,6 +13,7 @@ interface Props {
     isHideShow?: boolean;
     isHideDelete?: boolean;
     isHideEdit?: boolean;
+    isHideActions?: boolean;
 }
 
 export const usePopulateTable = ({
@@ -23,7 +24,8 @@ export const usePopulateTable = ({
     permission,
     isHideShow,
     isHideDelete,
-    isHideEdit
+    isHideEdit,
+    isHideActions
 }: Props) => {
     const createRowHeader = () => {
         let newColumns: any[] = []
@@ -34,7 +36,7 @@ export const usePopulateTable = ({
             }
         })
 
-        return [
+        return isHideActions ? newColumns : [
             ...newColumns,
             {
                 id: 'actions',

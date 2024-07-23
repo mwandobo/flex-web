@@ -19,16 +19,25 @@ function Project() {
             errorMessage: ''
         },
         {
-            name: 'type_id',
-            type: 'select',
-            label: `Project Type`,
+            name: 'pillar',
+            type: 'text',
+            label: 'Project Pillar',
             value: '',
-            optionsUrlData: `settings/project`,
-            optionDataKey: 'departments',
             required: true,
             isError: false,
             errorMessage: ''
         },
+        // {
+        //     name: 'type_id',
+        //     type: 'select',
+        //     label: `Project Type`,
+        //     value: '',
+        //     optionsUrlData: `settings/project`,
+        //     optionDataKey: 'departments',
+        //     required: true,
+        //     isError: false,
+        //     errorMessage: ''
+        // },
         {
             name: 'start_date',
             type: 'date',
@@ -90,10 +99,10 @@ function Project() {
             label: 'Project Name',
         },
         {
-            id: 'type',
+            id: 'pillar',
             numeric: false,
             disablePadding: false,
-            label: 'Project Type',
+            label: 'Project Pillar',
         },
         {
             id: 'formatted_start_date',

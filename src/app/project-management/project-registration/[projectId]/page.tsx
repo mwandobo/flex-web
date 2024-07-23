@@ -17,6 +17,7 @@ import Risk from "../../fragments/risk";
 import { useRouter } from "next/navigation";
 import FormattedMoney from "@/components/moneyFormater";
 import LogFrame from "../../fragments/logframe";
+import Budget from "../../fragments/Budget";
 
 const ProjectShow = ({ params }: { params: { projectId: string } }) => {
     const [data, setData] = useState<any>([])
@@ -86,10 +87,11 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
             project={data}
             isHideShow={true}
         />,
-        <Cost
+        <Budget
             key={'cost'}
             project_id={id}
             isHideAdd={true}
+            prefix="Budget"
         />,
         <Risk
             key={'risk'}
@@ -142,7 +144,7 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                                     { label: 'Total Resource Cost', value: <FormattedMoney amount={data.total_resource_cost} /> },
                                     { label: 'Grand Total Cost', value: <FormattedMoney amount={data.grand_total_cost} /> },
                                     { label: 'Prepared By', value: data?.prepared_by },
-                                    { label: 'Status (%)', value: data.progress },
+                                    { label: 'Progress', value: data.progress_status },
                                 ]}
                                 titleA="Project"
                                 titleB={data?.name}
@@ -155,7 +157,7 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                                     "Indicators",
                                     "Sponsors",
                                     "Stakeholders",
-                                    "Inputs",
+                                    "Budget",
                                     "Risks",
                                     "Assumptions & constraints"
                                     // "Deliverable"

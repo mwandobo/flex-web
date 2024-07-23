@@ -5,8 +5,6 @@ import PageHeader from '@/components/header/page-header'
 import { usePageData } from '@/hooks/use-page/use-page-data'
 import React from 'react'
 
-
-
 interface Props {
     activity_id?: any
     project_id?: any
@@ -15,7 +13,7 @@ interface Props {
     isHide?: (item: string) => boolean
 }
 
-function Cost(
+function Budget(
     {
         activity_id,
         project_id,
@@ -23,48 +21,6 @@ function Cost(
         prefix
     }: Props
 ) {
-
-    const formInputs = [
-        {
-            name: 'name',
-            type: 'text',
-            label: 'Name',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
-            name: 'amount',
-            type: 'text',
-            label: 'Amount',
-            textType: 'number',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
-            name: 'currency_id',
-            type: 'select',
-            label: `Select Currency`,
-            value: '',
-            optionsUrlData: `currency`,
-            optionDataKey: 'departments',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
-            name: 'purpose',
-            type: 'textArea',
-            label: 'Description',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        }
-    ]
 
     const columns = [
         {
@@ -103,7 +59,6 @@ function Cost(
             disablePadding: false,
             label: 'Expense',
         },
-
     ]
 
     const url = `cost/${project_id}/activity/${activity_id}`
@@ -116,12 +71,13 @@ function Cost(
 
     } = usePageData({
         columns: columns,
-        formInputs: formInputs,
+        formInputs: [],
         url: url,
         modalTitle: 'Cost',
         viewUrl: '',
         state_properties: [],
-        isHideShow: true
+        isHideShow: true,
+        isHideActions: true
     })
 
     return (
@@ -135,7 +91,6 @@ function Cost(
                             subHeader='Inputs / List'
                             links={[{ name: 'Cost', linkTo: `/admnistration/external/` }]}
                             isHideAdd={isHideAdd}
-
                         />
                         {tabular()}
                         {createdForm()}
@@ -145,4 +100,4 @@ function Cost(
     )
 }
 
-export default Cost
+export default Budget
