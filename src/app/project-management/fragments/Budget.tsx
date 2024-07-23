@@ -10,7 +10,6 @@ interface Props {
     project_id?: any
     isHideAdd?: boolean
     prefix?: string
-    isHide?: (item: string) => boolean
 }
 
 function Budget(
@@ -94,6 +93,34 @@ function Budget(
                         />
                         {tabular()}
                         {createdForm()}
+
+                        <div className='flex flex-col items-end w-full'>
+                            <div className='flex flex-col items-end border border-gray-100 p-2'>
+                                <h4 className='text-start w-full'>Summary</h4>
+                                <div className=''>
+                                    <div className='grid grid-cols-3 text-xs'>
+                                        <p className='text-end'></p>
+                                        <p className='ml-3'>Amount</p>
+                                        <p className=''>Expense</p>
+                                    </div>
+                                    <div className='grid grid-cols-3 text-xs'>
+                                        <p className='text-end'>Total Direct Budget:</p>
+                                        <p className='ml-3'>130000</p>
+                                        <p className='ml-2'>130000</p>
+                                    </div>
+                                    <div className='grid grid-cols-3 text-xs'>
+                                        <p className='text-end'>Total Resource Budget:</p>
+                                        <p className='ml-3'>130000</p>
+                                        <p className='ml-2'>130000</p>
+                                    </div>
+                                    <div className='grid grid-cols-3 text-xs'>
+                                        <p className='text-end'>Total Budget:</p>
+                                        <p className='ml-3'>130000</p>
+                                        <p className='ml-2'>130000</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </>
             }
         </ProtectedRoute>
