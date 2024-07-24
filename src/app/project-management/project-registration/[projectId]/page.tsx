@@ -19,6 +19,7 @@ import FormattedMoney from "@/components/moneyFormater";
 import LogFrame from "../../fragments/logframe";
 import Budget from "../../fragments/budget";
 import OutcomeCost from "../../fragments/outcome-cost";
+import LogFrameIndicator from "../../fragments/logframe-indicator";
 
 const ProjectShow = ({ params }: { params: { projectId: string } }) => {
     const [data, setData] = useState<any>([])
@@ -62,15 +63,8 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
 
 
     const nodes: React.ReactNode[] = [
-        <LogFrame
-            key={'logframe'}
-            project_id={id}
-            isHideAdd={true}
-        />,
-        <Indicator
-            key={'indicator'}
-            project_id={id}
-            isHideAdd={true}
+        <LogFrameIndicator
+            project={data}
         />,
 
         <ExternalUsers
@@ -161,7 +155,6 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                             <MuiTab
                                 columns={[
                                     "LogFrame",
-                                    "Indicators",
                                     "Sponsors",
                                     "Stakeholders",
                                     "Budget",

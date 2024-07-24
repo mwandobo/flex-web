@@ -135,8 +135,6 @@ function Indicator({
         viewUrl: '',
         state_properties: [],
         isHideShow: true
-
-
     })
 
 

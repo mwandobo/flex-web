@@ -18,44 +18,27 @@ function LogFrame({
     from,
     from_id,
     project_id,
-    means_of_verification,
-    isHideAdd
-
 }: Props) {
 
     const [data, setData] = useState<any>(null)
     const [loading, setLoading] = useState(false)
-
-
-
     const token = getValueFromLocalStorage('token')
-
-    const itemsFinder = () => {
-
-    }
-
-
 
     const url = `indicator/${project_id}/${from}/${from_id}`
 
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true)
-            const res = await get(`project/logframe/${project_id}`, token)
-
-            if (res && res.status === 200) {
-                setData(res.data.data)
-                setLoading(false)
+            if (project_id) {
+                setLoading(true)
+                const res = await get(`project/logframe/${project_id}`, token)
+                if (res && res.status === 200) {
+                    setData(res.data.data)
+                    setLoading(false)
+                }
             }
         };
         fetchData()
     }, [project_id, token])
-
-
-    console.log(data)
-
-
-
 
     return (
         <ProtectedRoute>
