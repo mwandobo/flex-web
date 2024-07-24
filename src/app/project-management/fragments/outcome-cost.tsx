@@ -7,14 +7,16 @@ import React from 'react'
 
 interface Props {
     activity_id?: any
+    outcomes?: any
     project?: any
     isHideAdd?: boolean
     prefix?: string
 }
 
-function Budget(
+function OutcomeCost(
     {
         activity_id,
+        outcomes,
         project,
         isHideAdd,
         prefix
@@ -23,50 +25,33 @@ function Budget(
 
     const columns = [
         {
-            id: 'type',
+            id: 'formatted_name',
             numeric: false,
             disablePadding: false,
-            label: `${prefix} Type`,
+            label: `Outcome Name`,
         },
         {
-            id: 'name',
+            id: 'cost',
             numeric: false,
             disablePadding: false,
-            label: `${prefix} Name`,
+            label: `Budget`,
         },
         {
-            id: 'activity',
-            numeric: false,
-            disablePadding: false,
-            label: 'Activity Name',
-        },
-        {
-            id: 'description',
-            numeric: false,
-            disablePadding: false,
-            label: 'Description',
-        },
-        {
-            id: 'amount',
-            numeric: false,
-            disablePadding: false,
-            label: 'Amount',
-        },
-        {
-            id: 'occured_cost',
+            id: 'resource_cost',
             numeric: false,
             disablePadding: false,
             label: 'Expense',
         },
     ]
 
-    const url = `cost/${project?.id}/activity/${activity_id}`
+    const url = `outcome/by-project/${project?.id}`
 
     const {
         loading,
         createdForm,
         handleClick,
-        tabular
+        tabular,
+        data
 
     } = usePageData({
         columns: columns,
@@ -74,10 +59,50 @@ function Budget(
         url: url,
         modalTitle: 'Cost',
         viewUrl: '',
-        state_properties: [],
+        state_properties: [outcomes.length],
         isHideShow: true,
         isHideActions: true
     })
+
+    const calculator = () => {
+
+        let totalResourceCost = 0;
+        let totalDirectCost = 0;
+        let totalResourceOccuredCost = 0;
+        let totalDirectOccuredCost = 0;
+        if (data.length > 0) {
+            data.forEach(element => {
+                totalResourceCost += Number(element.resource_cost)
+                totalDirectCost += Number(element.cost)
+                totalResourceOccuredCost += Number(element.resource_occured_cost)
+                totalDirectOccuredCost += Number(element.direct_occured_cost)
+            });
+        }
+
+        const grandTotalCost = totalResourceCost + totalDirectCost
+        const grandTotalOccuredCost = totalResourceOccuredCost + totalDirectOccuredCost
+
+        return {
+            totalResourceCost,
+            totalDirectCost,
+            totalResourceOccuredCost,
+            totalDirectOccuredCost,
+            grandTotalCost,
+            grandTotalOccuredCost
+
+        }
+    }
+
+
+    const {
+        totalResourceCost,
+        totalDirectCost,
+        totalResourceOccuredCost,
+        totalDirectOccuredCost,
+        grandTotalCost,
+        grandTotalOccuredCost
+    } = calculator()
+
 
     return (
         <ProtectedRoute>
@@ -87,7 +112,7 @@ function Budget(
                     <>
                         <PageHeader
                             handleClick={handleClick}
-                            subHeader='Budget / List'
+                            subHeader='Costs / List'
                             links={[{ name: 'Cost', linkTo: `/admnistration/external/` }]}
                             isHideAdd={isHideAdd}
                         />
@@ -105,18 +130,18 @@ function Budget(
                                     </div>
                                     <div className='grid grid-cols-3 text-xs'>
                                         <p className='text-end'>Total Direct Budget:</p>
-                                        <p className='ml-3'>{project.total_direct_cost}</p>
-                                        <p className='ml-3'>{project.total_direct_expense}</p>
+                                        <p className='ml-3'>{totalDirectCost}</p>
+                                        <p className='ml-3'>{totalDirectOccuredCost}</p>
                                     </div>
                                     <div className='grid grid-cols-3 text-xs'>
                                         <p className='text-end'>Total Resource Budget:</p>
-                                        <p className='ml-3'>{project.total_resource_cost}</p>
-                                        <p className='ml-3'>{project.total_resource_expense}</p>
+                                        <p className='ml-3'>{totalResourceCost}</p>
+                                        <p className='ml-3'>{totalResourceOccuredCost}</p>
                                     </div>
                                     <div className='grid grid-cols-3 text-xs'>
                                         <p className='text-end'>Total Budget:</p>
-                                        <p className='ml-3'>{project.grand_total_cost}</p>
-                                        <p className='ml-3'>{project.occured_cost}</p>
+                                        <p className='ml-3'>{grandTotalCost}</p>
+                                        <p className='ml-3'>{grandTotalOccuredCost}</p>
                                     </div>
                                 </div>
                             </div>
@@ -127,4 +152,4 @@ function Budget(
     )
 }
 
-export default Budget
+export default OutcomeCost

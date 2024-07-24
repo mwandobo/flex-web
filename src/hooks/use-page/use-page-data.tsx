@@ -26,6 +26,7 @@ interface Props {
     isCreateAndSend?: string;
     emailNotificationBody?: any,
     isHideActions?: boolean
+    tableData?: any[]
 
 }
 
@@ -45,10 +46,12 @@ export const usePageData = ({
     isHideDelete,
     isHideEdit,
     emailNotificationBody,
-    isHideActions
+    isHideActions,
+    tableData
 }: Props
 
 ) => {
+    console.log(tableData)
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState<any[]>([])
     const [count, setCount] = useState<any>()
@@ -111,7 +114,12 @@ export const usePageData = ({
                 }
             }
         };
-        fetchData()
+
+        if (tableData?.length > 0) {
+            setData(tableData)
+        } else {
+            fetchData()
+        }
     }, [isStateChanged, ...state_properties])
 
 
