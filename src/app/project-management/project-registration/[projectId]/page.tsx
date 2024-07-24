@@ -89,7 +89,7 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
         />,
         <Budget
             key={'cost'}
-            project_id={id}
+            project={data}
             isHideAdd={true}
             prefix="Budget"
         />,

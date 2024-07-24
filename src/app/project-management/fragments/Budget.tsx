@@ -7,7 +7,7 @@ import React from 'react'
 
 interface Props {
     activity_id?: any
-    project_id?: any
+    project?: any
     isHideAdd?: boolean
     prefix?: string
 }
@@ -15,7 +15,7 @@ interface Props {
 function Budget(
     {
         activity_id,
-        project_id,
+        project,
         isHideAdd,
         prefix
     }: Props
@@ -60,7 +60,7 @@ function Budget(
         },
     ]
 
-    const url = `cost/${project_id}/activity/${activity_id}`
+    const url = `cost/${project?.id}/activity/${activity_id}`
 
     const {
         loading,
@@ -105,18 +105,18 @@ function Budget(
                                     </div>
                                     <div className='grid grid-cols-3 text-xs'>
                                         <p className='text-end'>Total Direct Budget:</p>
-                                        <p className='ml-3'>130000</p>
-                                        <p className='ml-2'>130000</p>
+                                        <p className='ml-3'>{project.total_direct_cost}</p>
+                                        <p className='ml-3'>{project.total_direct_expense}</p>
                                     </div>
                                     <div className='grid grid-cols-3 text-xs'>
                                         <p className='text-end'>Total Resource Budget:</p>
-                                        <p className='ml-3'>130000</p>
-                                        <p className='ml-2'>130000</p>
+                                        <p className='ml-3'>{project.total_resource_cost}</p>
+                                        <p className='ml-3'>{project.total_resource_expense}</p>
                                     </div>
                                     <div className='grid grid-cols-3 text-xs'>
                                         <p className='text-end'>Total Budget:</p>
-                                        <p className='ml-3'>130000</p>
-                                        <p className='ml-2'>130000</p>
+                                        <p className='ml-3'>{project.grand_total_cost}</p>
+                                        <p className='ml-3'>{project.occured_cost}</p>
                                     </div>
                                 </div>
                             </div>
