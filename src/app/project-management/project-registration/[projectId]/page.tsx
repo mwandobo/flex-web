@@ -64,6 +64,7 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
 
     const nodes: React.ReactNode[] = [
         <LogFrameIndicator
+            key={'logframe'}
             project={data}
         />,
 
