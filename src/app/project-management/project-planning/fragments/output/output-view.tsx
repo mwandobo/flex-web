@@ -96,7 +96,7 @@ const OutputShow = (
                                     { label: 'Project ', value: data?.project },
                                     { label: 'Start Date', value: data.start_date },
                                     { label: 'End Date', value: data.end_date },
-                                    { label: 'Status ', value: statusFormatter(data.progress_status) },
+                                    { label: 'Progress (%)', value: statusFormatter(data.progress) },
                                     { label: 'Direct Cost  Budget', value: <FormattedMoney amount={data.cost} /> },
                                     { label: 'Resource Cost Budget ', value: <FormattedMoney amount={data.resource_cost} /> },
                                     { label: 'Total Cost Budget', value: <FormattedMoney amount={data.total_cost} /> },

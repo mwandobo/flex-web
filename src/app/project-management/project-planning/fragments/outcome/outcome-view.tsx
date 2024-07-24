@@ -1,6 +1,5 @@
 "use client"
 
-import ExternalUsers from "@/app/admnistration/external/page";
 import Indicator from "@/app/project-management/fragments/indicator";
 import ProtectedRoute from "@/components/authentication/protected-route";
 import MuiCardComponent from "@/components/card/mui-card.component";
@@ -71,7 +70,6 @@ const OutcomeShow = (
         />,
     ];
 
-
     return (
         <ProtectedRoute>
             {
@@ -94,7 +92,7 @@ const OutcomeShow = (
                                     { label: 'Project ', value: data?.project },
                                     { label: 'Start Date', value: data.start_date },
                                     { label: 'End Date', value: data.end_date },
-                                    { label: 'Status', value: statusFormatter(data.progress_status) },
+                                    { label: 'Progress (%)', value: statusFormatter(data.progress) },
                                     { label: 'Direct Cost Budget', value: <FormattedMoney amount={data.cost} /> },
                                     { label: 'Resource Cost Budget', value: <FormattedMoney amount={data.resource_cost} /> },
                                     { label: 'Total Cost Budget', value: <FormattedMoney amount={data.total_cost} /> },]}
@@ -108,6 +106,7 @@ const OutcomeShow = (
                                 columns={[
                                     "Outputs",
                                     "Indicators",
+                                    "Assumptions",
                                 ]}
                                 nodes={nodes}
                             >

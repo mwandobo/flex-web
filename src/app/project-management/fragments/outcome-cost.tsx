@@ -31,13 +31,13 @@ function OutcomeCost(
             label: `Outcome Name`,
         },
         {
-            id: 'cost',
+            id: 'total_cost',
             numeric: false,
             disablePadding: false,
             label: `Budget`,
         },
         {
-            id: 'resource_cost',
+            id: 'occured_cost',
             numeric: false,
             disablePadding: false,
             label: 'Expense',

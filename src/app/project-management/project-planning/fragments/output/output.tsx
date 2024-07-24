@@ -130,11 +130,11 @@ function Output({
             label: 'Total Cost Budget',
         },
         {
-            id: 'progress_status',
+            id: 'progress',
             numeric: false,
             has_progressStatus: true,
             disablePadding: false,
-            label: 'Status',
+            label: 'Progress (%)',
         },
     ]
 
