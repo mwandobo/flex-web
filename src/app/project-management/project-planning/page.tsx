@@ -22,10 +22,10 @@ function Project() {
             label: 'Project Name',
         },
         {
-            id: 'type',
+            id: 'pillar',
             numeric: false,
             disablePadding: false,
-            label: 'Project Type',
+            label: 'Project Pillar',
         },
         {
             id: 'formatted_start_date',
