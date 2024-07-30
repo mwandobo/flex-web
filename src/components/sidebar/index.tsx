@@ -85,6 +85,12 @@ const items: ISidebarItem[] = [
                 permission: 'projects-list',
                 icon: FolderOpenDot
             },
+            {
+                name: 'Gantt Chart',
+                path: '/report/gantt-chart',
+                permission: 'projects-list',
+                icon: FolderOpenDot
+            },
         ]
     },
     {
