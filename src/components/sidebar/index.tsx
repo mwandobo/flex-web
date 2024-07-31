@@ -91,6 +91,12 @@ const items: ISidebarItem[] = [
                 permission: 'projects-list',
                 icon: FolderOpenDot
             },
+            {
+                name: 'Project Charter',
+                path: '/report/project-charter',
+                permission: 'projects-list',
+                icon: FolderOpenDot
+            },
         ]
     },
     {

@@ -29,7 +29,7 @@ const GanttChart = ({ params }: { params: { ganttChartId: string } }) => {
 
 
     const rowCretor = (item: any, from?: string) => {
-        return <div className="flex border-l border-gray-500">
+        return <div key={item.id} className="flex border-l border-gray-500">
             {/* <p className="flex-shrink-0 w-16">{indexer(i)}</p> */}
             <p className="flex-grow w-32 p-1 border-r border-b border-gray-500">{item.formatted_code}</p>
             <p className="flex-grow w-48 p-1  border-r border-b border-gray-500">{item.name}</p>
@@ -45,7 +45,7 @@ const GanttChart = ({ params }: { params: { ganttChartId: string } }) => {
                                 item.assignments.department_assignments.length > 0) ?
                                 <p className='flex-grow w-32 p-1  border-r border-b border-gray-500'>
                                     {item.assignments.department_assignments.map(dept_assign =>
-                                        <span>{
+                                        <span key={dept_assign.id}>{
                                             dept_assign.personnel_department}</span>
                                     )}
                                 </p> :
@@ -62,7 +62,7 @@ const GanttChart = ({ params }: { params: { ganttChartId: string } }) => {
                                 item.assignments.personnel_assignments.length > 0) ?
                                 <p className='flex-grow w-32 p-1  border-r border-b border-gray-500'>
                                     {item.assignments.personnel_assignments.map(dept_assign =>
-                                        <span>{
+                                        <span key={dept_assign.id}>{
                                             dept_assign.personnel_department}</span>
                                     )}
                                 </p> :
@@ -92,12 +92,12 @@ const GanttChart = ({ params }: { params: { ganttChartId: string } }) => {
                         <div className='flex flex-col bg-gray-50 '>
                             {
                                 data?.goals?.length > 0 && data.goals.map((goal: any, i: any) =>
-                                    <>
+                                    <div key={goal.id}>
                                         {rowCretor(goal)}
                                         {goal?.outcomes.length > 0 && goal?.outcomes.map((outcome: any, index: any) => { return rowCretor(outcome) })}
                                         {goal?.outputs.length > 0 && goal?.outputs.map((output: any, index: any) => { return rowCretor(output) })}
                                         {goal?.activities.length > 0 && goal?.activities.map((activity: any, index: any) => { return rowCretor(activity, "activity") })}
-                                    </>
+                                    </div>
                                 )}
                         </div>
                     </>
