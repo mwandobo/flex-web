@@ -29,16 +29,47 @@ const GanttChart = ({ params }: { params: { ganttChartId: string } }) => {
 
 
     const rowCretor = (item: any, from?: string) => {
-        return <div className="flex">
+        return <div className="flex border-l border-gray-500">
             {/* <p className="flex-shrink-0 w-16">{indexer(i)}</p> */}
-            <p className="flex-grow w-32">{item.formatted_code}</p>
-            <p className="flex-grow w-48">{item.name}</p>
-            <p className="flex-grow w-24">{item.cost}</p>
-            <p className="flex-grow w-24">{item.duration}</p>
-            <p className="flex-grow w-32">{from !== "activity" ? item.start_date : item.formatted_start_date}</p>
-            <p className="flex-grow w-32">{from !== "activity" ? item.end_date : item.formatted_end_date}</p>
-            <p className="flex-grow w-24">OBS</p>
-            <p className="flex-grow w-48">Resource Names</p>
+            <p className="flex-grow w-32 p-1 border-r border-b border-gray-500">{item.formatted_code}</p>
+            <p className="flex-grow w-48 p-1  border-r border-b border-gray-500">{item.name}</p>
+            <p className="flex-grow w-24 p-1  border-r border-b border-gray-500">{item.cost}</p>
+            <p className="flex-grow w-24 p-1  border-r border-b border-gray-500">{item.duration}</p>
+            <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{from !== "activity" ? item.start_date : item.formatted_start_date}</p>
+            <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{from !== "activity" ? item.end_date : item.formatted_end_date}</p>
+            {
+                from === 'activity' ?
+                    <>
+                        {
+                            (item.assignments.department_assignments &&
+                                item.assignments.department_assignments.length > 0) ?
+                                <p className='flex-grow w-32 p-1  border-r border-b border-gray-500'>
+                                    {item.assignments.department_assignments.map(dept_assign =>
+                                        <span>{
+                                            dept_assign.personnel_department}</span>
+                                    )}
+                                </p> :
+                                <p className='flex-grow w-32 p-1  border-r border-b border-gray-500'>no assignment</p>
+                        }
+                    </> :
+                    <p className='flex-grow w-32 p-1  border-r border-b border-gray-500'>....</p>
+            }
+            {
+                from === 'activity' ?
+                    <>
+                        {
+                            (item.assignments.personnel_assignments &&
+                                item.assignments.personnel_assignments.length > 0) ?
+                                <p className='flex-grow w-32 p-1  border-r border-b border-gray-500'>
+                                    {item.assignments.personnel_assignments.map(dept_assign =>
+                                        <span>{
+                                            dept_assign.personnel_department}</span>
+                                    )}
+                                </p> :
+                                <p className='flex-grow w-32 p-1  border-r border-b border-gray-500'>no assignment</p>
+                        }
+                    </> : <p className='flex-grow w-32 p-1  border-r border-b border-gray-500'>....</p>
+            }
         </div>
     }
 
@@ -48,16 +79,15 @@ const GanttChart = ({ params }: { params: { ganttChartId: string } }) => {
                 loading ? <p>Loading...</p>
                     :
                     <>
-                        <div className="flex">
-                            {/* <p className="flex-shrink-0 w-16">ID</p> */}
-                            <p className="flex-grow w-32">WBS</p>
-                            <p className="flex-grow w-48">Task Name</p>
-                            <p className="flex-grow w-24">Cost</p>
-                            <p className="flex-grow w-24">Duration</p>
-                            <p className="flex-grow w-32">Start</p>
-                            <p className="flex-grow w-32">Finish</p>
-                            <p className="flex-grow w-24">Department</p>
-                            <p className="flex-grow w-48">Resource Names</p>
+                        <div className="flex border-l border-t border-b border-gray-500 font-semibold">
+                            <p className="flex-grow w-32 p-1 border-r border-gray-500">WBS</p>
+                            <p className="flex-grow w-48 p-1 border-r border-gray-500">Task Name</p>
+                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Cost</p>
+                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Duration</p>
+                            <p className="flex-grow w-32 p-1 border-r border-gray-500">Start</p>
+                            <p className="flex-grow w-32 p-1 border-r border-gray-500">Finish</p>
+                            <p className="flex-grow w-32 p-1 border-r border-gray-500">Department</p>
+                            <p className="flex-grow w-32 p-1 border-r border-gray-500">Resource Names</p>
                         </div>
                         <div className='flex flex-col bg-gray-50 '>
                             {

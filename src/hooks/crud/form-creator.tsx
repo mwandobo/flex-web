@@ -120,6 +120,7 @@ export const useCrudFormCreator = ({
     };
 
     const sideUpdatePayloadAssignment = (value?: string) => {
+
         const newformInputs = formInputs?.map((input) => {
             if (Number(value) === 17) {
                 if (input.name === 'personnel_id') {

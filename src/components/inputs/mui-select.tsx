@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Select, FormControl, InputLabel, MenuItem, SelectChangeEvent } from '@mui/material';
 import { get } from '@/utils/api';
@@ -31,8 +30,6 @@ const MuiSelect = ({
   value,
   error,
   label = '',
-  control,
-  control_id,
   control_for
 }: Props) => {
 
@@ -41,7 +38,6 @@ const MuiSelect = ({
   };
 
   const [options, setOptions] = useState<any[]>([]);
-
   const token = getValueFromLocalStorage('token')
 
   useEffect(() => {
@@ -55,11 +51,9 @@ const MuiSelect = ({
       }
     };
     fetchData()
-
   }, [optionsUrlData]);
 
   return (
-
     <>
       <FormControl fullWidth>
         <InputLabel
