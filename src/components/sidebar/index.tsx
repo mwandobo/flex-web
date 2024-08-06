@@ -97,6 +97,12 @@ const items: ISidebarItem[] = [
                 permission: 'projects-list',
                 icon: FolderOpenDot
             },
+            {
+                name: 'ME Plan',
+                path: '/report/me-plan',
+                permission: 'projects-list',
+                icon: FolderOpenDot
+            },
         ]
     },
     {
