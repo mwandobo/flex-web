@@ -27,6 +27,7 @@ function Project() {
             isError: false,
             errorMessage: ''
         },
+
         // {
         //     name: 'type_id',
         //     type: 'select',
@@ -78,6 +79,15 @@ function Project() {
             name: 'prepared_by',
             type: 'text',
             label: 'Prepared By',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+        {
+            name: 'description',
+            type: 'textArea',
+            label: 'Description',
             value: '',
             required: true,
             isError: false,

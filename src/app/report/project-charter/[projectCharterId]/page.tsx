@@ -17,8 +17,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
     const [isloadingGenaratePdf, setIsLoadingGeneratePdf] = useState(false)
     const token = getValueFromLocalStorage('token')
 
-    const url = `reports/gantt-chart/show/${id}`
-
+    const url = `reports/project-charter/show/${id}`
     useEffect(() => {
         const fetchData = async () => {
             if (id) {
@@ -67,6 +66,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
             setIsLoadingGeneratePdf(false);
         }
     };
+    const project = data
 
 
     const ButtonDownloadComponent = () => {
@@ -80,7 +80,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                             {
                                 isDownloading ?
                                     <div className="flex gap-3 items-center">
-                                        <p className="text-xs">{`${data.project_name}.pdf`}</p>
+                                        <p className="text-xs">{`${project.name}.pdf`}</p>
                                         <a className="flex text-xs items-center text-blue-700 shadow px-2 py-1 hover:bg-green-600 hover:text-white hover:px-3  hover:py-1" href={pdfData} download={`${data.project_name}.pdf`} onClick={refreshDownloadButton}>
                                             <Download className="me-1" size={15} />  Download PDF
                                         </a>
@@ -123,27 +123,40 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                 <div className='ml-12'>
                                     <div className='flex mb-1'>
                                         <p className='w-32 mr-1'>Project Title:</p>
-                                        <p className='font-medium'>Flex Projects</p>
+                                        <p className='font-medium'>{project?.name}</p>
                                     </div>
                                     <div className='flex mb-1'>
                                         <p className='w-32 mr-1'>Project Owner:</p>
-                                        <p className='font-medium'>CITS</p>
+                                        <p className='font-medium'>{project?.owner}</p>
                                     </div>
                                     <div className='flex mb-1'>
                                         <p className='w-32 mr-1'>Sponsor: </p>
-                                        <p className='font-medium'>CITS</p>
+                                        <p className='font-medium'>
+                                            {project?.sponsors?.length > 0 ?
+                                                <>{project?.sponsors.map(item => <span key={item.id}>{item.name}</span>)}
+                                                </> :
+                                                <>Not Available</>
+                                            }
+                                        </p>
                                     </div>
                                     <div className='flex mb-1'>
                                         <p className='w-32 mr-1'>Representative: </p>
-                                        <p className='font-medium'>James Sweke </p>
+                                        <p className='font-medium'>
+                                            {project?.representatives?.length > 0 ?
+                                                <>{project?.representatives.map(item => <span key={item.id}>{item.name}</span>)}
+                                                </> :
+                                                <>Not Available</>
+                                            }
+                                        </p>
                                     </div>
+
                                     <div className='flex mb-1'>
                                         <p className='w-32 mr-1'>Prepared by: </p>
-                                        <p className='font-medium'>Ulisubisya Masetta </p>
+                                        <p className='font-medium'>{project?.prepared_by} </p>
                                     </div>
                                     <div className='flex'>
                                         <p className='w-32 mr-1'>Version:</p>
-                                        <p className='font-medium'>xxL </p>
+                                        <p className='font-medium'>1.00 </p>
                                     </div>
                                 </div>
                             </div>
@@ -154,37 +167,47 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                         <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500"></p>
                                         <p className="flex-grow w-48 p-1 border-r border-gray-500">Position</p>
                                         <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
+                                        <p className="flex-grow w-24 p-1 border-r border-gray-500">Sponsorship</p>
                                         <p className="flex-grow w-24 p-1 border-r border-gray-500">Phone</p>
                                         <p className="flex-grow w-32 p-1 border-r border-gray-500">Email</p>
                                     </div>
                                     <>
-                                        <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                            <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">1</p>
-                                            <p className="flex-grow w-48 p-1 border-r border-gray-500">Position</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Phone</p>
-                                            <p className="flex-grow w-32 p-1 border-r border-gray-500">Email</p>
-                                        </div>
-                                        <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                            <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">2</p>
-                                            <p className="flex-grow w-48 p-1 border-r border-gray-500">Position</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Phone</p>
-                                            <p className="flex-grow w-32 p-1 border-r border-gray-500">Email</p>
-                                        </div>
+                                        {
+                                            project?.stakeholders.length > 0 ?
+                                                <>
+                                                    {
+                                                        project?.stakeholders.map((item, index) =>
+                                                            <div id={item.id} className="flex border-l  border-b border-gray-500">
+                                                                <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">{index + 1}</p>
+                                                                <p className="flex-grow w-48 p-1 border-r border-gray-500">{item.position}</p>
+                                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.name}</p>
+                                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.sponsorship}</p>
+                                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.phone}</p>
+                                                                <p className="flex-grow w-32 p-1 border-r border-gray-500">{item.email}</p>
+                                                            </div>
+                                                        )
+
+                                                    }</>
+
+                                                :
+                                                <div className="flex border-l border-b border-gray-500">
+                                                    <p className="flex-shrink-0 w-full text-center font-semibold p-1 border-r border-gray-500"> No Data</p>
+                                                </div>
+
+                                        }
                                     </>
                                 </div>
                             </div>
                             <div className='w-full flex flex-col mb-3'>
                                 <h4>3. Executive Summary</h4>
                                 <div className='ml-12'>
-                                    <p>This is the Executive Sumarray</p>
+                                    <p> <span className='text-red-500'>*</span> Not In System</p>
                                 </div>
                             </div>
                             <div className='w-full flex flex-col mb-3'>
                                 <h4>4. Project Purpose</h4>
                                 <div className='w-full flex flex-col mb-3 ml-12'>
-                                    <h4>4.1. Business Need/Problem</h4>
+                                    <p> <span className='text-red-500'>*</span> Not In System</p>
                                     <div className='ml-12'>
                                         <p>This is the Project Business need Explained</p>
                                     </div>
@@ -198,18 +221,23 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                             <p className="flex-grow w-24 p-1 border-r border-gray-500">Project Business Objective</p>
                                         </div>
                                         <>
-                                            <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                                <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">1</p>
-                                                <p className="flex-grow w-48 p-1 border-r border-gray-500">Position</p>
-                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
-
-                                            </div>
-                                            <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                                <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">2</p>
-                                                <p className="flex-grow w-48 p-1 border-r border-gray-500">Position</p>
-                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
-
-                                            </div>
+                                            {
+                                                project?.Objectives?.length > 0 ?
+                                                    <>
+                                                        {
+                                                            project?.Objectives?.map((item, index) =>
+                                                                <div id={item.id} className="flex border-l  border-b border-gray-500">
+                                                                    <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">{index + 1}</p>
+                                                                    <p className="flex-grow w-48 p-1 border-r border-gray-500">{item.element}</p>
+                                                                    <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.objective}</p>
+                                                                </div>
+                                                            )
+                                                        }</>
+                                                    :
+                                                    <div className="flex border-l border-b border-gray-500">
+                                                        <p className="flex-shrink-0 w-full text-center font-semibold p-1 border-r border-gray-500"> <span className='text-red-500'>*</span> Not In System </p>
+                                                    </div>
+                                            }
                                         </>
                                     </div>
                                 </div>
@@ -219,66 +247,73 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                 <div className='w-full flex flex-col mb-3 ml-12'>
                                     <h4>5.1. Project Description</h4>
                                     <div className='ml-12'>
-                                        <p>This is the Project Business need Explained</p>
+                                        <p>{project?.description}</p>
                                     </div>
                                 </div>
                                 <div className='w-full flex flex-col mb-3 ml-12'>
                                     <h4>5.2. Scope</h4>
                                     <div className='ml-12'>
-                                        <p>This is the Project Business need Explained</p>
+                                        <p> <span className='text-red-500'>*</span> Not In System</p>
                                     </div>
                                 </div>
 
                                 <div className='w-full flex flex-col mb-3 ml-12'>
                                     <h4>5.3. Assumption</h4>
                                     <div className='ml-12'>
-                                        <div className='border-t border-gray-500 '>
-                                            <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                                <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">1</p>
-                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
+                                        <>
+                                            {
+                                                project?.assumptions?.length > 0 ?
+                                                    <>
+                                                        {
+                                                            project?.assumptions?.map((item, index) =>
+                                                                <div id={item.id} className="flex border-l border-t border-b border-gray-500">
 
-                                            </div>
-                                            <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                                <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">2</p>
-                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
+                                                                    <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">{index + 1}</p>
+                                                                    <p className="flex-grow w-24 p-1 border-r border-gray-500">{item?.name}</p>
 
-                                            </div>
-                                        </div>
+                                                                </div>
+                                                            )
+                                                        }</>
+                                                    :
+                                                    <div className="flex border-l border-b border-t border-gray-500">
+                                                        <p className="flex-shrink-0 w-full text-center font-semibold p-1 border-r border-gray-500">Not Data </p>
+                                                    </div>
+                                            }
+                                        </>
                                     </div>
                                 </div>
                                 <div className='w-full flex flex-col mb-3 ml-12'>
                                     <h4>5.3. Constraints</h4>
                                     <div className='ml-12'>
-                                        <div className='border-t border-gray-500 '>
-                                            <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                                <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">1</p>
-                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
+                                        <p className="flex-shrink-0 w-full text-center font-semibold p-1 border-r border-gray-500"> <span className='text-red-500'>*</span> Included in assumptions  </p>
 
-                                            </div>
-                                            <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                                <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">2</p>
-                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
 
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div className='w-full flex flex-col mb-3 ml-12'>
                                 <h4>6. Project Deliverables</h4>
                                 <div className='ml-12'>
-                                    <div className='border-t border-gray-500 '>
-                                        <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                            <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">1</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
+                                    <>
+                                        {
+                                            project?.deliverables?.length > 0 ?
+                                                <>
+                                                    {
+                                                        project?.deliverables?.map((item, index) =>
+                                                            <div id={item.id} className="flex border-l border-t border-b border-gray-500">
 
-                                        </div>
-                                        <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                            <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">2</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
+                                                                <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">{index + 1}</p>
+                                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">{item?.name}</p>
 
-                                        </div>
-                                    </div>
+                                                            </div>
+                                                        )
+                                                    }</>
+                                                :
+                                                <div className="flex border-l border-b border-t border-gray-500">
+                                                    <p className="flex-shrink-0 w-full text-center font-semibold p-1 border-r border-gray-500">Not Data </p>
+                                                </div>
+                                        }
+                                    </>
                                 </div>
                             </div>
                             <div className='w-full flex flex-col mb-3 ml-12'>
@@ -291,19 +326,23 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                         <p className="flex-grow w-24 p-1 border-r border-gray-500">Source</p>
                                     </div>
                                     <>
-                                        <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                            <p className="flex-grow w-48 p-1 border-r border-gray-500">Position</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Position</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
-
-                                        </div>
-                                        <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                            {/* <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">2</p> */}
-                                            <p className="flex-grow w-48 p-1 border-r border-gray-500">Position</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
-
-                                        </div>
+                                        {
+                                            project?.costs?.length > 0 ?
+                                                <>
+                                                    {
+                                                        project?.costs?.map((item, index) =>
+                                                            <div id={item.id} className="flex border-l  border-b border-gray-500">
+                                                                <p className="flex-grow w-48 p-1 border-r border-gray-500">{item.purpose}</p>
+                                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.amount}</p>
+                                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.source}</p>
+                                                            </div>
+                                                        )
+                                                    }</>
+                                                :
+                                                <div className="flex border-l border-b border-gray-500">
+                                                    <p className="flex-shrink-0 w-full text-center font-semibold p-1 border-r border-gray-500">No Data </p>
+                                                </div>
+                                        }
                                     </>
                                 </div>
                             </div>
@@ -312,38 +351,51 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                 <div className='ml-12'>
                                     <div className="flex border-l border-t border-b border-gray-500 font-semibold">
                                         {/* <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500"></p> */}
-                                        <p className="flex-grow w-48 p-1 border-r border-gray-500">Resource</p>
-                                        <p className="flex-grow w-24 p-1 border-r border-gray-500">Description</p>
+                                        <p className="flex-grow w-24 p-1 border-r border-gray-500">Resource</p>
+                                        <p className="flex-grow w-48 p-1 border-r border-gray-500">Description</p>
                                     </div>
                                     <>
-                                        <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                            <p className="flex-grow w-48 p-1 border-r border-gray-500">Position</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
-
-                                        </div>
-                                        <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                            {/* <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">2</p> */}
-                                            <p className="flex-grow w-48 p-1 border-r border-gray-500">Name/Title/Organization</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
-
-                                        </div>
+                                        {
+                                            project?.resources?.length > 0 ?
+                                                <>
+                                                    {
+                                                        project?.resources?.map((item, index) =>
+                                                            <div id={item.id} className="flex border-l  border-b border-gray-500">
+                                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.name}</p>
+                                                                <p className="flex-grow w-48 p-1 border-r border-gray-500">{item.details}</p>
+                                                            </div>
+                                                        )
+                                                    }</>
+                                                :
+                                                <div className="flex border-l border-b border-gray-500">
+                                                    <p className="flex-shrink-0 w-full text-center font-semibold p-1 border-r border-gray-500">No Data </p>
+                                                </div>
+                                        }
                                     </>
                                 </div>
                             </div>
                             <div className='w-full flex flex-col mb-3 ml-12'>
                                 <h4> 9. Project Risks</h4>
                                 <div className='ml-12'>
-                                    <div className='border-t border-gray-500 '>
-                                        <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                            <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">1</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
+                                    <div className=' border-gray-500 '>
+                                        {
+                                            project?.risks?.length > 0 ?
+                                                <>
+                                                    {
+                                                        project?.risks?.map((item, index) =>
+                                                            <div id={item.id} className="flex border-l border-t border-b border-gray-500">
 
-                                        </div>
-                                        <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                            <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">2</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
+                                                                <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">{index + 1}</p>
+                                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">{item?.name}</p>
 
-                                        </div>
+                                                            </div>
+                                                        )
+                                                    }</>
+                                                :
+                                                <div className="flex border-l border-b border-t border-gray-500">
+                                                    <p className="flex-shrink-0 w-full text-center font-semibold p-1 border-r border-gray-500">Not Data </p>
+                                                </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -352,7 +404,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                 <div className='w-full flex flex-col mb-3 ml-12'>
                                     <h4>10.1. Project Organization Chart</h4>
                                     <div className='ml-12'>
-                                        <p>This is the Project Business need Explained</p>
+                                        <p> <span className='text-red-500'>*</span> Not In System</p>
                                     </div>
                                 </div>
                                 <div className='w-full flex flex-col mb-3 ml-12'>
@@ -365,18 +417,23 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                             <p className="flex-grow w-24 p-1 border-r border-gray-500">Roles and Responsibilities</p>
                                         </div>
                                         <>
-                                            <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                                <p className="flex-grow w-48 p-1 border-r border-gray-500">Name</p>
-                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">Position</p>
-                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
-
-                                            </div>
-                                            <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                                <p className="flex-grow w-48 p-1 border-r border-gray-500">Name</p>
-                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">Position</p>
-                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
-
-                                            </div>
+                                            {
+                                                project?.assignments?.length > 0 ?
+                                                    <>
+                                                        {
+                                                            project?.assignments?.map((item, index) =>
+                                                                <div id={item.id} className="flex border-l  border-b border-gray-500">
+                                                                    <p className="flex-grow w-48 p-1 border-r border-gray-500">{item.personnel_department}</p>
+                                                                    <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.phone}</p>
+                                                                    <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.description}</p>
+                                                                </div>
+                                                            )
+                                                        }</>
+                                                    :
+                                                    <div className="flex border-l border-b border-gray-500">
+                                                        <p className="flex-shrink-0 w-full text-center font-semibold p-1 border-r border-gray-500">No Data </p>
+                                                    </div>
+                                            }
                                         </>
                                     </div>
                                 </div>
@@ -392,20 +449,23 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                         <p className="flex-grow w-24 p-1 border-r border-gray-500">Date</p>
                                     </div>
                                     <>
-                                        <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                            <p className="flex-grow w-48 p-1 border-r border-gray-500">Position/Title</p>
-                                            <p className="flex-grow w-48 p-1 border-r border-gray-500">Position</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
-
-                                        </div>
-                                        <div className="flex border-l  border-b border-gray-500 font-semibold">
-                                            <p className="flex-grow w-48 p-1 border-r border-gray-500">Position/Title</p>
-                                            <p className="flex-grow w-48 p-1 border-r border-gray-500">Position</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
-                                            <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
-
-                                        </div>
+                                        {
+                                            project?.approvals?.length > 0 ?
+                                                <>
+                                                    {
+                                                        project?.approvals?.map((item, index) =>
+                                                            <div id={item.id} className="flex border-l  border-b border-gray-500">
+                                                                <p className="flex-grow w-48 p-1 border-r border-gray-500">{item.personnel_department}</p>
+                                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.phone}</p>
+                                                                <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.description}</p>
+                                                            </div>
+                                                        )
+                                                    }</>
+                                                :
+                                                <div className="flex border-l border-b border-gray-500">
+                                                    <p className="flex-shrink-0 w-full text-center font-semibold p-1 border-r border-gray-500"> <span className='text-red-500'>*</span> Pending </p>
+                                                </div>
+                                        }
                                     </>
                                 </div>
                             </div>

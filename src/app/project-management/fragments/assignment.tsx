@@ -118,7 +118,9 @@ function Assignment({
 
 
 
-    const url = `task_assignment/${activity_id}`
+    const url = `task_assignment/${project?.id}/${activity_id}`
+    // const url = `assumptions_contsraints/${project_id}/${from}/${from_id}`
+
 
     const {
         loading,
