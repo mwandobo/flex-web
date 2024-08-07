@@ -1,14 +1,12 @@
 "use client"
 
 import { useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { post } from '@/utils/api'
 import Button from '@/components/button'
-import { BackgroundDiv, FormContainer, LogoContainer, Image } from './login.styled'
 import { Card } from '@mui/material'
 import TextFieldComponent from '@/components/inputs/text-field'
 import Swal from "sweetalert2"
-
 
 const ChangePasswordPage = ({ params }: { params: { userId: string } }) => {
     const [new_password, setNewPassword] = useState('')

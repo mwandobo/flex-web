@@ -13,6 +13,7 @@ import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
 import { statusFormatter } from "@/utils/actions/status-formatter";
 import FormattedMoney from "@/components/moneyFormater";
 import Assumption from "@/app/project-management/fragments/assumption";
+import Assignment from "@/app/project-management/fragments/assignment";
 
 
 interface Props {
@@ -67,6 +68,12 @@ const OutputShow = (
             from_id={output_id}
             means_of_verification={data.measurement_type_id}
         />,
+        <Assignment
+            project={project}
+            key={'assignment'}
+            from='output'
+            from_id={output_id}
+        />,
         <Assumption
             key={'assumption'}
             from_id={output_id}
@@ -111,6 +118,7 @@ const OutputShow = (
                                 columns={[
                                     "Activities",
                                     "Indicators",
+                                    "Assignments",
                                     "Assumptions",
                                 ]}
                                 nodes={nodes}

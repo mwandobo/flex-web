@@ -175,7 +175,7 @@ const ProjectShow = ({ params }: { params: { planId: string } }) => {
                                     {selected === 'goal/show' &&
                                         < GoalShow
                                             goal_id={selectedId}
-                                            project_id={data?.project?.id}
+                                            project={data?.project}
                                             callBackFunction={handleCardClick}
                                         />
                                     }
@@ -190,7 +190,7 @@ const ProjectShow = ({ params }: { params: { planId: string } }) => {
                                     }
 
                                     {selected === 'outcome/show' && <OutcomeShow
-                                        project_id={data?.project?.id}
+                                        project={data?.project}
                                         callBackFunction={handleCardClick}
                                         goal_id='undefined'
                                         outcome_id={selectedId}

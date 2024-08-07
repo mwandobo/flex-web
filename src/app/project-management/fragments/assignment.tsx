@@ -6,15 +6,21 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import React from 'react'
 
 interface Props {
-    activity_id?: any
-    project?: any
+    from_id?: any
+    project: any
+    from?: any
     isHideAdd?: boolean
+
 }
 
 function Assignment({
-    activity_id,
+    from_id,
     project,
+    from,
     isHideAdd
+
+
+
 }: Props) {
 
     const formInputs = [
@@ -114,13 +120,7 @@ function Assignment({
         },
     ]
 
-
-
-
-
-    const url = `task_assignment/${project?.id}/${activity_id}`
-    // const url = `assumptions_contsraints/${project_id}/${from}/${from_id}`
-
+    const url = `assignment/${project?.id}/${from}/${from_id}`
 
     const {
         loading,

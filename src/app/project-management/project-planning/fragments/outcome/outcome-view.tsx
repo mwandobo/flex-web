@@ -13,18 +13,19 @@ import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
 import { statusFormatter } from "@/utils/actions/status-formatter";
 import FormattedMoney from "@/components/moneyFormater";
 import Assumption from "@/app/project-management/fragments/assumption";
+import Assignment from "@/app/project-management/fragments/assignment";
 
 interface Props {
     callBackFunction?: (selectedCard: string, id?: string) => void
     outcome_id?: string
-    project_id?: string | null
+    project?: any
     goal_id?: string | null
 }
 
 const OutcomeShow = (
     {
         goal_id,
-        project_id,
+        project,
         outcome_id,
         callBackFunction
     }: Props
@@ -36,7 +37,7 @@ const OutcomeShow = (
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
-            const res = await get(`project_outcome/${project_id}/${goal_id}/show/${outcome_id}`, token)
+            const res = await get(`project_outcome/${project?.id}/${goal_id}/show/${outcome_id}`, token)
 
             if (res && res.status === 200) {
                 setData(res.data.data)
@@ -46,27 +47,32 @@ const OutcomeShow = (
         fetchData()
     }, [])
 
-
     const nodes: React.ReactNode[] = [
         <Output
             key={'outcome'}
-            project_id={project_id}
+            project_id={project?.id}
             outcome_id={outcome_id}
             selectedViewCard="output/show"
             callBackFunction={callBackFunction}
         />,
         <Indicator
             key={'outcome'}
-            project_id={project_id}
+            project_id={project?.id}
             from='outcome'
             from_id={outcome_id}
             means_of_verification={data.measurement_type_id}
+        />,
+        <Assignment
+            project={project}
+            key={'assignment'}
+            from='outcome'
+            from_id={outcome_id}
         />,
         <Assumption
             key={'assumption'}
             from_id={outcome_id}
             from="outcome"
-            project_id={project_id}
+            project_id={project?.id}
         />,
     ];
 
@@ -106,6 +112,7 @@ const OutcomeShow = (
                                 columns={[
                                     "Outputs",
                                     "Indicators",
+                                    "Assignments",
                                     "Assumptions",
                                 ]}
                                 nodes={nodes}

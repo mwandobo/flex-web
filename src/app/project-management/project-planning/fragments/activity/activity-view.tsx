@@ -68,7 +68,8 @@ const ActivityShow = (
         <Assignment
             project={project}
             key={'assignment'}
-            activity_id={activity_id}
+            from='activity'
+            from_id={activity_id}
         />,
         <Resource
             key={'resource'}
