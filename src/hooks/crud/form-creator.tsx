@@ -10,7 +10,6 @@ import { post, put, remove } from "@/utils/api"
 import { CheckCircle2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import Swal from "sweetalert2"
-import swal from 'sweetalert2';
 interface Props {
     isModalOpen: boolean
     onCloseModal: () => void
@@ -283,7 +282,7 @@ export const useCrudFormCreator = ({
 
         } catch (error) {
             setIsDisabled(false)
-            swal.fire({
+            Swal.fire({
                 title: 'Error Occured!',
                 text: JSON.stringify(error?.response?.data?.error),
                 icon: 'error',

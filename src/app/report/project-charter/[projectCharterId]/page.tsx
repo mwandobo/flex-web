@@ -177,7 +177,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                                 <>
                                                     {
                                                         project?.stakeholders.map((item, index) =>
-                                                            <div id={item.id} className="flex border-l  border-b border-gray-500">
+                                                            <div key={item.id} className="flex border-l  border-b border-gray-500">
                                                                 <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">{index + 1}</p>
                                                                 <p className="flex-grow w-48 p-1 border-r border-gray-500">{item.position}</p>
                                                                 <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.name}</p>
@@ -226,7 +226,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                                     <>
                                                         {
                                                             project?.Objectives?.map((item, index) =>
-                                                                <div id={item.id} className="flex border-l  border-b border-gray-500">
+                                                                <div key={item.id} className="flex border-l  border-b border-gray-500">
                                                                     <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">{index + 1}</p>
                                                                     <p className="flex-grow w-48 p-1 border-r border-gray-500">{item.element}</p>
                                                                     <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.objective}</p>
@@ -266,7 +266,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                                     <>
                                                         {
                                                             project?.assumptions?.map((item, index) =>
-                                                                <div id={item.id} className="flex border-l border-t border-b border-gray-500">
+                                                                <div key={item.id} className="flex border-l border-t border-b border-gray-500">
 
                                                                     <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">{index + 1}</p>
                                                                     <p className="flex-grow w-24 p-1 border-r border-gray-500">{item?.name}</p>
@@ -300,7 +300,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                                 <>
                                                     {
                                                         project?.deliverables?.map((item, index) =>
-                                                            <div id={item.id} className="flex border-l border-t border-b border-gray-500">
+                                                            <div key={item.id} className="flex border-l border-t border-b border-gray-500">
 
                                                                 <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">{index + 1}</p>
                                                                 <p className="flex-grow w-24 p-1 border-r border-gray-500">{item?.name}</p>
@@ -331,7 +331,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                                 <>
                                                     {
                                                         project?.costs?.map((item, index) =>
-                                                            <div id={item.id} className="flex border-l  border-b border-gray-500">
+                                                            <div key={item.id} className="flex border-l  border-b border-gray-500">
                                                                 <p className="flex-grow w-48 p-1 border-r border-gray-500">{item.purpose}</p>
                                                                 <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.amount}</p>
                                                                 <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.source}</p>
@@ -360,7 +360,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                                 <>
                                                     {
                                                         project?.resources?.map((item, index) =>
-                                                            <div id={item.id} className="flex border-l  border-b border-gray-500">
+                                                            <div key={item.id} className="flex border-l  border-b border-gray-500">
                                                                 <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.name}</p>
                                                                 <p className="flex-grow w-48 p-1 border-r border-gray-500">{item.details}</p>
                                                             </div>
@@ -383,7 +383,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                                 <>
                                                     {
                                                         project?.risks?.map((item, index) =>
-                                                            <div id={item.id} className="flex border-l border-t border-b border-gray-500">
+                                                            <div key={item.id} className="flex border-l border-t border-b border-gray-500">
 
                                                                 <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">{index + 1}</p>
                                                                 <p className="flex-grow w-24 p-1 border-r border-gray-500">{item?.name}</p>
@@ -422,7 +422,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                                     <>
                                                         {
                                                             project?.assignments?.map((item, index) =>
-                                                                <div id={item.id} className="flex border-l  border-b border-gray-500">
+                                                                <div key={item.id} className="flex border-l  border-b border-gray-500">
                                                                     <p className="flex-grow w-48 p-1 border-r border-gray-500">{item.personnel_department}</p>
                                                                     <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.phone}</p>
                                                                     <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.description}</p>
@@ -454,13 +454,14 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                                 <>
                                                     {
                                                         project?.approvals?.map((item, index) =>
-                                                            <div id={item.id} className="flex border-l  border-b border-gray-500">
+                                                            <div key={item.id} className="flex border-l  border-b border-gray-500">
                                                                 <p className="flex-grow w-48 p-1 border-r border-gray-500">{item.personnel_department}</p>
                                                                 <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.phone}</p>
                                                                 <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.description}</p>
                                                             </div>
                                                         )
-                                                    }</>
+                                                    }
+                                                </>
                                                 :
                                                 <div className="flex border-l border-b border-gray-500">
                                                     <p className="flex-shrink-0 w-full text-center font-semibold p-1 border-r border-gray-500"> <span className='text-red-500'>*</span> Pending </p>
