@@ -147,6 +147,9 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                                     { label: 'Grand Total Cost', value: <FormattedMoney amount={data.grand_total_cost} /> },
                                     { label: 'Prepared By', value: data?.prepared_by },
                                     { label: 'Description', value: data?.description },
+                                    { label: 'Summary', value: data?.summary },
+                                    { label: 'Scope', value: data?.scope },
+                                    { label: 'Purpose', value: data?.purpose },
                                     { label: 'Progress', value: data.progress_status },
                                 ]}
                                 titleA="Project"

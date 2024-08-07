@@ -93,6 +93,33 @@ function Project() {
             isError: false,
             errorMessage: ''
         },
+        {
+            name: 'summary',
+            type: 'textArea',
+            label: 'Summary',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+        {
+            name: 'purpose',
+            type: 'textArea',
+            label: 'Purpose',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+        {
+            name: 'scope',
+            type: 'textArea',
+            label: 'Scope',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
     ]
 
     const _columns = [

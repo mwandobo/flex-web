@@ -201,16 +201,13 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                             <div className='w-full flex flex-col mb-3'>
                                 <h4>3. Executive Summary</h4>
                                 <div className='ml-12'>
-                                    <p> <span className='text-red-500'>*</span> Not In System</p>
+                                    <p>{project?.summary}</p>
                                 </div>
                             </div>
                             <div className='w-full flex flex-col mb-3'>
                                 <h4>4. Project Purpose</h4>
                                 <div className='w-full flex flex-col mb-3 ml-12'>
-                                    <p> <span className='text-red-500'>*</span> Not In System</p>
-                                    <div className='ml-12'>
-                                        <p>This is the Project Business need Explained</p>
-                                    </div>
+                                    <p>{project?.purpose}</p>
                                 </div>
                                 <div className='w-full flex flex-col mb-3 ml-12'>
                                     <h4>4.2. Business Objective</h4>
@@ -253,7 +250,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                 <div className='w-full flex flex-col mb-3 ml-12'>
                                     <h4>5.2. Scope</h4>
                                     <div className='ml-12'>
-                                        <p> <span className='text-red-500'>*</span> Not In System</p>
+                                        <p> {project?.scope}</p>
                                     </div>
                                 </div>
 

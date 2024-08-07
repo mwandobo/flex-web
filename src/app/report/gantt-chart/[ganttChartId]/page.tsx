@@ -80,38 +80,29 @@ const GanttChart = ({ params }: { params: { ganttChartId: string } }) => {
             <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{from !== "activity" ? item.start_date : item.formatted_start_date}</p>
             <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{from !== "activity" ? item.end_date : item.formatted_end_date}</p>
             {
-                from === 'activity' ?
-                    <>
-                        {
-                            (item.assignments.department_assignments &&
-                                item.assignments.department_assignments.length > 0) ?
-                                <p className='flex-grow w-32 p-1  border-r border-b border-gray-500'>
-                                    {item.assignments.department_assignments.map(dept_assign =>
-                                        <span key={dept_assign.id}>{
-                                            dept_assign.personnel_department}</span>
-                                    )}
-                                </p> :
-                                <p className='flex-grow w-32 p-1  border-r border-b border-gray-500'>no assignment</p>
-                        }
-                    </> :
-                    <p className='flex-grow w-32 p-1  border-r border-b border-gray-500'>....</p>
+                (item.assignments.department_assignments &&
+                    item.assignments.department_assignments.length > 0) ?
+                    <p className='flex flex-col flex-grow w-32 p-1  border-r border-b border-gray-500'>
+                        {item.assignments.department_assignments.map(dept_assign =>
+                            <span key={dept_assign.id}>{
+                                dept_assign.personnel_department}</span>
+                        )}
+                    </p> :
+                    <p className='flex-grow w-32 p-1  border-r border-b border-gray-500'>.....</p>
             }
+
             {
-                from === 'activity' ?
-                    <>
-                        {
-                            (item.assignments.personnel_assignments &&
-                                item.assignments.personnel_assignments.length > 0) ?
-                                <p className='flex-grow w-32 p-1  border-r border-b border-gray-500'>
-                                    {item.assignments.personnel_assignments.map(dept_assign =>
-                                        <span key={dept_assign.id}>{
-                                            dept_assign.personnel_department}</span>
-                                    )}
-                                </p> :
-                                <p className='flex-grow w-32 p-1  border-r border-b border-gray-500'>no assignment</p>
-                        }
-                    </> : <p className='flex-grow w-32 p-1  border-r border-b border-gray-500'>....</p>
+                (item.assignments.personnel_assignments &&
+                    item.assignments.personnel_assignments.length > 0) ?
+                    <p className='flex flex-col flex-grow w-32 p-1  border-r border-b border-gray-500'>
+                        {item.assignments.personnel_assignments.map(dept_assign =>
+                            <span key={dept_assign.id}>{
+                                dept_assign.personnel_department}</span>
+                        )}
+                    </p> :
+                    <p className='flex-grow w-32 p-1  border-r border-b border-gray-500'>.....</p>
             }
+
         </div>
     }
 
