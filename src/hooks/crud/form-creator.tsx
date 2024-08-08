@@ -304,23 +304,24 @@ export const useCrudFormCreator = ({
 
     }, [modalBodyArray, ...state_properties])
 
-    const createdForm = () => {
+    const createdForm = (gridSize?: number) => {
         return <PopupModal
             isOpen={isModalOpen}
             onSaveButtonName={'Save'}
             onClose={closeModel}
             isDisabled={isButtonDisabled}
             title={modalTitle}
+            isLarge={Boolean(gridSize)}
         >
             <>
                 <>
                     {
                         isForm
                             ?
-                            <>
+                            <div className={`grid grid-cols-${Boolean(gridSize) ? 2 : 1} w-full gap-2`} style={{ gridTemplateColumns: `repeat(${gridSize ?? 1}, 1fr)`, gap: "10px" }}>
                                 {
                                     formInputs && formInputs.length > 0 && formInputs?.map((item, index) => (
-                                        <div key={index}>
+                                        <div className="" key={index}>
                                             {
                                                 item?.type === 'text' && !item.isRemoved &&
                                                 <TextFieldComponent
@@ -387,7 +388,7 @@ export const useCrudFormCreator = ({
                                         </div>
                                     ))
                                 }
-                            </>
+                            </div>
                             :
                             <p>{modalBodyString}</p>
                     }

@@ -1,9 +1,8 @@
-import { CheckCircle2, X } from 'lucide-react';
 import React, { ReactNode } from 'react';
-import { ReusableButton } from '../button/reusable-button';
 
 interface Props {
     isOpen: boolean
+    isLarge?: boolean
     onClose: () => void
     onSaveButtonName: string
     title: string
@@ -17,16 +16,19 @@ const PopupModal = ({
     children,
     title,
     onSaveButtonName,
+    isLarge,
     isDisabled
 }: Props) => {
+
+    console.log(isLarge)
 
     if (!isOpen) return null;
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
             <div className="absolute inset-0 bg-black opacity-50"></div>
 
-            <div className="relative w-full max-w-md max-h-full">
-                <div className="relative bg-white rounded-lg shadow dark:bg-white">
+            <div className={`relative w-full max-w-${isLarge ? 'lg px-10' : 'md'} max-h-full`}>
+                <div className="relative bg-white rounded-lg shadow dark:bg-white max-h-[90vh] overflow-y-auto">
                     {!isDisabled && <button
                         type="button"
                         onClick={onClose}
@@ -54,19 +56,6 @@ const PopupModal = ({
 
                         {children}
 
-
-                        {/* <form className="space-y-6" action="#">
-
-                            <div className="flex justify-end">
-                                <ReusableButton
-                                    name={onSaveButtonName}
-                                    onClick={onSave}
-                                    isDisabled={isDisabled}
-                                >
-                                    {!isDisabled && <CheckCircle2 size={13} />}
-                                </ReusableButton>
-                            </div>
-                        </form> */}
                     </div>
                 </div>
             </div>

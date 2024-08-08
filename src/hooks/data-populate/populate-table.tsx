@@ -2,7 +2,6 @@ import CrudButtonsComponent from "@/components/crud-operator-buttons"
 import FormattedMoney from "@/components/moneyFormater"
 import ProgressStatus from "@/components/status/progress"
 import MuiTable from "@/components/tables/mui-table"
-import { statusFormatter } from "@/utils/actions/status-formatter"
 
 interface Props {
     columns: any[]
@@ -48,7 +47,6 @@ export const usePopulateTable = ({
         ]
     }
 
-
     const createRowHeaderArray = () => {
         let newColumns: any[] = []
 
@@ -62,7 +60,6 @@ export const usePopulateTable = ({
     }
 
     function sortObjectValuesByHeaders(obj: any, headers: any[]) {
-        console.log(obj)
         return headers.map(header => obj[header]);
     }
 
@@ -122,11 +119,6 @@ export const usePopulateTable = ({
         }
         return newData
     }
-
-
-    console.log(createRowData())
-
-
 
     const tabular = () => {
         return (

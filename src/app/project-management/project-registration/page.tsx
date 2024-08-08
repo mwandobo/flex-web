@@ -213,7 +213,7 @@ function Project() {
                                     links={[{ name: 'Projects / List', linkTo: '/project-management/project-registration', permission: '' }]}
                                 />
                                 {tabular()}
-                                {createdForm()}
+                                {createdForm(2)}
                             </>
                     }
                 </>

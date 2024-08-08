@@ -51,7 +51,6 @@ export const usePageData = ({
 }: Props
 
 ) => {
-    console.log(tableData)
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState<any[]>([])
     const [count, setCount] = useState<any>()
