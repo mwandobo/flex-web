@@ -16,6 +16,42 @@ const formInputs = [
         errorMessage: ''
     },
     {
+        name: 'collection_method',
+        type: 'text',
+        label: 'Collection Method',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'frequency',
+        type: 'text',
+        label: 'Frequency and Schedule',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'responsibilities',
+        type: 'text',
+        label: 'Responsibilities',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'audience',
+        type: 'text',
+        label: 'Information Use / Audience',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
         name: 'details',
         type: 'textArea',
         label: 'Description',
@@ -33,14 +69,36 @@ const columns = [
         numeric: false,
         disablePadding: false,
         label: 'Assumption Name',
-        width: '30%',
+    },
+    {
+        id: 'collection_method',
+        numeric: false,
+        disablePadding: false,
+        label: 'Collection Method',
+    },
+    {
+        id: 'frequency',
+        numeric: false,
+        disablePadding: false,
+        label: 'Frequency',
+    },
+    {
+        id: 'responsibilities',
+        numeric: false,
+        disablePadding: false,
+        label: 'Responsibilities',
+    },
+    {
+        id: 'audience',
+        numeric: false,
+        disablePadding: false,
+        label: 'Audience',
     },
     {
         id: 'details',
         numeric: false,
         disablePadding: false,
         label: 'Description',
-        width: '65%',
     },
 ]
 

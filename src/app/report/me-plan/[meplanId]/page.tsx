@@ -74,10 +74,10 @@ const MEPlan = ({ params }: { params: { meplanId: string } }) => {
             {/* <p className="flex-shrink-0 w-16">{indexer(i)}</p> */}
             <p className="flex-grow w-32 p-1 border-r border-b border-gray-500">Indicator:{item.formatted_code}</p>
             <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{item.name}</p>
-            <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{item.measurement}</p>
+            <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{item.collection_method}</p>
             <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{item.frequency}</p>
-            <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{item.responsibility}</p>
-            <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{item.audiance}</p>
+            <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{item.responsibilities}</p>
+            <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{item.audience}</p>
         </div>
     }
 
@@ -86,10 +86,10 @@ const MEPlan = ({ params }: { params: { meplanId: string } }) => {
             {/* <p className="flex-shrink-0 w-16">{indexer(i)}</p> */}
             <p className="flex-grow w-32 p-1 border-r border-b border-gray-500">Assumption:{item.formatted_code}</p>
             <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{item.name}</p>
-            <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{item.measurement}</p>
+            <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{item.collection_method}</p>
             <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{item.frequency}</p>
-            <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{item.responsibility}</p>
-            <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{item.audiance}</p>
+            <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{item.responsibilities}</p>
+            <p className="flex-grow w-32 p-1  border-r border-b border-gray-500">{item.audience}</p>
         </div>
     }
 
@@ -133,7 +133,7 @@ const MEPlan = ({ params }: { params: { meplanId: string } }) => {
                     <>
                         <PageHeader
                             links={[
-                                { name: 'Gantt Chart', linkTo: '/report/gantt-chart', permission: '' },
+                                { name: 'ME Plan', linkTo: '/report/me-plan', permission: '' },
                                 { name: 'Show', linkTo: '/projects/show', permission: '' },
                             ]}
                             isShowPage={true}
