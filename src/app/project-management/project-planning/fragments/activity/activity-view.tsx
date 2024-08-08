@@ -8,17 +8,16 @@ import PageHeader from "@/components/header/page-header";
 import MuiTab from "@/components/tabs/mui-tab";
 import { get } from "@/utils/api";
 import { useEffect, useState } from "react";
-import Task from "../task/task";
 import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
 import { statusFormatter } from "@/utils/actions/status-formatter";
 import FormattedMoney from "@/components/moneyFormater";
 import Assignment from "@/app/project-management/fragments/assignment";
-import Assumption from "@/app/project-management/fragments/assumption";
 import Cost from "@/app/project-management/fragments/costs";
 import Deliverable from "@/app/project-management/fragments/deliverable";
 import Resource from "@/app/project-management/fragments/resource";
 import Risk from "@/app/project-management/fragments/risk";
 import FileUploadForm from "@/app/project-management/fragments/document";
+import AssumptionConstraint from "@/app/project-management/fragments/assumption_constraint";
 
 
 interface Props {
@@ -86,7 +85,7 @@ const ActivityShow = (
             activity_id={activity_id}
             project_id={project_id}
         />,
-        <Assumption
+        <AssumptionConstraint
             key={'assumption'}
             from={'activity'}
             from_id={activity_id}

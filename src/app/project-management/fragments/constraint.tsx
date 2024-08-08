@@ -32,7 +32,7 @@ const columns = [
         id: 'name',
         numeric: false,
         disablePadding: false,
-        label: 'Assumption Name',
+        label: 'Constraint Name',
         width: '30%',
     },
     {
@@ -49,17 +49,20 @@ interface Props {
     project_id?: any
     from?: any
     isHideAdd?: boolean
+
 }
 
-function Assumption({
+function Constraint({
     from_id,
     project_id,
     from,
     isHideAdd
 
+
+
 }: Props) {
 
-    const url = `assumptions_contsraints/${project_id}/${from}/${from_id}/assumption`
+    const url = `assumptions_contsraints/${project_id}/${from}/${from_id}/constraint`
 
     const {
         loading,
@@ -73,7 +76,7 @@ function Assumption({
         isHideShow: true,
         state_properties: [],
         formInputs: formInputs,
-        modalTitle: "Assumption"
+        modalTitle: "Constraint"
     })
 
     return (
@@ -84,7 +87,7 @@ function Assumption({
                     <>
                         <PageHeader
                             handleClick={handleClick}
-                            subHeader='Assumptions / List'
+                            subHeader='Constraints / List'
                             links={[{ name: 'Assumption & Constraint', linkTo: `/admnistration/external/` }]}
                             isHideAdd={isHideAdd}
 
@@ -97,4 +100,4 @@ function Assumption({
     )
 }
 
-export default Assumption
+export default Constraint

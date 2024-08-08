@@ -8,13 +8,13 @@ import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
 import { useRouter } from "next/navigation";
 
 interface Props {
-    columns: any[]
+    columns?: any[]
     formInputs?: any[]
-    url: string
-    modalTitle: string
-    viewUrl: string
+    url?: string
+    modalTitle?: string
+    viewUrl?: string
     isFormLoading?: boolean
-    state_properties: any[]
+    state_properties?: any[]
     callBackFunction?: (selectedCard: string, id?: string) => void
     planningCallbackFunction?: () => void
     selectedViewCard?: string

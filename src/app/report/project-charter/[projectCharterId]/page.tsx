@@ -264,7 +264,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                                                 <div key={item.id} className="flex border-l border-t border-b border-gray-500">
 
                                                                     <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">{index + 1}</p>
-                                                                    <p className="flex-grow w-24 p-1 border-r border-gray-500">{item?.name}</p>
+                                                                    <p className="flex-grow w-24 p-1 border-r border-gray-500">{`${item.formatted_code} ${item?.name}`}</p>
 
                                                                 </div>
                                                             )
@@ -280,8 +280,26 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                 <div className='w-full flex flex-col mb-3 ml-12'>
                                     <h4>5.3. Constraints</h4>
                                     <div className='ml-12'>
-                                        <p className="flex-shrink-0 w-full text-center font-semibold p-1 border-r border-gray-500"> <span className='text-red-500'>*</span> Included in assumptions  </p>
+                                        <>
+                                            {
+                                                project?.constraints?.length > 0 ?
+                                                    <>
+                                                        {
+                                                            project?.constraints?.map((item, index) =>
+                                                                <div key={item.id} className="flex border-l border-t border-b border-gray-500">
 
+                                                                    <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500">{index + 1}</p>
+                                                                    <p className="flex-grow w-24 p-1 border-r border-gray-500">{`${item.formatted_code} ${item?.name}`}</p>
+
+                                                                </div>
+                                                            )
+                                                        }</>
+                                                    :
+                                                    <div className="flex border-l border-b border-t border-gray-500">
+                                                        <p className="flex-shrink-0 w-full text-center font-semibold p-1 border-r border-gray-500">Not Data </p>
+                                                    </div>
+                                            }
+                                        </>
 
                                     </div>
                                 </div>

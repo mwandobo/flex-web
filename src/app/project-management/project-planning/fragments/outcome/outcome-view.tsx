@@ -12,8 +12,8 @@ import Output from "../output/output";
 import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
 import { statusFormatter } from "@/utils/actions/status-formatter";
 import FormattedMoney from "@/components/moneyFormater";
-import Assumption from "@/app/project-management/fragments/assumption";
 import Assignment from "@/app/project-management/fragments/assignment";
+import AssumptionConstraint from "@/app/project-management/fragments/assumption_constraint";
 
 interface Props {
     callBackFunction?: (selectedCard: string, id?: string) => void
@@ -68,7 +68,7 @@ const OutcomeShow = (
             from='outcome'
             from_id={outcome_id}
         />,
-        <Assumption
+        <AssumptionConstraint
             key={'assumption'}
             from_id={outcome_id}
             from="outcome"
