@@ -30,12 +30,20 @@ const MuiSelect = ({
   value,
   error,
   label = '',
+  control,
   control_for
 }: Props) => {
 
   const onChange = (event: SelectChangeEvent) => {
     return handleChange(event, from, control_for)
   };
+
+  const assumptionOptions = [
+    { label: "Assumption", value: "assumption" },
+    { label: "Constraint", value: "assumption" }
+  ]
+
+
 
   const [options, setOptions] = useState<any[]>([]);
   const token = getValueFromLocalStorage('token')
@@ -50,7 +58,13 @@ const MuiSelect = ({
         setOptions(payload)
       }
     };
-    fetchData()
+
+    if (control === "assumption") {
+      setOptions(assumptionOptions)
+
+    } else {
+      fetchData()
+    }
   }, [optionsUrlData]);
 
   return (

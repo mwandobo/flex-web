@@ -16,6 +16,16 @@ const formInputs = [
         errorMessage: ''
     },
     {
+        label: 'Select Type',
+        options: [
+            { value: 'assumption', label: 'Assumption' },
+            { value: 'constraint', label: 'Constraint' },
+        ],
+        type: 'radio',
+        name: 'type',
+        value: '',
+    },
+    {
         name: 'details',
         type: 'textArea',
         label: 'Description',

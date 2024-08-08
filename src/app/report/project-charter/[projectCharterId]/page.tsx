@@ -186,9 +186,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                                                 <p className="flex-grow w-32 p-1 border-r border-gray-500">{item.email}</p>
                                                             </div>
                                                         )
-
                                                     }</>
-
                                                 :
                                                 <div className="flex border-l border-b border-gray-500">
                                                     <p className="flex-shrink-0 w-full text-center font-semibold p-1 border-r border-gray-500"> No Data</p>

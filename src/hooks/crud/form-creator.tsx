@@ -1,5 +1,6 @@
 import { ReusableButton } from "@/components/button/reusable-button"
 import MuiDate from "@/components/inputs/mui-date"
+import MuiRadioButtonsGroup from "@/components/inputs/mui-radio"
 import MuiSelect from "@/components/inputs/mui-select"
 import TextArea from "@/components/inputs/text-area"
 import TextFieldComponent from "@/components/inputs/text-field"
@@ -371,6 +372,15 @@ export const useCrudFormCreator = ({
                                                     from={item?.name}
                                                     label={item?.label}
                                                     value={item.value}
+                                                />
+                                            }
+                                            {
+                                                item?.type === 'radio' && !item.isRemoved &&
+                                                <MuiRadioButtonsGroup
+                                                    onChange={handleInputChange}
+                                                    from={item.name}
+                                                    label={item.label}
+                                                    options={item.options}
                                                 />
                                             }
 
