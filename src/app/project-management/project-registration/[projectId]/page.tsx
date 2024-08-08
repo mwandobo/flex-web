@@ -20,6 +20,7 @@ import LogFrame from "../../fragments/logframe";
 import Budget from "../../fragments/budget";
 import OutcomeCost from "../../fragments/outcome-cost";
 import LogFrameIndicator from "../../fragments/logframe-indicator";
+import Purpose from "../../fragments/purpose";
 
 const ProjectShow = ({ params }: { params: { projectId: string } }) => {
     const [data, setData] = useState<any>([])
@@ -67,6 +68,12 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
             key={'logframe'}
             project={data}
         />,
+        <Purpose
+            key={'purpose'}
+            project_id={id}
+            isHideAdd={true}
+        />,
+
 
         <ExternalUsers
             key={'sponsor'}
@@ -107,6 +114,7 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
             project_id={id}
             isHideAdd={false}
         />,
+
         <Resource
             key={'resource'}
             project_id={id}
@@ -160,6 +168,7 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                             <MuiTab
                                 columns={[
                                     "LogFrame",
+                                    "Purpose",
                                     "Sponsors",
                                     "Stakeholders",
                                     "Budget",
