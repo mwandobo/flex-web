@@ -10,6 +10,9 @@ import { capitalizeFirstWord } from "@/utils/actions/string-manipulations";
 import FormattedMoney from "@/components/moneyFormater";
 import { Download, FileDown } from "lucide-react";
 import { ReusableButton } from "@/components/button/reusable-button";
+import ReactDOMServer from 'react-dom/server';
+import HydrationZustand from "@/app/Hydrated";
+
 
 const LearningReportShow = ({ params }: { params: { learningReportId: string } }) => {
     const router = useRouter()
@@ -288,30 +291,43 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
     }
 
     const generatePdf = async () => {
-        const strippedToken = token?.substring(1, token.length - 1)
+        setIsLoadingGeneratePdf(true)
+        const content = ReactDOMServer.renderToStaticMarkup(pageBody());
 
-        setIsLoadingGeneratePdf(true);
-        try {
-            const response = await fetch(`${baseURL}/project_learning_report/generate_pdf/${data.project.id}/${evaluatedItem}`, {
-                headers: {
-                    'Authorization': `Bearer ${strippedToken}`, // Include token if authentication is required
-                    'Content-Type': 'application/json',
-                },
-            });
+        const fullHtml = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+            <title>Document</title>
+        </head>
+        <body>
+            ${content}
+        </body>
+        </html>
+    `;
 
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status} ${response.statusText}`);
-            }
+        // const content = pageRenderHtml(); // Replace with your content
+        const response = await fetch('/api/generate-pdf', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content: fullHtml }),
+        });
 
+        console.log(response)
+
+        if (response.ok) {
             const pdfBlob = await response.blob();
-
             setPdfData(URL.createObjectURL(pdfBlob));
-            setIsDownloading(true);
-        } catch (error) {
-            console.error('Error in testFetch', error);
-        } finally {
-            setIsLoadingGeneratePdf(false);
+            setIsDownloading(true)
+            setIsLoadingGeneratePdf(false)
+
+        } else {
+            console.error('Error generating PDF');
         }
+
     };
 
     console.log(reportToDownload)
@@ -597,7 +613,85 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
         </>
     }
 
+    const pageBody = () => {
+        return (
+            <div className="flex flex-col p-4 h-full w-full bg-white">
+                <div className="bg-white px-2 ">
+                    <h3 className="text-left font-semibold mb-1"> {reportHeader()} </h3>
+                    {
+                        customTableFunction()?.data?.length > 0 ?
+                            <div>
+                                <div
+                                    className="grid grid-cols-6 border border-gray-500  bg-gray-200 ">
+                                    {columns.map((item, index) => {
+                                        const isLast = index === columns.length - 1;
+                                        return (
+                                            <div key={index}
+                                                className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
+                                                <p className="text-xs ">
+                                                    {item.label}
+                                                </p>
+                                            </div>
+                                        )
+                                    }
+                                    )}
+                                </div>
+                                <div className="border-b border-gray-500">
+                                    {
+                                        customTableFunction()?.data?.map((item1, index) => {
+                                            return (
+                                                < >
+                                                    {itemRender(item1, index)}
+                                                    {evaluatedItem === "combined" && item1.activities && item1.activities.length > 0 && item1.activities.map((activity: any, index: any) => {
+                                                        return <>
+                                                            {itemRender(activity, index)}
+                                                        </>
+                                                    })}
+                                                </>
+
+                                            )
+                                        }
+                                        )}
+                                </div>
+                            </div>
+                            : <NoDataComponent />
+                    }
+                </div>
+
+            </div>
+        );
+    }
+
+    const pageRenderHtml = () => {
+        return (
+            <div className="bg-white h-full ">
+                <div className="flex ">
+                    <div className="flex flex-col w-36 mt-4 ml-4 p-2">
+                        <h4 className="text-sm font-semibold mb-2">Learning Items</h4>
+                        <div className="flex flex-col justify-between h-full">
+                            <div className="flex flex-col ml-3 text-xs gap-1 cursor-pointer py-5">
+                                {
+                                    learningItems.map((item, index) =>
+                                        <p
+                                            key={index}
+                                            className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${evaluatedItem === item.from && 'bg-sidebar-background text-sidebar-active'} `}
+                                            onClick={() => handleMonitoringItemChange(item.from)}>
+                                            {item.name}
+                                        </p>
+                                    )
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    {pageBody()}
+                </div>
+            </div>
+        );
+    }
+
+
     return (
+
         <ProtectedRoute>
             {
                 loading ? <p>Loading...</p>
@@ -612,75 +706,13 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                             isDownload={true}
                             ButtonDownloadComponent={ButtonDownloadComponent}
                         />
-                        <div className="bg-white h-full ">
-                            <div className="flex ">
-                                <div className="flex flex-col w-36 mt-4 ml-4 p-2">
-                                    <h4 className="text-sm font-semibold mb-2">Learning Items</h4>
-                                    <div className="flex flex-col justify-between h-full">
-                                        <div className="flex flex-col ml-3 text-xs gap-1 cursor-pointer py-5">
-                                            {
-                                                learningItems.map((item, index) =>
-                                                    <p
-                                                        key={index}
-                                                        className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${evaluatedItem === item.from && 'bg-sidebar-background text-sidebar-active'} `}
-                                                        onClick={() => handleMonitoringItemChange(item.from)}>
-                                                        {item.name}
-                                                    </p>
-                                                )
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col p-4 h-full w-full bg-white">
-                                    <div className="bg-white px-2 ">
-                                        <h3 className="text-left font-semibold mb-1"> {reportHeader()} </h3>
-                                        {
-                                            customTableFunction()?.data?.length > 0 ?
-                                                <div>
-                                                    <div
-                                                        className="grid grid-cols-6 border border-gray-500  bg-gray-200 ">
-                                                        {columns.map((item, index) => {
-                                                            const isLast = index === columns.length - 1;
-                                                            return (
-                                                                <div key={index}
-                                                                    className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
-                                                                    <p className="text-xs ">
-                                                                        {item.label}
-                                                                    </p>
-                                                                </div>
-                                                            )
-                                                        }
-                                                        )}
-                                                    </div>
-                                                    <div className="border-b border-gray-500">
-                                                        {
-                                                            customTableFunction()?.data?.map((item1, index) => {
-                                                                return (
-                                                                    < >
-                                                                        {itemRender(item1, index)}
-                                                                        {evaluatedItem === "combined" && item1.activities && item1.activities.length > 0 && item1.activities.map((activity: any, index: any) => {
-                                                                            return <>
-                                                                                {itemRender(activity, index)}
-                                                                            </>
-                                                                        })}
-                                                                    </>
-
-                                                                )
-                                                            }
-                                                            )}
-                                                    </div>
-                                                </div>
-                                                : <NoDataComponent />
-                                        }
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
+                        {pageRenderHtml()}
                     </div>
             }
         </ProtectedRoute>
     );
+
+
 };
 
 export default LearningReportShow;
