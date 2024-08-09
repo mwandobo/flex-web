@@ -7,9 +7,8 @@ import { useEffect, useState } from "react";
 import { getValueFromLocalStorage, } from "@/utils/actions/local-starage";
 import NoDataComponent from "@/components/status/no-data";
 import { capitalizeFirstWord } from "@/utils/actions/string-manipulations";
-import { ReusableButton } from "@/components/button/reusable-button";
-import { Download, FileDown } from "lucide-react";
 import FormattedMoney from "@/components/moneyFormater";
+import GeneratePdf from "@/components/pdf/generate-pdf";
 
 const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
     const router = useRouter()
@@ -18,9 +17,6 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [evaluatedItem, setEvaluatedItem] = useState('goal')
     const token = getValueFromLocalStorage('token')
-    const [isDownloading, setIsDownloading] = useState(false)
-    const [isloadingGenaratePdf, setIsLoadingGeneratePdf] = useState(false)
-    const [pdfData, setPdfData] = useState<any>(null);
     const id = params.reportId
 
     const url = `project_evaluation_report/show_single/${id}`
@@ -184,51 +180,6 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
         },
     ]
 
-    const outputColumns = [
-        {
-            id: 'direct_cost',
-            numeric: false,
-            disablePadding: false,
-            label: 'Direct Inputs',
-        },
-        {
-            id: 'resource_cost',
-            numeric: false,
-            disablePadding: false,
-            label: 'Resource Inputs',
-        },
-        {
-            id: 'total_cost',
-            numeric: false,
-            disablePadding: false,
-            label: 'Total Inputs',
-        },
-        {
-            id: 'expense',
-            numeric: false,
-            disablePadding: false,
-            label: 'Expense',
-        },
-        {
-            id: 'evaluated_expense',
-            numeric: false,
-            disablePadding: false,
-            label: 'Evaluated Expense',
-        },
-        {
-            id: 'evaluation_budget',
-            numeric: false,
-            disablePadding: false,
-            label: 'Evaluation Against Budget',
-        },
-        {
-            id: 'evaluation_target',
-            numeric: false,
-            disablePadding: false,
-            label: 'Evaluation Against Target',
-        },
-    ]
-
     const styler = (progress: string) => {
         if (progress) {
             switch (true) {
@@ -262,45 +213,10 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
         }
     }
 
-    const handleClick = async () => {
-        return await generatePdf()
-    }
-
-    const generatePdf = async () => {
-        const strippedToken = token?.substring(1, token.length - 1)
-
-        setIsLoadingGeneratePdf(true);
-        try {
-            const response = await fetch(`${baseURL}/project_evaluation_report/generate_pdf/${id}/${evaluatedItem}`, {
-                headers: {
-                    'Authorization': `Bearer ${strippedToken}`, // Include token if authentication is required
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error(`Error: ${response.status} ${response.statusText}`);
-            }
-
-            const pdfBlob = await response.blob();
-
-            setPdfData(URL.createObjectURL(pdfBlob));
-            setIsDownloading(true);
-        } catch (error) {
-            console.error('Error in testFetch', error);
-        } finally {
-            setIsLoadingGeneratePdf(false);
-        }
-    };
-
-
     const handleMonitoringItemChange = (item: string) => {
         setEvaluatedItem(item)
     }
 
-    const refreshDownloadButton = () => {
-        setIsDownloading(false)
-    }
 
     const evaluationsItems = [
         {
@@ -317,35 +233,49 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
         },
     ]
 
-    const ButtonDownloadComponent = () => {
+    const pageBody = () => {
         return (
-            <>
-                {
-                    isloadingGenaratePdf ?
-                        <p className="text-xs">Generating PDF ...</p>
-                        :
-                        <>
-                            {
-                                isDownloading ?
-                                    <div className="flex gap-3 items-center">
-                                        <p className="text-xs">{`${data.project_name}.pdf`}</p>
-                                        <a className="flex text-xs items-center text-blue-700 shadow px-2 py-1 hover:bg-green-600 hover:text-white hover:px-3  hover:py-1" href={pdfData} download={`${data.project_name}.pdf`} onClick={refreshDownloadButton}>
-                                            <Download className="me-1" size={15} />  Download PDF
-                                        </a>
-                                    </div>
-                                    :
-                                    < div className=''>
-                                        <ReusableButton
-                                            name={'Download'}
-                                            onClick={() => handleClick()}
-                                        >
-                                            <FileDown size={15} />
-                                        </ReusableButton>
-                                    </div>
-                            }
-                        </>
-                }
-            </>
+            <div className="flex flex-col p-4 h-full w-full bg-white">
+                <div className="bg-white px-2 ">
+                    <h3 className="text-left font-semibold mb-1"> {reportHeader()} </h3>
+                    {
+                        customTableFunction()?.data?.length > 0 ?
+                            <div>
+                                <div className="grid grid-cols-7 border border-gray-500  bg-gray-200 ">
+                                    {columns.map((item, index) => {
+                                        const isLast = index === columns.length - 1;
+                                        return (
+
+                                            <div key={index} className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
+                                                <p className="text-xs ">
+                                                    {item.label}
+                                                </p>
+                                            </div>
+                                        )
+                                    }
+                                    )}
+                                </div>
+                                <div className="border-b border-gray-500">
+                                    {customTableFunction()?.data?.map((item1, index) => {
+                                        return (
+                                            < >
+                                                {itemRender(item1, index)}
+                                                {evaluatedItem === "combined" && item1.outcomes && item1.outcomes.length > 0 && item1.outcomes.map((outcome: any, index: any) => {
+                                                    return <>
+                                                        {itemRender(outcome, index)}
+                                                    </>
+                                                })}
+                                            </>
+                                        )
+                                    }
+                                    )}
+                                </div>
+                            </div>
+                            : <NoDataComponent />
+                    }
+                </div>
+
+            </div>
         )
     }
 
@@ -523,8 +453,11 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                             ]}
                             isShowPage={true}
                             isDownload={true}
-                            ButtonDownloadComponent={ButtonDownloadComponent}
-                        />
+                            ButtonDownloadComponent={<GeneratePdf
+                                content={pageBody()}
+                                fileName="MyDocument.pdf"
+                                buttonLabel="Generate PDF"
+                            />} />
                         <div className="bg-white h-full ">
                             <div className="flex ">
                                 <div className="flex flex-col w-36 mt-4 ml-4 p-2">
@@ -544,47 +477,7 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex flex-col p-4 h-full w-full bg-white">
-                                    <div className="bg-white px-2 ">
-                                        <h3 className="text-left font-semibold mb-1"> {reportHeader()} </h3>
-                                        {
-                                            customTableFunction()?.data?.length > 0 ?
-                                                <div>
-                                                    <div className="grid grid-cols-7 border border-gray-500  bg-gray-200 ">
-                                                        {columns.map((item, index) => {
-                                                            const isLast = index === columns.length - 1;
-                                                            return (
-
-                                                                <div key={index} className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
-                                                                    <p className="text-xs ">
-                                                                        {item.label}
-                                                                    </p>
-                                                                </div>
-                                                            )
-                                                        }
-                                                        )}
-                                                    </div>
-                                                    <div className="border-b border-gray-500">
-                                                        {customTableFunction()?.data?.map((item1, index) => {
-                                                            return (
-                                                                < >
-                                                                    {itemRender(item1, index)}
-                                                                    {evaluatedItem === "combined" && item1.outcomes && item1.outcomes.length > 0 && item1.outcomes.map((outcome: any, index: any) => {
-                                                                        return <>
-                                                                            {itemRender(outcome, index)}
-                                                                        </>
-                                                                    })}
-                                                                </>
-                                                            )
-                                                        }
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                : <NoDataComponent />
-                                        }
-                                    </div>
-
-                                </div>
+                                {pageBody()}
                             </div>
                         </div>
                     </div>

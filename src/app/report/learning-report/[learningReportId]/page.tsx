@@ -8,11 +8,7 @@ import { getValueFromLocalStorage, } from "@/utils/actions/local-starage";
 import NoDataComponent from "@/components/status/no-data";
 import { capitalizeFirstWord } from "@/utils/actions/string-manipulations";
 import FormattedMoney from "@/components/moneyFormater";
-import { Download, FileDown } from "lucide-react";
-import { ReusableButton } from "@/components/button/reusable-button";
-import ReactDOMServer from 'react-dom/server';
-import HydrationZustand from "@/app/Hydrated";
-
+import GeneratePdf from "@/components/pdf/generate-pdf";
 
 const LearningReportShow = ({ params }: { params: { learningReportId: string } }) => {
     const router = useRouter()
@@ -22,10 +18,6 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
     const [evaluatedItem, setEvaluatedItem] = useState('goal')
     const token = getValueFromLocalStorage('token')
     const id = params.learningReportId
-    const [isDownloading, setIsDownloading] = useState(false)
-    const [reportToDownload, setReportToDownload] = useState<any>()
-    const [isloadingGenaratePdf, setIsLoadingGeneratePdf] = useState(false)
-    const [pdfData, setPdfData] = useState<any>(null);
 
     const url = `project_learning_report/show/${id}`
     const navigateToLogin = () => {
@@ -201,7 +193,6 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
         },
     ]
 
-
     const styler = (progress: string) => {
         if (progress) {
             switch (true) {
@@ -248,7 +239,6 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                 return { data: data?.activities }
             case 'combined':
                 return { data: data?.outputs }
-            // return { data: data?.outputs, [...data?.outputs, ...data.activities] }
             default:
                 break
         }
@@ -271,101 +261,12 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
             name: "Combined",
             from: "combined"
         },
-        // {
-        //     name: "Input",
-        //     from: "input"
-        // },
     ]
-
-    const handleClick = async () => {
-        return await generatePdf()
-    }
-
-    const refreshDownloadButton = () => {
-        setIsDownloading(false)
-        setReportToDownload(null)
-    }
 
     const inputColumns = (type: string) => {
         return type === "output" ? outputInputColumns : actvityInputColumns
     }
 
-    const generatePdf = async () => {
-        setIsLoadingGeneratePdf(true)
-        const content = ReactDOMServer.renderToStaticMarkup(pageBody());
-
-        const fullHtml = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-            <title>Document</title>
-        </head>
-        <body>
-            ${content}
-        </body>
-        </html>
-    `;
-
-        // const content = pageRenderHtml(); // Replace with your content
-        const response = await fetch('/api/generate-pdf', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ content: fullHtml }),
-        });
-
-        console.log(response)
-
-        if (response.ok) {
-            const pdfBlob = await response.blob();
-            setPdfData(URL.createObjectURL(pdfBlob));
-            setIsDownloading(true)
-            setIsLoadingGeneratePdf(false)
-
-        } else {
-            console.error('Error generating PDF');
-        }
-
-    };
-
-    console.log(reportToDownload)
-
-
-    const ButtonDownloadComponent = () => {
-        return (
-            <>
-                {
-                    isloadingGenaratePdf ?
-                        <p className="text-xs">Generating PDF ...</p>
-                        :
-                        <>
-                            {
-                                isDownloading ?
-                                    <div className="flex gap-3 items-center">
-                                        <p className="text-xs">{`${data.project.name}.pdf`}</p>
-                                        <a className="flex text-xs items-center text-blue-700 shadow px-2 py-1 hover:bg-green-600 hover:text-white hover:px-3  hover:py-1"
-                                            href={pdfData} download={`${data.project.name}.pdf`}
-                                            onClick={refreshDownloadButton}>
-                                            <Download className="me-1" size={15} /> Download PDF
-                                        </a>
-                                    </div>
-                                    :
-                                    < div className=''>
-                                        <ReusableButton
-                                            name={'Download'}
-                                            onClick={() => handleClick()}
-                                        >
-                                            <FileDown size={15} />
-                                        </ReusableButton>
-                                    </div>
-                            }
-                        </>
-                }
-            </>
-        )
-    }
 
     const itemRender = (item1: any, index: any) => {
         const isFirst = index === 0;
@@ -648,7 +549,6 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                                                         </>
                                                     })}
                                                 </>
-
                                             )
                                         }
                                         )}
@@ -704,15 +604,16 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                             ]}
                             isShowPage={true}
                             isDownload={true}
-                            ButtonDownloadComponent={ButtonDownloadComponent}
-                        />
+                            ButtonDownloadComponent={<GeneratePdf
+                                content={pageBody()}
+                                fileName="MyDocument.pdf"
+                                buttonLabel="Generate PDF"
+                            />} />
                         {pageRenderHtml()}
                     </div>
             }
         </ProtectedRoute>
     );
-
-
 };
 
 export default LearningReportShow;

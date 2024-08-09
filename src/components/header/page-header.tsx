@@ -2,6 +2,7 @@ import { PlusCircle } from "lucide-react"
 import MuiBreadcrumbs from "../breadcumb/mui-breadcumb"
 import { ReusableButton } from "../button/reusable-button"
 import BackButton from "../button/back-button"
+import { ReactNode } from "react"
 
 interface Props {
     handleClick?: (type: string) => void
@@ -12,7 +13,7 @@ interface Props {
     isHideBack?: boolean
     isDownload?: boolean
     subHeader?: string
-    ButtonDownloadComponent?: any
+    ButtonDownloadComponent?: ReactNode
 }
 
 const PageHeader = ({
@@ -37,7 +38,7 @@ const PageHeader = ({
 
         <div className="flex justify-end items-center space-x-2">
             {
-                isDownload && <ButtonDownloadComponent />
+                isDownload && ButtonDownloadComponent
             }
             {isShowPage && !isHideBack &&
                 <BackButton />
