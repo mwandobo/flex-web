@@ -19,9 +19,9 @@ const FormattedMoney = ({ amount, currency = 'Tzs', isHideCurrency }: Props) => 
         const symbol = formattedAmount.replace(/[0-9,.]/g, '').trim();
         const amountStr = formattedAmount.replace(/[^0-9.,]/g, '').trim();
 
-        return <p>{amountStr} <span className="text-xs"> {!isHideCurrency && symbol}</span></p>
+        return <p className="text-xs">{amountStr} <span className="text-xs"> {!isHideCurrency && symbol}</span></p>
     } else {
-        return <p>0.00</p>
+        return <p className="text-xs">0.00</p>
 
     }
 

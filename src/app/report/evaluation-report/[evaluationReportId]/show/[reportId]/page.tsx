@@ -404,13 +404,13 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                         </div>
                         <div className={`grid grid-cols-7 border-r border-l border-gray-500`}>
                             <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 }`}>
-                                <p className="text-xs">{FormattedMoney({ amount: item1.cost, isHideCurrency: true })}</p>
+                                <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>{FormattedMoney({ amount: item1.cost, isHideCurrency: true })}</p>
                             </div>
                             <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 }`}>
-                                <p className="text-xs">{FormattedMoney({ amount: item1.resource_cost, isHideCurrency: true })}</p>
+                                <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>{FormattedMoney({ amount: item1.resource_cost, isHideCurrency: true })}</p>
                             </div>
                             <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 }`}>
-                                <p className="text-xs">{FormattedMoney({ amount: Number(item1.cost) + Number(item1.resource_cost), isHideCurrency: true })}</p>                                                                                </div>
+                                <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>{FormattedMoney({ amount: Number(item1.cost) + Number(item1.resource_cost), isHideCurrency: true })}</p>                                                                                </div>
                             <div className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 }`}>
                                 <p className="text-xs ">
                                     {item1.occured_cost}

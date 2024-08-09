@@ -2,10 +2,12 @@ import { Download, FileDown } from 'lucide-react';
 import React, { useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { ReusableButton } from '../button/reusable-button';
+import { nextBaseURL } from '@/utils/api';
 
 const GeneratePdf = ({ content, fileName = 'document.pdf', buttonLabel = 'Download PDF' }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isDownloading, setIsDownloading] = useState(false)
+    const imageUrl = `${nextBaseURL}/logo.png`
 
     const [pdfUrl, setPdfUrl] = useState(null);
 
@@ -33,19 +35,19 @@ const GeneratePdf = ({ content, fileName = 'document.pdf', buttonLabel = 'Downlo
             </head>
             <body class="p-8">
                 <!-- Company Header -->
-                <header class="flex justify-between items-center mb-8">
+                <header class="flex justify-between items-center mb-8 px-8">
                     <div class="flex items-center">
-                        <img src="/logo.png" alt="Company Logo" class="h-12 w-auto mr-4">
+                        <img src=${imageUrl} alt="Company Logo" class="h-12 w-auto mr-4">
                         <div>
-                            <h1 class="text-xl font-bold">Your Company Name</h1>
-                            <p class="text-sm">www.your-company-website.com</p>
+                            <h1 class="text-xl font-bold">Flex Projects</h1>
+                            <p class="text-sm">www.flex.com</p>
                         </div>
                     </div>
                     <div class="text-right">
-                        <p class="text-sm">1234 Street Name</p>
-                        <p class="text-sm">City, State, ZIP</p>
-                        <p class="text-sm">Phone: (123) 456-7890</p>
-                        <p class="text-sm">Email: info@your-company.com</p>
+                        <p class="text-sm">Second Floor Aficana Tower, Africana</p>
+                        <p class="text-sm">Dar es Salaam, Tanzania</p>
+                        <p class="text-sm">Phone: +255 687 199 133</p>
+                        <p class="text-sm">Email: support@flex.co.tz</p>
                     </div>
                 </header>
         
