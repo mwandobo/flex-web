@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 // export const baseURL = 'https://flexprojectsapi.int.cits.co.tz/api';
-// export const nextBaseURL = 'https://flexprojects.int.cits.co.tz/';
+// export const nextBaseURL = 'https://flexprojects.int.cits.co.tz';
 export const baseURL = 'http://127.0.0.1:8000/api';
 export const nextBaseURL = 'http://localhost:3000';
 

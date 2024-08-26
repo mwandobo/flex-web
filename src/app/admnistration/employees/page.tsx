@@ -78,7 +78,7 @@ function Employees({
             type: 'select',
             label: 'Position',
             value: parent_id,
-            optionsUrlData: `undefined/position`,
+            optionsUrlData: `/position`,
             optionDataKey: 'departments',
             required: true,
             isError: false,
@@ -134,8 +134,7 @@ function Employees({
     ]
 
     const permission = 'employees'
-
-    const url = `${parent_id}/employee`
+    const url = `/employee/${parent_id}`
 
     const {
         loading,

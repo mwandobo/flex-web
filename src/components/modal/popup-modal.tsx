@@ -27,7 +27,8 @@ const PopupModal = ({
         <div className="fixed inset-0 flex items-center justify-center z-50">
             <div className="absolute inset-0 bg-black opacity-50"></div>
 
-            <div className={`relative w-full max-w-${isLarge ? 'lg px-10' : 'md'} max-h-full`}>
+            {/* <div className={`relative w-full max-w-${isLarge ? 'lg px-10' : 'md'} max-h-full`}> */}
+            <div className={`relative w-full max-w-md max-h-full`}>
                 <div className="relative bg-white rounded-lg shadow dark:bg-white max-h-[90vh] overflow-y-auto">
                     {!isDisabled && <button
                         type="button"

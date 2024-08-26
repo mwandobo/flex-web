@@ -20,7 +20,7 @@ const EmployeeShow = ({ params }: { params: { employeeId: string } }) => {
 
     const id = params.employeeId
 
-    const url = `${positionId}/employee/show/${id}`
+    const url = `employee/show/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }

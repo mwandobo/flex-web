@@ -6,21 +6,18 @@ import ViewCardComponent from "@/components/card/view.card.component";
 import PageHeader from "@/components/header/page-header";
 import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
 import { get } from "@/utils/api";
-import { StatusCreatorHelperActive } from "@/utils/statusHelper/active";
 import { useEffect, useState } from "react";
-import Employees from "../../employees/page";
 import { useRouter } from "next/navigation";
+import ApprovalLevel from "../../approval-levels/page";
 
-const PositionView = ({ params }: { params: { positionId: string } }) => {
-    const router = useRouter()
+const DepartmentShow = ({ params }: { params: { approvalId: string } }) => {
+
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
-
+    const router = useRouter()
     const token = getValueFromLocalStorage('token')
-    const departmentId = getValueFromLocalStorage('parent_id')
-    const id = params.positionId
-
-    const url = `position/${departmentId}/show/${id}`
+    const id = params.approvalId
+    const url = `approval/show/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
@@ -54,28 +51,29 @@ const PositionView = ({ params }: { params: { positionId: string } }) => {
                     <>
                         <PageHeader
                             links={[
-                                { name: 'Position', linkTo: '/admnistration/positions', permission: 'positions', isClickable: true },
-                                { name: 'Show', linkTo: '', permission: '' },]}
+                                { name: 'Approval', linkTo: '/admnistration/approvals', permission: 'approvals', isClickable: true },
+                                { name: 'Show', linkTo: '', permission: '' }
+                            ]}
                             isShowPage={true}
                         />
-
                         <MuiCardComponent>
                             <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
-                                        { label: 'Position Name', value: data?.name },
-                                        { label: 'Department', value: data?.department },
+                                        { label: 'Approval Name', value: data?.name },
+                                        { label: 'Approval Reference Name', value: data?.sys_approval },
+                                        { label: 'Description', value: data?.description },
                                     ]}
-                                    titleA={`Position`}
+                                    titleA={`Approval`}
                                     titleB={` ${data?.name} `}
                                 />
                             </div>
                             <hr className="bg-gray-100" />
                             <div className="mt-3 px-3">
                                 <div className="border border-solid border-gray-200 p-2">
-                                    <Employees
+                                    <ApprovalLevel
                                         parent_id={id}
-                                        subHeader={`All Employees in ${data.name} Position`}
+                                        subHeader={`All Approval Levels in ${data?.name}`}
                                     />
                                 </div>
                             </div>
@@ -86,4 +84,4 @@ const PositionView = ({ params }: { params: { positionId: string } }) => {
     );
 };
 
-export default PositionView;
+export default DepartmentShow;

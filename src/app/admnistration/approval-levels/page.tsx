@@ -10,11 +10,11 @@ interface Props {
     parent_id?: string
     subHeader?: string
 }
-function Positions({
+function ApprovalLevel({
     parent_id,
     subHeader
 }: Props) {
-    const permission = 'positions'
+    const permission = 'approval_level'
 
     const _deptFormInputs = [
         {
@@ -27,12 +27,11 @@ function Positions({
             errorMessage: ''
         },
         {
-            name: 'dept_id',
+            name: 'position_id',
             type: 'select',
-            label: 'Department',
-            value: parent_id,
-            optionsData: [{ label: 'test', value: 'value' }],
-            optionsUrlData: 'department',
+            label: 'Position',
+            value: '',
+            optionsUrlData: 'position',
             optionDataKey: 'departments',
             required: true,
             isError: false,
@@ -44,19 +43,19 @@ function Positions({
             id: 'name',
             numeric: false,
             disablePadding: false,
-            label: 'Position Name',
+            label: 'Approval Level Name',
             width: '50%',
         },
         {
-            id: 'department',
+            id: 'position',
             numeric: false,
             disablePadding: false,
-            label: 'Department',
+            label: 'Position',
             width: '44%',
         },
     ]
 
-    const url = `position/${parent_id}`;
+    const url = `approval/${parent_id}/level`;
 
     const {
         loading,
@@ -84,7 +83,7 @@ function Positions({
                                 <PageHeader
                                     handleClick={handleClick}
                                     subHeader={subHeader}
-                                    links={[{ name: 'Positions / List', linkTo: '/positions', permission: '' }]}
+                                    links={[{ name: 'Approval Level / List', linkTo: '/approaval-level', permission: '' }]}
                                 />
                                 {tabular()}
                                 {createdForm()}
@@ -97,4 +96,4 @@ function Positions({
     )
 }
 
-export default Positions
+export default ApprovalLevel

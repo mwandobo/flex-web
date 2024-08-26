@@ -1,6 +1,6 @@
 "use client"
 
-import { Activity, AlignHorizontalJustifyStart, Armchair, Book, FolderKanban, FolderOpenDot, Gauge, HardDrive, LayoutDashboard, LucideIcon, NotebookPen, RollerCoaster, Scale, Settings, Settings2, Table, User, UserCog, UserRound, UserRoundCog, Users } from 'lucide-react'
+import { Activity, Ligature, AlignHorizontalJustifyStart, Armchair, Book, FolderKanban, FolderOpenDot, Gauge, HardDrive, LayoutDashboard, LucideIcon, NotebookPen, RollerCoaster, Scale, Settings, Settings2, Table, User, UserCog, UserRound, UserRoundCog, Users, UserCheck } from 'lucide-react'
 import React from 'react'
 import SidebarItem from './item'
 import { checkPermissions } from '@/utils/actions/check-permissions'
@@ -155,6 +155,12 @@ const items: ISidebarItem[] = [
                 path: '/roles',
                 permission: 'roles-list',
                 icon: RollerCoaster
+            },
+            {
+                name: 'Approvals',
+                path: '/admnistration/approvals',
+                permission: 'approvals-list',
+                icon: UserCheck
             },
         ]
     },
