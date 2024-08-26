@@ -8,20 +8,18 @@ import PageHeader from "@/components/header/page-header";
 import MuiTab from "@/components/tabs/mui-tab";
 import { get } from "@/utils/api";
 import { useEffect, useState } from "react";
-import Indicator from "../../fragments/indicator";
 import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
 import Assumption from "../../fragments/assumption";
-import Cost from "../../fragments/costs";
 import Resource from "../../fragments/resource";
 import Risk from "../../fragments/risk";
 import { useRouter } from "next/navigation";
 import FormattedMoney from "@/components/moneyFormater";
-import LogFrame from "../../fragments/logframe";
 import Budget from "../../fragments/budget";
 import OutcomeCost from "../../fragments/outcome-cost";
 import LogFrameIndicator from "../../fragments/logframe-indicator";
 import Purpose from "../../fragments/purpose";
 import ApprovalWrapper from "@/components/wrappers/approval.wrapper";
+import ApprovalComponent from "@/components/page-components/approval-component";
 
 const ProjectShow = ({ params }: { params: { projectId: string } }) => {
     const [data, setData] = useState<any>([])
@@ -63,7 +61,6 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
         fetchData()
     }, [id, token])
 
-
     const nodes: React.ReactNode[] = [
         <LogFrameIndicator
             key={'logframe'}
@@ -74,8 +71,6 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
             project_id={id}
             isHideAdd={true}
         />,
-
-
         <ExternalUsers
             key={'sponsor'}
             groupProp="sponsor"
@@ -83,7 +78,6 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
             project_id={id}
             isHideShow={true}
         />,
-
         <ExternalUsers
             key={'stakeholder'}
             groupProp="stakeholder"
@@ -115,9 +109,13 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
             project_id={id}
             isHideAdd={false}
         />,
-
         <Resource
             key={'resource'}
+            project_id={id}
+            isHideAdd={true}
+        />,
+        <ApprovalComponent
+            key={'approved'}
             project_id={id}
             isHideAdd={true}
         />,
@@ -178,8 +176,9 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                                     "Budget",
                                     "Cost",
                                     "Risks",
-                                    "Assumptions & constraints"
-                                    // "Deliverable"
+                                    "Assumptions & constraints",
+                                    "Resources",
+                                    "Approvals"
                                 ]}
                                 nodes={nodes}
                             >
