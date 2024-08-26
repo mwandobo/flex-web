@@ -7,6 +7,7 @@ import { Ellipsis } from 'lucide-react';
 type Props = {
     data: any[];
     titleA?: string
+    OptionalElement?: React.ReactNode
     titleB?: string
     onClick?: (key?: any) => void
     buttonName?: string
@@ -24,6 +25,7 @@ const ViewCardComponent = ({
     isExtraButton,
     isExtraButtonDisabled,
     buttonKey,
+    OptionalElement,
     onClick
 }: Props) => {
     return (
@@ -54,6 +56,9 @@ const ViewCardComponent = ({
                         <p className="font-semibold text-left pl-2  w-1/2 text-sm">{item.value}</p>
                     </div>
                 ))}
+            </div>
+            <div className='flex justify-end w-full'>
+                {OptionalElement && OptionalElement}
             </div>
 
         </div>

@@ -21,6 +21,7 @@ import Budget from "../../fragments/budget";
 import OutcomeCost from "../../fragments/outcome-cost";
 import LogFrameIndicator from "../../fragments/logframe-indicator";
 import Purpose from "../../fragments/purpose";
+import ApprovalWrapper from "@/components/wrappers/approval.wrapper";
 
 const ProjectShow = ({ params }: { params: { projectId: string } }) => {
     const [data, setData] = useState<any>([])
@@ -141,7 +142,9 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                             ]}
                             isShowPage={true}
                         />
+
                         <MuiCardComponent>
+
                             <ViewCardComponent
                                 data={[
                                     { label: 'Code', value: data?.code },
@@ -162,6 +165,7 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                                 ]}
                                 titleA="Project"
                                 titleB={data?.name}
+                                OptionalElement={<ApprovalWrapper />}
                             />
                         </MuiCardComponent>
                         <MuiCardComponent>
