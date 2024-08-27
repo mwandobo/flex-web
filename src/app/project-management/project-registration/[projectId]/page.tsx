@@ -20,13 +20,18 @@ import LogFrameIndicator from "../../fragments/logframe-indicator";
 import Purpose from "../../fragments/purpose";
 import ApprovalWrapper from "@/components/wrappers/approval.wrapper";
 import ApprovalComponent from "@/components/page-components/approval-component";
+import { useApprovalHook } from "@/hooks/useApprove";
 
 const ProjectShow = ({ params }: { params: { projectId: string } }) => {
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
     const token = getValueFromLocalStorage('token')
     const id = params.projectId
+    const projectApproval = "project_approval"
     const router = useRouter()
+    const { foundApproval } = useApprovalHook({ approval_slug: projectApproval })
+
+    console.log(foundApproval)
 
     const url = `department/show/${id}`
     const navigateToLogin = () => {

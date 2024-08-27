@@ -39,7 +39,6 @@ interface Props {
 
 function ApprovalComponent({
   from_id,
-  project_id,
   from,
   isHideAdd
 

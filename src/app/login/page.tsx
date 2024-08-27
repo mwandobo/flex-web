@@ -46,6 +46,8 @@ export default function LoginPage() {
                     const user = response?.data?.user
                     const role = response?.data?.role
                     const permissions = response?.data?.permissions
+                    const approvals = response?.data?.approvals
+                    const approved_items = response?.data?.approved_items
                     const token = JSON.stringify(user?.token);
 
                     if (Number(user.is_otp_verified) === 0) {
@@ -63,7 +65,9 @@ export default function LoginPage() {
                     if (setValueLocalStorage('token', token) === 1 &&
                         setValueLocalStorage('user', JSON.stringify(user)) &&
                         setValueLocalStorage('role', JSON.stringify(role)) &&
-                        setValueLocalStorage('permissions', JSON.stringify(permissions))
+                        setValueLocalStorage('permissions', JSON.stringify(permissions)) &&
+                        setValueLocalStorage('approval', JSON.stringify(approvals)) &&
+                        setValueLocalStorage('approved_items', JSON.stringify(approved_items))
                     ) {
                         setLoading(!loading)
                         router.push('/')
