@@ -27,7 +27,6 @@ interface Props {
     emailNotificationBody?: any,
     isHideActions?: boolean
     tableData?: any[]
-
 }
 
 export const usePageData = ({
@@ -90,7 +89,6 @@ export const usePageData = ({
         isHideEdit,
         isHideActions
     })
-
 
     useEffect(() => {
         const fetchData = async () => {
