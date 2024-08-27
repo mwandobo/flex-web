@@ -29,9 +29,15 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
     const id = params.projectId
     const projectApproval = "project_approval"
     const router = useRouter()
-    const { foundApproval } = useApprovalHook({ approval_slug: projectApproval })
+    const {
+        isApproved,
+        isNeedApprove,
+        canApprove
+    } = useApprovalHook({ approval_slug: projectApproval })
 
-    console.log(foundApproval)
+    console.log('canApprove', canApprove)
+    console.log('isApproved', isApproved)
+    console.log('isNeedApprove', isNeedApprove)
 
     const url = `department/show/${id}`
     const navigateToLogin = () => {
@@ -147,7 +153,6 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                         />
 
                         <MuiCardComponent>
-
                             <ViewCardComponent
                                 data={[
                                     { label: 'Code', value: data?.code },

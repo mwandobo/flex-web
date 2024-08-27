@@ -47,6 +47,7 @@ export default function LoginPage() {
                     const role = response?.data?.role
                     const permissions = response?.data?.permissions
                     const approvals = response?.data?.approvals
+                    const sys_approvals = response?.data?.sys_approvals
                     const approved_items = response?.data?.approved_items
                     const token = JSON.stringify(user?.token);
 
@@ -66,7 +67,8 @@ export default function LoginPage() {
                         setValueLocalStorage('user', JSON.stringify(user)) &&
                         setValueLocalStorage('role', JSON.stringify(role)) &&
                         setValueLocalStorage('permissions', JSON.stringify(permissions)) &&
-                        setValueLocalStorage('approval', JSON.stringify(approvals)) &&
+                        setValueLocalStorage('approvals', JSON.stringify(approvals)) &&
+                        setValueLocalStorage('sys_approvals', JSON.stringify(sys_approvals)) &&
                         setValueLocalStorage('approved_items', JSON.stringify(approved_items))
                     ) {
                         setLoading(!loading)

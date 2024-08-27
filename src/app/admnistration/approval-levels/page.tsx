@@ -27,11 +27,11 @@ function ApprovalLevel({
             errorMessage: ''
         },
         {
-            name: 'position_id',
+            name: 'role_id',
             type: 'select',
-            label: 'Position',
+            label: 'Role',
             value: '',
-            optionsUrlData: 'position',
+            optionsUrlData: 'role',
             optionDataKey: 'departments',
             required: true,
             isError: false,
@@ -47,10 +47,10 @@ function ApprovalLevel({
             width: '50%',
         },
         {
-            id: 'position',
+            id: 'role',
             numeric: false,
             disablePadding: false,
-            label: 'Position',
+            label: 'Role',
             width: '44%',
         },
     ]

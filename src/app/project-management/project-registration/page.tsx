@@ -28,17 +28,6 @@ function Project() {
             errorMessage: ''
         },
 
-        // {
-        //     name: 'type_id',
-        //     type: 'select',
-        //     label: `Project Type`,
-        //     value: '',
-        //     optionsUrlData: `settings/project`,
-        //     optionDataKey: 'departments',
-        //     required: true,
-        //     isError: false,
-        //     errorMessage: ''
-        // },
         {
             name: 'start_date',
             type: 'date',
