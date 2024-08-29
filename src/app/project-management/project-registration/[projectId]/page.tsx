@@ -27,17 +27,17 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
     const [loading, setLoading] = useState(false)
     const token = getValueFromLocalStorage('token')
     const id = params.projectId
-    const projectApproval = "project_approval"
+    const approval_name = "project_approval"
     const router = useRouter()
     const {
         isApproved,
         isNeedApprove,
         canApprove
-    } = useApprovalHook({ approval_slug: projectApproval })
+    } = useApprovalHook({ approval_slug: approval_name })
 
-    console.log('canApprove', canApprove)
-    console.log('isApproved', isApproved)
-    console.log('isNeedApprove', isNeedApprove)
+    // console.log('canApprove', canApprove)
+    // console.log('isApproved', isApproved)
+    // console.log('isNeedApprove', isNeedApprove)
 
     const url = `department/show/${id}`
     const navigateToLogin = () => {
@@ -173,27 +173,34 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                                 ]}
                                 titleA="Project"
                                 titleB={data?.name}
-                                OptionalElement={<ApprovalWrapper />}
+                                OptionalElement={
+                                    <ApprovalWrapper
+                                        from="project"
+                                        from_id={id}
+                                        approval_name={approval_name}
+                                    />}
                             />
                         </MuiCardComponent>
-                        <MuiCardComponent>
-                            <MuiTab
-                                columns={[
-                                    "LogFrame",
-                                    "Purpose",
-                                    "Sponsors",
-                                    "Stakeholders",
-                                    "Budget",
-                                    "Cost",
-                                    "Risks",
-                                    "Assumptions & constraints",
-                                    "Resources",
-                                    "Approvals"
-                                ]}
-                                nodes={nodes}
-                            >
-                            </MuiTab>
-                        </MuiCardComponent>
+                        {(!isNeedApprove || (isNeedApprove && isApproved)) && (
+                            <MuiCardComponent>
+                                <MuiTab
+                                    columns={[
+                                        "LogFrame",
+                                        "Purpose",
+                                        "Sponsors",
+                                        "Stakeholders",
+                                        "Budget",
+                                        "Cost",
+                                        "Risks",
+                                        "Assumptions & constraints",
+                                        "Resources",
+                                        "Approvals"
+                                    ]}
+                                    nodes={nodes}
+                                >
+                                </MuiTab>
+                            </MuiCardComponent>
+                        )}
                     </>
             }
         </ProtectedRoute>

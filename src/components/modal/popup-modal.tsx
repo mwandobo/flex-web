@@ -19,9 +19,6 @@ const PopupModal = ({
     isLarge,
     isDisabled
 }: Props) => {
-
-    console.log(isLarge)
-
     if (!isOpen) return null;
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">

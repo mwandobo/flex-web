@@ -1,4 +1,5 @@
 import { ReusableButton } from "@/components/button/reusable-button"
+import CrudFormComponent from "@/components/forms/crud.form.component"
 import MuiDate from "@/components/inputs/mui-date"
 import MuiRadioButtonsGroup from "@/components/inputs/mui-radio"
 import MuiSelect from "@/components/inputs/mui-select"
@@ -305,107 +306,129 @@ export const useCrudFormCreator = ({
     }, [modalBodyArray, ...state_properties])
 
     const createdForm = (gridSize?: number) => {
-        return <PopupModal
-            isOpen={isModalOpen}
-            onSaveButtonName={'Save'}
-            onClose={closeModel}
-            isDisabled={isButtonDisabled}
-            title={modalTitle}
-            isLarge={Boolean(gridSize)}
-        >
-            <>
-                <>
-                    {
-                        isForm
-                            ?
-                            <div className={`grid grid-cols-${Boolean(gridSize) ? 2 : 1} w-full gap-2`} style={{ gridTemplateColumns: `repeat(${gridSize ?? 1}, 1fr)`, gap: "10px" }}>
-                                {
-                                    formInputs && formInputs.length > 0 && formInputs?.map((item, index) => (
-                                        <div className="" key={index}>
-                                            {
-                                                item?.type === 'text' && !item.isRemoved &&
-                                                <TextFieldComponent
-                                                    placeholder={item?.placeholder}
-                                                    type={item.textType}
-                                                    from={item?.name}
-                                                    label={item?.label}
-                                                    value={item.value}
-                                                    onChange={handleInputChange}
-                                                    isError={item.isError}
-                                                    errorMessage={item.errorMessage}
-                                                />
-                                            }
+        return < CrudFormComponent
+            isModalOpen={isModalOpen}
+            onCloseModal={onCloseModal}
+            handleSubmit={handleSubmit}
+            isButtonDisabled={isButtonDisabled}
+            modalTitle={modalTitle}
+            isForm={isForm}
+            formInputs={formInputs}
+            handleInputChange={handleInputChange}
+            gridSize={gridSize}
+            isDisabled={isDisabled}
+            modalBodyString={modalBodyString}
+            onSaveButtonName={onSaveButtonName}
 
-                                            {
-                                                item?.type === 'select' && !item.isRemoved &&
-                                                <MuiSelect
-                                                    handleChange={handleInputChange}
-                                                    from={item?.name}
-                                                    label={item?.label}
-                                                    optionsUrlData={item.optionsUrlData}
-                                                    optionDataKey={item.optionDataKey}
-                                                    control={item.control}
-                                                    control_id={item.control_id}
-                                                    control_for={item.control_for}
-                                                    value={item.value}
-                                                    error={item.errorMessage}
-                                                    isDisabled={isDisabled}
+        />
 
-                                                />
-                                            }
-                                            {
-                                                item?.type === 'date' && !item.isRemoved &&
-                                                <MuiDate
-                                                    handleDateChange={handleInputChange}
-                                                    from={item?.name}
-                                                    label={item?.label}
-                                                    value={item.value}
-                                                    minDate={item.minDate}
-                                                    maxDate={item.maxDate}
-                                                    defaultValue={item.defaultDate}
-                                                    isDisabled={isDisabled}
-                                                />
-                                            }
-                                            {
-                                                item?.type === 'textArea' && !item.isRemoved &&
-                                                <TextArea
-                                                    onChange={handleInputChange}
-                                                    from={item?.name}
-                                                    label={item?.label}
-                                                    value={item.value}
-                                                />
-                                            }
-                                            {
-                                                item?.type === 'radio' && !item.isRemoved &&
-                                                <MuiRadioButtonsGroup
-                                                    onChange={handleInputChange}
-                                                    from={item.name}
-                                                    label={item.label}
-                                                    options={item.options}
-                                                />
-                                            }
 
-                                        </div>
-                                    ))
-                                }
-                            </div>
-                            :
-                            <p>{modalBodyString}</p>
-                    }
 
-                </>
-                < div className="flex justify-end" >
-                    <ReusableButton
-                        name={onSaveButtonName}
-                        isDisabled={isDisabled}
-                        onClick={handleSubmit}
-                    >
-                        {!isDisabled && <CheckCircle2 size={13} />}
-                    </ReusableButton>
-                </div>
-            </>
 
-        </PopupModal >
+
+
+
+        // <PopupModal
+        //     isOpen={isModalOpen}
+        //     onSaveButtonName={'Save'}
+        //     onClose={closeModel}
+        //     isDisabled={isButtonDisabled}
+        //     title={modalTitle}
+        //     isLarge={Boolean(gridSize)}
+        // >
+        //     <>
+        //         <>
+        //             {
+        //                 isForm
+        //                     ?
+        //                     <div className={`grid grid-cols-${Boolean(gridSize) ? 2 : 1} w-full gap-2`} style={{ gridTemplateColumns: `repeat(${gridSize ?? 1}, 1fr)`, gap: "10px" }}>
+        //                         {
+        //                             formInputs && formInputs.length > 0 && formInputs?.map((item, index) => (
+        //                                 <div className="" key={index}>
+        //                                     {
+        //                                         item?.type === 'text' && !item.isRemoved &&
+        //                                         <TextFieldComponent
+        //                                             placeholder={item?.placeholder}
+        //                                             type={item.textType}
+        //                                             from={item?.name}
+        //                                             label={item?.label}
+        //                                             value={item.value}
+        //                                             onChange={handleInputChange}
+        //                                             isError={item.isError}
+        //                                             errorMessage={item.errorMessage}
+        //                                         />
+        //                                     }
+
+        //                                     {
+        //                                         item?.type === 'select' && !item.isRemoved &&
+        //                                         <MuiSelect
+        //                                             handleChange={handleInputChange}
+        //                                             from={item?.name}
+        //                                             label={item?.label}
+        //                                             optionsUrlData={item.optionsUrlData}
+        //                                             optionDataKey={item.optionDataKey}
+        //                                             control={item.control}
+        //                                             control_id={item.control_id}
+        //                                             control_for={item.control_for}
+        //                                             value={item.value}
+        //                                             error={item.errorMessage}
+        //                                             isDisabled={isDisabled}
+
+        //                                         />
+        //                                     }
+        //                                     {
+        //                                         item?.type === 'date' && !item.isRemoved &&
+        //                                         <MuiDate
+        //                                             handleDateChange={handleInputChange}
+        //                                             from={item?.name}
+        //                                             label={item?.label}
+        //                                             value={item.value}
+        //                                             minDate={item.minDate}
+        //                                             maxDate={item.maxDate}
+        //                                             defaultValue={item.defaultDate}
+        //                                             isDisabled={isDisabled}
+        //                                         />
+        //                                     }
+        //                                     {
+        //                                         item?.type === 'textArea' && !item.isRemoved &&
+        //                                         <TextArea
+        //                                             onChange={handleInputChange}
+        //                                             from={item?.name}
+        //                                             label={item?.label}
+        //                                             value={item.value}
+        //                                         />
+        //                                     }
+        //                                     {
+        //                                         item?.type === 'radio' && !item.isRemoved &&
+        //                                         <MuiRadioButtonsGroup
+        //                                             onChange={handleInputChange}
+        //                                             from={item.name}
+        //                                             label={item.label}
+        //                                             options={item.options}
+        //                                         />
+        //                                     }
+
+        //                                 </div>
+        //                             ))
+        //                         }
+        //                     </div>
+        //                     :
+        //                     <p>{modalBodyString}</p>
+        //             }
+
+        //         </>
+        //         < div className="flex justify-end" >
+        //             <ReusableButton
+        //                 name={onSaveButtonName}
+        //                 isDisabled={isDisabled}
+        //                 onClick={handleSubmit}
+        //             >
+        //                 {!isDisabled && <CheckCircle2 size={13} />}
+        //             </ReusableButton>
+        //         </div>
+        //     </>
+
+        // </PopupModal >
     }
 
     return {

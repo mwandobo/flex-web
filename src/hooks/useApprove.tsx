@@ -1,4 +1,5 @@
 import { getValueFromLocalStorage } from '@/utils/actions/local-starage';
+import { post } from '@/utils/api';
 interface Props {
     approval_slug?: string
 }
@@ -15,31 +16,78 @@ export const useApprovalHook = ({ approval_slug }: Props) => {
     let allApprovedItems = getValueFromLocalStorage('approved_items')
     allApprovedItems = JSON.parse(allApprovedItems)
     let role = getValueFromLocalStorage('role')
+    const token = getValueFromLocalStorage('token')
+
     role = JSON.parse(role)
 
+    const getMappedApproval = () => {
+        let mappedApproval = null
+        const foundSysApproval = allSysApprovals?.find((item: any) => item.name === approval_slug)
+        if (foundSysApproval) {
+            mappedApproval = allRegisteredApprovals?.find((item: any) => Number(item.sys_approval_id) === Number(foundSysApproval?.id))
+        }
+        return mappedApproval
+    }
 
-    const foundSysApproval = allSysApprovals?.find((item: any) => item.name === approval_slug)
-    if (foundSysApproval) {
-        const mappedApproval = allRegisteredApprovals?.find((item: any) => Number(item.sys_approval_id) === Number(foundSysApproval?.id))
+    const getApprovalLevel = () => {
+        let found_level = null
+        const mappedApproval = getMappedApproval()
         if (mappedApproval) {
             const levels = mappedApproval?.approval_levels
-            console.log("levels", levels)
-            console.log('role', role?.id)
+            found_level = levels?.find((item: any) => Number(item.role_id) === Number(role?.id))
+        }
 
-            const found_level = levels?.find((item: any) => Number(item.role_id) === Number(role?.id))
-            console.log(found_level)
-            if (found_level) {
-                isNeedApprove = true
-                canApprove = true
-                const approvedItem = allApprovedItems.find((item: any) => Number(item.approval_level_id) === Number(found_level?.id))
-                if (approvedItem) {
-                    isApproved = true
-                } else {
-                    isApproved = false
-                }
-            }
+        return found_level
+    }
+
+    const found_level = getApprovalLevel()
+    if (found_level) {
+        isNeedApprove = true
+        canApprove = true
+        const approvedItem = allApprovedItems.find((item: any) => Number(item.approval_level_id) === Number(found_level?.id))
+        if (approvedItem) {
+            isApproved = true
+        } else {
+            isApproved = false
+
         }
     }
+
+
+
+
+
+
+
+
+    interface ApproveBody {
+        approval_name?: string,
+        from: string,
+        from_id: string,
+        remark?: string,
+        approval_level_id?: string
+        type?: string,
+    }
+
+    const approve = async (body: ApproveBody) => {
+        const approveUrl = 'approval/approve';
+        const level = getApprovalLevel()
+
+        body = { ...body, approval_level_id: level?.id }
+
+        const response = await post(approveUrl, body, token)
+
+        return response
+    }
+
+
+
+
+
+
+
+
+
 
     const updateApprovalLevel = (approvalLevel: any) => {
         // Find the mapped approval based on the provided approval ID
@@ -76,5 +124,5 @@ export const useApprovalHook = ({ approval_slug }: Props) => {
     };
 
 
-    return { isApproved, canApprove, isNeedApprove }
-};
+    return { isApproved, canApprove, isNeedApprove, approve }
+}
