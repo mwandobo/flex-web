@@ -32,12 +32,22 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
     const {
         isApproved,
         isNeedApprove,
-        canApprove
-    } = useApprovalHook({ approval_slug: approval_name })
+        canApprove,
+        isLastLevel,
+        approveStatus,
+        isMyLevelApproved
+    } = useApprovalHook({
+        approval_slug: approval_name,
+        from: 'project',
+        from_id: id
+    })
 
-    // console.log('canApprove', canApprove)
-    // console.log('isApproved', isApproved)
-    // console.log('isNeedApprove', isNeedApprove)
+    console.log('canApprove', canApprove)
+    console.log('isApproved', isApproved)
+    console.log('isNeedApprove', isNeedApprove)
+    console.log('isLastLevel', isLastLevel)
+    console.log('approveStatus', approveStatus)
+    console.log('isMyLevelApproved', isMyLevelApproved)
 
     const url = `department/show/${id}`
     const navigateToLogin = () => {
@@ -178,10 +188,12 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                                         from="project"
                                         from_id={id}
                                         approval_name={approval_name}
+                                        isApproved={isApproved}
+                                        isLastApproval={isLastLevel}
                                     />}
                             />
                         </MuiCardComponent>
-                        {(!isNeedApprove || (isNeedApprove && isApproved)) && (
+                        {(!isNeedApprove || (isLastLevel && isApproved)) && (
                             <MuiCardComponent>
                                 <MuiTab
                                     columns={[

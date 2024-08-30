@@ -1,128 +1,193 @@
 import { getValueFromLocalStorage } from '@/utils/actions/local-starage';
 import { post } from '@/utils/api';
+import { useState, useEffect } from 'react';
+
 interface Props {
-    approval_slug?: string
+    approval_slug?: string;
+    from: string;
+    from_id: string;
 }
 
-export const useApprovalHook = ({ approval_slug }: Props) => {
-    let isNeedApprove = false
-    let isApproved = false
-    let canApprove = false
+export const useApprovalHook = ({
+    approval_slug,
+    from,
+    from_id
+}: Props) => {
+    const [isNeedApprove, setIsNeedApprove] = useState(false);
+    const [isApproved, setIsApproved] = useState(false);
+    const [isMyLevelApproved, setIsMyLevelApproved] = useState(false);
+    const [canApprove, setCanApprove] = useState(false);
+    const [isLastLevel, setIsLastLevel] = useState(false);
+    const [approveStatus, setApproveStatus] = useState('');
 
-    let allSysApprovals = getValueFromLocalStorage('sys_approvals')
-    allSysApprovals = JSON.parse(allSysApprovals)
-    let allRegisteredApprovals = getValueFromLocalStorage('approvals')
-    allRegisteredApprovals = JSON.parse(allRegisteredApprovals)
-    let allApprovedItems = getValueFromLocalStorage('approved_items')
-    allApprovedItems = JSON.parse(allApprovedItems)
-    let role = getValueFromLocalStorage('role')
-    const token = getValueFromLocalStorage('token')
-
-    role = JSON.parse(role)
+    const allSysApprovals = JSON.parse(getValueFromLocalStorage('sys_approvals'));
+    const allRegisteredApprovals = JSON.parse(getValueFromLocalStorage('approvals'));
+    const allApprovedItems = JSON.parse(getValueFromLocalStorage('approved_items'));
+    const role = JSON.parse(getValueFromLocalStorage('role'));
+    const token = getValueFromLocalStorage('token');
 
     const getMappedApproval = () => {
-        let mappedApproval = null
-        const foundSysApproval = allSysApprovals?.find((item: any) => item.name === approval_slug)
+        const foundSysApproval = allSysApprovals?.find((item: any) => item.name === approval_slug);
         if (foundSysApproval) {
-            mappedApproval = allRegisteredApprovals?.find((item: any) => Number(item.sys_approval_id) === Number(foundSysApproval?.id))
+            return allRegisteredApprovals?.find((item: any) => Number(item.sys_approval_id) === Number(foundSysApproval?.id));
         }
-        return mappedApproval
-    }
-
-    const getApprovalLevel = () => {
-        let found_level = null
-        const mappedApproval = getMappedApproval()
-        if (mappedApproval) {
-            const levels = mappedApproval?.approval_levels
-            found_level = levels?.find((item: any) => Number(item.role_id) === Number(role?.id))
-        }
-
-        return found_level
-    }
-
-    const found_level = getApprovalLevel()
-    if (found_level) {
-        isNeedApprove = true
-        canApprove = true
-        const approvedItem = allApprovedItems.find((item: any) => Number(item.approval_level_id) === Number(found_level?.id))
-        if (approvedItem) {
-            isApproved = true
-        } else {
-            isApproved = false
-
-        }
-    }
-
-
-
-
-
-
-
-
-    interface ApproveBody {
-        approval_name?: string,
-        from: string,
-        from_id: string,
-        remark?: string,
-        approval_level_id?: string
-        type?: string,
-    }
-
-    const approve = async (body: ApproveBody) => {
-        const approveUrl = 'approval/approve';
-        const level = getApprovalLevel()
-
-        body = { ...body, approval_level_id: level?.id }
-
-        const response = await post(approveUrl, body, token)
-
-        return response
-    }
-
-
-
-
-
-
-
-
-
-
-    const updateApprovalLevel = (approvalLevel: any) => {
-        // Find the mapped approval based on the provided approval ID
-        const mappedApproval = allRegisteredApprovals?.find(
-            (item: any) => Number(item.sys_approval_id) === Number(approvalLevel?.approval_id)
-        );
-
-        if (mappedApproval) {
-            const levels = mappedApproval?.approval_levels || [];
-
-            // Find the level in the existing approval levels
-            const foundLevelIndex = levels.findIndex(
-                (item: any) => Number(item.id) === Number(approvalLevel?.id)
-            );
-
-            if (foundLevelIndex !== -1) {
-                if (approvalLevel.delete) {
-                    // If the approvalLevel has a 'delete' flag, remove the level
-                    levels.splice(foundLevelIndex, 1);
-                } else {
-                    // If found, update the existing level
-                    levels[foundLevelIndex] = { ...levels[foundLevelIndex], ...approvalLevel };
-                }
-            } else {
-                if (!approvalLevel.delete) {
-                    // If not found and not marked for deletion, add as a new level
-                    levels.push(approvalLevel);
-                }
-            }
-
-            // Update the approval levels in the mapped approval
-            mappedApproval.approval_levels = levels;
-        }
+        return null;
     };
 
+    // const getApprovalLevel = () => {
+    //     const mappedApproval = getMappedApproval();
+    //     if (mappedApproval) {
+    //         const levels = mappedApproval?.approval_levels;
+    //         const found_level = levels?.find((item: any) => Number(item.role_id) === Number(role?.id));
+    //         const latestLevel = levels?.reduce((max, item) => {
+    //             return Number(item.role_id) > Number(max.role_id) ? item : max;
+    //         }, levels[0]);
 
-    return { isApproved, canApprove, isNeedApprove, approve }
-}
+    //         return { found_level, latestLevel };
+    //     }
+    //     return { found_level: null, latestLevel: null };
+    // };
+
+    // useEffect(() => {
+    //     const { found_level, latestLevel } = getApprovalLevel();
+    //     const mappedApproval = getMappedApproval();
+
+    //     if (found_level) setCanApprove(true)
+
+    //     if (mappedApproval && mappedApproval?.approval_levels?.length > 0) setIsNeedApprove(true)
+
+    //     if (found_level && latestLevel) {
+    //         if (Number(found_level.role_id) === Number(latestLevel.role_id)) {
+    //             setIsLastLevel(true);
+    //             setIsApproved(true);
+    //         } else {
+    //             setApproveStatus(latestLevel.type);
+    //         }
+
+    //         const approvedItem = allApprovedItems?.find((item: any) => Number(item.approval_level_id) === Number(found_level?.id) &&
+    //             item.from === from &&
+    //             item.from_id === from_id
+    //         );
+
+    //         // console.log('approvedItem', approvedItem)
+    //         // console.log('found_level', found_level)
+    //         // console.log('role', role)
+
+    //         if (approvedItem) {
+    //             setIsMyLevelApproved(true);
+    //             setApproveStatus(approvedItem.type);
+    //         }
+
+    //     } else {
+    //         setCanApprove(false);
+    //         setIsApproved(false);
+    //     }
+
+    // }, [approval_slug, role]);
+
+
+    const getApprovedItemByLevelId = (level_id: number) => {
+        const approvedItem = allApprovedItems?.find(
+            (item: any) =>
+                Number(item.approval_level_id) === Number(level_id) &&
+                item.from === from &&
+                item.from_id === from_id
+        );
+
+        return approvedItem;
+    }
+
+
+    const getApprovalLevel = () => {
+        const mappedApproval = getMappedApproval();
+        if (mappedApproval) {
+            const levels = mappedApproval?.approval_levels || [];
+            const current_level = levels?.find((item: any) => Number(item.role_id) === Number(role?.id));
+            const latestLevel = levels?.reduce((max, item) => {
+                return Number(item.id) > Number(max.id) ? item : max;
+            }, levels[0]);
+            const previousLevel = levels?.reduce((prev, item) => {
+                if (Number(item.id) < Number(current_level?.id)) {
+                    return !prev || Number(item.id) > Number(prev.id) ? item : prev;
+                }
+                return prev;
+            }, null);
+
+            return { current_level, latestLevel, levels, previousLevel };
+        }
+        return { current_level: null, latestLevel: null, levels: [], previousLevel: null };
+    };
+
+    useEffect(() => {
+        const { current_level, latestLevel, levels, previousLevel } = getApprovalLevel();
+        // console.log('previousLevel', previousLevel)
+        // console.log('levels', levels)
+        // console.log('latestLevel', latestLevel)
+        // console.log('current_level', current_level)
+        // console.log('role', role)
+        const mappedApproval = getMappedApproval();
+
+        if (mappedApproval && levels.length > 0) {
+            setIsNeedApprove(true);
+        }
+
+        if (current_level) {
+            const approvedItemForCurrentLevel = getApprovedItemByLevelId(current_level?.id)
+            if (approvedItemForCurrentLevel && approvedItemForCurrentLevel.type === "approve") {
+                setIsApproved(true)
+                setIsMyLevelApproved(true);
+            } else {
+                if (previousLevel) {
+                    const approvedItemForPreviousLevel = getApprovedItemByLevelId(previousLevel?.id)
+                    if (approvedItemForPreviousLevel && approvedItemForPreviousLevel.type === "approve") {
+                        setCanApprove(true)
+                    }
+                } else {
+                    setCanApprove(true)
+                }
+            }
+        }
+
+        if (current_level && latestLevel) {
+            if (Number(current_level.role_id) === Number(latestLevel.role_id)) {
+                setIsLastLevel(true);
+                setApproveStatus(latestLevel.type);
+            } else {
+                setApproveStatus(latestLevel.type);
+            }
+        }
+
+    }, [approval_slug, role]);
+
+
+
+    interface ApproveProps {
+        approval_name?: string;
+        from: string;
+        from_id: string;
+        remark?: string;
+        approval_level_id?: string;
+        type?: string;
+    }
+
+    const approve = async (body: ApproveProps) => {
+        const approveUrl = 'approval/approve';
+        const { current_level } = getApprovalLevel();
+
+        if (current_level) {
+            body = { ...body, approval_level_id: current_level.id };
+            return await post(approveUrl, body, token);
+        }
+        return null;
+    };
+
+    return {
+        isApproved,
+        canApprove,
+        isNeedApprove,
+        approve,
+        isLastLevel,
+        approveStatus,
+        isMyLevelApproved
+    };
+};
