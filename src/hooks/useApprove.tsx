@@ -18,6 +18,7 @@ export const useApprovalHook = ({
     const [isMyLevelApproved, setIsMyLevelApproved] = useState(false);
     const [canApprove, setCanApprove] = useState(false);
     const [isLastLevel, setIsLastLevel] = useState(false);
+    const [refresh, setIsrefresh] = useState(false);
     const [approveStatus, setApproveStatus] = useState('');
 
     const allSysApprovals = JSON.parse(getValueFromLocalStorage('sys_approvals'));
@@ -33,58 +34,6 @@ export const useApprovalHook = ({
         }
         return null;
     };
-
-    // const getApprovalLevel = () => {
-    //     const mappedApproval = getMappedApproval();
-    //     if (mappedApproval) {
-    //         const levels = mappedApproval?.approval_levels;
-    //         const found_level = levels?.find((item: any) => Number(item.role_id) === Number(role?.id));
-    //         const latestLevel = levels?.reduce((max, item) => {
-    //             return Number(item.role_id) > Number(max.role_id) ? item : max;
-    //         }, levels[0]);
-
-    //         return { found_level, latestLevel };
-    //     }
-    //     return { found_level: null, latestLevel: null };
-    // };
-
-    // useEffect(() => {
-    //     const { found_level, latestLevel } = getApprovalLevel();
-    //     const mappedApproval = getMappedApproval();
-
-    //     if (found_level) setCanApprove(true)
-
-    //     if (mappedApproval && mappedApproval?.approval_levels?.length > 0) setIsNeedApprove(true)
-
-    //     if (found_level && latestLevel) {
-    //         if (Number(found_level.role_id) === Number(latestLevel.role_id)) {
-    //             setIsLastLevel(true);
-    //             setIsApproved(true);
-    //         } else {
-    //             setApproveStatus(latestLevel.type);
-    //         }
-
-    //         const approvedItem = allApprovedItems?.find((item: any) => Number(item.approval_level_id) === Number(found_level?.id) &&
-    //             item.from === from &&
-    //             item.from_id === from_id
-    //         );
-
-    //         // console.log('approvedItem', approvedItem)
-    //         // console.log('found_level', found_level)
-    //         // console.log('role', role)
-
-    //         if (approvedItem) {
-    //             setIsMyLevelApproved(true);
-    //             setApproveStatus(approvedItem.type);
-    //         }
-
-    //     } else {
-    //         setCanApprove(false);
-    //         setIsApproved(false);
-    //     }
-
-    // }, [approval_slug, role]);
-
 
     const getApprovedItemByLevelId = (level_id: number) => {
         const approvedItem = allApprovedItems?.find(
@@ -136,6 +85,8 @@ export const useApprovalHook = ({
             if (approvedItemForCurrentLevel && approvedItemForCurrentLevel.type === "approve") {
                 setIsApproved(true)
                 setIsMyLevelApproved(true);
+                setApproveStatus(approvedItemForCurrentLevel.type);
+
             } else {
                 if (previousLevel) {
                     const approvedItemForPreviousLevel = getApprovedItemByLevelId(previousLevel?.id)
@@ -148,16 +99,14 @@ export const useApprovalHook = ({
             }
         }
 
-        if (current_level && latestLevel) {
-            if (Number(current_level.role_id) === Number(latestLevel.role_id)) {
+        if (latestLevel) {
+            const approvedItemForLatestLevel = getApprovedItemByLevelId(latestLevel?.id)
+            if (approvedItemForLatestLevel) {
                 setIsLastLevel(true);
-                setApproveStatus(latestLevel.type);
-            } else {
-                setApproveStatus(latestLevel.type);
             }
         }
 
-    }, [approval_slug, role]);
+    }, [approval_slug, role, isApproved]);
 
 
 
@@ -176,16 +125,37 @@ export const useApprovalHook = ({
 
         if (current_level) {
             body = { ...body, approval_level_id: current_level.id };
-            return await post(approveUrl, body, token);
+            const response = await post(approveUrl, body, token);
+            if (response.status === 200) {
+                setIsrefresh(!refresh); // Trigger a re-render by toggling the refresh state
+            }
+
+            return response;
         }
         return null;
     };
+
+
+    const callBack = () => {
+
+        // console.log('call back called')
+        // console.log('isApproved', isApproved)
+        // console.log('isLastLeve', isLastLevel)
+
+        setIsrefresh(prev => !prev); // Trigger a re-render by toggling the refresh state
+
+        return null;
+    };
+
+
+
 
     return {
         isApproved,
         canApprove,
         isNeedApprove,
         approve,
+        callBack,
         isLastLevel,
         approveStatus,
         isMyLevelApproved

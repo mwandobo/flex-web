@@ -42,12 +42,22 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
         from_id: id
     })
 
-    console.log('canApprove', canApprove)
-    console.log('isApproved', isApproved)
-    console.log('isNeedApprove', isNeedApprove)
-    console.log('isLastLevel', isLastLevel)
-    console.log('approveStatus', approveStatus)
-    console.log('isMyLevelApproved', isMyLevelApproved)
+    useEffect(() => {
+
+    }, [isApproved, isLastLevel])
+
+    // console.log('isApproved', isApproved)
+    // console.log('isLastApproval', isLastLevel)
+
+
+
+
+    // console.log('canApprove', canApprove)
+    // console.log('isApproved', isApproved)
+    // console.log('isNeedApprove', isNeedApprove)
+    // console.log('isLastLevel', isLastLevel)
+    // console.log('approveStatus', approveStatus)
+    // console.log('isMyLevelApproved', isMyLevelApproved)
 
     const url = `department/show/${id}`
     const navigateToLogin = () => {
@@ -190,6 +200,7 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                                         approval_name={approval_name}
                                         isApproved={isApproved}
                                         isLastApproval={isLastLevel}
+                                        isNeedApproval={isNeedApprove}
                                     />}
                             />
                         </MuiCardComponent>
