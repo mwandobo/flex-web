@@ -1,17 +1,10 @@
-import { ReusableButton } from "@/components/button/reusable-button"
 import CrudFormComponent from "@/components/forms/crud.form.component"
-import MuiDate from "@/components/inputs/mui-date"
-import MuiRadioButtonsGroup from "@/components/inputs/mui-radio"
-import MuiSelect from "@/components/inputs/mui-select"
-import TextArea from "@/components/inputs/text-area"
-import TextFieldComponent from "@/components/inputs/text-field"
-import PopupModal from "@/components/modal/popup-modal"
 import { getValueFromLocalStorage } from "@/utils/actions/local-starage"
 import { send_email } from "@/utils/actions/send-email"
 import { post, put, remove } from "@/utils/api"
-import { CheckCircle2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import Swal from "sweetalert2"
+import {bracefulApprovalUpdater, } from "@/utils/actions/update-approvals.helper";
 interface Props {
     isModalOpen: boolean
     onCloseModal: () => void
@@ -41,7 +34,8 @@ export const useCrudFormCreator = ({
     isButtonDisabled,
     isForm,
     state_properties = [],
-    emailNotificationBody
+    emailNotificationBody,
+    from
 }: Props) => {
     const createPayload = (body: any[]) => {
         const payload: any = {};
@@ -82,7 +76,7 @@ export const useCrudFormCreator = ({
 
     const sideUpdatePayload = (payload?: any, value?: string) => {
         console.log(value)
-        const newformInputs = formInputs?.map((input) => {
+        return formInputs?.map((input) => {
             if (input.name === payload.name) {
                 const splited = payload.optionsUrlData.split('/');
                 splited[1] = value
@@ -92,11 +86,10 @@ export const useCrudFormCreator = ({
             }
             return input
         });
-        return newformInputs; // Return the modified array
     };
 
     const sideUpdatePayloadSponsorship = (value?: string) => {
-        const newformInputs = formInputs?.map((input) => {
+        return formInputs?.map((input) => {
             if (Number(value) === 8) {
                 if (input.name === 'amount' || input.name === 'currency_id') {
                     return { ...input, isRemoved: false }
@@ -117,12 +110,10 @@ export const useCrudFormCreator = ({
             }
             return input
         });
-        return newformInputs; // Return the modified array
     };
 
     const sideUpdatePayloadAssignment = (value?: string) => {
-
-        const newformInputs = formInputs?.map((input) => {
+        return formInputs?.map((input) => {
             if (Number(value) === 17) {
                 if (input.name === 'personnel_id') {
                     return { ...input, isRemoved: false }
@@ -143,15 +134,11 @@ export const useCrudFormCreator = ({
                 return input
             }
             return input
-
-
         });
-        return newformInputs; // Return the modified array
     };
 
-
     const sideUpdatePayloadResource = (value?: string) => {
-        const newformInputs = formInputs?.map((input) => {
+      return formInputs?.map((input) => {
             if (Number(value) === 23) {
                 if (input.name === 'personnel_id') {
                     return { ...input, isRemoved: false }
@@ -172,18 +159,15 @@ export const useCrudFormCreator = ({
                 return input
             }
             return input
-
-
         });
-        return newformInputs; // Return the modified array
     };
 
     const updateFormDataPayload = (from?: string, value?: string, clear?: string, error?: string, control_for?: string) => {
-        let newformInputs = [...formInputs]; // Copy the formInputs array
+        let newfoundInputs = [...formInputs]; // Copy the formInputs array
 
         if (clear === 'clear') {
             // Clear all inputs
-            newformInputs = newformInputs.map(input => ({ ...input, value: '' }));
+            newfoundInputs = newfoundInputs.map(input => ({ ...input, value: '' }));
         }
 
         if (error === 'error') {
@@ -192,32 +176,30 @@ export const useCrudFormCreator = ({
 
         if (control_for === 'sponsors') {
             const foundInput = formInputs.find(item => item.control === 'sponsor_type');
-            newformInputs = sideUpdatePayload(foundInput, value); // Update inputs for sponsors
+            newfoundInputs = sideUpdatePayload(foundInput, value); // Update inputs for sponsors
         }
 
         if (control_for === 'sponsorship') {
-            newformInputs = sideUpdatePayloadSponsorship(value); // Update inputs for sponsors
+            newfoundInputs = sideUpdatePayloadSponsorship(value); // Update inputs for sponsors
         }
 
         if (control_for === 'assignment') {
-            newformInputs = sideUpdatePayloadAssignment(value); // Update inputs for sponsors
+            newfoundInputs = sideUpdatePayloadAssignment(value); // Update inputs for sponsors
         }
 
         if (control_for === 'resource') {
-            newformInputs = sideUpdatePayloadResource(value); // Update inputs for sponsors
+            newfoundInputs = sideUpdatePayloadResource(value); // Update inputs for sponsors
         }
 
         if (from) {
-            newformInputs = newformInputs.map(input => {
+            newfoundInputs = newfoundInputs.map(input => {
                 if (input.name === from) {
                     return { ...input, value: value }
                 }
                 return input
             });
         }
-
-
-        setFormInputs(newformInputs);
+        setFormInputs(newfoundInputs);
     };
 
     const handleError = (item: any, error: any) => {
@@ -268,6 +250,7 @@ export const useCrudFormCreator = ({
                 }
             }
             if (response?.status === 200) {
+                await bracefulApprovalUpdater(from)
 
                 if (emailNotificationBody &&
                     Object.keys(emailNotificationBody).length > 0 &&
@@ -319,118 +302,8 @@ export const useCrudFormCreator = ({
             isDisabled={isDisabled}
             modalBodyString={modalBodyString}
             onSaveButtonName={onSaveButtonName}
-
         />
-
-
-
-
-
-
-
-        // <PopupModal
-        //     isOpen={isModalOpen}
-        //     onSaveButtonName={'Save'}
-        //     onClose={closeModel}
-        //     isDisabled={isButtonDisabled}
-        //     title={modalTitle}
-        //     isLarge={Boolean(gridSize)}
-        // >
-        //     <>
-        //         <>
-        //             {
-        //                 isForm
-        //                     ?
-        //                     <div className={`grid grid-cols-${Boolean(gridSize) ? 2 : 1} w-full gap-2`} style={{ gridTemplateColumns: `repeat(${gridSize ?? 1}, 1fr)`, gap: "10px" }}>
-        //                         {
-        //                             formInputs && formInputs.length > 0 && formInputs?.map((item, index) => (
-        //                                 <div className="" key={index}>
-        //                                     {
-        //                                         item?.type === 'text' && !item.isRemoved &&
-        //                                         <TextFieldComponent
-        //                                             placeholder={item?.placeholder}
-        //                                             type={item.textType}
-        //                                             from={item?.name}
-        //                                             label={item?.label}
-        //                                             value={item.value}
-        //                                             onChange={handleInputChange}
-        //                                             isError={item.isError}
-        //                                             errorMessage={item.errorMessage}
-        //                                         />
-        //                                     }
-
-        //                                     {
-        //                                         item?.type === 'select' && !item.isRemoved &&
-        //                                         <MuiSelect
-        //                                             handleChange={handleInputChange}
-        //                                             from={item?.name}
-        //                                             label={item?.label}
-        //                                             optionsUrlData={item.optionsUrlData}
-        //                                             optionDataKey={item.optionDataKey}
-        //                                             control={item.control}
-        //                                             control_id={item.control_id}
-        //                                             control_for={item.control_for}
-        //                                             value={item.value}
-        //                                             error={item.errorMessage}
-        //                                             isDisabled={isDisabled}
-
-        //                                         />
-        //                                     }
-        //                                     {
-        //                                         item?.type === 'date' && !item.isRemoved &&
-        //                                         <MuiDate
-        //                                             handleDateChange={handleInputChange}
-        //                                             from={item?.name}
-        //                                             label={item?.label}
-        //                                             value={item.value}
-        //                                             minDate={item.minDate}
-        //                                             maxDate={item.maxDate}
-        //                                             defaultValue={item.defaultDate}
-        //                                             isDisabled={isDisabled}
-        //                                         />
-        //                                     }
-        //                                     {
-        //                                         item?.type === 'textArea' && !item.isRemoved &&
-        //                                         <TextArea
-        //                                             onChange={handleInputChange}
-        //                                             from={item?.name}
-        //                                             label={item?.label}
-        //                                             value={item.value}
-        //                                         />
-        //                                     }
-        //                                     {
-        //                                         item?.type === 'radio' && !item.isRemoved &&
-        //                                         <MuiRadioButtonsGroup
-        //                                             onChange={handleInputChange}
-        //                                             from={item.name}
-        //                                             label={item.label}
-        //                                             options={item.options}
-        //                                         />
-        //                                     }
-
-        //                                 </div>
-        //                             ))
-        //                         }
-        //                     </div>
-        //                     :
-        //                     <p>{modalBodyString}</p>
-        //             }
-
-        //         </>
-        //         < div className="flex justify-end" >
-        //             <ReusableButton
-        //                 name={onSaveButtonName}
-        //                 isDisabled={isDisabled}
-        //                 onClick={handleSubmit}
-        //             >
-        //                 {!isDisabled && <CheckCircle2 size={13} />}
-        //             </ReusableButton>
-        //         </div>
-        //     </>
-
-        // </PopupModal >
     }
-
     return {
         createdForm,
         isStateChanged

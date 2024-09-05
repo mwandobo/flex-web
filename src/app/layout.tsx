@@ -36,10 +36,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="flex h-screen w-full bg-gray-100">
-          <HydrationZustand>
+      {/*<div className="flex h-screen w-full bg-gray-100">*/}
+        <div className="flex h-screen w-full bg-gray-200">
+        <HydrationZustand>
 
-            <GlobalContextProvider>
+          <GlobalContextProvider>
               <>
 
                 < Sidebar />

@@ -75,7 +75,8 @@ function Departments() {
         modalTitle: 'Approval',
         viewUrl: '/admnistration/approvals/',
         state_properties: [],
-        permission: permission
+        permission: permission,
+        from: 'approvals'
     })
 
     return (

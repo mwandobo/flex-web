@@ -242,9 +242,9 @@ const items: ISidebarItem[] = [
 
 function Sidebar() {
     return (
-        <div className='fixed top-0 left-0 h-screen w-64 bg-white shadow-lg z-10 p-4'>
+        <div className='fixed top-0 left-0 h-screen w-64 bg-yellow-200 shadow-lg z-10 p-4'>
             <div className="flex flex-col space-y-10">
-                <img className='h-10 w-fit' src="/logo.png" alt="logo" />
+                {/*<img className='h-10 w-fit' src="/logo.png" alt="logo" />*/}
                 <div
                     className='flex flex-col space-y-2'
                 >

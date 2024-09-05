@@ -69,7 +69,8 @@ function ApprovalLevel({
         modalTitle: 'Position',
         viewUrl: '/admnistration/positions/',
         state_properties: [],
-        permission: permission
+        permission: permission,
+        from:'approval_levels'
 
     })
     return (

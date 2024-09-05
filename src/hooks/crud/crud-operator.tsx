@@ -1,9 +1,9 @@
 "use client"
 
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
-import { useCrudFormCreator } from "./form-creator"
-import { setValueLocalStorage } from "@/utils/actions/local-starage"
+import {useRouter} from "next/navigation"
+import {useEffect, useState} from "react"
+import {useCrudFormCreator} from "./form-creator"
+import {setValueLocalStorage} from "@/utils/actions/local-starage"
 
 interface Props {
     formInputData: any[],
@@ -14,6 +14,7 @@ interface Props {
     callBackFunction?: (selectedCard: string, id?: string) => void
     selectedViewCard?: string,
     emailNotificationBody?: any
+    from?: string
 }
 
 export const useCrudOperator = (
@@ -25,6 +26,7 @@ export const useCrudOperator = (
         state_properties,
         callBackFunction,
         selectedViewCard,
+        from,
         emailNotificationBody: incomingEmailNotificationBody,
     }: Props
 ) => {
@@ -45,15 +47,15 @@ export const useCrudOperator = (
     const formPayload: any = {
         isModalOpen: isModalOpen,
         onCloseModal: onCloseModal,
-        from: 'department',
-        url: url,
-        httpMethod: httpMethod,
-        modalTitle: modalTitle,
-        modalBodyArray: modalBodyArray,
-        modalBodyString: modalBodyString,
-        isButtonDisabled: isButtonDisabled,
-        isForm: isForm,
-        onSaveButtonName: onSaveButtonName,
+        from,
+        url,
+        httpMethod,
+        modalTitle,
+        modalBodyArray,
+        modalBodyString,
+        isButtonDisabled,
+        isForm,
+        onSaveButtonName,
         payloadForEdit: selected,
         state_properties: state_properties,
         emailNotificationBody: emailNotificationBody
@@ -78,19 +80,15 @@ export const useCrudOperator = (
 
             if (item.name === 'start_date') {
                 objKeyValue = parseDate(payload[item.name])
-            }
-
-            else if (item.name === 'end_date') {
+            } else if (item.name === 'end_date') {
                 objKeyValue = parseDate(payload[item.name])
-            }
-
-            else if (item.name === 'd_o_b') {
+            } else if (item.name === 'd_o_b') {
                 objKeyValue = parseDate(payload[item.name])
             } else {
                 objKeyValue = payload[item.name]
             }
 
-            const newItemObj = { ...item, value: objKeyValue }
+            const newItemObj = {...item, value: objKeyValue}
             return newItemObj
         })
 
@@ -106,7 +104,7 @@ export const useCrudOperator = (
 
     const handleNotificationPayload = (type: string) => {
         if (emailNotificationBody && Object.keys(emailNotificationBody).length > 0) {
-            const newEmailNotificationBody = { ...emailNotificationBody, operation: type }
+            const newEmailNotificationBody = {...emailNotificationBody, operation: type}
             setEmailNotificationBody(newEmailNotificationBody)
         }
     }
@@ -152,21 +150,16 @@ export const useCrudOperator = (
 
                 if (selectedViewCard === 'goal/show') {
                     callBackFunction('goal/show', payload?.id)
-                }
-                else if (selectedViewCard === 'outcome/show') {
+                } else if (selectedViewCard === 'outcome/show') {
                     callBackFunction('outcome/show', payload?.id)
-                }
-                else if (selectedViewCard === 'output/show') {
+                } else if (selectedViewCard === 'output/show') {
                     callBackFunction('output/show', payload?.id)
-                }
-                else if (selectedViewCard === 'activity/show') {
+                } else if (selectedViewCard === 'activity/show') {
                     callBackFunction('activity/show', payload?.id)
-                }
-                else if (selectedViewCard === 'task/show') {
+                } else if (selectedViewCard === 'task/show') {
                     callBackFunction('task/show', payload?.id)
                 }
-            }
-            else {
+            } else {
                 router.push(`${viewUrl}${payload?.id}`)
                 if (payload.has_parent) {
                     setValueLocalStorage('parent_id', payload.parent_id)

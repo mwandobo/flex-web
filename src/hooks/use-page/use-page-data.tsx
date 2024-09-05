@@ -6,6 +6,7 @@ import { useCrudOperator } from "../crud/crud-operator";
 import { usePopulateTable } from "../data-populate/populate-table";
 import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
 import { useRouter } from "next/navigation";
+import { gracefulApprovalUpdater} from "@/utils/actions/update-approvals.helper";
 
 interface Props {
     columns?: any[]
@@ -27,6 +28,7 @@ interface Props {
     emailNotificationBody?: any,
     isHideActions?: boolean
     tableData?: any[]
+    from?: string
 }
 
 export const usePageData = ({
@@ -46,7 +48,8 @@ export const usePageData = ({
     isHideEdit,
     emailNotificationBody,
     isHideActions,
-    tableData
+    tableData,
+    from
 }: Props
 
 ) => {
@@ -62,6 +65,8 @@ export const usePageData = ({
         return router.push('/login')
     }
 
+
+
     const {
         handleClick,
         createdForm,
@@ -74,8 +79,8 @@ export const usePageData = ({
         state_properties: state_properties,
         selectedViewCard: selectedViewCard,
         callBackFunction: callBackFunction,
-        emailNotificationBody: emailNotificationBody
-
+        emailNotificationBody: emailNotificationBody,
+        from: from
     })
 
     const { tabular } = usePopulateTable({
@@ -90,6 +95,8 @@ export const usePageData = ({
         isHideActions
     })
 
+
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -97,6 +104,7 @@ export const usePageData = ({
                 const res = await get(url, token)
 
                 if (data && res.status === 200) {
+                    await gracefulApprovalUpdater(from)
                     setData(res.data.data)
                     if (res.data.count) {
                         setCount(res.data.count)
