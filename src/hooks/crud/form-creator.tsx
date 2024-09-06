@@ -4,7 +4,7 @@ import { send_email } from "@/utils/actions/send-email"
 import { post, put, remove } from "@/utils/api"
 import { useEffect, useState } from "react"
 import Swal from "sweetalert2"
-import {bracefulApprovalUpdater, } from "@/utils/actions/update-approvals.helper";
+import {gracefulApprovalUpdater} from "@/utils/actions/update-approvals.helper";
 interface Props {
     isModalOpen: boolean
     onCloseModal: () => void
@@ -250,7 +250,7 @@ export const useCrudFormCreator = ({
                 }
             }
             if (response?.status === 200) {
-                await bracefulApprovalUpdater(from)
+                await gracefulApprovalUpdater(from)
 
                 if (emailNotificationBody &&
                     Object.keys(emailNotificationBody).length > 0 &&

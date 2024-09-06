@@ -1,12 +1,10 @@
-"use client"
-
-import { useApprovalHook } from '@/hooks/useApprove';
-import { ReusableButton } from '../button/reusable-button';
-import CrudFormComponent from '../forms/crud.form.component';
-import { useState } from 'react';
-import { capitalizeFirstWord } from '@/utils/actions/string-manipulations';
-import Swal from 'sweetalert2';
-import { getValueFromLocalStorage, setValueLocalStorage } from '@/utils/actions/local-starage';
+import {useApprovalHook} from "@/hooks/useApprove";
+import {useState} from "react";
+import {getValueFromLocalStorage, setValueLocalStorage} from "@/utils/actions/local-starage";
+import Swal from "sweetalert2";
+import {ReusableButton} from "@/components/button/reusable-button";
+import CrudFormComponent from "@/components/forms/crud.form.component";
+import {capitalizeFirstWord} from "@/utils/actions/string-manipulations";
 
 interface Props {
     approval_name?: string | undefined,
@@ -16,26 +14,20 @@ interface Props {
     type?: string,
     approval_level_id?: number
     isApproved?: boolean
+    isMyLevelApproved?: boolean
     isLastApproval?: boolean
     isNeedApproval?: boolean
+    refreshData: () => void; // Add the refreshData callback
 }
 
 const ApprovalWrapper = (body: Props) => {
-    const { approval_name, from, from_id, isApproved, isLastApproval, isNeedApproval } = body;
-    const {
-        approve,
-        canApprove,
-        callBack,
-        approveStatus,
-    } = useApprovalHook({
+    const { approval_name, from, from_id, isApproved, isLastApproval, isNeedApproval, isMyLevelApproved, refreshData } = body;
+    const { approve, canApprove, callBack, approveStatus } = useApprovalHook({
         approval_slug: approval_name,
         from: from,
         from_id: from_id
     });
 
-
-
-    // Add the `refresh` dependency to force re-rendering when the hook's state changes
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState("");
     const [remark, setRemark] = useState('');
@@ -54,7 +46,6 @@ const ApprovalWrapper = (body: Props) => {
     }
 
     const handleSubmit = async () => {
-        const { from, from_id } = body;
         const payload = {
             from,
             from_id,
@@ -66,7 +57,11 @@ const ApprovalWrapper = (body: Props) => {
         if (response && response.status === 200) {
             setIsModalOpen(false);
             setRemark('');
-            callBack()
+            callBack();
+
+            // Refetch data after successful approval
+            refreshData();
+
             let approvedItems = JSON.parse(getValueFromLocalStorage('approved_items')) || [];
             approvedItems.push(response.data.data);
             setValueLocalStorage('approved_items', JSON.stringify(approvedItems));
@@ -79,11 +74,9 @@ const ApprovalWrapper = (body: Props) => {
         }
     }
 
-    console.log(isNeedApproval)
-
     return (
         <>
-            {isNeedApproval &&
+            {isNeedApproval && (
                 <>
                     {isApproved && isLastApproval ? (
                         <p className='text-xs p-1'>
@@ -95,7 +88,7 @@ const ApprovalWrapper = (body: Props) => {
                         </p>
                     ) : (
                         <>
-                            {canApprove ? (
+                            {canApprove && !isMyLevelApproved ? (
                                 <div className='flex gap-2'>
                                     <ReusableButton
                                         name='Approve'
@@ -132,9 +125,9 @@ const ApprovalWrapper = (body: Props) => {
                         </>
                     )}
                 </>
-            }
-        </>);
+            )}
+        </>
+    );
 };
-
 
 export default ApprovalWrapper;

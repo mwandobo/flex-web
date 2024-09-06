@@ -106,7 +106,7 @@ export const useApprovalHook = ({
             }
         }
 
-    }, [approval_slug, role, isApproved]);
+    }, [approval_slug, role, isApproved, refresh, getApprovalLevel, getMappedApproval, getApprovedItemByLevelId]);
 
 
 
@@ -141,6 +141,10 @@ export const useApprovalHook = ({
         // console.log('call back called')
         // console.log('isApproved', isApproved)
         // console.log('isLastLeve', isLastLevel)
+
+        // console.log("isApproved", isApproved)
+        // console.log('canApprove', canApprove)
+        // console.log('isMyLevelApproved', isMyLevelApproved)
 
         setIsrefresh(prev => !prev); // Trigger a re-render by toggling the refresh state
 

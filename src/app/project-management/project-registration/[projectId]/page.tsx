@@ -48,49 +48,48 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
 
     // console.log('isApproved', isApproved)
     // console.log('isLastApproval', isLastLevel)
-
-
-
-
     // console.log('canApprove', canApprove)
     // console.log('isApproved', isApproved)
     // console.log('isNeedApprove', isNeedApprove)
     // console.log('isLastLevel', isLastLevel)
-    // console.log('approveStatus', approveStatus)
-    // console.log('isMyLevelApproved', isMyLevelApproved)
+    console.log('approveStatus', approveStatus)
+    console.log('isMyLevelApproved', isMyLevelApproved)
 
     const url = `department/show/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true)
-                const res = await get(url, token)
-
-                if (data && res.status === 200) {
-                    setData(res.data.data)
-                    setLoading(false)
-                }
-
-            } catch (error: any) {
-                if (error?.code === "ERR_NETWORK") {
-                    navigateToLogin()
-                }
-            }
-
+    const fetchData = async () => {
+        try {
             setLoading(true)
-            const res = await get(`project/show/${id}`, token)
+            const res = await get(url, token)
 
-            if (res && res.status === 200) {
+            if (data && res.status === 200) {
                 setData(res.data.data)
                 setLoading(false)
             }
-        };
+
+        } catch (error: any) {
+            if (error?.code === "ERR_NETWORK") {
+                navigateToLogin()
+            }
+        }
+
+        setLoading(true)
+        const res = await get(`project/show/${id}`, token)
+
+        if (res && res.status === 200) {
+            setData(res.data.data)
+            setLoading(false)
+        }
+    };
+    useEffect(() => {
         fetchData()
     }, [id, token])
+
+    const refreshData = () => {
+        fetchData();
+    };
 
     const nodes: React.ReactNode[] = [
         <LogFrameIndicator
@@ -164,7 +163,6 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                     :
                     <>
                         <PageHeader
-
                             links={[
                                 { name: 'Project', linkTo: '/projects', permission: 'projects', isClickable: true },
                                 { name: 'Show', linkTo: '/', permission: '' },
@@ -201,6 +199,8 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                                         isApproved={isApproved}
                                         isLastApproval={isLastLevel}
                                         isNeedApproval={isNeedApprove}
+                                        isMyLevelApproved={isMyLevelApproved}
+                                        refreshData={refreshData} // Pass the callback to refresh data
                                     />}
                             />
                         </MuiCardComponent>
