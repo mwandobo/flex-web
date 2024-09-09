@@ -1,6 +1,10 @@
-import { getValueFromLocalStorage } from '@/utils/actions/local-starage';
+import {getValueFromLocalStorage, setValueLocalStorage} from '@/utils/actions/local-starage';
 import { post } from '@/utils/api';
 import { useState, useEffect } from 'react';
+import {ReusableButton} from "@/components/button/reusable-button";
+import CrudFormComponent from "@/components/forms/crud.form.component";
+import {capitalizeFirstWord} from "@/utils/actions/string-manipulations";
+import Swal from "sweetalert2";
 
 interface Props {
     approval_slug?: string;
@@ -26,6 +30,11 @@ export const useApprovalHook = ({
     const allApprovedItems = JSON.parse(getValueFromLocalStorage('approved_items'));
     const role = JSON.parse(getValueFromLocalStorage('role'));
     const token = getValueFromLocalStorage('token');
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalTitle, setModalTitle] = useState("");
+    const [remark, setRemark] = useState('');
+
 
     const getMappedApproval = () => {
         const foundSysApproval = allSysApprovals?.find((item: any) => item.name === approval_slug);
@@ -151,6 +160,105 @@ export const useApprovalHook = ({
         return null;
     };
 
+    const handleApproval = (type: string) => {
+        setModalTitle(type);
+        setIsModalOpen(true);
+    }
+
+    const onCloseModal = () => {
+        setIsModalOpen(false);
+    }
+
+    const handleInputChange = (e: any) => {
+        setRemark(e?.target?.value);
+    }
+
+    const handleSubmit = async () => {
+        const payload = {
+            from,
+            from_id,
+            remark,
+            type: modalTitle
+        };
+
+        const response = await approve(payload);
+        if (response && response.status === 200) {
+            setIsModalOpen(false);
+            setRemark('');
+            callBack();
+
+            // Refetch data after successful approval
+            // refreshData();
+
+            let approvedItems = JSON.parse(getValueFromLocalStorage('approved_items')) || [];
+            approvedItems.push(response.data.data);
+            setValueLocalStorage('approved_items', JSON.stringify(approvedItems));
+
+            Swal.fire({
+                title: "Project Approval",
+                text: "Project Approved successfully",
+                icon: "success"
+            });
+        }
+    }
+
+    const approvalButtonsWrapper = ()=>{
+        return (
+            <>
+                {isNeedApprove && (
+                    <>
+                        {isApproved && isLastLevel ? (
+                            <p className='text-xs p-1'>
+                                {approveStatus === "approve" ? (
+                                    <span className='bg-green-100'>Approved</span>
+                                ) : (
+                                    <span className='bg-red-100'>Disapproved</span>
+                                )}
+                            </p>
+                        ) : (
+                            <>
+                                {canApprove && !isMyLevelApproved ? (
+                                    <div className='flex gap-2'>
+                                        <ReusableButton
+                                            name='Approve'
+                                            onClick={() => handleApproval('approve')}
+                                        />
+                                        <ReusableButton
+                                            name='DisApprove'
+                                            onClick={() => handleApproval('disapprove')}
+                                        />
+                                        <CrudFormComponent
+                                            isModalOpen={isModalOpen}
+                                            onCloseModal={onCloseModal}
+                                            handleSubmit={handleSubmit}
+                                            formInputs={[
+                                                {
+                                                    name: 'remark',
+                                                    type: 'textArea',
+                                                    label: 'Remark',
+                                                    value: remark,
+                                                    required: true,
+                                                    isError: false,
+                                                    errorMessage: ''
+                                                }
+                                            ]}
+                                            modalTitle={capitalizeFirstWord(modalTitle)}
+                                            isForm={true}
+                                            handleInputChange={handleInputChange}
+                                            onSaveButtonName={'Proceed'}
+                                        />
+                                    </div>
+                                ) : (
+                                    <p className='text-xs p-1 bg-gray-200'>Waiting For Approval</p>
+                                )}
+                            </>
+                        )}
+                    </>
+                )}
+            </>
+        );
+    }
+
 
 
 
@@ -162,6 +270,7 @@ export const useApprovalHook = ({
         callBack,
         isLastLevel,
         approveStatus,
-        isMyLevelApproved
+        isMyLevelApproved,
+        approvalButtonsWrapper
     };
 };

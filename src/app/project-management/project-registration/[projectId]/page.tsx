@@ -35,7 +35,8 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
         canApprove,
         isLastLevel,
         approveStatus,
-        isMyLevelApproved
+        isMyLevelApproved,
+        approvalButtonsWrapper,
     } = useApprovalHook({
         approval_slug: approval_name,
         from: 'project',
@@ -52,8 +53,8 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
     // console.log('isApproved', isApproved)
     // console.log('isNeedApprove', isNeedApprove)
     // console.log('isLastLevel', isLastLevel)
-    console.log('approveStatus', approveStatus)
-    console.log('isMyLevelApproved', isMyLevelApproved)
+    // console.log('approveStatus', approveStatus)
+    // console.log('isMyLevelApproved', isMyLevelApproved)
 
     const url = `department/show/${id}`
     const navigateToLogin = () => {
@@ -191,17 +192,7 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                                 ]}
                                 titleA="Project"
                                 titleB={data?.name}
-                                OptionalElement={
-                                    <ApprovalWrapper
-                                        from="project"
-                                        from_id={id}
-                                        approval_name={approval_name}
-                                        isApproved={isApproved}
-                                        isLastApproval={isLastLevel}
-                                        isNeedApproval={isNeedApprove}
-                                        isMyLevelApproved={isMyLevelApproved}
-                                        refreshData={refreshData} // Pass the callback to refresh data
-                                    />}
+                                OptionalElement={approvalButtonsWrapper()}
                             />
                         </MuiCardComponent>
                         {(!isNeedApprove || (isLastLevel && isApproved)) && (
