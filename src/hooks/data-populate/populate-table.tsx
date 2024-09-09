@@ -2,6 +2,8 @@ import CrudButtonsComponent from "@/components/crud-operator-buttons"
 import FormattedMoney from "@/components/moneyFormater"
 import ProgressStatus from "@/components/status/progress"
 import MuiTable from "@/components/tables/mui-table"
+import {useApprovalHook} from "@/hooks/useApprove";
+import {getApprovals} from "@/utils/approve/approvalHelper";
 
 interface Props {
     columns: any[]
@@ -16,16 +18,16 @@ interface Props {
 }
 
 export const usePopulateTable = ({
-    columns,
-    data,
-    handleClick,
-    show_assign,
-    permission,
-    isHideShow,
-    isHideDelete,
-    isHideEdit,
-    isHideActions
-}: Props) => {
+                                     columns,
+                                     data,
+                                     handleClick,
+                                     show_assign,
+                                     permission,
+                                     isHideShow,
+                                     isHideDelete,
+                                     isHideEdit,
+                                     isHideActions
+                                 }: Props) => {
     const createRowHeader = () => {
         let newColumns: any[] = []
 
@@ -68,39 +70,45 @@ export const usePopulateTable = ({
 
         if (data && data.length > 0) {
             newData = data.map(obj => {
+                const {isApproved, isAnyLevelApproved, approveStatus} = getApprovals('project_approval', 'project', obj?.id)
+                console.log(obj.name, "isAnyLevelApproved", isAnyLevelApproved )
+                console.log(obj.name, 'approveStatus', approveStatus)
                 if (obj.has_url) {
-                    obj = { ...obj, file: <p className="mb-1"><a href={obj.location} className="text-blue-600 border-b border-gray-300">{obj.name}</a></p> }
+                    obj = {
+                        ...obj,
+                        file: <p className="mb-1"><a href={obj.location}
+                                                     className="text-blue-600 border-b border-gray-300">{obj.name}</a>
+                        </p>
+                    }
                 }
 
                 if (obj.has_progress_status_task) {
-                    obj = { ...obj, progress_status: <ProgressStatus status={obj.progress_status} /> }
+                    obj = {...obj, progress_status: <ProgressStatus status={obj.progress_status}/>}
                 }
 
                 if (obj.cost) {
-                    obj = { ...obj, cost: <FormattedMoney amount={obj.cost} /> }
+                    obj = {...obj, cost: <FormattedMoney amount={obj.cost}/>}
                 }
 
                 if (obj.resource_cost) {
-                    obj = { ...obj, resource_cost: <FormattedMoney amount={obj.resource_cost} /> }
+                    obj = {...obj, resource_cost: <FormattedMoney amount={obj.resource_cost}/>}
                 }
 
                 if (obj.total_cost) {
-                    obj = { ...obj, total_cost: <FormattedMoney amount={obj.total_cost} /> }
+                    obj = {...obj, total_cost: <FormattedMoney amount={obj.total_cost}/>}
                 }
 
                 if (obj.total_direct_cost) {
-                    obj = { ...obj, total_direct_cost: <FormattedMoney amount={obj.total_direct_cost} /> }
+                    obj = {...obj, total_direct_cost: <FormattedMoney amount={obj.total_direct_cost}/>}
                 }
 
                 if (obj.total_resource_cost) {
-                    obj = { ...obj, total_resource_cost: <FormattedMoney amount={obj.total_resource_cost} /> }
+                    obj = {...obj, total_resource_cost: <FormattedMoney amount={obj.total_resource_cost}/>}
                 }
 
                 if (obj.grand_total_cost) {
-                    obj = { ...obj, grand_total_cost: <FormattedMoney amount={obj.grand_total_cost} /> }
+                    obj = {...obj, grand_total_cost: <FormattedMoney amount={obj.grand_total_cost}/>}
                 }
-
-
 
                 obj.actions = <CrudButtonsComponent
                     hide_approve={true}
@@ -109,20 +117,19 @@ export const usePopulateTable = ({
                     show_assign={show_assign}
                     permission={permission}
                     hide_view={isHideShow}
-                    hide_edit={isHideDelete}
-                    hide_delete={isHideDelete}
+                    hide_edit={isHideDelete || (isAnyLevelApproved && approveStatus === 'approve')}
+                    hide_delete={isHideDelete ||  (isAnyLevelApproved && approveStatus === 'approve')}
                 />
 
                 return sortObjectValuesByHeaders(obj, createRowHeaderArray())
             })
-
         }
         return newData
     }
 
     const tabular = () => {
         return (
-            <div className="w-96" style={{ width: '100%' }}>
+            <div className="w-96" style={{width: '100%'}}>
                 <MuiTable
                     data={createRowData()}
                     columns={createRowHeader()}

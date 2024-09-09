@@ -91,7 +91,7 @@ export const useApprovalHook = ({
 
         if (current_level) {
             const approvedItemForCurrentLevel = getApprovedItemByLevelId(current_level?.id)
-            if (approvedItemForCurrentLevel && approvedItemForCurrentLevel.type === "approve") {
+            if (approvedItemForCurrentLevel) {
                 setIsApproved(true)
                 setIsMyLevelApproved(true);
                 setApproveStatus(approvedItemForCurrentLevel.type);
@@ -144,19 +144,8 @@ export const useApprovalHook = ({
         return null;
     };
 
-
     const callBack = () => {
-
-        // console.log('call back called')
-        // console.log('isApproved', isApproved)
-        // console.log('isLastLeve', isLastLevel)
-
-        // console.log("isApproved", isApproved)
-        // console.log('canApprove', canApprove)
-        // console.log('isMyLevelApproved', isMyLevelApproved)
-
         setIsrefresh(prev => !prev); // Trigger a re-render by toggling the refresh state
-
         return null;
     };
 
@@ -188,7 +177,6 @@ export const useApprovalHook = ({
             callBack();
 
             // Refetch data after successful approval
-            // refreshData();
 
             let approvedItems = JSON.parse(getValueFromLocalStorage('approved_items')) || [];
             approvedItems.push(response.data.data);
