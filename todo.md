@@ -8,3 +8,4 @@ when fetch approval update state.
 
 after change password redirect.
 check if it needs approve in the index page.
+if itNeeds approve fetch approvedItems on that page refresh

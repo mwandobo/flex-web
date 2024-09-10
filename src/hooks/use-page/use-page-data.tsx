@@ -101,7 +101,7 @@ export const usePageData = ({
                 const res = await get(url, token)
 
                 if (data && res.status === 200) {
-                    await gracefulApprovalUpdater(from)
+                    await gracefulApprovalUpdater(from, approval_slug)
                     setData(res.data.data)
                     if (res.data.count) {
                         setCount(res.data.count)

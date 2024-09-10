@@ -4,6 +4,7 @@ import ProgressStatus from "@/components/status/progress"
 import MuiTable from "@/components/tables/mui-table"
 import {useApprovalHook} from "@/hooks/useApprove";
 import {getApprovals} from "@/utils/approve/approvalHelper";
+import {updateApprovalItems, updateApprovals} from "@/utils/actions/update-approvals.helper";
 
 interface Props {
     columns: any[]
@@ -29,8 +30,8 @@ export const usePopulateTable = ({
                                      isHideDelete,
                                      isHideEdit,
                                      isHideActions,
-    approval_slug,
-    from
+                                     approval_slug,
+                                     from
                                  }: Props) => {
     const createRowHeader = () => {
         let newColumns: any[] = []
@@ -74,7 +75,7 @@ export const usePopulateTable = ({
 
         if (data && data.length > 0) {
             newData = data.map(obj => {
-                const { isAnyLevelApproved, latestApproveStatus,} = getApprovals(approval_slug, from, obj?.id)
+                const {isAnyLevelApproved, latestApproveStatus,} = getApprovals(approval_slug, from, obj?.id)
                 if (obj.has_url) {
                     obj = {
                         ...obj,
@@ -120,7 +121,7 @@ export const usePopulateTable = ({
                     permission={permission}
                     hide_view={isHideShow}
                     hide_edit={isHideDelete || (isAnyLevelApproved && latestApproveStatus === 'approve')}
-                    hide_delete={isHideDelete ||  (isAnyLevelApproved && latestApproveStatus === 'approve')}
+                    hide_delete={isHideDelete || (isAnyLevelApproved && latestApproveStatus === 'approve')}
                 />
 
                 return sortObjectValuesByHeaders(obj, createRowHeaderArray())
