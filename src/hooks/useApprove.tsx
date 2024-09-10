@@ -24,6 +24,7 @@ export const useApprovalHook = ({
     const [isLastLevel, setIsLastLevel] = useState(false);
     const [refresh, setIsrefresh] = useState(false);
     const [approveStatus, setApproveStatus] = useState('');
+    const [latestApproveStatus, setLatestApproveStatus] = useState('');
 
     const allSysApprovals = JSON.parse(getValueFromLocalStorage('sys_approvals'));
     const allRegisteredApprovals = JSON.parse(getValueFromLocalStorage('approvals'));
@@ -34,7 +35,6 @@ export const useApprovalHook = ({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState("");
     const [remark, setRemark] = useState('');
-
 
     const getMappedApproval = () => {
         const foundSysApproval = allSysApprovals?.find((item: any) => item.name === approval_slug);
@@ -54,7 +54,6 @@ export const useApprovalHook = ({
 
         return approvedItem;
     }
-
 
     const getApprovalLevel = () => {
         const mappedApproval = getMappedApproval();
@@ -78,11 +77,6 @@ export const useApprovalHook = ({
 
     useEffect(() => {
         const { current_level, latestLevel, levels, previousLevel } = getApprovalLevel();
-        // console.log('previousLevel', previousLevel)
-        // console.log('levels', levels)
-        // console.log('latestLevel', latestLevel)
-        // console.log('current_level', current_level)
-        // console.log('role', role)
         const mappedApproval = getMappedApproval();
 
         if (mappedApproval && levels.length > 0) {
@@ -114,10 +108,22 @@ export const useApprovalHook = ({
                 setIsLastLevel(true);
             }
         }
+        const filteredItems = allApprovedItems.filter(
+            item => item.from === from && Number(item.from_id) === Number(from_id)
+        );
+
+
+        if (filteredItems.length > 0) {
+            const latestItem = filteredItems.reduce((max, item) => {
+                return Number(item.id) > Number(max.id) ? item : max;
+            }, filteredItems[0]);
+
+            if (latestItem) {
+                setLatestApproveStatus(latestItem.type)
+            }
+        }
 
     }, [approval_slug, role, isApproved, refresh, getApprovalLevel, getMappedApproval, getApprovedItemByLevelId]);
-
-
 
     interface ApproveProps {
         approval_name?: string;
@@ -176,15 +182,13 @@ export const useApprovalHook = ({
             setRemark('');
             callBack();
 
-            // Refetch data after successful approval
-
             let approvedItems = JSON.parse(getValueFromLocalStorage('approved_items')) || [];
             approvedItems.push(response.data.data);
             setValueLocalStorage('approved_items', JSON.stringify(approvedItems));
 
-            Swal.fire({
-                title: "Project Approval",
-                text: "Project Approved successfully",
+            await Swal.fire({
+                title: `Project ${modalTitle}`,
+                text: `Project ${modalTitle} successfully`,
                 icon: "success"
             });
         }
@@ -195,9 +199,9 @@ export const useApprovalHook = ({
             <>
                 {isNeedApprove && (
                     <>
-                        {isApproved && isLastLevel ? (
+                        {latestApproveStatus && isLastLevel ? (
                             <p className='text-xs p-1'>
-                                {approveStatus === "approve" ? (
+                                {latestApproveStatus === "approve" ? (
                                     <span className='bg-green-100'>Approved</span>
                                 ) : (
                                     <span className='bg-red-100'>Disapproved</span>
@@ -247,9 +251,6 @@ export const useApprovalHook = ({
         );
     }
 
-
-
-
     return {
         isApproved,
         canApprove,
@@ -259,6 +260,7 @@ export const useApprovalHook = ({
         isLastLevel,
         approveStatus,
         isMyLevelApproved,
+        latestApproveStatus,
         approvalButtonsWrapper
     };
 };

@@ -31,7 +31,6 @@ const getApprovedItemByLevelId = (level_id: number, from: string, from_id: strin
     return approvedItem;
 }
 
-
 const getMultipleApprovedItemByLevelId = (level_ids: number[], from: string, from_id: string) => {
     const approvedItems = allApprovedItems?.filter((item: any) =>
         level_ids.includes(Number(item.approval_level_id)) &&
@@ -66,22 +65,24 @@ export const getApprovals = (approval_slug: string, from: string, from_id: strin
     const {current_level, latestLevel, levels, previousLevel} = getApprovalLevel(approval_slug);
     let canApprove = false
     let isApproved = false
+    let isNeedApprove = false
     let isMyLevelApproved = false
     let approveStatus = ''
+    let latestApproveStatus = ''
     let isLastLevel = false
     let isAnyLevelApproved = false
 
     const mappedApproval = getMappedApproval(approval_slug);
 
     if (mappedApproval && levels.length > 0) {
-        canApprove = true
+        isNeedApprove = true
     }
 
-    if(levels.length > 0) {
+    if (levels.length > 0) {
         const level_ids = levels.map((level: any) => level.id);
         const approvedItemForLevels = getMultipleApprovedItemByLevelId(level_ids, from, from_id)
 
-        if(approvedItemForLevels.length > 0){
+        if (approvedItemForLevels.length > 0) {
             isAnyLevelApproved = true;
         }
     }
@@ -89,8 +90,7 @@ export const getApprovals = (approval_slug: string, from: string, from_id: strin
     if (current_level) {
         const approvedItemForCurrentLevel = getApprovedItemByLevelId(current_level?.id, from, from_id)
 
-        console.log("approvedItemForCurrentLevel", approvedItemForCurrentLevel)
-        if (approvedItemForCurrentLevel ) {
+        if (approvedItemForCurrentLevel) {
             isApproved = true
             isMyLevelApproved = true
             approveStatus = approvedItemForCurrentLevel.type
@@ -114,6 +114,20 @@ export const getApprovals = (approval_slug: string, from: string, from_id: strin
         }
     }
 
+    const filteredItems = allApprovedItems.filter(
+        item => item.from === from && Number(item.from_id) === Number(from_id)
+    );
+
+    if (filteredItems.length > 0) {
+        const latestItem = filteredItems.reduce((max, item) => {
+            return Number(item.id) > Number(max.id) ? item : max;
+        }, filteredItems[0]);
+
+        if (latestItem) {
+            latestApproveStatus = latestItem.type
+        }
+    }
+
     return {
         current_level,
         latestLevel,
@@ -121,6 +135,7 @@ export const getApprovals = (approval_slug: string, from: string, from_id: strin
         canApprove,
         isMyLevelApproved,
         approveStatus,
+        latestApproveStatus,
         isLastLevel,
         isAnyLevelApproved
     }

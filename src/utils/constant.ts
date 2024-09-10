@@ -1,0 +1,1 @@
+export const PROJECT_APPROVAL_SLUG = "project_approval"

@@ -5,6 +5,7 @@ import PageHeader from '@/components/header/page-header'
 import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
+import {PROJECT_APPROVAL_SLUG} from "@/utils/constant";
 function Project() {
     const permission = 'projects'
 
@@ -170,7 +171,7 @@ function Project() {
             id: 'progress_status',
             numeric: false,
             disablePadding: false,
-            label: 'Prrogress',
+            label: 'Progress',
         },
     ]
 
@@ -186,7 +187,9 @@ function Project() {
         modalTitle: 'Project',
         viewUrl: '/project-management/project-registration/',
         state_properties: [],
-        permission: permission
+        permission: permission,
+        from: "project",
+        approval_slug:PROJECT_APPROVAL_SLUG
 
     })
     return (

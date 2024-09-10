@@ -29,6 +29,7 @@ interface Props {
     isHideActions?: boolean
     tableData?: any[]
     from?: string
+    approval_slug?: string
 }
 
 export const usePageData = ({
@@ -49,23 +50,19 @@ export const usePageData = ({
     emailNotificationBody,
     isHideActions,
     tableData,
-    from
+    from,
+                                approval_slug
 }: Props
 
 ) => {
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState<any[]>([])
     const [count, setCount] = useState<any>()
-
     const token = getValueFromLocalStorage('token', null)
-
     const router = useRouter()
-
     const navigateToLogin = () => {
         return router.push('/login')
     }
-
-
 
     const {
         handleClick,
@@ -75,12 +72,12 @@ export const usePageData = ({
         formInputData: formInputs,
         incomingUrl: url,
         incomingModalTitle: modalTitle,
-        viewUrl: viewUrl,
-        state_properties: state_properties,
-        selectedViewCard: selectedViewCard,
-        callBackFunction: callBackFunction,
-        emailNotificationBody: emailNotificationBody,
-        from: from
+        viewUrl,
+        state_properties,
+        selectedViewCard,
+        callBackFunction,
+        emailNotificationBody,
+        from
     })
 
     const { tabular } = usePopulateTable({
@@ -92,10 +89,10 @@ export const usePageData = ({
         isHideShow,
         isHideDelete,
         isHideEdit,
-        isHideActions
+        isHideActions,
+        from,
+        approval_slug
     })
-
-
 
     useEffect(() => {
         const fetchData = async () => {

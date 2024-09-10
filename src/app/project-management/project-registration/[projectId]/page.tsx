@@ -21,13 +21,13 @@ import Purpose from "../../fragments/purpose";
 import ApprovalWrapper from "@/components/wrappers/approval.wrapper";
 import ApprovalComponent from "@/components/page-components/approval-component";
 import { useApprovalHook } from "@/hooks/useApprove";
+import {PROJECT_APPROVAL_SLUG} from "@/utils/constant";
 
 const ProjectShow = ({ params }: { params: { projectId: string } }) => {
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
     const token = getValueFromLocalStorage('token')
     const id = params.projectId
-    const approval_name = "project_approval"
     const router = useRouter()
     const {
         isApproved,
@@ -36,16 +36,13 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
         isLastLevel,
         approveStatus,
         isMyLevelApproved,
+        latestApproveStatus,
         approvalButtonsWrapper,
     } = useApprovalHook({
-        approval_slug: approval_name,
+        approval_slug: PROJECT_APPROVAL_SLUG,
         from: 'project',
         from_id: id
     })
-
-    useEffect(() => {
-
-    }, [isApproved, isLastLevel])
 
     // console.log('isApproved', isApproved)
     // console.log('isLastApproval', isLastLevel)
@@ -195,7 +192,7 @@ const ProjectShow = ({ params }: { params: { projectId: string } }) => {
                                 OptionalElement={approvalButtonsWrapper()}
                             />
                         </MuiCardComponent>
-                        {(!isNeedApprove || (isLastLevel && isApproved)) && (
+                        {(!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve' )) && (
                             <MuiCardComponent>
                                 <MuiTab
                                     columns={[

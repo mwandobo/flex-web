@@ -15,6 +15,8 @@ interface Props {
     isHideDelete?: boolean;
     isHideEdit?: boolean;
     isHideActions?: boolean;
+    from?: string;
+    approval_slug?: string;
 }
 
 export const usePopulateTable = ({
@@ -26,7 +28,9 @@ export const usePopulateTable = ({
                                      isHideShow,
                                      isHideDelete,
                                      isHideEdit,
-                                     isHideActions
+                                     isHideActions,
+    approval_slug,
+    from
                                  }: Props) => {
     const createRowHeader = () => {
         let newColumns: any[] = []
@@ -70,9 +74,7 @@ export const usePopulateTable = ({
 
         if (data && data.length > 0) {
             newData = data.map(obj => {
-                const {isApproved, isAnyLevelApproved, approveStatus} = getApprovals('project_approval', 'project', obj?.id)
-                console.log(obj.name, "isAnyLevelApproved", isAnyLevelApproved )
-                console.log(obj.name, 'approveStatus', approveStatus)
+                const { isAnyLevelApproved, latestApproveStatus,} = getApprovals(approval_slug, from, obj?.id)
                 if (obj.has_url) {
                     obj = {
                         ...obj,
@@ -117,8 +119,8 @@ export const usePopulateTable = ({
                     show_assign={show_assign}
                     permission={permission}
                     hide_view={isHideShow}
-                    hide_edit={isHideDelete || (isAnyLevelApproved && approveStatus === 'approve')}
-                    hide_delete={isHideDelete ||  (isAnyLevelApproved && approveStatus === 'approve')}
+                    hide_edit={isHideDelete || (isAnyLevelApproved && latestApproveStatus === 'approve')}
+                    hide_delete={isHideDelete ||  (isAnyLevelApproved && latestApproveStatus === 'approve')}
                 />
 
                 return sortObjectValuesByHeaders(obj, createRowHeaderArray())
