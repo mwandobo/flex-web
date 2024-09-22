@@ -1,7 +1,6 @@
 "use client"
 
-import { getValueFromLocalStorage, setValueLocalStorage } from '@/utils/actions/local-starage';
-import { createContext, useReducer, ReactNode, useState, useEffect } from 'react';
+import { createContext, useReducer, ReactNode } from 'react';
 
 interface PlanningCountProps {
     goals: number,
@@ -27,9 +26,13 @@ interface SelectedMonitoringItemProps {
     expandedItem: string
 }
 
-
 interface evaluationForm {
     data: any[]
+}
+
+interface viewedItem {
+    id: string,
+    from: string
 }
 
 type State = {
@@ -38,14 +41,13 @@ type State = {
     planningSelectedCard: PlanningSelectedCardProps;
     selectedMonitoringItem: SelectedMonitoringItemProps;
     evaluationForm: evaluationForm
+    selectedSubSidebarItem: string
+    viewedItem: viewedItem
 };
-
-
 
 type Action = {
     type: string;
     payload: any;
-
 };
 
 type Dispatch = (action: Action) => void;
@@ -66,20 +68,27 @@ const initialPlanning: PlanningCountProps = {
 const initialSelectedMonitoringItem: SelectedMonitoringItemProps = {
     selected: '',
     expandedItem: '',
-
 }
+
+const initialViewedItem: viewedItem = {
+    id: '',
+    from: ''
+}
+
 
 const initialEvaluationForm: evaluationForm = {
     data: [],
 }
-
 
 const initialState: State = {
     currentUser: null,
     planningCount: initialPlanning,
     planningSelectedCard: initialPlanningSelectedCard,
     selectedMonitoringItem: initialSelectedMonitoringItem,
-    evaluationForm: initialEvaluationForm
+    evaluationForm: initialEvaluationForm,
+    selectedSubSidebarItem: '',
+    viewedItem: initialViewedItem
+
 };
 
 export const GlobalContext = createContext<{ state: State; dispatch: Dispatch }>({
@@ -162,6 +171,16 @@ export const updateContextReducer = (state: State, action: Action): State => {
                     ...state.evaluationForm,
                     data: action.payload,
                 },
+            };
+        case 'SET_SUB_SIDEBAR_ITEM':
+            return {
+                ...state,
+                selectedSubSidebarItem: action.payload
+            };
+        case 'SET_SUB_VIEW_ITEM':
+            return {
+                ...state,
+                viewedItem: action.payload
             };
         default:
             return state;

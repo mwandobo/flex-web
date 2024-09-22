@@ -29,47 +29,57 @@ const ChangePasswordPage = ({ params }: { params: { userId: string } }) => {
 
     async function handleSubmit() {
         try {
-            setLoading(!loading)
+            setLoading(true);
 
+            // Validate inputs using regular flow control
             if (!new_password) {
-                throw ('new_password Not Found')
+                return Swal.fire({
+                    title: 'Error Occured!',
+                    text: 'New password not found',
+                    icon: 'error',
+                }).then(() => setLoading(false));
             }
 
             if (!new_password_confirmation) {
-                throw ('new_password_confirmation Not Found')
+                return Swal.fire({
+                    title: 'Error Occured!',
+                    text: 'New password confirmation not found',
+                    icon: 'error',
+                }).then(() => setLoading(false));
             }
 
             if (new_password !== new_password_confirmation) {
-                throw ('password mismatch')
+                return Swal.fire({
+                    title: 'Error Occured!',
+                    text: 'Password mismatch',
+                    icon: 'error',
+                }).then(() => setLoading(false));
             }
 
-            try {
-                const response = await post<any>('user/changePassword', {
-                    new_password, new_password_confirmation, user_id: userId
-                })
+            // Attempt the API call
+            const response = await post<any>('user/changePassword', {
+                new_password, new_password_confirmation, user_id: userId
+            });
 
-                if (response.status === 200) {
-                    const user = response?.data?.user
-                    setLoading(!loading)
-
-                    router.push(`change-password?email=${email}`)
-                }
-            }
-            catch (error) {
-                const message = error.response.data.message ?? error.message
-                throw message
+            if (response.status === 200) {
+                setLoading(false);
+                router.push('login');
             }
         } catch (error) {
+            const message = error?.response?.data?.message || error.message || 'Unknown error occurred';
 
+            // Show error alert
             Swal.fire({
                 title: 'Error Occured!',
-                text: error,
+                text: message,
                 icon: 'error',
-            }).then(() => setLoading(false))
+            }).then(() => setLoading(false));
 
             console.error(error);
         }
     }
+
+
 
     return (
 

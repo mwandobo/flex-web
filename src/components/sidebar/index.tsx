@@ -165,6 +165,35 @@ const items: ISidebarItem[] = [
         ]
     },
     {
+        name: 'Inventory',
+        path: '/inventory',
+        permission: 'inventory-list',
+        icon: Book,
+        // items: [
+        //     {
+        //         name: 'Requisition Request',
+        //         path: '/procurement/requisition-request',
+        //         permission: 'requisition-request-list',
+        //         icon: Table
+        //     },
+        // ]
+    },
+    {
+        name: 'Procurement',
+        path: '/procurement',
+        permission: 'procurement-list',
+        icon: Book,
+        // items: [
+        //     {
+        //         name: 'Requisition Request',
+        //         path: '/procurement/requisition-request',
+        //         permission: 'requisition-request-list',
+        //         icon: Table
+        //     },
+        // ]
+    },
+
+    {
         name: 'Settings',
         path: '/settings',
         permission: 'settings-list',

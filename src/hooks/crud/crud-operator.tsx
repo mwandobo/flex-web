@@ -4,6 +4,7 @@ import {useRouter} from "next/navigation"
 import {useEffect, useState} from "react"
 import {useCrudFormCreator} from "./form-creator"
 import {setValueLocalStorage} from "@/utils/actions/local-starage"
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 
 interface Props {
     formInputData: any[],
@@ -15,6 +16,7 @@ interface Props {
     selectedViewCard?: string,
     emailNotificationBody?: any
     from?: string
+    isApiV2?: boolean
 }
 
 export const useCrudOperator = (
@@ -28,6 +30,7 @@ export const useCrudOperator = (
         selectedViewCard,
         from,
         emailNotificationBody: incomingEmailNotificationBody,
+        isApiV2
     }: Props
 ) => {
     const router = useRouter()
@@ -42,7 +45,10 @@ export const useCrudOperator = (
     const [emailNotificationBody, setEmailNotificationBody] = useState(incomingEmailNotificationBody)
     const [isButtonDisabled, setIsButtonDisabled] = useState(false)
     const [isForm, setIsForm] = useState(true)
+    const {state, dispatch} = useGlobalContextHook()
     const onCloseModal = () => setIsModalOpen(false)
+
+
 
     const formPayload: any = {
         isModalOpen: isModalOpen,
@@ -115,7 +121,7 @@ export const useCrudOperator = (
             setModalTitle(`Create ${incomingModalTitle}`)
             setIsForm(true)
             setOnSaveButtonName('Save')
-            setUrl(`${incomingUrl}/store`)
+            setUrl(!isApiV2 ? `${incomingUrl}/store`: incomingUrl )
             setHttpMethod('post')
             handleNotificationPayload('create')
         }
@@ -127,14 +133,14 @@ export const useCrudOperator = (
             setIsForm(true)
             setOnSaveButtonName('Save')
             setSelected(payload)
-            setUrl(`${incomingUrl}/update/${payload?.id}`)
+            setUrl(!isApiV2 ?`${incomingUrl}/update/${payload?.id}`:`${incomingUrl}/${payload?.id}` )
             setHttpMethod('put')
             handleNotificationPayload('edit')
         }
 
         if (type.toLowerCase() === 'delete') {
             setIsModalOpen(true)
-            setUrl(`${incomingUrl}/delete/${payload?.id}`)
+            setUrl(!isApiV2 ?`${incomingUrl}/delete/${payload?.id}`:`${incomingUrl}/${payload?.id}` )
             setHttpMethod('delete')
             setModalTitle(`Delete ${incomingModalTitle}`)
             setIsForm(false)
@@ -146,8 +152,12 @@ export const useCrudOperator = (
         if (type.toLowerCase() === 'show') {
             handleNotificationPayload("show")
 
+            if(isApiV2){
+                dispatch({type: "SET_SUB_VIEW_ITEM", payload: {id: payload?.id, from} })
+                setValueLocalStorage('sub_view_item', JSON.stringify({id: payload?.id, from}))
+                return
+            }
             if (callBackFunction) {
-
                 if (selectedViewCard === 'goal/show') {
                     callBackFunction('goal/show', payload?.id)
                 } else if (selectedViewCard === 'outcome/show') {

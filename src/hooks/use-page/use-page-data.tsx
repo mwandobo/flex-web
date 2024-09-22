@@ -1,12 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react";
-import { get } from "@/utils/api";
-import { useCrudOperator } from "../crud/crud-operator";
-import { usePopulateTable } from "../data-populate/populate-table";
-import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
-import { useRouter } from "next/navigation";
-import { gracefulApprovalUpdater} from "@/utils/actions/update-approvals.helper";
+import {useState, useEffect} from "react";
+import {get} from "@/utils/api";
+import {useCrudOperator} from "../crud/crud-operator";
+import {usePopulateTable} from "../data-populate/populate-table";
+import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
+import {useRouter} from "next/navigation";
+import {gracefulApprovalUpdater} from "@/utils/actions/update-approvals.helper";
 
 interface Props {
     columns?: any[]
@@ -30,30 +30,31 @@ interface Props {
     tableData?: any[]
     from?: string
     approval_slug?: string
+    isApiV2?: boolean
 }
 
 export const usePageData = ({
-    columns,
-    formInputs,
-    url,
-    modalTitle,
-    viewUrl,
-    state_properties,
-    callBackFunction,
-    planningCallbackFunction,
-    selectedViewCard,
-    show_assign,
-    permission,
-    isHideShow,
-    isHideDelete,
-    isHideEdit,
-    emailNotificationBody,
-    isHideActions,
-    tableData,
-    from,
+                                columns,
+                                formInputs,
+                                url,
+                                modalTitle,
+                                viewUrl,
+                                state_properties,
+                                callBackFunction,
+                                planningCallbackFunction,
+                                selectedViewCard,
+                                show_assign,
+                                permission,
+                                isHideShow,
+                                isHideDelete,
+                                isHideEdit,
+                                emailNotificationBody,
+                                isHideActions,
+                                tableData,
+                                from,
+                                isApiV2,
                                 approval_slug
-}: Props
-
+                            }: Props
 ) => {
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState<any[]>([])
@@ -77,10 +78,11 @@ export const usePageData = ({
         selectedViewCard,
         callBackFunction,
         emailNotificationBody,
-        from
+        from,
+        isApiV2
     })
 
-    const { tabular } = usePopulateTable({
+    const {tabular} = usePopulateTable({
         columns: columns,
         data: data,
         handleClick: handleClick,
