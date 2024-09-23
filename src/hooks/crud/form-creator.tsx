@@ -249,7 +249,7 @@ export const useCrudFormCreator = ({
                     }
                 }
             }
-            if (response?.status === 200) {
+            if (response?.status === 200 ) {
                 await gracefulApprovalUpdater(from)
 
                 if (emailNotificationBody &&

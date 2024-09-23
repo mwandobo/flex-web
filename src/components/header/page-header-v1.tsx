@@ -7,16 +7,18 @@ interface Props {
     handleClick?: (type: string) => void
     isShowAddButton?: boolean
     isShowBackButton?:boolean
+    fontSize?: string
 }
 
 const PageHeader = ({
                         title,
                         isShowAddButton,
                         handleClick,
-                        isShowBackButton
+                        isShowBackButton,
+                        fontSize
                     }: Props) => {
     return <div className='flex justify-between items-center p-2'>
-        <h4 className="text-sm font-semibold">{title}</h4>
+        <h4 className="text-sm font-semibold" style={{fontSize}}>{title}</h4>
         {isShowAddButton &&
             < div className=''>
                 <ReusableButton
