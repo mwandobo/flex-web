@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 
-const SuppliersView = () => {
+const StoresView = () => {
 
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
@@ -21,7 +21,7 @@ const SuppliersView = () => {
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
 
-    const url = `suppliers/${id}`
+    const url = `stores/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
@@ -54,19 +54,22 @@ const SuppliersView = () => {
                     :
                     <>
                         <PageHeader
-                           title={'Supplier View'}
+                           title={'Store View'}
                            isShowBackButton={true}
                         />
                         <MuiCardComponent>
                             <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
-                                        { label: 'Supplier Name', value: data?.name },
-                                        { label: 'Supplier Phone', value: data?.phone },
-                                        { label: 'Supplier Email', value: data?.email },
-                                        { label: 'Supplier Categories', value: data?.category_name },
+                                        { label: 'Store Name', value: data?.name },
+                                        { label: 'Store Phone', value: data?.phone },
+                                        { label: 'Store Email ', value: data?.email },
+                                        { label: 'Store Address', value: data?.address },
+                                        { label: 'Store Keeper', value: data?.keeper_name },
+                                        { label: 'Store Manager', value: data?.manager_name },
+                                        { label: 'Description', value: data?.description },
                                     ]}
-                                    titleA={`Supplier`}
+                                    titleA={`Store`}
                                     titleB={` ${data?.name} `}
                                 />
                             </div>
@@ -78,4 +81,4 @@ const SuppliersView = () => {
     );
 };
 
-export default SuppliersView;
+export default StoresView;
