@@ -6,6 +6,7 @@ import MuiSelect from "../inputs/mui-select"
 import TextArea from "../inputs/text-area"
 import TextFieldComponent from "../inputs/text-field"
 import PopupModal from "../modal/popup-modal"
+import MuiMultiSelectSelect from "@/components/inputs/mui-multi-select";
 
 interface Props {
     isModalOpen: boolean,
@@ -86,6 +87,16 @@ const CrudFormComponent = ({
                                             />
                                         }
                                         {
+                                            item?.type === 'multi-select' && !item.isRemoved &&
+                                            <MuiMultiSelectSelect
+                                                optionsUrlData={item.optionsUrlData}
+                                                optionDataKey={item.optionDataKey}
+                                                from={item.name}
+                                                handleChange={handleInputChange}
+                                                value={item.value}
+                                            />
+                                        }
+                                        {
                                             item?.type === 'date' && !item.isRemoved &&
                                             <MuiDate
                                                 handleDateChange={handleInputChange}
@@ -114,6 +125,7 @@ const CrudFormComponent = ({
                                                 from={item.name}
                                                 label={item.label}
                                                 options={item.options}
+
                                             />
                                         }
 

@@ -8,6 +8,8 @@ import ItemsCategories from "@/app/inventory/items-categories/items-categories";
 import ItemsCategoryView from "@/app/inventory/items-categories/items-category-view";
 import Items from "@/app/inventory/items/items";
 import ItemsView from "@/app/inventory/items/items-view";
+import Suppliers from "@/app/inventory/suppliers/suppliers";
+import SuppliersView from "@/app/inventory/suppliers/suppliers-view";
 
 function Inventory() {
     const {state, dispatch} = useGlobalContextHook()
@@ -23,7 +25,8 @@ function Inventory() {
 
     const pageItems = [
         {'name': 'item-categories', item: <ItemsCategories/>, itemView: <ItemsCategoryView/>, title: "Item Categories"},
-        {'name': 'items', item: <Items/>, itemView: <ItemsView/> , title: "Items"}
+        {'name': 'items', item: <Items/>, itemView: <ItemsView/> , title: "Items"},
+        {'name': 'suppliers', item: <Suppliers/>, itemView: <SuppliersView/> , title: "Suppliers"}
     ]
 
     return (

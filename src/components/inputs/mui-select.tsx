@@ -43,8 +43,6 @@ const MuiSelect = ({
     { label: "Constraint", value: "assumption" }
   ]
 
-
-
   const [options, setOptions] = useState<any[]>([]);
   const token = getValueFromLocalStorage('token')
 

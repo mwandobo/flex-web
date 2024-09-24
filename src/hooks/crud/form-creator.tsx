@@ -1,10 +1,11 @@
 import CrudFormComponent from "@/components/forms/crud.form.component"
-import { getValueFromLocalStorage } from "@/utils/actions/local-starage"
-import { send_email } from "@/utils/actions/send-email"
-import { post, put, remove } from "@/utils/api"
-import { useEffect, useState } from "react"
+import {getValueFromLocalStorage} from "@/utils/actions/local-starage"
+import {send_email} from "@/utils/actions/send-email"
+import {post, put, remove} from "@/utils/api"
+import {useEffect, useState} from "react"
 import Swal from "sweetalert2"
 import {gracefulApprovalUpdater} from "@/utils/actions/update-approvals.helper";
+
 interface Props {
     isModalOpen: boolean
     onCloseModal: () => void
@@ -23,20 +24,20 @@ interface Props {
 }
 
 export const useCrudFormCreator = ({
-    isModalOpen,
-    onCloseModal,
-    onSaveButtonName = 'save',
-    modalTitle,
-    url,
-    httpMethod,
-    modalBodyArray,
-    modalBodyString,
-    isButtonDisabled,
-    isForm,
-    state_properties = [],
-    emailNotificationBody,
-    from
-}: Props) => {
+                                       isModalOpen,
+                                       onCloseModal,
+                                       onSaveButtonName = 'save',
+                                       modalTitle,
+                                       url,
+                                       httpMethod,
+                                       modalBodyArray,
+                                       modalBodyString,
+                                       isButtonDisabled,
+                                       isForm,
+                                       state_properties = [],
+                                       emailNotificationBody,
+                                       from
+                                   }: Props) => {
     const createPayload = (body: any[]) => {
         const payload: any = {};
         body?.forEach((input) => {
@@ -82,7 +83,7 @@ export const useCrudFormCreator = ({
                 splited[1] = value
                 const joined = splited.join('/')
 
-                return { ...payload, optionsUrlData: joined }
+                return {...payload, optionsUrlData: joined}
             }
             return input
         });
@@ -92,19 +93,19 @@ export const useCrudFormCreator = ({
         return formInputs?.map((input) => {
             if (Number(value) === 8) {
                 if (input.name === 'amount' || input.name === 'currency_id') {
-                    return { ...input, isRemoved: false }
+                    return {...input, isRemoved: false}
                 }
                 if (input.name === 'name') {
-                    return { ...input, isRemoved: true }
+                    return {...input, isRemoved: true}
                 }
                 return input
             }
             if (Number(value) === 11) {
                 if (input.name === 'name') {
-                    return { ...input, isRemoved: false }
+                    return {...input, isRemoved: false}
                 }
                 if (input.name === 'amount' || input.name === 'currency_id') {
-                    return { ...input, isRemoved: true }
+                    return {...input, isRemoved: true}
                 }
                 return input
             }
@@ -116,20 +117,20 @@ export const useCrudFormCreator = ({
         return formInputs?.map((input) => {
             if (Number(value) === 17) {
                 if (input.name === 'personnel_id') {
-                    return { ...input, isRemoved: false }
+                    return {...input, isRemoved: false}
                 }
                 if (input.name === 'dept_id') {
-                    return { ...input, isRemoved: true }
+                    return {...input, isRemoved: true}
                 }
 
                 return input
             }
             if (Number(value) === 18) {
                 if (input.name === 'dept_id') {
-                    return { ...input, isRemoved: false }
+                    return {...input, isRemoved: false}
                 }
                 if (input.name === 'personnel_id') {
-                    return { ...input, isRemoved: true }
+                    return {...input, isRemoved: true}
                 }
                 return input
             }
@@ -138,23 +139,23 @@ export const useCrudFormCreator = ({
     };
 
     const sideUpdatePayloadResource = (value?: string) => {
-      return formInputs?.map((input) => {
+        return formInputs?.map((input) => {
             if (Number(value) === 23) {
                 if (input.name === 'personnel_id') {
-                    return { ...input, isRemoved: false }
+                    return {...input, isRemoved: false}
                 }
                 if (input.name === 'quantity' || input.name === 'name') {
-                    return { ...input, isRemoved: true }
+                    return {...input, isRemoved: true}
                 }
 
                 return input
             }
             if (Number(value) === 6) {
                 if (input.name === 'quantity' || input.name === 'name') {
-                    return { ...input, isRemoved: false }
+                    return {...input, isRemoved: false}
                 }
                 if (input.name === 'personnel_id') {
-                    return { ...input, isRemoved: true }
+                    return {...input, isRemoved: true}
                 }
                 return input
             }
@@ -167,7 +168,7 @@ export const useCrudFormCreator = ({
 
         if (clear === 'clear') {
             // Clear all inputs
-            newfoundInputs = newfoundInputs.map(input => ({ ...input, value: '' }));
+            newfoundInputs = newfoundInputs.map(input => ({...input, value: ''}));
         }
 
         if (error === 'error') {
@@ -194,7 +195,7 @@ export const useCrudFormCreator = ({
         if (from) {
             newfoundInputs = newfoundInputs.map(input => {
                 if (input.name === from) {
-                    return { ...input, value: value }
+                    return {...input, value: value}
                 }
                 return input
             });
@@ -249,7 +250,7 @@ export const useCrudFormCreator = ({
                     }
                 }
             }
-            if (response?.status === 200 ) {
+            if ([200, 201].includes(response?.status)) {
                 await gracefulApprovalUpdater(from)
 
                 if (emailNotificationBody &&
@@ -257,7 +258,7 @@ export const useCrudFormCreator = ({
                     emailNotificationBody['code'] === 'create-employee' &&
                     emailNotificationBody['operation'] === 'create'
                 ) {
-                    const emailBody = { ...emailNotificationBody, id: response?.data?.data?.id }
+                    const emailBody = {...emailNotificationBody, id: response?.data?.data?.id}
                     sendEmail(emailBody)
                 }
                 setIsStateChanged(!isStateChanged)

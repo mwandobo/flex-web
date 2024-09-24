@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 
-const ItemsView = () => {
+const SuppliersView = () => {
 
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
@@ -21,7 +21,7 @@ const ItemsView = () => {
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
 
-    const url = `item/${id}`
+    const url = `suppliers/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
@@ -61,11 +61,10 @@ const ItemsView = () => {
                             <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
-                                        { label: 'Item Name', value: data?.name },
-                                        { label: 'Item Category', value: data?.category_name },
-                                        { label: 'Quantity', value: data?.quantity },
-                                        { label: 'Price', value: data?.price },
-                                        { label: 'Description', value: data?.description },
+                                        { label: 'Supplier Name', value: data?.name },
+                                        { label: 'Supplier Phone', value: data?.phone },
+                                        { label: 'Supplier Email', value: data?.email },
+                                        { label: 'Supplier Categories', value: data?.category_name },
                                     ]}
                                     titleA={`Approval`}
                                     titleB={` ${data?.name} `}
@@ -79,4 +78,4 @@ const ItemsView = () => {
     );
 };
 
-export default ItemsView;
+export default SuppliersView;

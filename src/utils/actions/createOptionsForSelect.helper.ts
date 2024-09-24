@@ -28,7 +28,12 @@ const CreateOptionsForselectHelper = (payload?: any[], from?: string, id?: strin
         })
     }
 
-
+    if (payload && payload.length && from === 'supplier-items-category') {
+        payload.map(item => {
+            const data = { name: item.name, value: item.id }
+            output.push(data)
+        })
+    }
 
     return output
 }
