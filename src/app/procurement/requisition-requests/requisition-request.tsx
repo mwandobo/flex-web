@@ -1,36 +1,37 @@
 "use client"
 
 import ProtectedRoute from '@/components/authentication/protected-route'
-import PageHeader from '@/components/header/page-header'
 import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
+import PageHeader from "@/components/header/page-header-v1";
+import {tr} from "date-fns/locale";
 
-const requisitionFormInputs = [
+const formInputs = [
     {
-        name: 'name',
+        name: 'formatted_code',
         type: 'text',
-        label: 'Name',
+        label: 'Code',
         value: '',
         required: true,
         isError: false,
         errorMessage: ''
     },
     {
-        name: 'sys_approval_id',
+        name: 'store',
         type: 'select',
-        label: 'Sytem Approval',
-        value: "",
-        optionsUrlData: 'approval/sys',
-        optionDataKey: "approvals",
+        label: 'Store',
+        value: '',
+        optionsUrlData: 'items-categories',
+        optionDataKey: 'departments',
         required: true,
         isError: false,
         errorMessage: ''
     },
     {
-        name: 'description',
-        type: 'textArea',
-        label: 'Description',
+        name: 'store_keeper',
+        type: 'text',
+        label: 'Store Keeper',
         value: '',
         required: true,
         isError: false,
@@ -40,27 +41,27 @@ const requisitionFormInputs = [
 
 const columns = [
     {
-        id: 'name',
+        id: 'code',
         numeric: false,
         disablePadding: false,
-        label: 'Approval Name',
+        label: 'Requisition Request Code',
     },
     {
-        id: 'sys_approval',
+        id: 'store',
         numeric: false,
         disablePadding: false,
-        label: 'System Approval Reference',
+        label: 'Store',
     },
     {
-        id: 'description',
+        id: 'keepeer',
         numeric: false,
         disablePadding: false,
-        label: 'Description',
+        label: 'Store Keeper',
     }
 ]
 
-function Departments() {
-    const permission = 'approvals'
+function RequisitionRequest() {
+    const permission = 'requisition-request-list'
 
     const {
         loading,
@@ -70,13 +71,14 @@ function Departments() {
 
     } = usePageData({
         columns: columns,
-        formInputs: requisitionFormInputs,
-        url: 'approval',
-        modalTitle: 'Approval',
-        viewUrl: '/admnistration/approvals/',
+        formInputs: formInputs,
+        url: 'requisition-request',
+        modalTitle: 'Requisition Request',
+        viewUrl: '/inventory/items-categories/',
         state_properties: [],
         permission: permission,
-        from: 'approvals'
+        isApiV2:true,
+        from: 'requisition-requests'
     })
 
     return (
@@ -87,10 +89,10 @@ function Departments() {
                         :
                         <>
                             <PageHeader
+                                title={"Requisition Requests"}
                                 handleClick={handleClick}
-                                links={[
-                                    { name: 'Approvals / List', linkTo: '/admnistration/approvals', permission: permission, isClickable: true },
-                                ]} />
+                                isShowAddButton={true}
+                               />
                             {tabular()}
                             {createdForm()}
                         </>
@@ -103,4 +105,4 @@ function Departments() {
     )
 }
 
-export default Departments
+export default RequisitionRequest

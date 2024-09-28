@@ -15,9 +15,10 @@ type PageItem = {
 type InventoryProps = {
   pageItems: PageItem[];
   title: string;
+  subtitle: string;
 };
 
-function InternalMenuSkeletonComponent({ pageItems, title }: InventoryProps) {
+function InternalMenuSkeletonComponent({ pageItems, title , subtitle}: InventoryProps) {
   const { state, dispatch } = useGlobalContextHook();
   const { selectedSubSidebarItem: selected, viewedItem } = state;
   const { id: viewId } = viewedItem;
@@ -36,7 +37,7 @@ function InternalMenuSkeletonComponent({ pageItems, title }: InventoryProps) {
           <div className="flex bg-white h-full ">
             {/* Sidebar */}
             <div className="flex flex-col w-48 mt-4 ml-4 p-2 border-r border-gray-200">
-              <h4 className="text-sm font-medium mb-2">Inventory Items</h4>
+              <h4 className="text-sm font-medium mb-2">{subtitle}</h4>
               <div className="flex flex-col h-full">
                 {pageItems.map((item, index) => (
                     <button

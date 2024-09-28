@@ -4,6 +4,7 @@ import Button from "../button";
 import { useRouter } from "next/navigation";
 import { getValueFromLocalStorage, removeValueFromLocalStorage } from "@/utils/actions/local-starage";
 import { useGlobalContextHook } from "@/hooks/useGlobalContextHook";
+import ProfileDropdown from "@/components/dropdown/profile-dropdown.component";
 
 function Header() {
     const router = useRouter();
@@ -47,17 +48,22 @@ function Header() {
     return (
         <nav className="w-full px-3 py-3 bg-white border-b border-gray-200">
             <div className="flex items-center justify-end">
-                <div className="me-4 text-xs">
-                    {
-                        !currentUser ? <div></div> :
-                            <div className="">
-                                <p>{`${currentUser?.first_name} ${currentUser?.last_name}`}</p>
-                                <p>{currentUser?.email}</p>
-                            </div>
-                    }
-                </div>
-                <Button text="Logout" onClick={handleLogout} />
+                {/*<div className="me-4 text-xs">*/}
+                {/*    {*/}
+                {/*        !currentUser ? <div></div> :*/}
+                {/*            <div className="">*/}
+                {/*                <p>{`${currentUser?.first_name} ${currentUser?.last_name}`}</p>*/}
+                {/*                <p>{currentUser?.email}</p>*/}
+                {/*            </div>*/}
+                {/*    }*/}
+                {/*</div>*/}
+                {/*<Button text="Logout" onClick={handleLogout} />*/}
+
+                <ProfileDropdown name={currentUser?.email} handleLogout={handleLogout}/>
+
             </div>
+
+
         </nav>
     );
 }

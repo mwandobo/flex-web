@@ -16,7 +16,7 @@ const InventoryItems = [
 ];
 
 function InventoryPage() {
-    return <InternalMenuSkeletonComponent pageItems={InventoryItems} title="Inventory Management" />;
+    return <InternalMenuSkeletonComponent pageItems={InventoryItems} title="Inventory Management"  subtitle="Inventory Items" />;
 }
 
 export default InventoryPage;

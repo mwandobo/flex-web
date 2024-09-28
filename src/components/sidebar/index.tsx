@@ -1,6 +1,31 @@
 "use client"
 
-import { Activity, Ligature, AlignHorizontalJustifyStart, Armchair, Book, FolderKanban, FolderOpenDot, Gauge, HardDrive, LayoutDashboard, LucideIcon, NotebookPen, RollerCoaster, Scale, Settings, Settings2, Table, User, UserCog, UserRound, UserRoundCog, Users, UserCheck } from 'lucide-react'
+import {
+    Activity,
+    Ligature,
+    AlignHorizontalJustifyStart,
+    Armchair,
+    Book,
+    FolderKanban,
+    FolderOpenDot,
+    Gauge,
+    HardDrive,
+    LayoutDashboard,
+    LucideIcon,
+    NotebookPen,
+    RollerCoaster,
+    Scale,
+    Settings,
+    Settings2,
+    Table,
+    User,
+    UserCog,
+    UserRound,
+    UserRoundCog,
+    Users,
+    UserCheck,
+    Bell
+} from 'lucide-react'
 import React from 'react'
 import SidebarItem from './item'
 import { checkPermissions } from '@/utils/actions/check-permissions'
@@ -169,28 +194,19 @@ const items: ISidebarItem[] = [
         path: '/inventory',
         permission: 'inventory-list',
         icon: Book,
-        // items: [
-        //     {
-        //         name: 'Requisition Request',
-        //         path: '/procurement/requisition-request',
-        //         permission: 'requisition-request-list',
-        //         icon: Table
-        //     },
-        // ]
     },
     {
         name: 'Procurement',
         path: '/procurement',
         permission: 'procurement-list',
         icon: Book,
-        // items: [
-        //     {
-        //         name: 'Requisition Request',
-        //         path: '/procurement/requisition-request',
-        //         permission: 'requisition-request-list',
-        //         icon: Table
-        //     },
-        // ]
+
+    },
+    {
+        name: 'Notifications',
+        path: '/notification',
+        permission: 'notification-list',
+        icon: Bell,
     },
 
     {
