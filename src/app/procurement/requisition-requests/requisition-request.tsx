@@ -41,19 +41,20 @@ const formInputs = [
 
 const columns = [
     {
-        id: 'code',
+        id: 'formatted_code',
         numeric: false,
         disablePadding: false,
         label: 'Requisition Request Code',
+        width: '20%'
     },
     {
-        id: 'store',
+        id: 'store_name',
         numeric: false,
         disablePadding: false,
         label: 'Store',
     },
     {
-        id: 'keepeer',
+        id: 'store_keeper',
         numeric: false,
         disablePadding: false,
         label: 'Store Keeper',

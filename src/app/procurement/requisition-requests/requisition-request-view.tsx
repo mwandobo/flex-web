@@ -21,7 +21,7 @@ const RequisitionRequestView = () => {
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
 
-    const url = `item/${id}`
+    const url = `requisition-request/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
@@ -62,12 +62,12 @@ const RequisitionRequestView = () => {
                                 <ViewCardComponent
                                     data={[
                                         { label: 'Requisition Request Code', value: data?.formatted_code },
-                                        { label: 'Store', value: data?.store },
-                                        { label: 'Store Keeper', value: data?.keeper },
+                                        { label: 'Store', value: data?.store_name },
+                                        { label: 'Store Keeper', value: data?.store_keeper },
                                         { label: 'Description', value: data?.description },
                                     ]}
                                     titleA={`Requisition Request`}
-                                    titleB={` ${data?.name} `}
+                                    titleB={` ${data?.formatted_code} `}
                                 />
                             </div>
                             <hr className="bg-gray-100" />
