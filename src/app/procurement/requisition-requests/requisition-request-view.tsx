@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
+import RequisitionRequestItem from "@/app/procurement/requisition-requests/requisition-request-items";
 
 const RequisitionRequestView = () => {
 
@@ -61,16 +62,22 @@ const RequisitionRequestView = () => {
                             <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
-                                        { label: 'Requisition Request Code', value: data?.formatted_code },
-                                        { label: 'Store', value: data?.store_name },
-                                        { label: 'Store Keeper', value: data?.store_keeper },
-                                        { label: 'Description', value: data?.description },
+                                        {label: 'Requisition Request Code', value: data?.formatted_code},
+                                        {label: 'Store', value: data?.store_name},
+                                        {label: 'Store Keeper', value: data?.store_keeper},
+                                        {label: 'Description', value: data?.description},
                                     ]}
                                     titleA={`Requisition Request`}
                                     titleB={` ${data?.formatted_code} `}
                                 />
+
                             </div>
-                            <hr className="bg-gray-100" />
+
+                            <hr className="bg-gray-100"/>
+                            <div className={'mt-2'}>
+                                <RequisitionRequestItem requisition_request_id={id}/>
+                            </div>
+
                         </MuiCardComponent>
                     </>
             }

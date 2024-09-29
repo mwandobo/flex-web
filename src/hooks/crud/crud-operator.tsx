@@ -1,7 +1,7 @@
 "use client"
 
 import {useRouter} from "next/navigation"
-import {useEffect, useState} from "react"
+import {ReactNode, useEffect, useState} from "react"
 import {useCrudFormCreator} from "./form-creator"
 import {setValueLocalStorage} from "@/utils/actions/local-starage"
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
@@ -17,6 +17,8 @@ interface Props {
     emailNotificationBody?: any
     from?: string
     isApiV2?: boolean
+    itHasCustomForm?: boolean
+    customForm?: ReactNode;
 }
 
 export const useCrudOperator = (
@@ -29,6 +31,8 @@ export const useCrudOperator = (
         callBackFunction,
         selectedViewCard,
         from,
+        itHasCustomForm,
+        customForm,
         emailNotificationBody: incomingEmailNotificationBody,
         isApiV2
     }: Props
@@ -48,8 +52,6 @@ export const useCrudOperator = (
     const {state, dispatch} = useGlobalContextHook()
     const onCloseModal = () => setIsModalOpen(false)
 
-
-
     const formPayload: any = {
         isModalOpen: isModalOpen,
         onCloseModal: onCloseModal,
@@ -64,7 +66,9 @@ export const useCrudOperator = (
         onSaveButtonName,
         payloadForEdit: selected,
         state_properties: state_properties,
-        emailNotificationBody: emailNotificationBody
+        emailNotificationBody: emailNotificationBody,
+        itHasCustomForm:itHasCustomForm,
+        customForm:customForm
     }
 
     const {

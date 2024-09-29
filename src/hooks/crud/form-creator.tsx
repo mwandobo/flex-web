@@ -2,7 +2,7 @@ import CrudFormComponent from "@/components/forms/crud.form.component"
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage"
 import {send_email} from "@/utils/actions/send-email"
 import {post, put, remove} from "@/utils/api"
-import {useEffect, useState} from "react"
+import {ReactNode, useEffect, useState} from "react"
 import Swal from "sweetalert2"
 import {gracefulApprovalUpdater} from "@/utils/actions/update-approvals.helper";
 
@@ -17,6 +17,8 @@ interface Props {
     modalBodyArray?: any[]
     modalBodyString?: string
     isButtonDisabled?: boolean
+    itHasCustomForm?: boolean
+    customForm?: ReactNode;
     isForm?: boolean
     state_properties: any[]
     isMultipart?: boolean,
@@ -32,6 +34,8 @@ export const useCrudFormCreator = ({
                                        httpMethod,
                                        modalBodyArray,
                                        modalBodyString,
+    itHasCustomForm,
+    customForm,
                                        isButtonDisabled,
                                        isForm,
                                        state_properties = [],
@@ -67,9 +71,9 @@ export const useCrudFormCreator = ({
 
     const handleInputChange = (e: any, from?: any, control_for?: string) => {
         try {
-            formData[from] = e.target.value
-            updateFormDataPayload(from, e.target.value, '', '', control_for)
-            setFormData(formData)
+                formData[from] = e.target.value
+                updateFormDataPayload(from, e.target.value, '', '', control_for)
+                setFormData(formData)
         } catch (error: any) {
             console.log(error)
         }
@@ -235,6 +239,7 @@ export const useCrudFormCreator = ({
 
     const handleSubmit = async () => {
         try {
+            console.log('here')
             setIsDisabled(true)
             let response;
             const token = getValueFromLocalStorage('token')
@@ -242,11 +247,12 @@ export const useCrudFormCreator = ({
                 response = await remove<any>(url, token)
             } else {
                 if (validator()) {
+                    let _formData = !itHasCustomForm ? formData : getValueFromLocalStorage('customFormData')
                     if (httpMethod === 'post') {
-                        response = await post<any>(url, formData, token)
+                        response = await post<any>(url, _formData, token)
                     }
                     if (httpMethod === 'put') {
-                        response = await put<any>(url, formData, token)
+                        response = await put<any>(url, _formData, token)
                     }
                 }
             }
@@ -303,6 +309,8 @@ export const useCrudFormCreator = ({
             isDisabled={isDisabled}
             modalBodyString={modalBodyString}
             onSaveButtonName={onSaveButtonName}
+            itHasCustomForm={itHasCustomForm}
+            customForm={customForm}
         />
     }
     return {

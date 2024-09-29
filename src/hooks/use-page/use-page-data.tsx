@@ -1,6 +1,6 @@
 "use client"
 
-import {useState, useEffect} from "react";
+import {useState, useEffect, ReactNode} from "react";
 import {get} from "@/utils/api";
 import {useCrudOperator} from "../crud/crud-operator";
 import {usePopulateTable} from "../data-populate/populate-table";
@@ -31,6 +31,8 @@ interface Props {
     from?: string
     approval_slug?: string
     isApiV2?: boolean
+    itHasCustomForm?: boolean
+    customForm?: ReactNode;
 }
 
 export const usePageData = ({
@@ -42,6 +44,8 @@ export const usePageData = ({
                                 state_properties,
                                 callBackFunction,
                                 planningCallbackFunction,
+                                itHasCustomForm,
+                                customForm,
                                 selectedViewCard,
                                 show_assign,
                                 permission,
@@ -79,7 +83,9 @@ export const usePageData = ({
         callBackFunction,
         emailNotificationBody,
         from,
-        isApiV2
+        isApiV2,
+        itHasCustomForm:itHasCustomForm,
+        customForm:customForm
     })
 
     const {tabular} = usePopulateTable({

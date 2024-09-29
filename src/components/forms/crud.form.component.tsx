@@ -7,6 +7,7 @@ import TextArea from "../inputs/text-area"
 import TextFieldComponent from "../inputs/text-field"
 import PopupModal from "../modal/popup-modal"
 import MuiMultiSelectSelect from "@/components/inputs/mui-multi-select";
+import { ReactNode } from "react"
 
 interface Props {
     isModalOpen: boolean,
@@ -14,6 +15,8 @@ interface Props {
     isButtonDisabled?: boolean,
     modalTitle?: string
     isForm?: boolean
+    itHasCustomForm?: boolean
+    customForm?: ReactNode; // React component to be rendered
     formInputs?: any[]
     handleInputChange?: (e: any, from?: any, control_for?: string) => void
     isDisabled?: boolean
@@ -35,7 +38,9 @@ const CrudFormComponent = ({
     isDisabled,
     modalBodyString,
     onSaveButtonName,
-    handleSubmit
+    handleSubmit,
+    itHasCustomForm,
+    customForm
 }: Props) => {
 
     return <PopupModal
@@ -53,85 +58,86 @@ const CrudFormComponent = ({
                         ?
                         <div className={`grid grid-cols-${Boolean(gridSize) ? 2 : 1} w-full gap-2`} style={{ gridTemplateColumns: `repeat(${gridSize ?? 1}, 1fr)`, gap: "10px" }}>
                             {
-                                formInputs && formInputs.length > 0 && formInputs?.map((item, index) => (
-                                    <div className="" key={index}>
-                                        {
-                                            item?.type === 'text' && !item.isRemoved &&
-                                            <TextFieldComponent
-                                                placeholder={item?.placeholder}
-                                                type={item.textType}
-                                                from={item?.name}
-                                                label={item?.label}
-                                                value={item.value}
-                                                onChange={handleInputChange}
-                                                isError={item.isError}
-                                                errorMessage={item.errorMessage}
-                                            />
-                                        }
+                                itHasCustomForm ? (
+                                    customForm
+                                ) : (
+                                    // If itHasCustomForm is false, map over formInputs
+                                    formInputs && formInputs.length > 0 && formInputs.map((item, index) => (
+                                        <div className="" key={index}>
+                                            {item?.type === 'text' && !item.isRemoved && (
+                                                <TextFieldComponent
+                                                    placeholder={item?.placeholder}
+                                                    type={item.textType}
+                                                    from={item?.name}
+                                                    label={item?.label}
+                                                    value={item.value}
+                                                    onChange={handleInputChange}
+                                                    isError={item.isError}
+                                                    errorMessage={item.errorMessage}
+                                                />
+                                            )}
 
-                                        {
-                                            item?.type === 'select' && !item.isRemoved &&
-                                            <MuiSelect
-                                                handleChange={handleInputChange}
-                                                from={item?.name}
-                                                label={item?.label}
-                                                optionsUrlData={item.optionsUrlData}
-                                                optionDataKey={item.optionDataKey}
-                                                control={item.control}
-                                                control_id={item.control_id}
-                                                control_for={item.control_for}
-                                                value={item.value}
-                                                error={item.errorMessage}
-                                                isDisabled={isDisabled}
+                                            {item?.type === 'select' && !item.isRemoved && (
+                                                <MuiSelect
+                                                    handleChange={handleInputChange}
+                                                    from={item?.name}
+                                                    label={item?.label}
+                                                    optionsUrlData={item.optionsUrlData}
+                                                    optionDataKey={item.optionDataKey}
+                                                    control={item.control}
+                                                    control_id={item.control_id}
+                                                    control_for={item.control_for}
+                                                    value={item.value}
+                                                    error={item.errorMessage}
+                                                    isDisabled={isDisabled}
+                                                />
+                                            )}
 
-                                            />
-                                        }
-                                        {
-                                            item?.type === 'multi-select' && !item.isRemoved &&
-                                            <MuiMultiSelectSelect
-                                                optionsUrlData={item.optionsUrlData}
-                                                optionDataKey={item.optionDataKey}
-                                                from={item.name}
-                                                handleChange={handleInputChange}
-                                                value={item.value}
-                                            />
-                                        }
-                                        {
-                                            item?.type === 'date' && !item.isRemoved &&
-                                            <MuiDate
-                                                handleDateChange={handleInputChange}
-                                                from={item?.name}
-                                                label={item?.label}
-                                                value={item.value}
-                                                minDate={item.minDate}
-                                                maxDate={item.maxDate}
-                                                defaultValue={item.defaultDate}
-                                                isDisabled={isDisabled}
-                                            />
-                                        }
-                                        {
-                                            item?.type === 'textArea' && !item.isRemoved &&
-                                            <TextArea
-                                                onChange={handleInputChange}
-                                                from={item?.name}
-                                                label={item?.label}
-                                                value={item.value}
-                                            />
-                                        }
-                                        {
-                                            item?.type === 'radio' && !item.isRemoved &&
-                                            <MuiRadioButtonsGroup
-                                                onChange={handleInputChange}
-                                                from={item.name}
-                                                label={item.label}
-                                                options={item.options}
+                                            {item?.type === 'multi-select' && !item.isRemoved && (
+                                                <MuiMultiSelectSelect
+                                                    optionsUrlData={item.optionsUrlData}
+                                                    optionDataKey={item.optionDataKey}
+                                                    from={item.name}
+                                                    handleChange={handleInputChange}
+                                                    value={item.value}
+                                                />
+                                            )}
 
-                                            />
-                                        }
+                                            {item?.type === 'date' && !item.isRemoved && (
+                                                <MuiDate
+                                                    handleDateChange={handleInputChange}
+                                                    from={item?.name}
+                                                    label={item?.label}
+                                                    value={item.value}
+                                                    minDate={item.minDate}
+                                                    maxDate={item.maxDate}
+                                                    defaultValue={item.defaultDate}
+                                                    isDisabled={isDisabled}
+                                                />
+                                            )}
 
-                                    </div>
-                                ))
+                                            {item?.type === 'textArea' && !item.isRemoved && (
+                                                <TextArea
+                                                    onChange={handleInputChange}
+                                                    from={item?.name}
+                                                    label={item?.label}
+                                                    value={item.value}
+                                                />
+                                            )}
+
+                                            {item?.type === 'radio' && !item.isRemoved && (
+                                                <MuiRadioButtonsGroup
+                                                    onChange={handleInputChange}
+                                                    from={item.name}
+                                                    label={item.label}
+                                                    options={item.options}
+                                                />
+                                            )}
+                                        </div>
+                                    ))
+                                )
                             }
+
                         </div>
                         :
                         <p>{modalBodyString}</p>
