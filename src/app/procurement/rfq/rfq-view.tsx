@@ -13,8 +13,9 @@ import RequisitionRequestItem from "@/app/procurement/requisition-requests/requi
 import {useCrudOperator} from "@/hooks/crud/crud-operator";
 import {ReusableButton} from "@/components/button/reusable-button";
 import {FileOutput} from "lucide-react";
+import RfqItems from "@/app/procurement/rfq/rfq-items";
 
-const RequisitionRequestView = () => {
+const RfqView = () => {
 
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
@@ -25,7 +26,7 @@ const RequisitionRequestView = () => {
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
 
-    const url = `requisition-request/${id}`
+    const url = `rfq/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
@@ -94,7 +95,7 @@ const RequisitionRequestView = () => {
     } = useCrudOperator({
         formInputData: formInputs,
         incomingUrl: `rfq/${id}/create-rfq`,
-        incomingModalTitle: "Request For  Quotation",
+        incomingModalTitle: "Request For Quotation",
         viewUrl:"",
         state_properties:[],
         from:'rfq',
@@ -129,35 +130,31 @@ const RequisitionRequestView = () => {
                     :
                     <>
                         <PageHeader
-                           title={'Requisition Request View'}
+                           title={'RFQ View'}
                            isShowBackButton={true}
                         />
                         <MuiCardComponent>
                             <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
-                                        {label: 'Requisition Request Code', value: data?.formatted_code},
-                                        {label: 'Store', value: data?.store_name},
-                                        {label: 'Store Keeper', value: data?.store_keeper},
-                                        {label: 'Description', value: data?.description},
+                                        {label: 'Request for Quotation Code', value: data?.formatted_code},
+                                        {label: 'Payment Method', value: data?.payment_method},
+                                        {label: 'Evaluation Method', value: data?.evaluation_method},
+                                        {label: 'Decision Timeline', value: data?.decision_timeline},
+                                        {label: 'Submission Requirement', value: data?.submission_requirement},
+                                        {label: 'Delivery Time', value: data?.delivery_time},
+                                        {label: 'Terms and Conditions', value: data?.terms_and_conditions},
+
                                     ]}
-                                    titleA={`Requisition Request`}
+                                    titleA={`RFQ`}
                                     titleB={` ${data?.formatted_code} `}
                                 />
                             </div>
                             <hr className="bg-gray-100"/>
                             <div className={'mt-2'}>
-                                <RequisitionRequestItem requisition_request_id={id}/>
+                                <RfqItems rfq_id={id}/>
                             </div>
 
-                            <div className="flex flex-col items-end">
-                                <ReusableButton
-                                    name={'Request for Quotation'}
-                                    onClick={() => handleClick('create')}
-                                >
-                                    <FileOutput size={12}/>
-                                </ReusableButton>
-                            </div>
                         </MuiCardComponent>
                         {createdForm()}
 
@@ -167,4 +164,4 @@ const RequisitionRequestView = () => {
     );
 };
 
-export default RequisitionRequestView;
+export default RfqView;

@@ -6,63 +6,39 @@ import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
 import {tr} from "date-fns/locale";
+import RequisitionFormComponent from "@/app/procurement/requisition-requests/components/requisition-form.component";
 
 const formInputs = [
-    {
-        name: 'formatted_code',
-        type: 'text',
-        label: 'Code',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
-        name: 'store',
-        type: 'select',
-        label: 'Store',
-        value: '',
-        optionsUrlData: 'items-categories',
-        optionDataKey: 'departments',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
-        name: 'store_keeper',
-        type: 'text',
-        label: 'Store Keeper',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
 ]
 
 const columns = [
     {
-        id: 'formatted_code',
+        id: 'name',
         numeric: false,
         disablePadding: false,
-        label: 'Requisition Request Code',
+        label: 'Item Name',
         width: '20%'
     },
     {
-        id: 'store_name',
+        id: 'price',
         numeric: false,
         disablePadding: false,
-        label: 'Store',
+        label: 'Price',
     },
     {
-        id: 'store_keeper',
+        id: 'requisition_quantity',
         numeric: false,
         disablePadding: false,
-        label: 'Store Keeper',
+        label: 'requested Quantity',
     }
 ]
 
-function RequisitionRequest() {
-    const permission = 'requisition-request-list'
+interface Props {
+    rfq_id: string
+}
+
+function RfqItems({rfq_id}: Props) {
+    const permission = 'rfq-item-list'
 
     const {
         loading,
@@ -73,13 +49,16 @@ function RequisitionRequest() {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'requisition-request',
-        modalTitle: 'Requisition Request',
+        url: `rfq/${rfq_id}/items`,
+        modalTitle: 'Rfq Item',
         viewUrl: '/inventory/items-categories/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'requisition-requests'
+        from: 'rfq-items',
+        itHasCustomForm: true,
+        customForm: <RequisitionFormComponent/>,
+        isHideShow:true
     })
 
     return (
@@ -90,9 +69,10 @@ function RequisitionRequest() {
                         :
                         <>
                             <PageHeader
-                                title={"Requisition Requests"}
+                                title={"RFQ Items"}
                                 handleClick={handleClick}
                                 isShowAddButton={false}
+
                                />
                             {tabular()}
                             {createdForm()}
@@ -106,4 +86,4 @@ function RequisitionRequest() {
     )
 }
 
-export default RequisitionRequest
+export default RfqItems

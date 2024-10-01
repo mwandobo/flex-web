@@ -1,4 +1,6 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, {AxiosResponse} from 'axios';
+import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
+
 // export const baseURL = 'https://flexprojectsapi.int.cits.co.tz/api';
 // export const nextBaseURL = 'https://flexprojects.int.cits.co.tz';
 export const baseURL = 'http://127.0.0.1:8000/api';
@@ -9,7 +11,8 @@ const api = axios.create({
 });
 
 export const config = (token: string | undefined | null) => {
-    const strippedToken = token?.substring(1, token.length - 1)
+    const _token = getValueFromLocalStorage('token')
+    const strippedToken = _token?.substring(1, _token.length - 1)
 
     return {
         headers: {
@@ -23,22 +26,19 @@ export const config = (token: string | undefined | null) => {
 
 // Define common request methods
 const get = async <T>(url?: string, token?: string | null): Promise<any> => {
-    const response = url && await api.get(url, config(token));
-    return response
+    return url && await api.get(url, config(token))
 };
 
 const post = async <T>(url: string, data: any, token?: string | null): Promise<any> => {
-    const response = await api.post(url, data, config(token)); return response;
+    return await api.post(url, data, config(token));
 };
 
 const put = async <T>(url: string, data: any, token?: string | null): Promise<any> => {
-    const response: AxiosResponse<T> = await api.put(url, data, config(token));
-    return response;
+    return await api.put(url, data, config(token));
 };
 
 const remove = async <T>(url: string, token?: string | null): Promise<any> => {
-    const response: AxiosResponse<T> = await api.delete(url, config(token));
-    return response;
+    return await api.delete(url, config(token));
 };
 
 export { get, post, put, remove };

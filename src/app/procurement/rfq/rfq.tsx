@@ -8,35 +8,6 @@ import PageHeader from "@/components/header/page-header-v1";
 import {tr} from "date-fns/locale";
 
 const formInputs = [
-    {
-        name: 'formatted_code',
-        type: 'text',
-        label: 'Code',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
-        name: 'store',
-        type: 'select',
-        label: 'Store',
-        value: '',
-        optionsUrlData: 'items-categories',
-        optionDataKey: 'departments',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
-        name: 'store_keeper',
-        type: 'text',
-        label: 'Store Keeper',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
 ]
 
 const columns = [
@@ -44,24 +15,41 @@ const columns = [
         id: 'formatted_code',
         numeric: false,
         disablePadding: false,
-        label: 'Requisition Request Code',
-        width: '20%'
+        label: 'RFQ Code',
     },
     {
-        id: 'store_name',
+        id: 'payment_method',
         numeric: false,
         disablePadding: false,
-        label: 'Store',
+        label: 'Payment Method',
     },
     {
-        id: 'store_keeper',
+        id: 'evaluation_method',
         numeric: false,
         disablePadding: false,
-        label: 'Store Keeper',
+        label: 'Evaluation Method',
+    },
+    {
+        id: 'decision_timeline',
+        numeric: false,
+        disablePadding: false,
+        label: 'Decision Timeline',
+    },
+    {
+        id: 'submission_requirement',
+        numeric: false,
+        disablePadding: false,
+        label: 'Submission Requirement',
+    },
+    {
+        id: 'delivery_time',
+        numeric: false,
+        disablePadding: false,
+        label: 'Deliver Time',
     }
 ]
 
-function RequisitionRequest() {
+function Rfq() {
     const permission = 'requisition-request-list'
 
     const {
@@ -73,13 +61,13 @@ function RequisitionRequest() {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'requisition-request',
-        modalTitle: 'Requisition Request',
-        viewUrl: '/inventory/items-categories/',
+        url: 'rfq',
+        modalTitle: 'Rfq',
+        viewUrl: '/procurement/rfq/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'requisition-requests'
+        from: 'rfq'
     })
 
     return (
@@ -106,4 +94,4 @@ function RequisitionRequest() {
     )
 }
 
-export default RequisitionRequest
+export default Rfq
