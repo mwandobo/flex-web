@@ -94,7 +94,7 @@ export default function MuiMultiSelectSelect({
                     input={<OutlinedInput label="Tag"/>}
                     renderValue={(selected) =>
                         selected
-                            .map(id => options.find(option => option.value === id)?.name) // Convert ID back to name for display
+                            .map(id => options.find(option => option.value === id)?.label) // Convert ID back to name for display
                             .join(', ')
                     }
                     MenuProps={MenuProps}
@@ -102,7 +102,7 @@ export default function MuiMultiSelectSelect({
                     {options?.length > 0 && options.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
                             <Checkbox checked={selected.includes(option.value)}/> {/* Compare by value (ID) */}
-                            <ListItemText primary={option.name}/> {/* Display the name */}
+                            <ListItemText primary={option.label}/> {/* Display the name */}
                         </MenuItem>
                     ))}
                 </Select>

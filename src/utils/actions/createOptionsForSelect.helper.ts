@@ -30,7 +30,22 @@ const CreateOptionsForselectHelper = (payload?: any[], from?: string, id?: strin
 
     if (payload && payload.length && from === 'supplier-items-category') {
         payload.map(item => {
-            const data = { name: item.name, value: item.id }
+            const data = { label: item.name, value: item.id }
+            output.push(data)
+        })
+    }
+
+    if (payload && payload.length && from === 'quotation-item') {
+        console.log("payload", payload)
+        payload.map(item => {
+            const data = { label: item.name, value: item.id }
+            output.push(data)
+        })
+    }
+
+    if (payload && payload.length && from === 'rfq') {
+        payload.map(item => {
+            const data = { label: item.formatted_code, value: item.id }
             output.push(data)
         })
     }

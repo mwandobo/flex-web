@@ -34,8 +34,8 @@ export const useCrudFormCreator = ({
                                        httpMethod,
                                        modalBodyArray,
                                        modalBodyString,
-    itHasCustomForm,
-    customForm,
+                                       itHasCustomForm,
+                                       customForm,
                                        isButtonDisabled,
                                        isForm,
                                        state_properties = [],
@@ -71,16 +71,17 @@ export const useCrudFormCreator = ({
 
     const handleInputChange = (e: any, from?: any, control_for?: string) => {
         try {
-                formData[from] = e.target.value
-                updateFormDataPayload(from, e.target.value, '', '', control_for)
-                setFormData(formData)
+            formData[from] = e.target.value
+            updateFormDataPayload(from, e.target.value, '', '', control_for)
+            setFormData(formData)
         } catch (error: any) {
             console.log(error)
         }
     };
 
     const sideUpdatePayload = (payload?: any, value?: string) => {
-        console.log(value)
+        console.log("payload", payload)
+        console.log("value", value)
         return formInputs?.map((input) => {
             if (input.name === payload.name) {
                 const splited = payload.optionsUrlData.split('/');
@@ -168,6 +169,8 @@ export const useCrudFormCreator = ({
     };
 
     const updateFormDataPayload = (from?: string, value?: string, clear?: string, error?: string, control_for?: string) => {
+        console.log("control_for", control_for)
+
         let newfoundInputs = [...formInputs]; // Copy the formInputs array
 
         if (clear === 'clear') {
@@ -182,6 +185,14 @@ export const useCrudFormCreator = ({
         if (control_for === 'sponsors') {
             const foundInput = formInputs.find(item => item.control === 'sponsor_type');
             newfoundInputs = sideUpdatePayload(foundInput, value); // Update inputs for sponsors
+        }
+
+        if (control_for === 'quotation-item') {
+            const foundInput = formInputs.find(item => item.control === 'quotation-item');
+            const selectUrl = foundInput.optionsUrlData
+            const split = selectUrl.split('/')
+            split[1] = value
+            foundInput.optionsUrlData = split.join('/')
         }
 
         if (control_for === 'sponsorship') {

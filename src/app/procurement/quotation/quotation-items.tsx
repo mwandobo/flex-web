@@ -26,24 +26,26 @@ const columns = [
         label: 'Price',
     },
     {
-        id: 'requisition_quantity',
+        id: 'rfq_quantity',
         numeric: false,
         disablePadding: false,
-        label: 'Requested Quantity',
+        label: 'RFQ Quantity',
     },
     {
         id: 'quantity',
         numeric: false,
         disablePadding: false,
-        label: 'RFQ Quantity',
+        label: 'Quotation Quantity',
     }
 ]
 
 interface Props {
-    rfq_id: string
+    quotation_id: string
 }
 
-function RfqItems({rfq_id}: Props) {
+function QuotationItems({quotation_id}: Props) {
+
+    console.log('quotation_id', quotation_id)
     const permission = 'rfq-item-list'
 
     const {
@@ -55,7 +57,7 @@ function RfqItems({rfq_id}: Props) {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: `rfq/${rfq_id}/items`,
+        url: `quotations/${quotation_id}/items`,
         modalTitle: 'Rfq Item',
         viewUrl: '/inventory/items-categories/',
         state_properties: [],
@@ -92,4 +94,4 @@ function RfqItems({rfq_id}: Props) {
     )
 }
 
-export default RfqItems
+export default QuotationItems
