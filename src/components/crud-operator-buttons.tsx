@@ -1,6 +1,6 @@
-import { CheckCircle2, EyeIcon, Pen, ShieldCheck, Trash2, X } from "lucide-react";
-import { ReusableButton } from "../button/reusable-button";
-import { checkPermissions } from "@/utils/actions/check-permissions";
+import {CheckCircle2, EyeIcon, Pen, ShieldCheck, Trash2, X} from "lucide-react";
+import {ReusableButton} from "./button/reusable-button";
+import {checkPermissions} from "@/utils/actions/check-permissions";
 
 interface Props {
     permission?: string;
@@ -12,20 +12,21 @@ interface Props {
     hide_delete?: boolean;
     hide_view?: boolean;
     show_assign?: boolean;
+    isShowAddPriceButton?: boolean;
 }
 
-
 const CrudButtonsComponent = ({
-    permission,
-    approval_name,
-    input,
-    handleClick,
-    hide_approve,
-    hide_delete,
-    hide_view,
-    hide_edit,
-    show_assign
-}: Props) => {
+                                  permission,
+                                  approval_name,
+                                  input,
+                                  handleClick,
+                                  hide_approve,
+                                  hide_delete,
+                                  hide_view,
+                                  hide_edit,
+                                  show_assign,
+                                  isShowAddPriceButton
+                              }: Props) => {
 
     const color = 'white';
     return <div className='p-0 m-0 inline-flex w-full gap-1'>
@@ -35,7 +36,7 @@ const CrudButtonsComponent = ({
                 text_color='text-dark'
                 onClick={() => handleClick && handleClick('assign', input)}
             >
-                <ShieldCheck size={10} color={color} />
+                <ShieldCheck size={10} color={color}/>
             </ReusableButton>
         }
         {!hide_view && checkPermissions(`${permission ? `${permission}-show` : ""}`) &&
@@ -44,7 +45,7 @@ const CrudButtonsComponent = ({
                 text_color='text-dark'
                 onClick={() => handleClick && handleClick('show', input)}
             >
-                <EyeIcon size={10} color={color} />
+                <EyeIcon size={10} color={color}/>
             </ReusableButton>
         }
         {
@@ -54,7 +55,7 @@ const CrudButtonsComponent = ({
                 text_color='text-dark'
                 onClick={() => handleClick && handleClick('approve', input)}
             >
-                <CheckCircle2 size={10} color={color} />
+                <CheckCircle2 size={10} color={color}/>
             </ReusableButton>
         }
         {
@@ -64,7 +65,7 @@ const CrudButtonsComponent = ({
                 text_color='text-dark'
                 onClick={() => handleClick && handleClick('disapprove', input)}
             >
-                <X size={10} color={'red'} />
+                <X size={10} color={'red'}/>
             </ReusableButton>
         }
         {
@@ -74,7 +75,7 @@ const CrudButtonsComponent = ({
                 text_color='text-dark'
                 onClick={() => handleClick && handleClick('delete', input)}
             >
-                <Trash2 size={10} color='red' />
+                <Trash2 size={10} color='red'/>
             </ReusableButton>}
 
         {
@@ -84,7 +85,16 @@ const CrudButtonsComponent = ({
                 text_color='text-dark'
                 onClick={() => handleClick && handleClick('edit', input)}
             >
-                <Pen size={10} color={color} />
+                <Pen size={10} color={color}/>
+            </ReusableButton>
+        }
+        {isShowAddPriceButton && checkPermissions(`${permission ? `${permission}-add-price` : ""}`) &&
+            <ReusableButton
+                name='Price'
+                text_color='text-dark'
+                onClick={() => handleClick && handleClick('add-price', input)}
+            >
+                <ShieldCheck size={10} color={color}/>
             </ReusableButton>
         }
     </div>

@@ -10,6 +10,7 @@ interface Props {
     isModalOpen: boolean
     onCloseModal: () => void
     onSaveButtonName?: string
+    isShowAddPriceButton?: boolean,
     modalTitle: string
     url: string
     httpMethod: string
@@ -39,6 +40,7 @@ export const useCrudFormCreator = ({
                                        isButtonDisabled,
                                        isForm,
                                        state_properties = [],
+                                       isShowAddPriceButton,
                                        emailNotificationBody,
                                        from
                                    }: Props) => {
@@ -80,8 +82,6 @@ export const useCrudFormCreator = ({
     };
 
     const sideUpdatePayload = (payload?: any, value?: string) => {
-        console.log("payload", payload)
-        console.log("value", value)
         return formInputs?.map((input) => {
             if (input.name === payload.name) {
                 const splited = payload.optionsUrlData.split('/');
@@ -169,8 +169,6 @@ export const useCrudFormCreator = ({
     };
 
     const updateFormDataPayload = (from?: string, value?: string, clear?: string, error?: string, control_for?: string) => {
-        console.log("control_for", control_for)
-
         let newfoundInputs = [...formInputs]; // Copy the formInputs array
 
         if (clear === 'clear') {
@@ -215,6 +213,7 @@ export const useCrudFormCreator = ({
                 return input
             });
         }
+
         setFormInputs(newfoundInputs);
     };
 
@@ -250,7 +249,9 @@ export const useCrudFormCreator = ({
 
     const handleSubmit = async () => {
         try {
-            console.log('here')
+            const add_price  = getValueFromLocalStorage('add-price')
+            console.log('add_price', add_price)
+
             setIsDisabled(true)
             let response;
             const token = getValueFromLocalStorage('token')
@@ -258,7 +259,7 @@ export const useCrudFormCreator = ({
                 response = await remove<any>(url, token)
             } else {
                 if (validator()) {
-                    let _formData = !itHasCustomForm ? formData : getValueFromLocalStorage('customFormData')
+                    let _formData = itHasCustomForm && !add_price ?  getValueFromLocalStorage('customFormData') : formData
                     if (httpMethod === 'post') {
                         response = await post<any>(url, _formData, token)
                     }
@@ -322,6 +323,7 @@ export const useCrudFormCreator = ({
             onSaveButtonName={onSaveButtonName}
             itHasCustomForm={itHasCustomForm}
             customForm={customForm}
+            isShowAddPriceButton={isShowAddPriceButton}
         />
     }
     return {

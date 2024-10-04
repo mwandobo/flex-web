@@ -1,5 +1,5 @@
-import { CheckCircle2 } from "lucide-react"
-import { ReusableButton } from "../button/reusable-button"
+import {CheckCircle2} from "lucide-react"
+import {ReusableButton} from "../button/reusable-button"
 import MuiDate from "../inputs/mui-date"
 import MuiRadioButtonsGroup from "../inputs/mui-radio"
 import MuiSelect from "../inputs/mui-select"
@@ -7,7 +7,8 @@ import TextArea from "../inputs/text-area"
 import TextFieldComponent from "../inputs/text-field"
 import PopupModal from "../modal/popup-modal"
 import MuiMultiSelectSelect from "@/components/inputs/mui-multi-select";
-import { ReactNode } from "react"
+import {ReactNode} from "react"
+import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 
 interface Props {
     isModalOpen: boolean,
@@ -24,24 +25,26 @@ interface Props {
     gridSize?: number
     onSaveButtonName?: string
     handleSubmit: () => void,
+    isShowAddPriceButton?: boolean,
 }
 
 const CrudFormComponent = ({
-    isModalOpen,
-    onCloseModal,
-    isButtonDisabled,
-    modalTitle,
-    isForm,
-    formInputs,
-    handleInputChange,
-    gridSize,
-    isDisabled,
-    modalBodyString,
-    onSaveButtonName,
-    handleSubmit,
-    itHasCustomForm,
-    customForm
-}: Props) => {
+                               isModalOpen,
+                               onCloseModal,
+                               isButtonDisabled,
+                               modalTitle,
+                               isForm,
+                               formInputs,
+                               handleInputChange,
+                               gridSize,
+                               isDisabled,
+                               modalBodyString,
+                               onSaveButtonName,
+                               handleSubmit,
+                               itHasCustomForm,
+                               customForm,
+                           }: Props) => {
+    const add_price = getValueFromLocalStorage('add-price')
 
     return <PopupModal
         isOpen={isModalOpen}
@@ -56,9 +59,10 @@ const CrudFormComponent = ({
                 {
                     isForm
                         ?
-                        <div className={`grid grid-cols-${Boolean(gridSize) ? 2 : 1} w-full gap-2`} style={{ gridTemplateColumns: `repeat(${gridSize ?? 1}, 1fr)`, gap: "10px" }}>
+                        <div className={`grid grid-cols-${Boolean(gridSize) ? 2 : 1} w-full gap-2`}
+                             style={{gridTemplateColumns: `repeat(${gridSize ?? 1}, 1fr)`, gap: "10px"}}>
                             {
-                                itHasCustomForm ? (
+                                itHasCustomForm && !add_price ? (
                                     customForm
                                 ) : (
                                     // If itHasCustomForm is false, map over formInputs
@@ -144,18 +148,18 @@ const CrudFormComponent = ({
                 }
 
             </>
-            < div className="flex justify-end" >
+            < div className="flex justify-end">
                 <ReusableButton
                     name={onSaveButtonName}
                     isDisabled={isDisabled}
                     onClick={handleSubmit}
                 >
-                    {!isDisabled && <CheckCircle2 size={13} />}
+                    {!isDisabled && <CheckCircle2 size={13}/>}
                 </ReusableButton>
             </div>
         </>
 
-    </PopupModal >
+    </PopupModal>
 }
 
 export default CrudFormComponent

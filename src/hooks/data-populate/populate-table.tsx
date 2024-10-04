@@ -16,6 +16,7 @@ interface Props {
     isHideDelete?: boolean;
     isHideEdit?: boolean;
     isHideActions?: boolean;
+    isShowAddPriceButton?: boolean;
     from?: string;
     approval_slug?: string;
 }
@@ -30,6 +31,7 @@ export const usePopulateTable = ({
                                      isHideDelete,
                                      isHideEdit,
                                      isHideActions,
+                                     isShowAddPriceButton,
                                      approval_slug,
                                      from
                                  }: Props) => {
@@ -118,6 +120,7 @@ export const usePopulateTable = ({
                     handleClick={handleClick}
                     input={obj}
                     show_assign={show_assign}
+                    isShowAddPriceButton={isShowAddPriceButton}
                     permission={permission}
                     hide_view={isHideShow}
                     hide_edit={isHideDelete || (isAnyLevelApproved && latestApproveStatus === 'approve')}

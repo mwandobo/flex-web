@@ -19,6 +19,7 @@ interface Props {
     isApiV2?: boolean
     itHasCustomForm?: boolean
     customForm?: ReactNode;
+    isShowAddPriceButton?: boolean,
 }
 
 export const useCrudOperator = (
@@ -33,6 +34,7 @@ export const useCrudOperator = (
         from,
         itHasCustomForm,
         customForm,
+        isShowAddPriceButton,
         emailNotificationBody: incomingEmailNotificationBody,
         isApiV2
     }: Props
@@ -68,7 +70,8 @@ export const useCrudOperator = (
         state_properties: state_properties,
         emailNotificationBody: emailNotificationBody,
         itHasCustomForm:itHasCustomForm,
-        customForm:customForm
+        customForm:customForm,
+        isShowAddPriceButton,
     }
 
     const {
@@ -126,6 +129,17 @@ export const useCrudOperator = (
             setIsForm(true)
             setOnSaveButtonName('Save')
             setUrl(!isApiV2 ? `${incomingUrl}/store`: incomingUrl )
+            setHttpMethod('post')
+            handleNotificationPayload('create')
+        }
+
+        if (type.toLowerCase() === 'add-price') {
+            setIsModalOpen(true)
+            setModalTitle(`Add Price to Item ${payload?.name}`)
+            setUrl(!isApiV2 ?`${incomingUrl}/update/${payload?.id}`:`${incomingUrl}/${payload?.id}/add-price`)
+            setIsForm(true)
+            setValueLocalStorage('add-price', 'add-price')
+            setOnSaveButtonName('Save')
             setHttpMethod('post')
             handleNotificationPayload('create')
         }

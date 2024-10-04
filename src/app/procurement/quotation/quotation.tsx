@@ -98,6 +98,64 @@ const formInputs = [
     },
 ]
 
+const addformInputs = [
+
+    {
+        name: 'payment_method',
+        type: 'text',
+        label: 'Payment Method',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'evaluation_method',
+        type: 'text',
+        label: 'Evaluation Method',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'decision_timeline',
+        type: 'text',
+        label: 'Decision Timeline',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'submission_requirement',
+        type: 'text',
+        label: 'Submission Requirement',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'delivery_time',
+        type: 'text',
+        label: 'Deliver Time',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'terms_and_conditions',
+        type: 'textArea',
+        label: 'Terms and Conditions',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+]
+
 
 const columns = [
     {

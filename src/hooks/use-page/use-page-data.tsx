@@ -11,6 +11,8 @@ import {gracefulApprovalUpdater} from "@/utils/actions/update-approvals.helper";
 interface Props {
     columns?: any[]
     formInputs?: any[]
+    isShowAddPriceButton?: boolean
+    addPriceFormInputData?: any[]
     url?: string
     modalTitle?: string
     viewUrl?: string
@@ -44,6 +46,7 @@ export const usePageData = ({
                                 state_properties,
                                 callBackFunction,
                                 planningCallbackFunction,
+                                addPriceFormInputData,
                                 itHasCustomForm,
                                 customForm,
                                 selectedViewCard,
@@ -52,6 +55,7 @@ export const usePageData = ({
                                 isHideShow,
                                 isHideDelete,
                                 isHideEdit,
+                                isShowAddPriceButton,
                                 emailNotificationBody,
                                 isHideActions,
                                 tableData,
@@ -74,7 +78,8 @@ export const usePageData = ({
         createdForm,
         isStateChanged
     } = useCrudOperator({
-        formInputData: formInputs,
+        formInputData: isShowAddPriceButton ? addPriceFormInputData : formInputs,
+        isShowAddPriceButton,
         incomingUrl: url,
         incomingModalTitle: modalTitle,
         viewUrl,
@@ -84,8 +89,8 @@ export const usePageData = ({
         emailNotificationBody,
         from,
         isApiV2,
-        itHasCustomForm:itHasCustomForm,
-        customForm:customForm
+        itHasCustomForm: itHasCustomForm,
+        customForm: customForm
     })
 
     const {tabular} = usePopulateTable({
@@ -98,6 +103,7 @@ export const usePageData = ({
         isHideDelete,
         isHideEdit,
         isHideActions,
+        isShowAddPriceButton,
         from,
         approval_slug
     })

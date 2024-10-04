@@ -5,10 +5,18 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import {tr} from "date-fns/locale";
 import RequisitionFormComponent from "@/app/procurement/requisition-requests/components/requisition-form.component";
 
 const formInputs = [
+    {
+        name: 'price',
+        type: 'text',
+        label: 'Item Price',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
 ]
 
 const columns = [
@@ -23,8 +31,15 @@ const columns = [
         id: 'price',
         numeric: false,
         disablePadding: false,
-        label: 'Price',
+        label: 'Item Price',
     },
+    {
+        id: 'quotation_price',
+        numeric: false,
+        disablePadding: false,
+        label: 'Quotation Price',
+    },
+
     {
         id: 'rfq_quantity',
         numeric: false,
@@ -44,8 +59,6 @@ interface Props {
 }
 
 function QuotationItems({quotation_id}: Props) {
-
-    console.log('quotation_id', quotation_id)
     const permission = 'rfq-item-list'
 
     const {
@@ -58,15 +71,17 @@ function QuotationItems({quotation_id}: Props) {
         columns: columns,
         formInputs: formInputs,
         url: `quotations/${quotation_id}/items`,
-        modalTitle: 'Rfq Item',
+        modalTitle: 'Quotation Item',
         viewUrl: '/inventory/items-categories/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'rfq-items',
+        from: 'quotation-items',
         itHasCustomForm: true,
         customForm: <RequisitionFormComponent/>,
-        isHideShow:true
+        isHideShow:true,
+        isShowAddPriceButton:true,
+        addPriceFormInputData: formInputs,
     })
 
     return (
@@ -77,7 +92,7 @@ function QuotationItems({quotation_id}: Props) {
                         :
                         <>
                             <PageHeader
-                                title={"RFQ Items"}
+                                title={"Quotation Items"}
                                 handleClick={handleClick}
                                 isShowAddButton={false}
 
