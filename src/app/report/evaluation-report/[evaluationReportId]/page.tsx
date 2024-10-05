@@ -45,7 +45,7 @@ const EvaluationReportShow = ({ params }: { params: { evaluationReportId: string
 
     const columns = [
         {
-            id: 'formaated_code',
+            id: 'formatted_code',
             numeric: false,
             hasUrl: true,
             disablePadding: false,
