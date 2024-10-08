@@ -66,8 +66,8 @@ const BidComparisonView = () => {
         }
     };
 
-    const handleCreatePurchaseRequest = async () => {
-        const response = await remove(`bid-comparison/${id}/remove-winners`, token)
+    const handleCreatePurchaseOrder = async () => {
+        const response = await get(`purchase-orders/rfq/${id}`, token)
 
         if (response.status === 200) {
             setRefresh(!refresh)
@@ -194,7 +194,7 @@ const BidComparisonView = () => {
                             <div className={'flex justify-end gap-1'}>
                                 {rfq?.status === "pending" && <ReusableButton name={'Submit'} onClick={handleSubmit}> <CheckCircle size={10} /> </ReusableButton>}
                                 {rfq?.status === "bid-comparison" && <ReusableButton name={'Re Choose Winner'} onClick={handleRefreshWinner}>  <CheckCircle size={10} /> </ReusableButton>}
-                                {rfq?.status === "bid-comparison" && <ReusableButton name={'Create Purchase Request'} onClick={handleCreatePurchaseRequest}> <CheckCircle size={10} /> </ReusableButton>}
+                                {rfq?.status === "bid-comparison" && <ReusableButton name={'Create Purchase Request'} onClick={handleCreatePurchaseOrder}> <CheckCircle size={10} /> </ReusableButton>}
                             </div>
                         </MuiCardComponent>
                     </>
