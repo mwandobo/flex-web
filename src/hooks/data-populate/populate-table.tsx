@@ -116,7 +116,7 @@ export const usePopulateTable = ({
                 }
 
                 if (obj.paid_amount || obj.paid_amount === 0 ) {
-                    obj = {...obj, paid_amount: <FormattedMoney amount={obj.paid_amount}/>}
+                    obj = {...obj, paid_amount: <FormattedMoney amount={obj.paid_amount } isHideCurrency={true}/>}
                 }
 
                 if (obj.amount) {

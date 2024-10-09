@@ -20,20 +20,18 @@ const formInputs = [
         errorMessage: ''
     },
     {
-        name: 'supplier_id',
-        type: 'select',
-        label: 'Supplier',
+        name: 'amount',
+        type: 'text',
+        label: 'Amount',
         value: '',
-        optionsUrlData: `/suppliers`,
-        optionDataKey: 'departments',
         required: true,
         isError: false,
         errorMessage: ''
     },
     {
-        name: 'amount',
-        type: 'text',
-        label: 'Amount',
+        name: 'payment_date',
+        type: 'date',
+        label: 'Payment Date',
         value: '',
         required: true,
         isError: false,

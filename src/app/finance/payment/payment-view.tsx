@@ -60,6 +60,7 @@ const PaymentView = () => {
                             <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
+                                        {label: 'Payment Code', value: data?.formatted_code},
                                         {label: 'Invoice Code', value: data?.invoice_name},
                                         {label: 'Purchase Order Code', value: data?.purchase_order_name},
                                         {label: 'Quotation Code', value: data?.quotation_name},
@@ -73,8 +74,6 @@ const PaymentView = () => {
                                 />
                             </div>
                         </MuiCardComponent>
-                        {createdForm()}
-
                     </>
             }
         </ProtectedRoute>

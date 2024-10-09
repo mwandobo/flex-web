@@ -80,7 +80,6 @@ const InvoiceView = () => {
                                         {label: 'Remaining Amount', value: moneyFormater({amount: data?.remaining_amount})},
                                         {label: 'Total Amount', value: moneyFormater({amount: data?.total_amount})},
                                         {label: 'Status', value: data?.status},
-
                                     ]}
                                     titleA={`Invoice`}
                                     titleB={` ${data?.formatted_code} `}
