@@ -5,61 +5,53 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import RequisitionFormComponent from "@/app/procurement/requisition-requests/components/requisition-form.component";
+import {tr} from "date-fns/locale";
 
 const formInputs = [
-    {
-        name: 'price',
-        type: 'text',
-        label: 'Item Price',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
+
 ]
 
 const columns = [
     {
-        id: 'name',
+        id: 'formatted_code',
         numeric: false,
         disablePadding: false,
-        label: 'Item Name',
-        width: '20%'
+        label: 'Purchase Order ',
     },
     {
-        id: 'price',
+        id: 'supplier_name',
         numeric: false,
         disablePadding: false,
-        label: 'Item Price',
+        label: 'Supplier Name',
     },
     {
-        id: 'quotation_price',
+        id: 'quotation_name',
         numeric: false,
         disablePadding: false,
-        label: 'Quotation Price',
-    },
-
-    {
-        id: 'rfq_quantity',
-        numeric: false,
-        disablePadding: false,
-        label: 'RFQ Quantity',
+        label: 'Quotation',
     },
     {
-        id: 'quantity',
+        id: 'rfq_name',
         numeric: false,
         disablePadding: false,
-        label: 'Quotation Quantity',
-    }
+        label: 'RFQ',
+    },
+    {
+        id: 'total_amount',
+        numeric: false,
+        disablePadding: false,
+        label: 'Amount',
+    },
+    {
+        id: 'status',
+        numeric: false,
+        disablePadding: false,
+        label: 'Status',
+    },
 ]
 
-interface Props {
-    quotation_id: string
-}
-
-function QuotationItems({quotation_id}: Props) {
-    const permission = 'rfq-item-list'
+function PurchaseOrder() {
+    const permission = 'purchase-order-list'
 
     const {
         loading,
@@ -70,18 +62,15 @@ function QuotationItems({quotation_id}: Props) {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: `quotations/${quotation_id}/items`,
-        modalTitle: 'Quotation Item',
-        viewUrl: '/inventory/items-categories/',
+        url: 'purchase-orders',
+        modalTitle: 'Purchase Order',
+        viewUrl: '/procurement/rfq/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'quotation-items',
-        itHasCustomForm: true,
-        customForm: <RequisitionFormComponent/>,
-        isHideShow:true,
-        isShowAddPriceButton:true,
-        addPriceFormInputData: formInputs,
+        from: 'bid-comparison',
+        isHideDelete: true,
+        isHideEdit: true
     })
 
     return (
@@ -92,10 +81,9 @@ function QuotationItems({quotation_id}: Props) {
                         :
                         <>
                             <PageHeader
-                                title={"Quotation Items"}
+                                title={"Purchase Order"}
                                 handleClick={handleClick}
-                                isShowAddButton={false}
-
+                                isShowAddButton={true}
                                />
                             {tabular()}
                             {createdForm()}
@@ -109,4 +97,4 @@ function QuotationItems({quotation_id}: Props) {
     )
 }
 
-export default QuotationItems
+export default PurchaseOrder

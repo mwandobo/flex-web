@@ -12,6 +12,8 @@ import BidComparisonView from "@/app/procurement/bid-comparison/bid-comparison-v
 import React, {useEffect} from "react";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
+import PurchaseOrder from "@/app/procurement/purchase-order/purchase-order";
+import PurchaseOrderView from "@/app/procurement/purchase-order/purchase-order-view";
 
 const ProcurementItems = [
     {
@@ -23,6 +25,7 @@ const ProcurementItems = [
     {name: 'request-for-quotation', title: 'Requests For Quotations', item: <Rfq/>, itemView: <RfqView/>},
     {name: 'quotation', title: 'Quotations', item: <Quotation/>, itemView: <QuotationView/>},
     {name: 'bid-comparison', title: 'Bid Comparison', item: <BidComparison/>, itemView: <BidComparisonView/>},
+    {name: 'purchase-order', title: 'Purchase Orders', item: <PurchaseOrder/>, itemView: <PurchaseOrderView/>},
 ];
 
 function InventoryPage() {

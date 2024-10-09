@@ -14,3 +14,5 @@ i have to create a condition in the crud form which will also allow to pass form
 I handle form state isolated store in local storage and the pull while submitting
 
 i have to contorl modal body ealy before i get deep
+
+Card still clickable when i created purchase request
