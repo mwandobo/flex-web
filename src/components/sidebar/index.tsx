@@ -200,7 +200,12 @@ const items: ISidebarItem[] = [
         path: '/procurement',
         permission: 'procurement-list',
         icon: Book,
-
+    },
+    {
+        name: 'Finance',
+        path: '/finance',
+        permission: 'finance-list',
+        icon: Book,
     },
     {
         name: 'Notifications',

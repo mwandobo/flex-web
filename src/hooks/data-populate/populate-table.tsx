@@ -115,6 +115,18 @@ export const usePopulateTable = ({
                     obj = {...obj, grand_total_cost: <FormattedMoney amount={obj.grand_total_cost}/>}
                 }
 
+                if (obj.paid_amount || obj.paid_amount === 0 ) {
+                    obj = {...obj, paid_amount: <FormattedMoney amount={obj.paid_amount}/>}
+                }
+
+                if (obj.amount) {
+                    obj = {...obj, amount: <FormattedMoney amount={obj.amount} isHideCurrency={true}/>}
+                }
+
+                if (obj.remaining_amount) {
+                    obj = {...obj, remaining_amount: <FormattedMoney amount={obj.remaining_amount} isHideCurrency={true}/>}
+                }
+
                 obj.actions = <CrudButtonsComponent
                     hide_approve={true}
                     handleClick={handleClick}
