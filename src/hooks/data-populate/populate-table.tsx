@@ -119,6 +119,10 @@ export const usePopulateTable = ({
                     obj = {...obj, paid_amount: <FormattedMoney amount={obj.paid_amount } isHideCurrency={true}/>}
                 }
 
+                if (obj.delivery_cost || obj.delivery_cost === 0 ) {
+                    obj = {...obj, delivery_cost: <FormattedMoney amount={obj.delivery_cost } isHideCurrency={true}/>}
+                }
+
                 if (obj.amount) {
                     obj = {...obj, amount: <FormattedMoney amount={obj.amount} isHideCurrency={true}/>}
                 }
@@ -135,7 +139,7 @@ export const usePopulateTable = ({
                     isShowAddPriceButton={isShowAddPriceButton}
                     permission={permission}
                     hide_view={isHideShow}
-                    hide_edit={isHideDelete || (isAnyLevelApproved && latestApproveStatus === 'approve')}
+                    hide_edit={isHideEdit || (isAnyLevelApproved && latestApproveStatus === 'approve')}
                     hide_delete={isHideDelete || (isAnyLevelApproved && latestApproveStatus === 'approve')}
                 />
 
