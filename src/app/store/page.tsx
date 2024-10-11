@@ -7,10 +7,13 @@ import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import DeliveryView from "@/app/store/delivery/delivery-view";
 import Delivery from "@/app/store/delivery/delivery";
+import Inspection from "@/app/store/inspection/inspection";
+import InspectionView from "@/app/store/inspection/inspection-view";
 
 const StoreManagementItems = [
     { name: 'stores', title: 'Stores', item: <Stores />, itemView: <StoresView /> },
     { name: 'deliveries', title: 'Deliveries', item: <Delivery />, itemView: <DeliveryView /> },
+    { name: 'inspections', title: 'Inspections', item: <Inspection />, itemView: <InspectionView /> },
 ];
 
 function StoreManagementPage() {
