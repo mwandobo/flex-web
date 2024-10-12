@@ -131,9 +131,9 @@ const items: ISidebarItem[] = [
         ]
     },
     {
-        name: 'Admnistration',
-        path: '/admnistration',
-        permission: 'admnistration-list',
+        name: 'Administration',
+        path: '/administration',
+        permission: 'administration-list',
         icon: Book,
         items: [
             {

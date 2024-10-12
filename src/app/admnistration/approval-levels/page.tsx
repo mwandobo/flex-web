@@ -14,7 +14,7 @@ function ApprovalLevel({
     parent_id,
     subHeader
 }: Props) {
-    const permission = 'approval_level'
+    const permission = 'approval_levels'
 
     const _deptFormInputs = [
         {

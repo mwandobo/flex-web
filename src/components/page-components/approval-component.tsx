@@ -11,13 +11,13 @@ const formInputs = [
 
 const columns = [
   {
-    id: 'approved_by',
+    id: 'approved_by_name',
     numeric: false,
     disablePadding: false,
     label: 'Approved By',
   },
   {
-    id: 'level',
+    id: 'approval_level_name',
     numeric: false,
     disablePadding: false,
     label: 'Level',
@@ -44,7 +44,7 @@ function ApprovalComponent({
 
 }: Props) {
 
-  const url = `approved_items/${from}/${from_id}/`
+  const url = `approval/approved-items/by-item?from=${from}&&from_id=${from_id}`
 
   const {
     loading,
