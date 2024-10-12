@@ -116,7 +116,7 @@ const columns = [
 ]
 
 function Inspection() {
-    const permission = 'inspection-list'
+    const permission = 'inspection'
 
     const {
         loading,

@@ -111,7 +111,7 @@ const columns = [
 ]
 
 function Stores() {
-    const permission = 'store-list'
+    const permission = 'store'
 
     const {
         loading,

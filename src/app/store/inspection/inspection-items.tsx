@@ -112,8 +112,6 @@ const columns = [
         disablePadding: false,
         label: 'Return Quantity',
     }
-
-
 ]
 
 interface Props {
@@ -121,7 +119,7 @@ interface Props {
 }
 
 function InspectionItems({inspectionId}: Props) {
-    const permission = 'inspection-items-list'
+    const permission = 'inspection_item'
 
     const {
         loading,

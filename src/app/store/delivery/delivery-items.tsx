@@ -64,7 +64,7 @@ interface Props {
 }
 
 function DeliveryItems({delivery_id}: Props) {
-    const permission = 'delivery-items-list'
+    const permission = 'delivery_item'
 
     const {
         loading,

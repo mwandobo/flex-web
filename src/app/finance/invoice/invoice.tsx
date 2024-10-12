@@ -69,7 +69,7 @@ const columns = [
 ]
 
 function Invoice() {
-    const permission = 'purchase-order-list'
+    const permission = 'invoice'
 
     const {
         loading,

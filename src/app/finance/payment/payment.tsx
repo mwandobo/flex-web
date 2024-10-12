@@ -76,7 +76,7 @@ const columns = [
 ]
 
 function Payment() {
-    const permission = 'payment-list'
+    const permission = 'payment'
 
     const {
         loading,

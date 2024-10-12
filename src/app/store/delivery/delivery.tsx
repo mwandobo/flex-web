@@ -116,7 +116,7 @@ const columns = [
 ]
 
 function Delivery() {
-    const permission = 'deliveries-list'
+    const permission = 'delivery'
 
     const {
         loading,
