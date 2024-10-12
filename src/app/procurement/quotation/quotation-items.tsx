@@ -59,7 +59,7 @@ interface Props {
 }
 
 function QuotationItems({quotation_id}: Props) {
-    const permission = 'rfq-item-list'
+    const permission = 'quotation_item'
 
     const {
         loading,

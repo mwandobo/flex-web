@@ -44,7 +44,7 @@ interface Props {
 }
 
 function RfqItems({rfq_id}: Props) {
-    const permission = 'rfq-item-list'
+    const permission = 'rfq_item'
 
     const {
         loading,

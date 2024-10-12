@@ -58,7 +58,7 @@ interface Props {
 }
 
 function PurchaseOrderItems({purchase_order_id}: Props) {
-    const permission = 'purchase-order-items-list'
+    const permission = 'purchase_order_item'
 
     const {
         loading,

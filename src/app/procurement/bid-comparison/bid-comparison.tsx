@@ -39,7 +39,7 @@ const columns = [
 ]
 
 function BidComparison() {
-    const permission = 'bid-comparison-list'
+    const permission = 'bid_comparison'
 
     const {
         loading,

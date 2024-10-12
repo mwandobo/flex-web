@@ -62,7 +62,7 @@ const columns = [
 ]
 
 function RequisitionRequest() {
-    const permission = 'requisition-request-list'
+    const permission = 'requisition_request'
 
     const {
         loading,

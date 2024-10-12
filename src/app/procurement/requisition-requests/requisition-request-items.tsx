@@ -38,7 +38,7 @@ interface Props {
 }
 
 function RequisitionRequestItem({requisition_request_id}: Props) {
-    const permission = 'requisition-request-item-list'
+    const permission = 'requisition_request_item'
 
     const {
         loading,

@@ -209,7 +209,7 @@ const columns = [
 ]
 
 function Quotation() {
-    const permission = 'requisition-request-list'
+    const permission = 'quotation'
 
     const {
         loading,

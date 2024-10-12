@@ -50,7 +50,7 @@ const columns = [
 ]
 
 function Rfq() {
-    const permission = 'requisition-request-list'
+    const permission = 'rfq'
 
     const {
         loading,

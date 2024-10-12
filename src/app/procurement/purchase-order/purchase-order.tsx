@@ -51,7 +51,7 @@ const columns = [
 ]
 
 function PurchaseOrder() {
-    const permission = 'purchase-order-list'
+    const permission = 'purchase_order'
 
     const {
         loading,
