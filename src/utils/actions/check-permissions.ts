@@ -1,11 +1,10 @@
-import { getValueFromLocalStorage } from "./local-starage";
+import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 
 export const checkPermissions = (permission: string) => {
 
     const permissionsJson = getValueFromLocalStorage('permissions');
     let permissions: any[] = [];
     let allowAccess = false;
-
     if (permissionsJson) {
         permissions = JSON.parse(permissionsJson);
     }
@@ -13,8 +12,14 @@ export const checkPermissions = (permission: string) => {
     if (!permission) {
         allowAccess = true;
     } else {
-        const foundIndex = permissions && permissions.findIndex((permission => permission.mapped_name === permission))
-        allowAccess = foundIndex ? true : false
+
+        console.log("permissions", permissions);
+        console.log("permission", permission);
+
+
+        const foundIndex = permissions && permissions.findIndex((perm => perm.mapped_name === permission));
+        allowAccess = foundIndex >= 0;
+
     }
 
     return allowAccess;

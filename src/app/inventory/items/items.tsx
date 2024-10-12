@@ -91,7 +91,7 @@ const columns = [
 ]
 
 function Items() {
-    const permission = 'item-list'
+    const permission = 'item'
 
     const {
         loading,

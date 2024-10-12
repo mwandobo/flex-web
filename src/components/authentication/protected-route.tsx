@@ -3,7 +3,7 @@
 import { checkPermissions } from '@/utils/actions/check-permissions';
 import { getValueFromLocalStorage } from '@/utils/actions/local-starage';
 import { useRouter } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect } from 'react';
 
 interface Props {
   children: React.ReactNode

@@ -5,7 +5,6 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import {tr} from "date-fns/locale";
 
 const formInputs = [
     {
@@ -50,7 +49,7 @@ const columns = [
 ]
 
 function ItemsCategories() {
-    const permission = 'requisition-request-list'
+    const permission = 'item_category'
 
     const {
         loading,

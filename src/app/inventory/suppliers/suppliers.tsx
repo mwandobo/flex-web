@@ -85,7 +85,7 @@ const columns = [
 ]
 
 function Suppliers() {
-    const permission = 'supplier-list'
+    const permission = 'supplier'
 
     const {
         loading,
