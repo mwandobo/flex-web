@@ -12,6 +12,10 @@ import PageHeader from "@/components/header/page-header-v1";
 import DeliveryItems from "@/app/store/delivery/delivery-items";
 import moneyFormater from "@/components/moneyFormater";
 import InspectionItems from "@/app/store/inspection/inspection-items";
+import SlideOver from "@/components/slide-over/slide-over.component";
+import TreeList from "@/components/list/tree-list.component";
+import {INSPECTION_APPROVAL_SLUG, ITEM_APPROVAL_SLUG} from "@/utils/constant";
+import {useApprovalHook} from "@/hooks/useApprove";
 
 const InspectionView = () => {
     const [data, setData] = useState<any>([])
@@ -27,6 +31,21 @@ const InspectionView = () => {
     const navigateToLogin = () => {
         return router.push('/login')
     }
+
+    const approval_url = `approval/approved-items/by-item?from=${INSPECTION_APPROVAL_SLUG}&&from_id=${id}`
+
+    const {
+        isNeedApprove,
+        isLastLevel,
+        latestApproveStatus,
+        approvalButtonsWrapper,
+    } = useApprovalHook({
+        approval_slug: INSPECTION_APPROVAL_SLUG,
+        from: INSPECTION_APPROVAL_SLUG,
+        from_id: id
+    })
+
+    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
     useEffect(() => {
         const fetchData = async () => {
@@ -65,23 +84,38 @@ const InspectionView = () => {
                             <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
-                                        { label: 'Inspection Code', value: data?.formatted_code },
-                                        { label: 'Delivery Code', value: data?.formatted_code },
-                                        { label: 'Purchase Order', value: data?.purchase_order_name },
-                                        { label: 'Request For Quotation', value: data?.rfq_name },
-                                        { label: 'Supplier', value: data?.supplier_name },
-                                        { label: 'Quotation', value: data?.quotation_name },
-                                        { label: 'Inspection By', value: data?.inspected_by },
-                                        { label: 'Inspection Cost', value: moneyFormater({amount:data?.inspection_cost })  },
-                                        { label: 'Inspection Date', value: data?.inspection_date },
-                                        { label: 'Description', value: data?.description },
-                                        { label: 'Status', value: data?.status },
+                                        {label: 'Inspection Code', value: data?.formatted_code},
+                                        {label: 'Delivery Code', value: data?.formatted_code},
+                                        {label: 'Purchase Order', value: data?.purchase_order_name},
+                                        {label: 'Request For Quotation', value: data?.rfq_name},
+                                        {label: 'Supplier', value: data?.supplier_name},
+                                        {label: 'Quotation', value: data?.quotation_name},
+                                        {label: 'Inspection By', value: data?.inspected_by},
+                                        {
+                                            label: 'Inspection Cost',
+                                            value: moneyFormater({amount: data?.inspection_cost})
+                                        },
+                                        {label: 'Inspection Date', value: data?.inspection_date},
+                                        {label: 'Description', value: data?.description},
+                                        {label: 'Status', value: data?.status},
                                     ]}
                                     titleA={`Inspection Code`}
                                     titleB={` ${data?.formatted_code} `}
                                 />
+                                <div className={'flex justify-between mt-2'}>
+                                    <>
+                                        {approvalButtonsWrapper()}
+                                    </>
+                                    <SlideOver
+                                        showButton={isNeedApprove}
+                                        title="Approval Trail">
+                                        <TreeList
+                                            url={approval_url}
+                                        />
+                                    </SlideOver>
+                                </div>
                             </div>
-                            <hr className="bg-gray-100" />
+                            <hr className="bg-gray-100"/>
                             <InspectionItems inspectionId={id}/>
                         </MuiCardComponent>
                     </>

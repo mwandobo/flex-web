@@ -6,6 +6,7 @@ import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
 import {tr} from "date-fns/locale";
+import {DELIVERY_APPROVAL_SLUG, ITEM_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
 
@@ -133,7 +134,8 @@ function Delivery() {
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'delivery'
+        from: 'delivery',
+        approval_slug: DELIVERY_APPROVAL_SLUG
     })
 
     return (

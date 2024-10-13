@@ -14,6 +14,10 @@ import {useCrudOperator} from "@/hooks/crud/crud-operator";
 import {ReusableButton} from "@/components/button/reusable-button";
 import {FileOutput} from "lucide-react";
 import RfqItems from "@/app/procurement/rfq/rfq-items";
+import SlideOver from "@/components/slide-over/slide-over.component";
+import TreeList from "@/components/list/tree-list.component";
+import {ITEM_APPROVAL_SLUG, REQUEST_FOR_QUOTATION_APPROVAL_SLUG} from "@/utils/constant";
+import {useApprovalHook} from "@/hooks/useApprove";
 
 const RfqView = () => {
 
@@ -30,6 +34,21 @@ const RfqView = () => {
     const navigateToLogin = () => {
         return router.push('/login')
     }
+
+    const approval_url = `approval/approved-items/by-item?from=${REQUEST_FOR_QUOTATION_APPROVAL_SLUG}&&from_id=${id}`
+
+    const {
+        isNeedApprove,
+        isLastLevel,
+        latestApproveStatus,
+        approvalButtonsWrapper,
+    } = useApprovalHook({
+        approval_slug: REQUEST_FOR_QUOTATION_APPROVAL_SLUG,
+        from: REQUEST_FOR_QUOTATION_APPROVAL_SLUG,
+        from_id: id
+    })
+
+    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
     const formInputs = [
         {
@@ -149,6 +168,18 @@ const RfqView = () => {
                                     titleA={`RFQ`}
                                     titleB={` ${data?.formatted_code} `}
                                 />
+                                <div className={'flex justify-between mt-2'}>
+                                    <>
+                                        {approvalButtonsWrapper()}
+                                    </>
+                                    <SlideOver
+                                        showButton={isNeedApprove}
+                                        title="Approval Trail">
+                                        <TreeList
+                                            url={approval_url}
+                                        />
+                                    </SlideOver>
+                                </div>
                             </div>
                             <hr className="bg-gray-100"/>
                             <div className={'mt-2'}>

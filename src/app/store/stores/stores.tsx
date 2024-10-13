@@ -6,6 +6,7 @@ import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
 import {tr} from "date-fns/locale";
+import {ITEM_APPROVAL_SLUG, STORE_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
     {
@@ -128,7 +129,8 @@ function Stores() {
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'store'
+        from: 'store',
+        approval_slug: STORE_APPROVAL_SLUG
     })
 
     return (

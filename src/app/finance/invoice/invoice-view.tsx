@@ -18,6 +18,10 @@ import QuotationItems from "@/app/procurement/quotation/quotation-items";
 import PurchaseOrderItems from "@/app/procurement/purchase-order/purchase-order-items";
 import moneyFormater from "@/components/moneyFormater";
 import Payment from "@/app/finance/payment/payment";
+import {INVOICE_APPROVAL_SLUG, ITEM_APPROVAL_SLUG} from "@/utils/constant";
+import {useApprovalHook} from "@/hooks/useApprove";
+import SlideOver from "@/components/slide-over/slide-over.component";
+import TreeList from "@/components/list/tree-list.component";
 
 const InvoiceView = () => {
 
@@ -31,9 +35,24 @@ const InvoiceView = () => {
     const {id, from: viewFrom} = viewedItem;
 
     const url = `invoices/${id}`
+    const approval_url = `approval/approved-items/by-item?from=${INVOICE_APPROVAL_SLUG}&&from_id=${id}`
+
     const navigateToLogin = () => {
         return router.push('/login')
     }
+    const {
+        isNeedApprove,
+        isLastLevel,
+        latestApproveStatus,
+        approvalButtonsWrapper,
+    } = useApprovalHook({
+        approval_slug: INVOICE_APPROVAL_SLUG,
+        from: INVOICE_APPROVAL_SLUG,
+        from_id: id
+    })
+
+    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -77,18 +96,35 @@ const InvoiceView = () => {
                                         {label: 'Quotation Code', value: data?.quotation_name},
                                         {label: 'Payment Method', value: data?.quotation?.payment_method},
                                         {label: 'Paid Amount', value: moneyFormater({amount: data?.paid_amount})},
-                                        {label: 'Remaining Amount', value: moneyFormater({amount: data?.remaining_amount})},
+                                        {
+                                            label: 'Remaining Amount',
+                                            value: moneyFormater({amount: data?.remaining_amount})
+                                        },
                                         {label: 'Total Amount', value: moneyFormater({amount: data?.total_amount})},
                                         {label: 'Status', value: data?.status},
                                     ]}
                                     titleA={`Invoice`}
                                     titleB={` ${data?.formatted_code} `}
                                 />
+                                <div className={'flex justify-between mt-2'}>
+                                    <>
+                                        {approvalButtonsWrapper()}
+                                    </>
+                                    <SlideOver
+                                        showButton={isNeedApprove}
+                                        title="Approval Trail">
+                                        <TreeList
+                                            url={approval_url}
+                                        />
+                                    </SlideOver>
+                                </div>
                             </div>
                             <hr className="bg-gray-100"/>
                             <div className={'mt-2'}>
                                 <Payment/>
                             </div>
+                            <hr className="bg-gray-100"/>
+
                         </MuiCardComponent>
                     </>
             }

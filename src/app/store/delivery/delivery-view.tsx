@@ -11,6 +11,10 @@ import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 import DeliveryItems from "@/app/store/delivery/delivery-items";
 import moneyFormater from "@/components/moneyFormater";
+import {DELIVERY_APPROVAL_SLUG, ITEM_APPROVAL_SLUG} from "@/utils/constant";
+import {useApprovalHook} from "@/hooks/useApprove";
+import SlideOver from "@/components/slide-over/slide-over.component";
+import TreeList from "@/components/list/tree-list.component";
 
 const DeliveryView = () => {
     const [data, setData] = useState<any>([])
@@ -26,6 +30,22 @@ const DeliveryView = () => {
     const navigateToLogin = () => {
         return router.push('/login')
     }
+
+    const approval_url = `approval/approved-items/by-item?from=${DELIVERY_APPROVAL_SLUG}&&from_id=${id}`
+
+    const {
+        isNeedApprove,
+        isLastLevel,
+        latestApproveStatus,
+        approvalButtonsWrapper,
+    } = useApprovalHook({
+        approval_slug: DELIVERY_APPROVAL_SLUG,
+        from: DELIVERY_APPROVAL_SLUG,
+        from_id: id
+    })
+
+    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -64,23 +84,35 @@ const DeliveryView = () => {
                             <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
-                                        { label: 'Delivery Code', value: data?.formatted_code },
-                                        { label: 'Purchase Order', value: data?.purchase_order_name },
-                                        { label: 'Request For Quotation', value: data?.rfq_name },
-                                        { label: 'Supplier', value: data?.supplier_name },
-                                        { label: 'Quotation', value: data?.quotation_name },
-                                        { label: 'Delivery Cost', value: moneyFormater({amount:data?.delivery_cost })  },
-                                        { label: 'Delivery Date', value: data?.delivery_date },
-                                        { label: 'Delivery Date', value: data?.delivery_date },
-                                        { label: 'Delivery Address', value: data?.delivery_address },
-                                        { label: 'Description', value: data?.description },
-                                        { label: 'Status', value: data?.status },
+                                        {label: 'Delivery Code', value: data?.formatted_code},
+                                        {label: 'Purchase Order', value: data?.purchase_order_name},
+                                        {label: 'Request For Quotation', value: data?.rfq_name},
+                                        {label: 'Supplier', value: data?.supplier_name},
+                                        {label: 'Quotation', value: data?.quotation_name},
+                                        {label: 'Delivery Cost', value: moneyFormater({amount: data?.delivery_cost})},
+                                        {label: 'Delivery Date', value: data?.delivery_date},
+                                        {label: 'Delivery Date', value: data?.delivery_date},
+                                        {label: 'Delivery Address', value: data?.delivery_address},
+                                        {label: 'Description', value: data?.description},
+                                        {label: 'Status', value: data?.status},
                                     ]}
                                     titleA={`Delivery`}
                                     titleB={` ${data?.formatted_code} `}
                                 />
+                                <div className={'flex justify-between mt-2'}>
+                                    <>
+                                        {approvalButtonsWrapper()}
+                                    </>
+                                    <SlideOver
+                                        showButton={isNeedApprove}
+                                        title="Approval Trail">
+                                        <TreeList
+                                            url={approval_url}
+                                        />
+                                    </SlideOver>
+                                </div>
                             </div>
-                            <hr className="bg-gray-100" />
+                            <hr className="bg-gray-100"/>
                             <DeliveryItems delivery_id={id}/>
                         </MuiCardComponent>
                     </>

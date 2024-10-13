@@ -6,6 +6,7 @@ import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
 import {tr} from "date-fns/locale";
+import {BID_COMPARISON_APPROVAL_SLUG, ITEM_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
 
@@ -56,7 +57,8 @@ function BidComparison() {
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'bid-comparison'
+        from: 'bid-comparison',
+        approval_slug: BID_COMPARISON_APPROVAL_SLUG
     })
 
     return (

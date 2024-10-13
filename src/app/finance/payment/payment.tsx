@@ -5,7 +5,7 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import {tr} from "date-fns/locale";
+import { PAYMENT_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
     {
@@ -93,7 +93,8 @@ function Payment() {
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'payment'
+        from: 'payment',
+        approval_slug: PAYMENT_APPROVAL_SLUG
     })
 
     return (

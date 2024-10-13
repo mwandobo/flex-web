@@ -17,6 +17,10 @@ import RfqItems from "@/app/procurement/rfq/rfq-items";
 import QuotationItems from "@/app/procurement/quotation/quotation-items";
 import PurchaseOrderItems from "@/app/procurement/purchase-order/purchase-order-items";
 import moneyFormater from "@/components/moneyFormater";
+import {ITEM_APPROVAL_SLUG, PURCHASE_ORDER_APPROVAL_SLUG} from "@/utils/constant";
+import {useApprovalHook} from "@/hooks/useApprove";
+import SlideOver from "@/components/slide-over/slide-over.component";
+import TreeList from "@/components/list/tree-list.component";
 
 const PurchaseOrderView = () => {
 
@@ -33,6 +37,22 @@ const PurchaseOrderView = () => {
     const navigateToLogin = () => {
         return router.push('/login')
     }
+
+    const approval_url = `approval/approved-items/by-item?from=${PURCHASE_ORDER_APPROVAL_SLUG}&&from_id=${id}`
+
+    const {
+        isNeedApprove,
+        isLastLevel,
+        latestApproveStatus,
+        approvalButtonsWrapper,
+    } = useApprovalHook({
+        approval_slug: PURCHASE_ORDER_APPROVAL_SLUG,
+        from: PURCHASE_ORDER_APPROVAL_SLUG,
+        from_id: id
+    })
+
+    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -77,7 +97,10 @@ const PurchaseOrderView = () => {
                                         {label: 'Payment Method', value: data?.quotation?.payment_method},
                                         {label: 'Evaluation Method', value: data?.quotation?.evaluation_method},
                                         {label: 'Decision Timeline', value: data?.quotation?.decision_timeline},
-                                        {label: 'Submission Requirement', value: data?.quotation?.submission_requirement},
+                                        {
+                                            label: 'Submission Requirement',
+                                            value: data?.quotation?.submission_requirement
+                                        },
                                         {label: 'Delivery Time', value: data?.quotation?.delivery_time},
                                         {label: 'Terms and Conditions', value: data?.quotation?.terms_and_conditions},
 
@@ -85,6 +108,18 @@ const PurchaseOrderView = () => {
                                     titleA={`Purchase Request`}
                                     titleB={` ${data?.formatted_code} `}
                                 />
+                                <div className={'flex justify-between mt-2'}>
+                                    <>
+                                        {approvalButtonsWrapper()}
+                                    </>
+                                    <SlideOver
+                                        showButton={isNeedApprove}
+                                        title="Approval Trail">
+                                        <TreeList
+                                            url={approval_url}
+                                        />
+                                    </SlideOver>
+                                </div>
                             </div>
                             <hr className="bg-gray-100"/>
                             <div className={'mt-2'}>

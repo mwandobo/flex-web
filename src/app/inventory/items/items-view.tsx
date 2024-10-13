@@ -29,11 +29,11 @@ const ItemsView = () => {
     const {id, from: viewFrom} = viewedItem;
 
     const url = `item/${id}`
-    const approval_url = `approval/approved-items/by-item?from=${ITEM_APPROVAL_SLUG}&&from_id=${id}`
 
     const navigateToLogin = () => {
         return router.push('/login')
     }
+    const approval_url = `approval/approved-items/by-item?from=${ITEM_APPROVAL_SLUG}&&from_id=${id}`
 
     const {
         isNeedApprove,

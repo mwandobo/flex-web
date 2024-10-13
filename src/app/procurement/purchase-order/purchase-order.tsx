@@ -6,6 +6,7 @@ import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
 import {tr} from "date-fns/locale";
+import {ITEM_APPROVAL_SLUG, PURCHASE_ORDER_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
 
@@ -70,7 +71,8 @@ function PurchaseOrder() {
         isApiV2:true,
         from: 'bid-comparison',
         isHideDelete: true,
-        isHideEdit: true
+        isHideEdit: true,
+        approval_slug: PURCHASE_ORDER_APPROVAL_SLUG
     })
 
     return (

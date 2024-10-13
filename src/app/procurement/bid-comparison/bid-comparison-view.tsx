@@ -11,6 +11,10 @@ import PageHeader from "@/components/header/page-header-v1";
 import CircleCheckbox from "@/components/inputs/check-circle.component";
 import {ReusableButton} from "@/components/button/reusable-button";
 import {CheckCircle} from "lucide-react";
+import SlideOver from "@/components/slide-over/slide-over.component";
+import TreeList from "@/components/list/tree-list.component";
+import {BID_COMPARISON_APPROVAL_SLUG, ITEM_APPROVAL_SLUG} from "@/utils/constant";
+import {useApprovalHook} from "@/hooks/useApprove";
 
 const BidComparisonView = () => {
 
@@ -26,9 +30,24 @@ const BidComparisonView = () => {
     const {id, from: viewFrom} = viewedItem;
 
     const url = `bid-comparison/${id}`
+
     const navigateToLogin = () => {
         return router.push('/login')
     }
+    const approval_url = `approval/approved-items/by-item?from=${BID_COMPARISON_APPROVAL_SLUG}&&from_id=${id}`
+
+    const {
+        isNeedApprove,
+        isLastLevel,
+        latestApproveStatus,
+        approvalButtonsWrapper,
+    } = useApprovalHook({
+        approval_slug: BID_COMPARISON_APPROVAL_SLUG,
+        from: BID_COMPARISON_APPROVAL_SLUG,
+        from_id: id
+    })
+
+    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
     const [selectedCards, setSelectedCards] = useState<any[]>([]);
 
@@ -153,16 +172,16 @@ const BidComparisonView = () => {
                                                 className={`p-4 mb-1 mt-1 mr-1 border border-gray-200 shadow-md text-xs hover:cursor-pointer 
                                                               transform transition-all duration-300 ease-in-out 
                                                               ${supplier?.winner === "winned" ? 'bg-gray-200  hover:bg-gray-300' :
-                                                               isSelected(payloadItem.id, supplier) ?
-                                                               'bg-gray-200 shadow-lg scale-105 hover:bg-gray-300' : 
-                                                                   `bg-white  ${rfq?.status ==="pending" && 'hover:scale-105 hover:bg-gray-200'}   `} 
+                                                    isSelected(payloadItem.id, supplier) ?
+                                                        'bg-gray-200 shadow-lg scale-105 hover:bg-gray-300' :
+                                                        `bg-white  ${rfq?.status === "pending" && 'hover:scale-105 hover:bg-gray-200'}   `} 
                                                               hover:shadow-lg `}
                                             >
                                                 <div>
                                                     {
                                                         rfq?.status === "pending" && <CircleCheckbox
-                                                        checked={isSelected(payloadItem.id, supplier)}
-                                                    />
+                                                            checked={isSelected(payloadItem.id, supplier)}
+                                                        />
                                                     }
 
                                                 </div>
@@ -192,9 +211,28 @@ const BidComparisonView = () => {
                                 </div>
                             ))}
                             <div className={'flex justify-end gap-1'}>
-                                {rfq?.status === "pending" && <ReusableButton name={'Submit'} onClick={handleSubmit}> <CheckCircle size={10} /> </ReusableButton>}
-                                {rfq?.status === "bid-comparison" && <ReusableButton name={'Re Choose Winner'} onClick={handleRefreshWinner}>  <CheckCircle size={10} /> </ReusableButton>}
-                                {rfq?.status === "bid-comparison" && <ReusableButton name={'Create Purchase Request'} onClick={handleCreatePurchaseOrder}> <CheckCircle size={10} /> </ReusableButton>}
+                                {rfq?.status === "pending" &&
+                                    <ReusableButton name={'Submit'} onClick={handleSubmit}> <CheckCircle size={10}/>
+                                    </ReusableButton>}
+                                {rfq?.status === "bid-comparison" &&
+                                    <ReusableButton name={'Re Choose Winner'} onClick={handleRefreshWinner}>
+                                        <CheckCircle size={10}/> </ReusableButton>}
+                                {rfq?.status === "bid-comparison" && <ReusableButton name={'Create Purchase Request'}
+                                                                                     onClick={handleCreatePurchaseOrder}>
+                                    <CheckCircle size={10}/> </ReusableButton>}
+                            </div>
+
+                            <div className={'flex justify-between mt-2'}>
+                                <>
+                                    {approvalButtonsWrapper()}
+                                </>
+                                <SlideOver
+                                    showButton={isNeedApprove}
+                                    title="Approval Trail">
+                                    <TreeList
+                                        url={approval_url}
+                                    />
+                                </SlideOver>
                             </div>
                         </MuiCardComponent>
                     </>

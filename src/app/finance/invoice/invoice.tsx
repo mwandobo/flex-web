@@ -5,7 +5,7 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import {tr} from "date-fns/locale";
+import {INVOICE_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
 
@@ -89,6 +89,7 @@ function Invoice() {
         from: 'invoices',
         isHideDelete: true,
         isHideEdit: true,
+        approval_slug: INVOICE_APPROVAL_SLUG
     })
 
     return (
