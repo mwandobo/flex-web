@@ -6,6 +6,7 @@ import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
 import {tr} from "date-fns/locale";
+import {ITEM_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
     {
@@ -108,7 +109,8 @@ function Items() {
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'item'
+        from: 'item',
+        approval_slug: ITEM_APPROVAL_SLUG
     })
 
     return (

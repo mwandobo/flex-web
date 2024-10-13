@@ -30,6 +30,7 @@ const getApprovedItemByLevelId = (level_id: number, from: string, from_id: strin
 }
 
 const getMultipleApprovedItemByLevelId = (level_ids: number[], from: string, from_id: string) => {
+    console.log('level_ids', level_ids)
     const approvedItems = allApprovedItems?.filter((item: any) =>
         level_ids.includes(Number(item.approval_level_id)) &&
         item.from === from &&
@@ -70,6 +71,8 @@ export const getApprovals = (approval_slug: string, from: string, from_id: strin
     let isLastLevel = false
     let isAnyLevelApproved = false
 
+
+
     const mappedApproval = getMappedApproval(approval_slug);
 
     if (mappedApproval && levels.length > 0) {
@@ -79,6 +82,9 @@ export const getApprovals = (approval_slug: string, from: string, from_id: strin
     if (levels.length > 0) {
         const level_ids = levels.map((level: any) => level.id);
         const approvedItemForLevels = getMultipleApprovedItemByLevelId(level_ids, from, from_id)
+
+        console.log('approvedItemForLevels', approvedItemForLevels)
+
 
         if (approvedItemForLevels.length > 0) {
             isAnyLevelApproved = true;

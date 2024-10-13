@@ -5,21 +5,17 @@ import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 
 interface Props {
     url: string,
-    refresh?: boolean
 }
 
 const TreeList = ({
                       url,
-                      refresh
                   }: Props) => {
-
 
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
     const token = getValueFromLocalStorage('token')
     const { state } = useGlobalContextHook()
     const { viewItemRefreshAfterApproval} = state
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -104,7 +100,6 @@ const TreeList = ({
                     </div>
             }
         </>
-
     );
 };
 

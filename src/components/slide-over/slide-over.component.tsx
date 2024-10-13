@@ -4,6 +4,7 @@ import {BadgeInfo} from "lucide-react";
 interface SlideOverProps {
     title?: string;
     width?: string;
+    showButton?: boolean;
     children: React.ReactNode;
 }
 
@@ -11,6 +12,7 @@ const SlideOver: React.FC<SlideOverProps> = ({
                                                  title = "Approval Trail",
                                                  width = "25%",
                                                  children,
+                                                 showButton
                                              }) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -22,10 +24,13 @@ const SlideOver: React.FC<SlideOverProps> = ({
     return (
         <>
             {/* Button to open the slide-over */}
-            <button onClick={toggleSlideOver} className="flex items-center gap-2 px-2 py-1 text-xs bg-blue-200 text-gray-600 hover:bg-blue-400 hover:text-gray-700 rounded">
-                <span><BadgeInfo size={12} /></span>
-                View Approvals
-            </button>
+            {
+                showButton && <button onClick={toggleSlideOver}
+                                      className="flex items-center gap-2 px-2 py-1 text-xs bg-blue-200 text-gray-600 hover:bg-blue-400 hover:text-gray-700 rounded">
+                    <span><BadgeInfo size={12}/></span>
+                    View Approvals
+                </button>
+            }
 
             {/* Slide-over Container */}
             <div

@@ -5,7 +5,7 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import {tr} from "date-fns/locale";
+import { SUPPLIER_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
     {
@@ -101,6 +101,7 @@ function Suppliers() {
         viewUrl: '/inventory/items-categories/',
         state_properties: [],
         permission: permission,
+        approval_slug: SUPPLIER_APPROVAL_SLUG,
         isApiV2:true,
         from: 'supplier'
     })

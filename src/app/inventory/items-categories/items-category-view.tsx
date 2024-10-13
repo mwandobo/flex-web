@@ -30,7 +30,6 @@ const ItemsCategoryView = () => {
         isLastLevel,
         latestApproveStatus,
         approvalButtonsWrapper,
-        refresh
     } = useApprovalHook({
         approval_slug: ITEM_CATEGORY_APPROVAL_SLUG,
         from: ITEM_CATEGORY_APPROVAL_SLUG,
@@ -95,10 +94,11 @@ const ItemsCategoryView = () => {
                                 <>
                                     {approvalButtonsWrapper()}
                                 </>
-                                <SlideOver title="Approval Trail">
+                                <SlideOver
+                                    showButton={isNeedApprove}
+                                    title="Approval Trail">
                                     <TreeList
                                         url={approval_url}
-                                        refresh={refresh}
                                     />
                                 </SlideOver>
                             </div>
