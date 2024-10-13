@@ -58,7 +58,8 @@ function ApprovalComponent({
     isHideShow: true,
     state_properties: [],
     formInputs: formInputs,
-    modalTitle: "Approve"
+    modalTitle: "Approve",
+    isHideDelete: true,
   })
 
   return (

@@ -36,7 +36,7 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
         approvalButtonsWrapper,
     } = useApprovalHook({
         approval_slug: PROJECT_APPROVAL_SLUG,
-        from: 'project',
+        from: PROJECT_APPROVAL_SLUG,
         from_id: id
     })
 
@@ -134,7 +134,7 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
         <ApprovalComponent
             key={'approved'}
             project_id={id}
-            from={'project'}
+            from={PROJECT_APPROVAL_SLUG}
             from_id={id}
             isHideAdd={true}
         />,

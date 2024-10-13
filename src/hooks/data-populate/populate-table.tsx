@@ -75,7 +75,7 @@ export const usePopulateTable = ({
 
         if (data && data.length > 0) {
             newData = data.map(obj => {
-                const {isAnyLevelApproved, latestApproveStatus,} = getApprovals(approval_slug, approval_slug, obj?.id)
+                const {isAnyLevelApproved, latestApproveStatus, isNeedApprove} = getApprovals(approval_slug, approval_slug, obj?.id)
                 if (obj.has_url) {
                     obj = {
                         ...obj,
@@ -129,6 +129,9 @@ export const usePopulateTable = ({
                     obj = {...obj, remaining_amount: <FormattedMoney amount={obj.remaining_amount} isHideCurrency={true}/>}
                 }
 
+                console.log('isNeedApprove', isNeedApprove)
+
+
                 obj.actions = <CrudButtonsComponent
                     hide_approve={true}
                     handleClick={handleClick}
@@ -137,8 +140,8 @@ export const usePopulateTable = ({
                     isShowAddPriceButton={isShowAddPriceButton}
                     permission={permission}
                     hide_view={isHideShow}
-                    hide_edit={isHideEdit || (isAnyLevelApproved && latestApproveStatus === 'approve')}
-                    hide_delete={isHideDelete || (isAnyLevelApproved && latestApproveStatus === 'approve')}
+                    hide_edit={isHideEdit || (isNeedApprove && isAnyLevelApproved && latestApproveStatus === 'approve')}
+                    hide_delete={isHideDelete || (isNeedApprove && isAnyLevelApproved && latestApproveStatus === 'approve')}
                 />
 
                 return sortObjectValuesByHeaders(obj, createRowHeaderArray())

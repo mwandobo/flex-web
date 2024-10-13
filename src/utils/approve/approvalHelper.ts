@@ -11,7 +11,6 @@ const allRegisteredApprovals = JSON.parse(getValueFromLocalStorage('approvals'))
 const allApprovedItems = JSON.parse(getValueFromLocalStorage('approved_items'));
 const role = JSON.parse(getValueFromLocalStorage('role'));
 
-
 const getMappedApproval = (approval_slug: string) => {
     const foundSysApproval = allSysApprovals?.find((item: any) => item.name === approval_slug);
     if (foundSysApproval) {
@@ -30,14 +29,11 @@ const getApprovedItemByLevelId = (level_id: number, from: string, from_id: strin
 }
 
 const getMultipleApprovedItemByLevelId = (level_ids: number[], from: string, from_id: string) => {
-    console.log('level_ids', level_ids)
-    const approvedItems = allApprovedItems?.filter((item: any) =>
+    return allApprovedItems?.filter((item: any) =>
         level_ids.includes(Number(item.approval_level_id)) &&
         item.from === from &&
         Number(item.from_id) === Number(from_id)
     );
-
-    return approvedItems;
 }
 
 const getApprovalLevel = (approval_slug: string) => {
@@ -71,8 +67,6 @@ export const getApprovals = (approval_slug: string, from: string, from_id: strin
     let isLastLevel = false
     let isAnyLevelApproved = false
 
-
-
     const mappedApproval = getMappedApproval(approval_slug);
 
     if (mappedApproval && levels.length > 0) {
@@ -83,9 +77,6 @@ export const getApprovals = (approval_slug: string, from: string, from_id: strin
         const level_ids = levels.map((level: any) => level.id);
         const approvedItemForLevels = getMultipleApprovedItemByLevelId(level_ids, from, from_id)
 
-        console.log('approvedItemForLevels', approvedItemForLevels)
-
-
         if (approvedItemForLevels.length > 0) {
             isAnyLevelApproved = true;
         }
@@ -95,7 +86,6 @@ export const getApprovals = (approval_slug: string, from: string, from_id: strin
         const approvedItemForCurrentLevel = getApprovedItemByLevelId(current_level?.id, from, from_id)
 
         if (approvedItemForCurrentLevel) {
-            isApproved = true
             isMyLevelApproved = true
             approveStatus = approvedItemForCurrentLevel.type
 
@@ -141,10 +131,7 @@ export const getApprovals = (approval_slug: string, from: string, from_id: strin
         approveStatus,
         latestApproveStatus,
         isLastLevel,
-        isAnyLevelApproved
+        isAnyLevelApproved,
+        isNeedApprove
     }
 };
-
-
-
-
