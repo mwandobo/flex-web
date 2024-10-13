@@ -13,13 +13,8 @@ export const checkPermissions = (permission: string) => {
         allowAccess = true;
     } else {
 
-        console.log("permissions", permissions);
-        console.log("permission", permission);
-
-
         const foundIndex = permissions && permissions.findIndex((perm => perm.mapped_name === permission));
         allowAccess = foundIndex >= 0;
-
     }
 
     return allowAccess;

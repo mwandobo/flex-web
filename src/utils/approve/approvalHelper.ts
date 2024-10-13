@@ -21,14 +21,12 @@ const getMappedApproval = (approval_slug: string) => {
 };
 
 const getApprovedItemByLevelId = (level_id: number, from: string, from_id: string) => {
-    const approvedItem = allApprovedItems?.find(
+    return allApprovedItems?.find(
         (item: any) =>
             Number(item.approval_level_id) === Number(level_id) &&
             item.from === from &&
             Number(item.from_id) === Number(from_id)
     );
-
-    return approvedItem;
 }
 
 const getMultipleApprovedItemByLevelId = (level_ids: number[], from: string, from_id: string) => {

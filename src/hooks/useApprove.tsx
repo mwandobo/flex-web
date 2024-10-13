@@ -1,10 +1,13 @@
+"use client"
+
 import {getValueFromLocalStorage, setValueLocalStorage} from '@/utils/actions/local-starage';
-import { post } from '@/utils/api';
-import { useState, useEffect } from 'react';
+import {post} from '@/utils/api';
+import {useState, useEffect} from 'react';
 import {ReusableButton} from "@/components/button/reusable-button";
 import CrudFormComponent from "@/components/forms/crud.form.component";
 import {capitalizeFirstWord} from "@/utils/actions/string-manipulations";
 import Swal from "sweetalert2";
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 
 interface Props {
     approval_slug?: string;
@@ -13,10 +16,10 @@ interface Props {
 }
 
 export const useApprovalHook = ({
-    approval_slug,
-    from,
-    from_id
-}: Props) => {
+                                    approval_slug,
+                                    from,
+                                    from_id
+                                }: Props) => {
     const [isNeedApprove, setIsNeedApprove] = useState(false);
     const [isApproved, setIsApproved] = useState(false);
     const [isMyLevelApproved, setIsMyLevelApproved] = useState(false);
@@ -25,6 +28,8 @@ export const useApprovalHook = ({
     const [refresh, setIsrefresh] = useState(false);
     const [approveStatus, setApproveStatus] = useState('');
     const [latestApproveStatus, setLatestApproveStatus] = useState('');
+    const { dispatch } = useGlobalContextHook()
+
 
     const allSysApprovals = JSON.parse(getValueFromLocalStorage('sys_approvals'));
     const allRegisteredApprovals = JSON.parse(getValueFromLocalStorage('approvals'));
@@ -49,7 +54,7 @@ export const useApprovalHook = ({
             (item: any) =>
                 Number(item.approval_level_id) === Number(level_id) &&
                 item.from === from &&
-                item.from_id === from_id
+                Number(item.from_id) === Number(from_id)
         );
 
         return approvedItem;
@@ -70,13 +75,14 @@ export const useApprovalHook = ({
                 return prev;
             }, null);
 
-            return { current_level, latestLevel, levels, previousLevel };
+            return {current_level, latestLevel, levels, previousLevel};
         }
-        return { current_level: null, latestLevel: null, levels: [], previousLevel: null };
+        return {current_level: null, latestLevel: null, levels: [], previousLevel: null};
     };
 
     useEffect(() => {
-        const { current_level, latestLevel, levels, previousLevel } = getApprovalLevel();
+        const {current_level, latestLevel, levels, previousLevel} = getApprovalLevel();
+
         const mappedApproval = getMappedApproval();
 
         if (mappedApproval && levels.length > 0) {
@@ -85,6 +91,7 @@ export const useApprovalHook = ({
 
         if (current_level) {
             const approvedItemForCurrentLevel = getApprovedItemByLevelId(current_level?.id)
+
             if (approvedItemForCurrentLevel) {
                 setIsApproved(true)
                 setIsMyLevelApproved(true);
@@ -136,19 +143,24 @@ export const useApprovalHook = ({
 
     const approve = async (body: ApproveProps) => {
         const approveUrl = 'approval/approve';
-        const { current_level } = getApprovalLevel();
+        const {current_level} = getApprovalLevel();
+
 
         if (current_level) {
-            body = { ...body, approval_level_id: current_level.id };
+            body = {...body, approval_level_id: current_level.id};
             const response = await post(approveUrl, body, token);
             if (response.status === 200) {
                 setIsrefresh(!refresh); // Trigger a re-render by toggling the refresh state
+                dispatch({ type: "UPDATE_VIEW_ITEM_REFRESH_AFTER_APPROVAL"})
             }
 
             return response;
         }
         return null;
     };
+
+
+    console.log("rfeeeeeeeee", refresh)
 
     const callBack = () => {
         setIsrefresh(prev => !prev); // Trigger a re-render by toggling the refresh state
@@ -194,7 +206,9 @@ export const useApprovalHook = ({
         }
     }
 
-    const approvalButtonsWrapper = ()=>{
+    const approvalButtonsWrapper = () => {
+
+
         return (
             <>
                 {isNeedApprove && (
@@ -261,6 +275,7 @@ export const useApprovalHook = ({
         approveStatus,
         isMyLevelApproved,
         latestApproveStatus,
-        approvalButtonsWrapper
+        approvalButtonsWrapper,
+        refresh
     };
 };

@@ -9,6 +9,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
+import {useApprovalHook} from "@/hooks/useApprove";
+import {ITEM_CATEGORY_APPROVAL_SLUG} from "@/utils/constant";
+import SlideOver from "@/components/slide-over/slide-over.component";
+import TreeList from "@/components/list/tree-list.component";
 
 const ItemsCategoryView = () => {
 
@@ -21,7 +25,23 @@ const ItemsCategoryView = () => {
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
 
+    const {
+        isNeedApprove,
+        isLastLevel,
+        latestApproveStatus,
+        approvalButtonsWrapper,
+        refresh
+    } = useApprovalHook({
+        approval_slug: ITEM_CATEGORY_APPROVAL_SLUG,
+        from: ITEM_CATEGORY_APPROVAL_SLUG,
+        from_id: id
+    })
+
+    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
+
     const url = `items-categories/${id}`
+    const approval_url = `approval/approved-items/by-item?from=${ITEM_CATEGORY_APPROVAL_SLUG}&&from_id=${id}`
+
     const navigateToLogin = () => {
         return router.push('/login')
     }
@@ -69,7 +89,19 @@ const ItemsCategoryView = () => {
                                     titleB={` ${data?.name} `}
                                 />
                             </div>
+
                             <hr className="bg-gray-100" />
+                            <div className={'flex justify-between mt-2'}>
+                                <>
+                                    {approvalButtonsWrapper()}
+                                </>
+                                <SlideOver title="Approval Trail">
+                                    <TreeList
+                                        url={approval_url}
+                                        refresh={refresh}
+                                    />
+                                </SlideOver>
+                            </div>
                         </MuiCardComponent>
                     </>
             }

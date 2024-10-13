@@ -35,6 +35,8 @@ interface viewedItem {
     from: string
 }
 
+
+
 type State = {
     currentUser: CurrentUserProps | null;
     planningCount: PlanningCountProps;
@@ -42,12 +44,13 @@ type State = {
     selectedMonitoringItem: SelectedMonitoringItemProps;
     evaluationForm: evaluationForm
     selectedSubSidebarItem: string
+    viewItemRefreshAfterApproval: boolean
     viewedItem: viewedItem
 };
 
 type Action = {
     type: string;
-    payload: any;
+    payload?: any;
 };
 
 type Dispatch = (action: Action) => void;
@@ -75,7 +78,6 @@ const initialViewedItem: viewedItem = {
     from: ''
 }
 
-
 const initialEvaluationForm: evaluationForm = {
     data: [],
 }
@@ -87,6 +89,7 @@ const initialState: State = {
     selectedMonitoringItem: initialSelectedMonitoringItem,
     evaluationForm: initialEvaluationForm,
     selectedSubSidebarItem: '',
+    viewItemRefreshAfterApproval: false,
     viewedItem: initialViewedItem
 
 };
@@ -181,6 +184,11 @@ export const updateContextReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 viewedItem: action.payload
+            };
+        case 'UPDATE_VIEW_ITEM_REFRESH_AFTER_APPROVAL':
+            return {
+                ...state,
+                viewItemRefreshAfterApproval: !state.viewItemRefreshAfterApproval
             };
         default:
             return state;
