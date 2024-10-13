@@ -222,7 +222,6 @@ export const useCrudFormCreator = ({
     }
 
     const validator = () => {
-
         let validation = true
         formInputs?.forEach((item) => {
             if (item.required && !item.isRemoved

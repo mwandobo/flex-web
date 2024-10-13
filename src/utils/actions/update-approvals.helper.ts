@@ -4,6 +4,8 @@ import {get} from "@/utils/api";
 export const updateApprovals = async () => {
     const token = getValueFromLocalStorage('token');
     let approvals = await get('approval', token)
+    console.log('approvals', approvals)
+
     approvals = approvals.data.data
     setValueLocalStorage('approvals', JSON.stringify(approvals))
 };
@@ -18,6 +20,7 @@ export const updateApprovalItems = async () => {
 export const gracefulApprovalUpdater = async (from: string, approval_slug?: string) => {
 
     console.log('approval_slug', approval_slug)
+    console.log('from', from)
     if( ['approvals', 'approval_levels'].includes(from) ){
         await updateApprovals()
     }
