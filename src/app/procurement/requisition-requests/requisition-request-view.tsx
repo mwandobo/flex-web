@@ -3,10 +3,10 @@
 import ProtectedRoute from "@/components/authentication/protected-route";
 import MuiCardComponent from "@/components/card/mui-card.component";
 import ViewCardComponent from "@/components/card/view.card.component";
-import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
-import { get } from "@/utils/api";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
+import {get} from "@/utils/api";
+import React, {useEffect, useState} from "react";
+import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 import RequisitionRequestItem from "@/app/procurement/requisition-requests/requisition-request-items";
@@ -48,7 +48,6 @@ const RequisitionRequestView = () => {
     })
 
     const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
-
 
     const formInputs = [
         {
@@ -115,10 +114,10 @@ const RequisitionRequestView = () => {
         formInputData: formInputs,
         incomingUrl: `rfq/${id}/create-rfq`,
         incomingModalTitle: "Request For  Quotation",
-        viewUrl:"",
-        state_properties:[],
-        from:'rfq',
-        isApiV2:true
+        viewUrl: "",
+        state_properties: [],
+        from: 'rfq',
+        isApiV2: true
     })
 
     useEffect(() => {
@@ -149,8 +148,8 @@ const RequisitionRequestView = () => {
                     :
                     <>
                         <PageHeader
-                           title={'Requisition Request View'}
-                           isShowBackButton={true}
+                            title={'Requisition Request View'}
+                            isShowBackButton={true}
                         />
                         <MuiCardComponent>
                             <div className="mb-3">
@@ -159,6 +158,7 @@ const RequisitionRequestView = () => {
                                         {label: 'Requisition Request Code', value: data?.formatted_code},
                                         {label: 'Store', value: data?.store_name},
                                         {label: 'Store Keeper', value: data?.store_keeper},
+                                        {label: 'Status', value: data?.status},
                                         {label: 'Description', value: data?.description},
                                     ]}
                                     titleA={`Requisition Request`}
@@ -179,20 +179,24 @@ const RequisitionRequestView = () => {
                             </div>
                             <hr className="bg-gray-100"/>
                             <div className={'mt-2'}>
-                                <RequisitionRequestItem requisition_request_id={id}/>
+                                <RequisitionRequestItem
+                                    requisition_request_id={id}
+                                    status={data.status}
+                                />
                             </div>
-
-                            <div className="flex flex-col items-end">
-                                <ReusableButton
-                                    name={'Request for Quotation'}
-                                    onClick={() => handleClick('create')}
-                                >
-                                    <FileOutput size={12}/>
-                                </ReusableButton>
-                            </div>
+                            {
+                                approveStatus() && data.status ==='pending' &&
+                                <div className="flex flex-col items-end">
+                                    <ReusableButton
+                                        name={'Request for Quotation'}
+                                        onClick={() => handleClick('create')}
+                                    >
+                                        <FileOutput size={12}/>
+                                    </ReusableButton>
+                                </div>
+                            }
                         </MuiCardComponent>
                         {createdForm()}
-
                     </>
             }
         </ProtectedRoute>

@@ -108,12 +108,10 @@ export const useCrudOperator = (
         setModalBodyArray(newModalBodyArray)
     }
 
-
     useEffect(() => {
         setModalBodyArray(formInputData)
 
     }, [...state_properties])
-
 
     const handleNotificationPayload = (type: string) => {
         if (emailNotificationBody && Object.keys(emailNotificationBody).length > 0) {
@@ -163,7 +161,7 @@ export const useCrudOperator = (
             setModalTitle(`Delete ${incomingModalTitle}`)
             setIsForm(false)
             setOnSaveButtonName('Yes')
-            setModalBodyString(`Are You Sure You Want to Delete this ${incomingModalTitle} ${payload.name}`)
+            setModalBodyString(`Are You Sure You Want to Delete this ${incomingModalTitle} ${payload.name ?? payload.formatted_code }`)
             handleNotificationPayload('delete')
         }
 

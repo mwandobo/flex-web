@@ -5,10 +5,17 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import {tr} from "date-fns/locale";
-import RequisitionFormComponent from "@/app/procurement/requisition-requests/components/requisition-form.component";
 
 const formInputs = [
+    {
+        name: 'quantity',
+        type: 'text',
+        label: 'Quantity',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
 ]
 
 const columns = [
@@ -35,10 +42,13 @@ const columns = [
 
 interface Props {
     requisition_request_id: string
+    status: string
 }
 
-function RequisitionRequestItem({requisition_request_id}: Props) {
+function RequisitionRequestItem({requisition_request_id, status}: Props) {
     const permission = 'requisition_request_item'
+
+    console.log('status',status)
 
     const {
         loading,
@@ -52,13 +62,13 @@ function RequisitionRequestItem({requisition_request_id}: Props) {
         url: `requisition-request/${requisition_request_id}/items`,
         modalTitle: 'Requisition Request Item',
         viewUrl: '/inventory/items-categories/',
-        state_properties: [],
+        state_properties: [status],
         permission: permission,
         isApiV2:true,
         from: 'requisition-requests',
-        itHasCustomForm: true,
-        customForm: <RequisitionFormComponent/>,
-        isHideShow:true
+        isHideShow:true,
+        isHideDelete:true,
+        isHideEdit: status !== 'pending'
     })
 
     return (

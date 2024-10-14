@@ -59,6 +59,12 @@ const columns = [
         numeric: false,
         disablePadding: false,
         label: 'Store Keeper',
+    },
+    {
+        id: 'status',
+        numeric: false,
+        disablePadding: false,
+        label: 'Status',
     }
 ]
 
@@ -81,7 +87,8 @@ function RequisitionRequest() {
         permission: permission,
         isApiV2:true,
         from: 'requisition-requests',
-        approval_slug: REQUISITION_REQUEST_APPROVAL_SLUG
+        approval_slug: REQUISITION_REQUEST_APPROVAL_SLUG,
+        isHideEdit: true
     })
 
     return (

@@ -5,10 +5,17 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import {tr} from "date-fns/locale";
-import RequisitionFormComponent from "@/app/procurement/requisition-requests/components/requisition-form.component";
 
 const formInputs = [
+    {
+        name: 'quantity',
+        type: 'text',
+        label: 'Quantity',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
 ]
 
 const columns = [
@@ -40,10 +47,11 @@ const columns = [
 ]
 
 interface Props {
-    rfq_id: string
+    rfq_id: string,
+    status: string
 }
 
-function RfqItems({rfq_id}: Props) {
+function RfqItems({rfq_id, status}: Props) {
     const permission = 'rfq_item'
 
     const {
@@ -62,9 +70,8 @@ function RfqItems({rfq_id}: Props) {
         permission: permission,
         isApiV2:true,
         from: 'rfq-items',
-        itHasCustomForm: true,
-        customForm: <RequisitionFormComponent/>,
-        isHideShow:true
+        isHideShow:true,
+        isHideDelete: status === 'pending'
     })
 
     return (

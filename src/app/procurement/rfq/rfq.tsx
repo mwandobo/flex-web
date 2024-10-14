@@ -5,11 +5,65 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import {tr} from "date-fns/locale";
-import {ITEM_APPROVAL_SLUG, REQUEST_FOR_QUOTATION_APPROVAL_SLUG} from "@/utils/constant";
+import { REQUEST_FOR_QUOTATION_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
+    {
+        name: 'payment_method',
+        type: 'text',
+        label: 'Payment Method',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'evaluation_method',
+        type: 'text',
+        label: 'Evaluation Method',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'decision_timeline',
+        type: 'text',
+        label: 'Decision Timeline',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'submission_requirement',
+        type: 'text',
+        label: 'Submission Requirement',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'delivery_time',
+        type: 'text',
+        label: 'Deliver Time',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'terms_and_conditions',
+        type: 'textArea',
+        label: 'Terms and Conditions',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
 ]
+
 
 const columns = [
     {
@@ -17,6 +71,12 @@ const columns = [
         numeric: false,
         disablePadding: false,
         label: 'RFQ Code',
+    },
+    {
+        id: 'requisition_request_name',
+        numeric: false,
+        disablePadding: false,
+        label: 'Requisition Request',
     },
     {
         id: 'payment_method',
@@ -47,6 +107,12 @@ const columns = [
         numeric: false,
         disablePadding: false,
         label: 'Deliver Time',
+    },
+    {
+        id: 'status',
+        numeric: false,
+        disablePadding: false,
+        label: 'Status',
     }
 ]
 

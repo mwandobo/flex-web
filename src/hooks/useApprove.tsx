@@ -159,9 +159,6 @@ export const useApprovalHook = ({
         return null;
     };
 
-
-    console.log("rfeeeeeeeee", refresh)
-
     const callBack = () => {
         setIsrefresh(prev => !prev); // Trigger a re-render by toggling the refresh state
         return null;

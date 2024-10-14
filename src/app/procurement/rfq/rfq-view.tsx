@@ -162,6 +162,7 @@ const RfqView = () => {
                                         {label: 'Decision Timeline', value: data?.decision_timeline},
                                         {label: 'Submission Requirement', value: data?.submission_requirement},
                                         {label: 'Delivery Time', value: data?.delivery_time},
+                                        {label: 'Status', value: data?.status},
                                         {label: 'Terms and Conditions', value: data?.terms_and_conditions},
 
                                     ]}
@@ -183,7 +184,10 @@ const RfqView = () => {
                             </div>
                             <hr className="bg-gray-100"/>
                             <div className={'mt-2'}>
-                                <RfqItems rfq_id={id}/>
+                                <RfqItems
+                                    rfq_id={id}
+                                    status={data?.status}
+                                />
                             </div>
 
                         </MuiCardComponent>
