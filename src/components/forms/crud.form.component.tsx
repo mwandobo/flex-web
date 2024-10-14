@@ -104,6 +104,8 @@ const CrudFormComponent = ({
                                                     from={item.name}
                                                     handleChange={handleInputChange}
                                                     value={item.value}
+                                                    label={item.label}
+                                                    placeholder={item.placeholder}
                                                 />
                                             )}
 

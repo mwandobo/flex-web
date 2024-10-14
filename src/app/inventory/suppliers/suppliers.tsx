@@ -47,9 +47,10 @@ const formInputs = [
     {
         name: 'category_ids',
         type: 'multi-select',
-        label: 'Supplier Category',
+        label: 'Supplier Categories',
+        placeholder: 'Select Supplier Categories',
         value: '',
-        optionsUrlData: 'items-categories',
+        optionsUrlData: 'items-categories?approved=approved',
         optionDataKey: 'supplier-items-category',
         required: true,
         isError: false,

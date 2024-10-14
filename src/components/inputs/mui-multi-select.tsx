@@ -39,6 +39,8 @@ interface Props {
     optionsUrlData: string
     optionDataKey: string
     from: string
+    label?: string
+    placeholder?: string
     value: any;
     handleChange: (event: any, from?: string, control_for?: string) => void
 }
@@ -48,6 +50,8 @@ export default function MuiMultiSelectSelect({
                                                  optionDataKey,
                                                  handleChange,
                                                  from,
+                                                 placeholder,
+                                                 label,
                                                  value
                                              }: Props) {
     const [selected, setSelected] = React.useState<number[]>([]); // Store IDs
@@ -83,15 +87,17 @@ export default function MuiMultiSelectSelect({
 
     return (
         <div>
-            <FormControl sx={{m: 1, width: 300}}>
-                <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
+            <FormControl sx={{width: '100%', marginBottom: "5px"}}>
+                <InputLabel sx={{ fontWeight: 500, color: 'black'}} id="demo-multiple-checkbox-label">{label}</InputLabel>
                 <Select
+                    className={'w-full'}
                     labelId="demo-multiple-checkbox-label"
                     id="demo-multiple-checkbox"
                     multiple
                     value={selected} // This contains IDs (option.value)
                     onChange={onChange}
-                    input={<OutlinedInput label="Tag"/>}
+                    placeholder={placeholder}
+                    input={<OutlinedInput label={label}/>}
                     renderValue={(selected) =>
                         selected
                             .map(id => options.find(option => option.value === id)?.label) // Convert ID back to name for display

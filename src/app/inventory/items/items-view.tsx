@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {Ellipsis, ShoppingCart} from "lucide-react";
+import { ShoppingCart} from "lucide-react";
 import {useCrudOperator} from "@/hooks/crud/crud-operator";
 import {useApprovalHook} from "@/hooks/useApprove";
 import {ITEM_APPROVAL_SLUG} from "@/utils/constant";
@@ -63,7 +63,6 @@ const ItemsView = () => {
     const {
         handleClick,
         createdForm,
-        isStateChanged
     } = useCrudOperator({
         formInputData: formInputs,
         incomingUrl: `requisition-request/item/${id}`,
@@ -118,14 +117,16 @@ const ItemsView = () => {
                                     titleA={`Item`}
                                     titleB={` ${data?.name} `}
                                 />
-                                <div className="flex flex-col items-end">
-                                    <ReusableButton
-                                        name={'Add Item to Requisition Request'}
-                                        onClick={() => handleClick('create')}
-                                    >
-                                        <ShoppingCart size={12}/>
-                                    </ReusableButton>
-                                </div>
+                                {
+                                    approveStatus() && <div className="flex flex-col items-end">
+                                        <ReusableButton
+                                            name={'Add Item to Requisition Request'}
+                                            onClick={() => handleClick('create')}
+                                        >
+                                            <ShoppingCart size={12}/>
+                                        </ReusableButton>
+                                    </div>
+                                }
                             </div>
                             <hr className="bg-gray-100"/>
                             <div className={'flex justify-between mt-2'}>

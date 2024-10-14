@@ -23,7 +23,7 @@ const formInputs = [
         type: 'select',
         label: 'Item Category',
         value: '',
-        optionsUrlData: 'items-categories',
+        optionsUrlData: 'items-categories?approved=approved',
         optionDataKey: 'departments',
         required: true,
         isError: false,
