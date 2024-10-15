@@ -59,7 +59,6 @@ function RfqItems({rfq_id, status}: Props) {
         createdForm,
         handleClick,
         tabular
-
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
@@ -71,7 +70,8 @@ function RfqItems({rfq_id, status}: Props) {
         isApiV2:true,
         from: 'rfq-items',
         isHideShow:true,
-        isHideDelete: status === 'pending'
+        isHideDelete:true,
+        isHideEdit: status !== 'pending'
     })
 
     return (

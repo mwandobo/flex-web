@@ -7,8 +7,9 @@ import TextArea from "../inputs/text-area"
 import TextFieldComponent from "../inputs/text-field"
 import PopupModal from "../modal/popup-modal"
 import MuiMultiSelectSelect from "@/components/inputs/mui-multi-select";
-import {ReactNode} from "react"
+import {ReactNode, useState} from "react"
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
+import PushNotification from "@/components/notificarion/push-notification";
 
 interface Props {
     isModalOpen: boolean,
@@ -28,6 +29,7 @@ interface Props {
     isShowAddPriceButton?: boolean,
 }
 
+
 const CrudFormComponent = ({
                                isModalOpen,
                                onCloseModal,
@@ -45,6 +47,8 @@ const CrudFormComponent = ({
                                customForm,
                            }: Props) => {
     const add_price = getValueFromLocalStorage('add-price')
+    const [notification, setNotification] = useState({ message: '', type: '' });
+
 
     return <PopupModal
         isOpen={isModalOpen}
@@ -158,6 +162,11 @@ const CrudFormComponent = ({
                 >
                     {!isDisabled && <CheckCircle2 size={13}/>}
                 </ReusableButton>
+                <PushNotification
+                    message={notification.message}
+                    type={notification.type}
+                    onClose={() => setNotification({ message: '', type: '' })}
+                />
             </div>
         </>
 

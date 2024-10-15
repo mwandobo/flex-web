@@ -3,10 +3,10 @@
 import ProtectedRoute from "@/components/authentication/protected-route";
 import MuiCardComponent from "@/components/card/mui-card.component";
 import ViewCardComponent from "@/components/card/view.card.component";
-import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
-import { get } from "@/utils/api";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
+import {get} from "@/utils/api";
+import React, {useEffect, useState} from "react";
+import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 import RequisitionRequestItem from "@/app/procurement/requisition-requests/requisition-request-items";
@@ -18,11 +18,13 @@ import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
 import {ITEM_APPROVAL_SLUG, REQUEST_FOR_QUOTATION_APPROVAL_SLUG} from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
+import Swal from "sweetalert2";
 
 const RfqView = () => {
 
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
+    const [refresh, setRefresh] = useState(false)
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
 
@@ -47,6 +49,46 @@ const RfqView = () => {
         from: REQUEST_FOR_QUOTATION_APPROVAL_SLUG,
         from_id: id
     })
+
+    function showConfirmationModal(data:any) {
+        Swal.fire({
+            title: `Are you sure ?`,
+            text: `Are you sure you want to submit Rfq code: ${data.formatted_code} ?`,
+            icon: 'warning',
+            showCancelButton: true,  // Shows the "No" button
+            confirmButtonText: 'Yes',  // Text for the "Yes" button
+            cancelButtonText: 'No',    // Text for the "No" button
+            reverseButtons: true,
+            customClass: {
+                actions: 'flex justify-between w-full', // Custom class for action buttons
+                confirmButton: 'mx-4 px-4 py-2 bg-green-500 text-white rounded',
+                cancelButton: 'mx-4 px-4 py-2 bg-red-500 text-white rounded',
+            },
+            buttonsStyling: false,// Optional: swaps the order of the buttons
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Handle the "Yes" action
+                onSave()
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // Handle the "No" action
+                console.log('User canceled the action');
+            }
+        });
+    }
+
+
+    const onSave = async () => {
+        try {
+            const res = await get(`${url}/submit-draft`, token)
+            if (data && res.status === 200) {
+                setRefresh(!refresh)
+            }
+
+        } catch (error: any) {
+            console.log(Error)
+        }
+    }
+
 
     const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
@@ -115,10 +157,10 @@ const RfqView = () => {
         formInputData: formInputs,
         incomingUrl: `rfq/${id}/create-rfq`,
         incomingModalTitle: "Request For Quotation",
-        viewUrl:"",
-        state_properties:[],
-        from:'rfq',
-        isApiV2:true
+        viewUrl: "",
+        state_properties: [],
+        from: 'rfq',
+        isApiV2: true
     })
 
     useEffect(() => {
@@ -139,7 +181,7 @@ const RfqView = () => {
             }
         };
         fetchData()
-    }, [])
+    }, [refresh])
 
     return (
 
@@ -149,8 +191,8 @@ const RfqView = () => {
                     :
                     <>
                         <PageHeader
-                           title={'RFQ View'}
-                           isShowBackButton={true}
+                            title={'RFQ View'}
+                            isShowBackButton={true}
                         />
                         <MuiCardComponent>
                             <div className="mb-3">
@@ -189,6 +231,16 @@ const RfqView = () => {
                                     status={data?.status}
                                 />
                             </div>
+                            {approveStatus() && data?.status ==='pending' &&
+                                <div className={'flex justify-end'}>
+                                    <ReusableButton
+                                        name={'Submit RFQ'}
+                                        onClick={() => showConfirmationModal(data)}
+                                    >
+                                        <FileOutput size={12}/>
+                                    </ReusableButton>
+                                </div>
+                            }
 
                         </MuiCardComponent>
                         {createdForm()}
