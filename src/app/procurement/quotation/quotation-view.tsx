@@ -3,22 +3,23 @@
 import ProtectedRoute from "@/components/authentication/protected-route";
 import MuiCardComponent from "@/components/card/mui-card.component";
 import ViewCardComponent from "@/components/card/view.card.component";
-import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
-import { get } from "@/utils/api";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
+import {get} from "@/utils/api";
+import React, {useEffect, useState} from "react";
+import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 import RequisitionRequestItem from "@/app/procurement/requisition-requests/requisition-request-items";
 import {useCrudOperator} from "@/hooks/crud/crud-operator";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {FileOutput} from "lucide-react";
+import {FileOutput, RotateCcw} from "lucide-react";
 import RfqItems from "@/app/procurement/rfq/rfq-items";
 import QuotationItems from "@/app/procurement/quotation/quotation-items";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
 import {ITEM_APPROVAL_SLUG, QUOTATION_APPROVAL_SLUG} from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
+import {showConfirmationModal} from "@/utils/showAlertDialog";
 
 const QuotationView = () => {
 
@@ -26,7 +27,7 @@ const QuotationView = () => {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
-
+    const [refresh, setRefresh] = useState(false)
     const {state, dispatch} = useGlobalContextHook()
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
@@ -49,79 +50,55 @@ const QuotationView = () => {
         from_id: id
     })
 
+    const onSave = async () => {
+        try {
+            const res = await get(`${url}/submit-draft`, token);
+            if (data && res.status === 200) {
+                setRefresh(!refresh);
+            }
+        } catch (error: any) {
+            console.log(error);
+        }
+    };
+
+    const handleSubmit = (data: any) => {
+        showConfirmationModal({
+            title: 'Are you sure?',
+            text: `Are you sure you want to submit Quotation code: ${data.formatted_code}?`,
+            onConfirm: onSave,  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
+
+    const onRefresh = async () => {
+        try {
+            const res = await get(`${url}/refresh-draft`, token);
+            if (data && res.status === 200) {
+                setRefresh(!refresh);
+            }
+        } catch (error: any) {
+            console.log(error);
+        }
+    };
+
+    const handleRefresh = (data: any) => {
+        showConfirmationModal({
+            title: 'Are you sure?',
+            text: `Are you sure you want to Refresh Saved Changes for Quotation code: ${data.formatted_code}?`,
+            onConfirm: onRefresh,  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
+
     const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
+    const [dataFromChild, setDataFromChild] = useState(null);
 
-    const formInputs = [
-        {
-            name: 'payment_method',
-            type: 'text',
-            label: 'Payment Method',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
-            name: 'evaluation_method',
-            type: 'text',
-            label: 'Evaluation Method',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
-            name: 'decision_timeline',
-            type: 'text',
-            label: 'Decision Timeline',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
-            name: 'submission_requirement',
-            type: 'text',
-            label: 'Submission Requirement',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
-            name: 'delivery_time',
-            type: 'text',
-            label: 'Deliver Time',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
-            name: 'terms_and_conditions',
-            type: 'textArea',
-            label: 'Terms and Conditions',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-    ]
-
-    const {
-        handleClick,
-        createdForm,
-        isStateChanged
-    } = useCrudOperator({
-        formInputData: formInputs,
-        incomingUrl: `rfq/${id}/create-rfq`,
-        incomingModalTitle: "Request For Quotation",
-        viewUrl:"",
-        state_properties:[],
-        from:'rfq',
-        isApiV2:true
-    })
+    // This function will be passed to the child to receive data
+    const sendRefresh = () => {
+        console.log('sendRefresh', 'refreshed')
+        setRefresh(!refresh);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -141,7 +118,7 @@ const QuotationView = () => {
             }
         };
         fetchData()
-    }, [])
+    }, [refresh])
 
     return (
 
@@ -151,8 +128,8 @@ const QuotationView = () => {
                     :
                     <>
                         <PageHeader
-                           title={'Quotation View'}
-                           isShowBackButton={true}
+                            title={'Quotation View'}
+                            isShowBackButton={true}
                         />
                         <MuiCardComponent>
                             <div className="mb-3">
@@ -166,8 +143,8 @@ const QuotationView = () => {
                                         {label: 'Decision Timeline', value: data?.decision_timeline},
                                         {label: 'Submission Requirement', value: data?.submission_requirement},
                                         {label: 'Delivery Time', value: data?.delivery_time},
+                                        {label: 'status', value: data?.status},
                                         {label: 'Terms and Conditions', value: data?.terms_and_conditions},
-
                                     ]}
                                     titleA={`Quotation`}
                                     titleB={` ${data?.formatted_code} `}
@@ -187,12 +164,25 @@ const QuotationView = () => {
                             </div>
                             <hr className="bg-gray-100"/>
                             <div className={'mt-2'}>
-                                <QuotationItems quotation_id={id}/>
+                                <QuotationItems quotation={data}/>
                             </div>
-
+                            {approveStatus() && data?.status === 'pending' &&
+                                <div className={'flex justify-end gap-2'}>
+                                    <ReusableButton
+                                        name={'Refresh Quotation'}
+                                        onClick={() => handleRefresh(data)}
+                                    >
+                                        <RotateCcw size={12}/>
+                                    </ReusableButton>
+                                    <ReusableButton
+                                        name={'Submit Quotation'}
+                                        onClick={() => handleSubmit(data)}
+                                    >
+                                        <FileOutput size={12}/>
+                                    </ReusableButton>
+                                </div>
+                            }
                         </MuiCardComponent>
-                        {createdForm()}
-
                     </>
             }
         </ProtectedRoute>

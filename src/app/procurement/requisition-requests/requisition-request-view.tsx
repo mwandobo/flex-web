@@ -138,7 +138,7 @@ const RequisitionRequestView = () => {
             }
         };
         fetchData()
-    }, [])
+    }, [isStateChanged])
 
     return (
 

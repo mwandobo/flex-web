@@ -3,14 +3,24 @@
 import ProtectedRoute from '@/components/authentication/protected-route'
 import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
-import React from 'react'
+import React, {useEffect} from 'react'
 import PageHeader from "@/components/header/page-header-v1";
+import {get} from "@/utils/api";
 
 const formInputs = [
     {
         name: 'price',
         type: 'text',
         label: 'Item Price',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'quantity',
+        type: 'text',
+        label: 'Quantity',
         value: '',
         required: true,
         isError: false,
@@ -54,22 +64,22 @@ const columns = [
 ]
 
 interface Props {
-    quotation_id: string
+    quotation: any
 }
 
-function QuotationItems({quotation_id}: Props) {
+function QuotationItems({quotation}: Props) {
     const permission = 'quotation_item'
 
     const {
         loading,
         createdForm,
         handleClick,
-        tabular
-
+        tabular,
+        isStateChanged
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: `quotations/${quotation_id}/items`,
+        url: `quotations/${quotation?.id}/items`,
         modalTitle: 'Quotation Item',
         viewUrl: '/inventory/items-categories/',
         state_properties: [],
@@ -79,6 +89,8 @@ function QuotationItems({quotation_id}: Props) {
         isHideShow:true,
         isShowAddPriceButton:true,
         addPriceFormInputData: formInputs,
+        isHideDelete: quotation?.status !== 'pending',
+        isHideEdit: quotation?.status !== 'pending'
     })
 
     return (
