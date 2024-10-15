@@ -168,7 +168,8 @@ function Quotation() {
         permission: permission,
         isApiV2:true,
         from: 'quotation',
-        approval_slug: QUOTATION_APPROVAL_SLUG
+        approval_slug: QUOTATION_APPROVAL_SLUG,
+        isHideEdit:true
     })
 
     return (

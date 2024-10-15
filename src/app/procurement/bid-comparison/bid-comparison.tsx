@@ -58,7 +58,9 @@ function BidComparison() {
         permission: permission,
         isApiV2:true,
         from: 'bid-comparison',
-        approval_slug: BID_COMPARISON_APPROVAL_SLUG
+        approval_slug: BID_COMPARISON_APPROVAL_SLUG,
+        isHideDelete: true,
+        isHideEdit: true
     })
 
     return (
@@ -71,7 +73,7 @@ function BidComparison() {
                             <PageHeader
                                 title={"Bid Comparison"}
                                 handleClick={handleClick}
-                                isShowAddButton={true}
+                                isShowAddButton={false}
                                />
                             {tabular()}
                             {createdForm()}

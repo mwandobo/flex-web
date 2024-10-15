@@ -113,16 +113,24 @@ const BidComparisonView = () => {
                 setData(result)
                 setRfq(res.data.rfq)
 
+                console.log(result)
+
+
                 const bufBody = result.map(item => ({
                     item_id: item.id,
-                    winner:
-                        {
-                            supplier_id: null,
-                            quotation_id: null,
-                            price: null,
-                            quantity: null
-                        },
-                }))
+                    // winner: {
+                    //     supplier_id: result[0]?.supplier?.supplier_id ?? null,   // First item's supplier_id
+                    //     quotation_id: result[0]?.supplier?.quotation_id ?? null, // First item's quotation_id
+                    //     price: result[0]?.supplier?.price ?? null,               // First item's price
+                    //     quantity: result[0]?.supplier.quantity ?? null,         // First item's quantity
+                    // },
+                    winner: {
+                        supplier_id: item?.suppliers[0]?.id ?? null,   // First item's supplier_id
+                        quotation_id: item?.suppliers[0]?.quotation_id ?? null, // First item's quotation_id
+                        price: item?.suppliers[0]?.price ?? null,               // First item's price
+                        quantity: item?.suppliers[0]?.quantity ?? null,         // First item's quantity
+                    },
+                }));
 
                 setSelectedCards(bufBody)
                 setLoading(false)
@@ -134,6 +142,7 @@ const BidComparisonView = () => {
             }
         }
     };
+
 
     useEffect(() => {
         fetchData()
@@ -179,7 +188,7 @@ const BidComparisonView = () => {
                                             >
                                                 <div>
                                                     {
-                                                        rfq?.status === "pending" && <CircleCheckbox
+                                                        rfq?.status === "bid_comparison" && <CircleCheckbox
                                                             checked={isSelected(payloadItem.id, supplier)}
                                                         />
                                                     }
@@ -211,13 +220,13 @@ const BidComparisonView = () => {
                                 </div>
                             ))}
                             <div className={'flex justify-end gap-1'}>
-                                {rfq?.status === "pending" &&
+                                {rfq?.status === "bid_comparison" &&
                                     <ReusableButton name={'Submit'} onClick={handleSubmit}> <CheckCircle size={10}/>
                                     </ReusableButton>}
-                                {rfq?.status === "bid-comparison" &&
+                                {rfq?.status === "purchase_order" &&
                                     <ReusableButton name={'Re Choose Winner'} onClick={handleRefreshWinner}>
                                         <CheckCircle size={10}/> </ReusableButton>}
-                                {rfq?.status === "bid-comparison" && <ReusableButton name={'Create Purchase Request'}
+                                {rfq?.status === "purchase_order" && <ReusableButton name={'Create Purchase Request'}
                                                                                      onClick={handleCreatePurchaseOrder}>
                                     <CheckCircle size={10}/> </ReusableButton>}
                             </div>
