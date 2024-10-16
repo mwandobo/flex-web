@@ -3,10 +3,10 @@
 import ProtectedRoute from "@/components/authentication/protected-route";
 import MuiCardComponent from "@/components/card/mui-card.component";
 import ViewCardComponent from "@/components/card/view.card.component";
-import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
-import { get } from "@/utils/api";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
+import {get} from "@/utils/api";
+import React, {useEffect, useState} from "react";
+import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 import RequisitionRequestItem from "@/app/procurement/requisition-requests/requisition-request-items";
@@ -22,11 +22,13 @@ import {INVOICE_APPROVAL_SLUG, ITEM_APPROVAL_SLUG} from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
+import {showConfirmationModal} from "@/utils/showAlertDialog";
 
 const InvoiceView = () => {
 
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
+    const [refresh, setRefresh] = useState(false)
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
 
@@ -53,6 +55,25 @@ const InvoiceView = () => {
 
     const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
+    const onSave = async () => {
+        try {
+            const res = await get(`${url}/submit-draft`, token);
+            if (data && res.status === 200) {
+                setRefresh(!refresh);
+            }
+        } catch (error: any) {
+            console.log(error);
+        }
+    };
+
+    const handleSubmit = (data: any) => {
+        showConfirmationModal({
+            title: 'Are You Sure?',
+            text: `Are You Sure You Want To Submit Invoice Code: ${data.formatted_code}?`,
+            onConfirm: onSave,  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -72,7 +93,7 @@ const InvoiceView = () => {
             }
         };
         fetchData()
-    }, [])
+    }, [refresh])
 
     return (
 
@@ -82,8 +103,8 @@ const InvoiceView = () => {
                     :
                     <>
                         <PageHeader
-                           title={'Invoice'}
-                           isShowBackButton={true}
+                            title={'Invoice'}
+                            isShowBackButton={true}
                         />
                         <MuiCardComponent>
                             <div className="mb-3">
@@ -120,11 +141,26 @@ const InvoiceView = () => {
                                 </div>
                             </div>
                             <hr className="bg-gray-100"/>
-                            <div className={'mt-2'}>
-                                <Payment/>
-                            </div>
-                            <hr className="bg-gray-100"/>
+                            {
+                                approveStatus() && data?.status === 'payment' &&
 
+                                <div className={'mt-2'}>
+                                    <Payment
+                                        invoice={data}
+                                    />
+                                </div>
+                            }
+                            <hr className="bg-gray-100"/>
+                            {approveStatus() && data?.status === 'pending' &&
+                                <div className={'flex justify-end gap-2 mt-2'}>
+                                    <ReusableButton
+                                        name={'Submit Invoice'}
+                                        onClick={() => handleSubmit(data)}
+                                    >
+                                        <FileOutput size={12}/>
+                                    </ReusableButton>
+                                </div>
+                            }
                         </MuiCardComponent>
                     </>
             }

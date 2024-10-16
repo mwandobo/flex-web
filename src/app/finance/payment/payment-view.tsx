@@ -13,6 +13,9 @@ import {ITEM_APPROVAL_SLUG, PAYMENT_APPROVAL_SLUG} from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
+import {showConfirmationModal} from "@/utils/showAlertDialog";
+import {ReusableButton} from "@/components/button/reusable-button";
+import {FileOutput} from "lucide-react";
 
 const PaymentView = () => {
 
@@ -20,6 +23,7 @@ const PaymentView = () => {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
+    const [refresh, setRefresh] = useState(false)
 
     const {state, dispatch} = useGlobalContextHook()
     const {selectedSubSidebarItem: selected, viewedItem} = state;
@@ -45,6 +49,25 @@ const PaymentView = () => {
 
     const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
+    const onSave = async () => {
+        try {
+            const res = await get(`${url}/submit-draft`, token);
+            if (data && res.status === 200) {
+                setRefresh(!refresh);
+            }
+        } catch (error: any) {
+            console.log(error);
+        }
+    };
+
+    const handleSubmit = (data: any) => {
+        showConfirmationModal({
+            title: 'Are You Sure?',
+            text: `Are You Sure You Want To Submit Payment Code: ${data.formatted_code}?`,
+            onConfirm: onSave,  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -64,7 +87,7 @@ const PaymentView = () => {
             }
         };
         fetchData()
-    }, [])
+    }, [refresh])
 
     return (
         <ProtectedRoute>
@@ -92,6 +115,7 @@ const PaymentView = () => {
                                     titleA={`Payment`}
                                     titleB={` ${data?.formatted_code} `}
                                 />
+                                <hr className="bg-gray-100"/>
                                 <div className={'flex justify-between mt-2'}>
                                     <>
                                         {approvalButtonsWrapper()}
@@ -105,6 +129,17 @@ const PaymentView = () => {
                                     </SlideOver>
                                 </div>
                             </div>
+                            <hr className="bg-gray-100"/>
+                            {approveStatus() && data?.status === 'pending' &&
+                                <div className={'flex justify-end gap-2'}>
+                                    <ReusableButton
+                                        name={'Submit Payment'}
+                                        onClick={() => handleSubmit(data)}
+                                    >
+                                        <FileOutput size={12}/>
+                                    </ReusableButton>
+                                </div>
+                            }
                         </MuiCardComponent>
                     </>
             }

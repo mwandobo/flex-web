@@ -15,12 +15,16 @@ import {DELIVERY_APPROVAL_SLUG, ITEM_APPROVAL_SLUG} from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
+import {showConfirmationModal} from "@/utils/showAlertDialog";
+import {ReusableButton} from "@/components/button/reusable-button";
+import {FileOutput} from "lucide-react";
 
 const DeliveryView = () => {
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
+    const [refresh, setRefresh] = useState(false)
 
     const {state, dispatch} = useGlobalContextHook()
     const {selectedSubSidebarItem: selected, viewedItem} = state;
@@ -46,6 +50,25 @@ const DeliveryView = () => {
 
     const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
+    const onSave = async () => {
+        try {
+            const res = await get(`${url}/submit-draft`, token);
+            if (data && res.status === 200) {
+                setRefresh(!refresh);
+            }
+        } catch (error: any) {
+            console.log(error);
+        }
+    };
+
+    const handleSubmit = (data: any) => {
+        showConfirmationModal({
+            title: 'Are You Sure?',
+            text: `Are You Sure You Want To Submit Delivery Code: ${data.formatted_code}?`,
+            onConfirm: onSave,  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -65,7 +88,7 @@ const DeliveryView = () => {
             }
         };
         fetchData()
-    }, [])
+    }, [refresh])
 
     console.log(data)
 
@@ -113,7 +136,18 @@ const DeliveryView = () => {
                                 </div>
                             </div>
                             <hr className="bg-gray-100"/>
-                            <DeliveryItems delivery_id={id}/>
+                            <DeliveryItems delivery={data}/>
+                            <hr className="bg-gray-100"/>
+                            {approveStatus() && data?.status === 'pending' &&
+                                <div className={'flex justify-end gap-2'}>
+                                    <ReusableButton
+                                        name={'Submit Delivery'}
+                                        onClick={() => handleSubmit(data)}
+                                    >
+                                        <FileOutput size={12}/>
+                                    </ReusableButton>
+                                </div>
+                            }
                         </MuiCardComponent>
                     </>
             }

@@ -5,7 +5,6 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import RequisitionFormComponent from "@/app/procurement/requisition-requests/components/requisition-form.component";
 
 const formInputs = [
     {
@@ -60,10 +59,10 @@ const columns = [
 ]
 
 interface Props {
-    delivery_id: string
+    delivery: any
 }
 
-function DeliveryItems({delivery_id}: Props) {
+function DeliveryItems({delivery}: Props) {
     const permission = 'delivery_item'
 
     const {
@@ -75,7 +74,7 @@ function DeliveryItems({delivery_id}: Props) {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: `deliveries/${delivery_id}/bids`,
+        url: `deliveries/${delivery?.id}/bids`,
         modalTitle: 'Delivery Item',
         viewUrl: '/inventory/items-categories/',
         state_properties: [],
@@ -84,7 +83,7 @@ function DeliveryItems({delivery_id}: Props) {
         from: 'delivery-items',
         isHideShow: true,
         isHideDelete: true,
-        // isHideEdit: false
+        isHideEdit: delivery?.status !== 'pending'
     })
 
     return (

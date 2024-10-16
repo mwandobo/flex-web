@@ -70,7 +70,7 @@ function PurchaseOrder() {
         permission: permission,
         isApiV2:true,
         from: 'bid-comparison',
-        isHideDelete: true,
+        isHideDelete: false,
         isHideEdit: true,
         approval_slug: PURCHASE_ORDER_APPROVAL_SLUG
     })

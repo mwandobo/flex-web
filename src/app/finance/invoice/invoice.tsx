@@ -8,7 +8,26 @@ import PageHeader from "@/components/header/page-header-v1";
 import {INVOICE_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
-
+    {
+        name: 'purchase_order_id',
+        type: 'select',
+        label: 'Purchase_order',
+        value: '',
+        optionsUrlData: `/purchase-orders?approved=approved&status=invoice`,
+        optionDataKey: 'rfq',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'invoice_date',
+        type: 'date',
+        label: 'Invoice Date',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    }
 ]
 
 const columns = [
@@ -81,7 +100,7 @@ function Invoice() {
         columns: columns,
         formInputs: formInputs,
         url: 'invoices',
-        modalTitle: 'Purchase Order',
+        modalTitle: 'Invoice',
         viewUrl: '/procurement/rfq/',
         state_properties: [],
         permission: permission,

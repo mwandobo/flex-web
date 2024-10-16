@@ -5,7 +5,6 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import RequisitionFormComponent from "@/app/procurement/requisition-requests/components/requisition-form.component";
 
 const formInputs = [
     {
@@ -115,10 +114,10 @@ const columns = [
 ]
 
 interface Props {
-    inspectionId: string
+    inspection: any
 }
 
-function InspectionItems({inspectionId}: Props) {
+function InspectionItems({inspection}: Props) {
     const permission = 'inspection_item'
 
     const {
@@ -130,7 +129,7 @@ function InspectionItems({inspectionId}: Props) {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: `inspections/${inspectionId}/bids`,
+        url: `inspections/${inspection.id}/bids`,
         modalTitle: 'Inspection Item',
         viewUrl: '/inventory/items-categories/',
         state_properties: [],
@@ -139,7 +138,7 @@ function InspectionItems({inspectionId}: Props) {
         from: 'inspection-items',
         isHideShow: true,
         isHideDelete: true,
-        // isHideEdit: false
+        isHideEdit: inspection.status !== "pending",
     })
 
     return (

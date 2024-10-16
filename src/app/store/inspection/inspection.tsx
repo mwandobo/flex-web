@@ -15,7 +15,7 @@ const formInputs = [
         type: 'select',
         label: 'Delivery',
         value: '',
-        optionsUrlData: 'deliveries',
+        optionsUrlData: `/deliveries?approved=approved&status=delivered`,
         optionDataKey: 'rfq',
         required: true,
         isError: false,

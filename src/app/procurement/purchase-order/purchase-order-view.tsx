@@ -12,7 +12,7 @@ import PageHeader from "@/components/header/page-header-v1";
 import RequisitionRequestItem from "@/app/procurement/requisition-requests/requisition-request-items";
 import {useCrudOperator} from "@/hooks/crud/crud-operator";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {FileOutput} from "lucide-react";
+import {FileOutput, RotateCcw} from "lucide-react";
 import RfqItems from "@/app/procurement/rfq/rfq-items";
 import QuotationItems from "@/app/procurement/quotation/quotation-items";
 import PurchaseOrderItems from "@/app/procurement/purchase-order/purchase-order-items";
@@ -21,6 +21,7 @@ import {ITEM_APPROVAL_SLUG, PURCHASE_ORDER_APPROVAL_SLUG} from "@/utils/constant
 import {useApprovalHook} from "@/hooks/useApprove";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
+import {showConfirmationModal} from "@/utils/showAlertDialog";
 
 const PurchaseOrderView = () => {
 
@@ -28,6 +29,7 @@ const PurchaseOrderView = () => {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
+    const [refresh, setRefresh] = useState(false)
 
     const {state, dispatch} = useGlobalContextHook()
     const {selectedSubSidebarItem: selected, viewedItem} = state;
@@ -53,6 +55,25 @@ const PurchaseOrderView = () => {
 
     const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
+    const onSave = async () => {
+        try {
+            const res = await get(`${url}/submit-draft`, token);
+            if (data && res.status === 200) {
+                setRefresh(!refresh);
+            }
+        } catch (error: any) {
+            console.log(error);
+        }
+    };
+
+    const handleSubmit = (data: any) => {
+        showConfirmationModal({
+            title: 'Are You Sure?',
+            text: `Are You Sure You Want To Submit Purchase Order Code: ${data.formatted_code}?`,
+            onConfirm: onSave,  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -72,7 +93,7 @@ const PurchaseOrderView = () => {
             }
         };
         fetchData()
-    }, [])
+    }, [refresh])
 
     return (
 
@@ -102,6 +123,7 @@ const PurchaseOrderView = () => {
                                             value: data?.quotation?.submission_requirement
                                         },
                                         {label: 'Delivery Time', value: data?.quotation?.delivery_time},
+                                        {label: 'Status', value: data?.status},
                                         {label: 'Terms and Conditions', value: data?.quotation?.terms_and_conditions},
 
                                     ]}
@@ -125,6 +147,16 @@ const PurchaseOrderView = () => {
                             <div className={'mt-2'}>
                                 <PurchaseOrderItems purchase_order_id={id}/>
                             </div>
+                            {approveStatus() && data?.status === 'pending' &&
+                                <div className={'flex justify-end gap-2'}>
+                                    <ReusableButton
+                                        name={'Submit Purchase Order'}
+                                        onClick={() => handleSubmit(data)}
+                                    >
+                                        <FileOutput size={12}/>
+                                    </ReusableButton>
+                                </div>
+                            }
                         </MuiCardComponent>
                     </>
             }

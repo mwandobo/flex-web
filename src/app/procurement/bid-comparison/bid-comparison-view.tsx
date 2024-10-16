@@ -226,7 +226,7 @@ const BidComparisonView = () => {
                                 {rfq?.status === "purchase_order" &&
                                     <ReusableButton name={'Re Choose Winner'} onClick={handleRefreshWinner}>
                                         <CheckCircle size={10}/> </ReusableButton>}
-                                {rfq?.status === "purchase_order" && <ReusableButton name={'Create Purchase Request'}
+                                {rfq?.status === "purchase_order" && <ReusableButton name={'Create Purchase Order'}
                                                                                      onClick={handleCreatePurchaseOrder}>
                                     <CheckCircle size={10}/> </ReusableButton>}
                             </div>

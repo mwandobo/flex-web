@@ -42,5 +42,5 @@ class RequestQueue {
     }
 }
 
-const requestQueue = new RequestQueue(3, 5); // 3 requests every 2 seconds
+const requestQueue = new RequestQueue(3, 1000); // 3 requests every 2 seconds
 export default requestQueue;

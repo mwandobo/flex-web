@@ -9,13 +9,12 @@ import {tr} from "date-fns/locale";
 import {DELIVERY_APPROVAL_SLUG, ITEM_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
-
     {
         name: 'purchase_order_id',
         type: 'select',
         label: 'Purchase Orders',
         value: '',
-        optionsUrlData: 'purchase-orders',
+        optionsUrlData: `/purchase-orders?approved=approved&status=invoice`,
         optionDataKey: 'rfq',
         required: true,
         isError: false,

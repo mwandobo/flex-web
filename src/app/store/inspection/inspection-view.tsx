@@ -16,10 +16,14 @@ import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
 import {INSPECTION_APPROVAL_SLUG, ITEM_APPROVAL_SLUG} from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
+import {showConfirmationModal} from "@/utils/showAlertDialog";
+import {ReusableButton} from "@/components/button/reusable-button";
+import {FileOutput} from "lucide-react";
 
 const InspectionView = () => {
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
+    const [refresh, setRefresh] = useState(false)
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
 
@@ -47,6 +51,26 @@ const InspectionView = () => {
 
     const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
+    const onSave = async () => {
+        try {
+            const res = await get(`${url}/submit-draft`, token);
+            if (data && res.status === 200) {
+                setRefresh(!refresh);
+            }
+        } catch (error: any) {
+            console.log(error);
+        }
+    };
+
+    const handleSubmit = (data: any) => {
+        showConfirmationModal({
+            title: 'Are You Sure?',
+            text: `Are You Sure You Want To Submit Inspection Code: ${data.formatted_code}?`,
+            onConfirm: onSave,  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -65,9 +89,7 @@ const InspectionView = () => {
             }
         };
         fetchData()
-    }, [])
-
-    console.log(data)
+    }, [refresh])
 
     return (
 
@@ -116,7 +138,18 @@ const InspectionView = () => {
                                 </div>
                             </div>
                             <hr className="bg-gray-100"/>
-                            <InspectionItems inspectionId={id}/>
+                            <InspectionItems inspection={data}/>
+                            <hr className="bg-gray-100"/>
+                            {approveStatus() && data?.status === 'pending' &&
+                                <div className={'flex justify-end gap-2'}>
+                                    <ReusableButton
+                                        name={'Submit Inspection'}
+                                        onClick={() => handleSubmit(data)}
+                                    >
+                                        <FileOutput size={12}/>
+                                    </ReusableButton>
+                                </div>
+                            }
                         </MuiCardComponent>
                     </>
             }

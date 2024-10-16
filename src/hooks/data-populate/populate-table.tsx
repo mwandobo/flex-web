@@ -137,8 +137,8 @@ export const usePopulateTable = ({
                     isShowAddPriceButton={isShowAddPriceButton}
                     permission={permission}
                     hide_view={isHideShow}
-                    hide_edit={isHideEdit || (isNeedApprove && isAnyLevelApproved && latestApproveStatus === 'approve')}
-                    hide_delete={isHideDelete || (isNeedApprove && isAnyLevelApproved && latestApproveStatus === 'approve')}
+                    hide_edit={isHideEdit || (isNeedApprove && isAnyLevelApproved && latestApproveStatus === 'approve') || obj?.status !== 'pending'}
+                    hide_delete={isHideDelete || (isNeedApprove && isAnyLevelApproved && latestApproveStatus === 'approve') || obj?.status !== 'pending'}
                 />
 
                 return sortObjectValuesByHeaders(obj, createRowHeaderArray())
