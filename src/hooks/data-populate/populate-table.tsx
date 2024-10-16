@@ -129,6 +129,7 @@ export const usePopulateTable = ({
                     obj = {...obj, remaining_amount: <FormattedMoney amount={obj.remaining_amount} isHideCurrency={true}/>}
                 }
 
+
                 obj.actions = <CrudButtonsComponent
                     hide_approve={true}
                     handleClick={handleClick}
