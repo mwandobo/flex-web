@@ -13,94 +13,18 @@ import {
 } from "@/utils/constant";
 import {from} from "stylis";
 
-const formInputs = [
-    {
-        name: 'name',
-        type: 'text',
-        label: 'Warranty Name',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
-        name: 'start_date',
-        type: 'date',
-        label: 'Start Date',
-        value: '',
-        required: true,
-        isError: false,
-    },
-    {
-        name: 'end_date',
-        type: 'date',
-        label: 'End Date',
-        value: '',
-        required: true,
-        isError: false,
-    },
-    {
-        name: 'terms',
-        type: 'textArea',
-        label: 'Terms',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
-        name: 'description',
-        type: 'textArea',
-        label: 'Description',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-]
-
-const columns = [
-    {
-        id: 'formatted_code',
-        numeric: false,
-        disablePadding: false,
-        label: 'Warranty Code',
-    },
-    {
-        id: 'service_item_name',
-        numeric: false,
-        disablePadding: false,
-        label: 'Service / Item',
-    },
-    {
-        id: 'formatted_start_date',
-        numeric: false,
-        disablePadding: false,
-        label: 'Start Date',
-    },
-    {
-        id: 'formatted_end_date',
-        numeric: false,
-        disablePadding: false,
-        label: 'End Date',
-    },
-    {
-        id: 'terms',
-        numeric: false,
-        disablePadding: false,
-        label: 'Terms',
-    },
-    {
-        id: 'status',
-        numeric: false,
-        disablePadding: false,
-        label: 'Status',
-    },
-]
 
 interface Props {
     from?: string,
     from_id?: string,
+}
+
+interface ColumnInputProps {
+    id: string,
+    numeric: boolean,
+    disablePadding: boolean,
+    label: string,
+    isHidden?: boolean
 }
 
 function Warranty({
@@ -108,6 +32,92 @@ function Warranty({
                       from_id
                   }: Props) {
     const permission = 'service'
+    const formInputs = [
+        {
+            name: 'name',
+            type: 'text',
+            label: 'Warranty Name',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+        {
+            name: 'start_date',
+            type: 'date',
+            label: 'Start Date',
+            value: '',
+            required: true,
+            isError: false,
+        },
+        {
+            name: 'end_date',
+            type: 'date',
+            label: 'End Date',
+            value: '',
+            required: true,
+            isError: false,
+        },
+        {
+            name: 'terms',
+            type: 'textArea',
+            label: 'Terms',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+        {
+            name: 'description',
+            type: 'textArea',
+            label: 'Description',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+    ]
+
+    const columns: ColumnInputProps[] = [
+        {
+            id: 'formatted_code',
+            numeric: false,
+            disablePadding: false,
+            label: 'Warranty Code',
+        },
+        {
+            id: 'service_item_name',
+            numeric: false,
+            disablePadding: false,
+            label: 'Service / Item',
+            isHidden: !!(from && from_id)
+        },
+        {
+            id: 'formatted_start_date',
+            numeric: false,
+            disablePadding: false,
+            label: 'Start Date',
+        },
+        {
+            id: 'formatted_end_date',
+            numeric: false,
+            disablePadding: false,
+            label: 'End Date',
+        },
+        {
+            id: 'terms',
+            numeric: false,
+            disablePadding: false,
+            label: 'Terms',
+        },
+        {
+            id: 'status',
+            numeric: false,
+            disablePadding: false,
+            label: 'Status',
+        },
+    ]
+
 
     const {
         loading,
@@ -140,7 +150,7 @@ function Warranty({
                             <PageHeader
                                 title={"Warranties"}
                                 handleClick={handleClick}
-                                isShowAddButton={true}
+                                isShowAddButton={!!(from && from_id)}
                             />
                             {tabular()}
                             {createdForm()}

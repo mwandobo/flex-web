@@ -16,6 +16,7 @@ import {useApprovalHook} from "@/hooks/useApprove";
 import {ITEM_APPROVAL_SLUG} from "@/utils/constant";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
+import Warranty from "@/app/inventory/warranty/warranty";
 
 const ItemsView = () => {
 
@@ -128,6 +129,8 @@ const ItemsView = () => {
                                     </div>
                                 }
                             </div>
+                            <hr className="bg-gray-100"/>
+                            <Warranty from={'item'} from_id={id}/>
                             <hr className="bg-gray-100"/>
                             <div className={'flex justify-between mt-2'}>
                                 <>

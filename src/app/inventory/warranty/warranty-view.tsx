@@ -22,7 +22,7 @@ import {
     COST_CENTER_APPROVAL_SLUG,
     INVOICE_APPROVAL_SLUG,
     ITEM_APPROVAL_SLUG,
-    SERVICES_APPROVAL_SLUG
+    SERVICES_APPROVAL_SLUG, WARRANTY_APPROVAL_SLUG
 } from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
 import SlideOver from "@/components/slide-over/slide-over.component";
@@ -41,8 +41,8 @@ const WarrantyView = () => {
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
 
-    const url = `services/${id}`
-    const approval_url = `approval/approved-items/by-item?from=${SERVICES_APPROVAL_SLUG}&&from_id=${id}`
+    const url = `warranties/${id}`
+    const approval_url = `approval/approved-items/by-item?from=${WARRANTY_APPROVAL_SLUG}&&from_id=${id}`
 
     const navigateToLogin = () => {
         return router.push('/login')
@@ -53,8 +53,8 @@ const WarrantyView = () => {
         latestApproveStatus,
         approvalButtonsWrapper,
     } = useApprovalHook({
-        approval_slug: SERVICES_APPROVAL_SLUG,
-        from: SERVICES_APPROVAL_SLUG,
+        approval_slug: WARRANTY_APPROVAL_SLUG,
+        from: WARRANTY_APPROVAL_SLUG,
         from_id: id
     })
 
@@ -76,7 +76,7 @@ const WarrantyView = () => {
     const handleSubmit = (data: any) => {
         showConfirmationModal({
             title: 'Are You Sure?',
-            text: `Are You Sure You Want To Submit Service: ${data.formatted_code}?`,
+            text: `Are You Sure You Want To Submit Warranty: ${data.formatted_code}?`,
             onConfirm: onSave,  // Action to perform on confirmation
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
@@ -103,7 +103,6 @@ const WarrantyView = () => {
     }, [refresh])
 
     return (
-
         <ProtectedRoute>
             {
                 loading ? <p>Loading...</p>
@@ -117,14 +116,13 @@ const WarrantyView = () => {
                             <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
-                                        {label: 'Service Code', value: data?.formatted_code},
-                                        {label: 'Service Name', value: data?.name},
-                                        {label: 'Service Cost', value:  moneyFormater({amount:data?.cost}) },
-                                        {label: 'Service Provider', value: data?.provider},
-                                        {label: 'Category', value: data?.category},
+                                        {label: 'Warranty Code', value: data?.formatted_code},
+                                        {label: 'Warranty Name', value: data?.name},
+                                        {label: 'Service Name', value:  moneyFormater({amount:data?.cost}) },
                                         {label: 'Start Date', value: data?.formatted_start_date},
                                         {label: 'End Date', value: data?.formatted_end_date},
                                         {label: 'Status', value: data?.status},
+                                        {label: 'Terms', value: data?.terms},
                                         {label: 'Description', value: data?.description},
                                     ]}
                                     titleA={`Service`}
@@ -149,7 +147,7 @@ const WarrantyView = () => {
                             {approveStatus() && data?.status === 'pending' &&
                                 <div className={'flex justify-end gap-2 mt-2'}>
                                     <ReusableButton
-                                        name={'Submit Service'}
+                                        name={'Submit Warranty'}
                                         onClick={() => handleSubmit(data)}
                                     >
                                         <FileOutput size={12}/>
