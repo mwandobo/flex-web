@@ -23,7 +23,7 @@ const formInputs = [
         type: 'select',
         label: `Select Personnel`,
         value: '',
-        optionsUrlData: `/undefined/employee`,
+        optionsUrlData: `/employee`,
         optionDataKey: 'users',
         required: true,
         isError: false,

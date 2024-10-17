@@ -1,65 +1,26 @@
 "use client"
 
-import ProtectedRoute from '@/components/authentication/protected-route'
-import PageHeader from '@/components/header/page-header'
-import { usePageData } from '@/hooks/use-page/use-page-data'
-import { getValueFromLocalStorage } from '@/utils/actions/local-starage'
-import { capitalizeFirstWord } from '@/utils/actions/string-manipulations'
-import React from 'react'
-function ExternalUsers() {
-    const group = getValueFromLocalStorage('group')
+import InternalMenuSkeletonComponent from "@/components/page-components/internal-menu-skeleton-component";
+import {useEffect} from "react";
+import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
+import SettingItem from "@/app/settings/setting-item";
 
-    const _deptFormInputs = [
-        {
-            name: 'name',
-            type: 'text',
-            label: 'Name',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-    ]
-    const _columns = [
-        {
-            id: 'name',
-            numeric: false,
-            disablePadding: false,
-            label: 'Name',
-        },
-    ]
+const SettingsItems = [
+    { name: 'project-type', title: 'Project Types', item: <SettingItem group={'project'} /> },
+];
 
-    const {
-        loading,
-        createdForm,
-        handleClick,
-        tabular,
-    } = usePageData({
-        columns: _columns,
-        formInputs: _deptFormInputs,
-        url: `settings/${group}`,
-        modalTitle: `${capitalizeFirstWord(group)} Settings`,
-        viewUrl: `/settings/${group}/view?id=`,
-        state_properties: [group],
-        isHideShow: true
-    })
+function SettingPage() {
+    const {state, dispatch} = useGlobalContextHook();
 
-    return (
-        <ProtectedRoute>
-            {
-                loading ? <p>Loading...</p>
-                    :
-                    <>
-                        <PageHeader
-                            handleClick={handleClick}
-                            links={[{ name: capitalizeFirstWord(group), linkTo: `/settings/${group}`, permission: '' }]}
-                        />
-                        {tabular()}
-                        {createdForm()}
-                    </>
-            }
-        </ProtectedRoute>
-    )
+    useEffect(() => {
+        const selectedItem = getValueFromLocalStorage('selected_sub_sidebar_item')
+        const sideViewPayload = JSON.parse(getValueFromLocalStorage('sub_view_item'))
+        dispatch({type: "SET_SUB_SIDEBAR_ITEM", payload: selectedItem});
+        dispatch({type: "SET_SUB_VIEW_ITEM", payload: sideViewPayload})
+    }, []);
+
+    return <InternalMenuSkeletonComponent pageItems={SettingsItems} title="Settings Management"  subtitle="Setting Items" />;
 }
 
-export default ExternalUsers
+export default SettingPage;

@@ -219,80 +219,18 @@ const items: ISidebarItem[] = [
         permission: 'notification-list',
         icon: Bell,
     },
-
+    {
+        name: 'Configurations',
+        path: '/configurations',
+        permission: 'configurations-list',
+        icon: Book,
+    },
     {
         name: 'Settings',
         path: '/settings',
         permission: 'settings-list',
-        icon: Settings,
-        items: [
-            {
-                name: 'Stakeholder Types',
-                path: '/settings?group=stakeholder',
-                permission: 'setting_stakeholder-list',
-                icon: UserRoundCog,
-                group: 'stakeholder'
-            },
-            {
-                name: 'Sponsor Types',
-                path: '/settings?group=sponsor',
-                permission: 'setting_sponsor-list',
-                icon: UserCog,
-                group: 'sponsor'
-
-            },
-            {
-                name: 'Representative Types',
-                path: '/settings?group=representative',
-                permission: 'setting_representative-list',
-                icon: UserCog,
-                group: 'representative'
-            },
-
-            {
-                name: 'Sponsorship Types',
-                path: '/settings?group=sponsorship',
-                permission: 'setting_sponsorship-list',
-                icon: Settings2,
-                group: 'sponsorship'
-
-            },
-            {
-                name: 'Resources Types',
-                path: '/settings?group=resource',
-                permission: 'setting_resource-list',
-                icon: AlignHorizontalJustifyStart,
-                group: 'resource'
-
-            },
-            {
-                name: 'Project Types',
-                path: '/settings?group=project',
-                permission: 'setting_project-list',
-                icon: Scale,
-                group: 'project'
-
-            },
-            {
-                name: 'Indicator Measurements Types',
-                path: '/settings?group=measurement',
-                permission: 'setting_measurement-list',
-                icon: Scale,
-                group: 'measurement'
-
-            },
-            {
-                name: 'Assignment Types',
-                path: '/settings?group=assignment',
-                permission: 'setting_assignment-list',
-                icon: Scale,
-                group: 'assignment'
-
-            },
-
-        ]
+        icon: Book,
     },
-
 
 ]
 

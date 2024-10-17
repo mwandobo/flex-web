@@ -9,7 +9,7 @@ type PageItem = {
   name: string;
   title: string;
   item: React.ReactNode;
-  itemView: React.ReactNode;
+  itemView?: React.ReactNode;
 };
 
 type InventoryProps = {
