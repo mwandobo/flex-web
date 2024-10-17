@@ -10,10 +10,16 @@ import InternalMenuSkeletonComponent from "@/components/page-components/internal
 import {useEffect} from "react";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
+import Service from "@/app/inventory/services/service";
+import ServiceView from "@/app/inventory/services/service-view";
+import Warranty from "@/app/inventory/warranty/warranty";
+import WarrantyView from "@/app/inventory/warranty/warranty-view";
 
 const InventoryItems = [
     { name: 'item-categories', title: 'Item Categories', item: <ItemsCategories />, itemView: <ItemsCategoryView /> },
     { name: 'items', title: 'Items', item: <Items />, itemView: <ItemsView /> },
+    { name: 'services', title: 'Services', item: <Service />, itemView: <ServiceView /> },
+    { name: 'warranties', title: 'Warranties', item: <Warranty />, itemView: <WarrantyView /> },
     { name: 'suppliers', title: 'Suppliers', item: <Suppliers />, itemView: <SuppliersView /> },
 ];
 
