@@ -75,7 +75,11 @@ export const usePopulateTable = ({
 
         if (data && data.length > 0) {
             newData = data.map(obj => {
-                const {isAnyLevelApproved, latestApproveStatus, isNeedApprove} = getApprovals(approval_slug, approval_slug, obj?.id)
+                const {
+                    isAnyLevelApproved,
+                    latestApproveStatus,
+                    isNeedApprove
+                } = getApprovals(approval_slug, approval_slug, obj?.id)
                 if (obj.has_url) {
                     obj = {
                         ...obj,
@@ -113,12 +117,12 @@ export const usePopulateTable = ({
                     obj = {...obj, grand_total_cost: <FormattedMoney amount={obj.grand_total_cost}/>}
                 }
 
-                if (obj.paid_amount || obj.paid_amount === 0 ) {
-                    obj = {...obj, paid_amount: <FormattedMoney amount={obj.paid_amount } isHideCurrency={true}/>}
+                if (obj.paid_amount || obj.paid_amount === 0) {
+                    obj = {...obj, paid_amount: <FormattedMoney amount={obj.paid_amount} isHideCurrency={true}/>}
                 }
 
-                if (obj.delivery_cost || obj.delivery_cost === 0 ) {
-                    obj = {...obj, delivery_cost: <FormattedMoney amount={obj.delivery_cost } isHideCurrency={true}/>}
+                if (obj.delivery_cost || obj.delivery_cost === 0) {
+                    obj = {...obj, delivery_cost: <FormattedMoney amount={obj.delivery_cost} isHideCurrency={true}/>}
                 }
 
                 if (obj.amount) {
@@ -126,9 +130,29 @@ export const usePopulateTable = ({
                 }
 
                 if (obj.remaining_amount) {
-                    obj = {...obj, remaining_amount: <FormattedMoney amount={obj.remaining_amount} isHideCurrency={true}/>}
+                    obj = {
+                        ...obj,
+                        remaining_amount: <FormattedMoney amount={obj.remaining_amount} isHideCurrency={true}/>
+                    }
                 }
 
+                const hideButton = () => {
+                    let hide = false
+
+                    if (isNeedApprove && isAnyLevelApproved && latestApproveStatus === 'approve') {
+                        hide = true;
+                    }
+
+                    if (obj?.status === 'pending') {
+                        hide = false;
+                    }
+
+                    if (!obj?.status) {
+                        hide = false;
+                    }
+
+                    return hide
+                }
 
                 obj.actions = <CrudButtonsComponent
                     hide_approve={true}
@@ -138,8 +162,8 @@ export const usePopulateTable = ({
                     isShowAddPriceButton={isShowAddPriceButton}
                     permission={permission}
                     hide_view={isHideShow}
-                    hide_edit={isHideEdit || (isNeedApprove && isAnyLevelApproved && latestApproveStatus === 'approve') || obj?.status !== 'pending'}
-                    hide_delete={isHideDelete || (isNeedApprove && isAnyLevelApproved && latestApproveStatus === 'approve') || obj?.status !== 'pending'}
+                    hide_edit={isHideEdit || hideButton()}
+                    hide_delete={isHideDelete || hideButton()}
                 />
 
                 return sortObjectValuesByHeaders(obj, createRowHeaderArray())

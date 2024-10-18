@@ -33,6 +33,8 @@ function ConfigurationItem({group}: Props) {
         viewUrl: `/settings/${group}/view?id=`,
         state_properties: [group],
         isHideShow: true,
+        isHideDelete: true,
+        isHideEdit: true,
         isApiV2:true
     })
 

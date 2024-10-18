@@ -145,26 +145,36 @@ export const useCrudFormCreator = ({
 
     const sideUpdatePayloadResource = (value?: string) => {
         return formInputs?.map((input) => {
-            if (Number(value) === 23) {
-                if (input.name === 'personnel_id') {
-                    return {...input, isRemoved: false}
-                }
-                if (input.name === 'quantity' || input.name === 'name') {
-                    return {...input, isRemoved: true}
-                }
+            switch (Number(value)) {
+                case 23:
+                    if (input.name === 'personnel_id') {
+                        return { ...input, isRemoved: false };
+                    }
+                    if (input.name === 'quantity' || input.name === 'item_id' || input.name === 'service_id') {
+                        return { ...input, isRemoved: true };
+                    }
+                    return input;
 
-                return input
+                case 29:
+                    if (input.name === 'quantity' || input.name === 'item_id') {
+                        return { ...input, isRemoved: false };
+                    }
+                    if (input.name === 'personnel_id' || input.name === 'service_id') {
+                        return { ...input, isRemoved: true };
+                    }
+                    return input;
+                case 30:
+                    if ( input.name === 'service_id') {
+                        return { ...input, isRemoved: false };
+                    }
+                    if (input.name === 'personnel_id' || input.name === 'item_id' || input.name === 'quantity') {
+                        return { ...input, isRemoved: true };
+                    }
+                    return input;
+
+                default:
+                    return input;
             }
-            if (Number(value) === 6) {
-                if (input.name === 'quantity' || input.name === 'name') {
-                    return {...input, isRemoved: false}
-                }
-                if (input.name === 'personnel_id') {
-                    return {...input, isRemoved: true}
-                }
-                return input
-            }
-            return input
         });
     };
 

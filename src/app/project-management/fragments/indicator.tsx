@@ -41,7 +41,7 @@ function Indicator({
             type: 'select',
             label: `Means of Verification`,
             value: means_of_verification,
-            optionsUrlData: `settings/measurement`,
+            optionsUrlData: `settings?group=measurement`,
             optionDataKey: 'departments',
             required: true,
             isError: false,

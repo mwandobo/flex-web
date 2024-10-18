@@ -11,7 +11,7 @@ const formInputs = [
         type: 'select',
         label: `Select Resource Type`,
         value: '',
-        optionsUrlData: `settings/resource`,
+        optionsUrlData: `settings?group=resource`,
         optionDataKey: 'departments',
         required: true,
         isError: false,
@@ -31,10 +31,24 @@ const formInputs = [
         isRemoved: true,
     },
     {
-        name: 'name',
-        type: 'text',
-        label: 'Name',
+        name: 'item_id',
+        type: 'select',
+        label: `Select Item`,
         value: '',
+        optionsUrlData: `/item?approved=approved`,
+        optionDataKey: 'quotation-item',
+        required: true,
+        isError: false,
+        errorMessage: '',
+        isRemoved: true,
+    },
+    {
+        name: 'service_id',
+        type: 'select',
+        label: `Select Service`,
+        value: '',
+        optionsUrlData: `/services?approved=approved`,
+        optionDataKey: 'quotation-item',
         required: true,
         isError: false,
         errorMessage: '',
@@ -51,27 +65,6 @@ const formInputs = [
         isRemoved: true,
     },
     {
-        name: 'amount',
-        type: 'text',
-        label: 'Amount',
-        textType: 'number',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: '',
-    },
-    {
-        name: 'currency_id',
-        type: 'select',
-        label: `Currency`,
-        value: '',
-        optionsUrlData: `currency`,
-        optionDataKey: 'departments',
-        required: true,
-        isError: false,
-        errorMessage: '',
-    },
-    {
         name: 'details',
         type: 'textArea',
         label: 'Description',
@@ -84,16 +77,16 @@ const formInputs = [
 
 const columns = [
     {
-        id: 'name',
+        id: 'resource_type_name',
         numeric: false,
         disablePadding: false,
-        label: 'ResourceName',
+        label: 'Resource Type',
     },
     {
-        id: 'personnel_item',
+        id: 'resource_name',
         numeric: false,
         disablePadding: false,
-        label: 'Personnel / Item',
+        label: 'Resource Name',
     },
     {
         id: 'quantity',
@@ -118,26 +111,22 @@ const columns = [
 interface Props {
     activity_id?: any
     project_id?: any
-
     isHideAdd?: boolean
-
 }
 
 function Resource({
     activity_id,
     project_id,
     isHideAdd
-
 }: Props) {
 
-    const url = `resource/${project_id}/activity/${activity_id}`
+    const url = `resource?project_id=${project_id}&for=activity&for_id=${activity_id}`
 
     const {
         loading,
         createdForm,
         handleClick,
         tabular
-
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
@@ -145,7 +134,8 @@ function Resource({
         modalTitle: 'Resource',
         viewUrl: '',
         state_properties: [],
-        isHideShow: true
+        isHideShow: true,
+        isApiV2:true
     })
 
     return (

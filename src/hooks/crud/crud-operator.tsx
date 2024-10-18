@@ -91,22 +91,39 @@ export const useCrudOperator = (
         const newModalBodyArray = modalBodyArray.map((item: any) => {
             let objKeyValue;
 
-            if (item.name === 'start_date') {
-                objKeyValue = parseDate(payload[item.name])
-            } else if (item.name === 'end_date') {
-                objKeyValue = parseDate(payload[item.name])
-            } else if (item.name === 'd_o_b') {
-                objKeyValue = parseDate(payload[item.name])
+            // Parse dates for specific fields
+            if (item.name === 'start_date' || item.name === 'end_date' || item.name === 'd_o_b') {
+                objKeyValue = parseDate(payload[item.name]);
             } else {
-                objKeyValue = payload[item.name]
+                objKeyValue = payload[item.name];
             }
 
-            const newItemObj = {...item, value: objKeyValue}
-            return newItemObj
-        })
+            // Maintain the 'value' while updating 'isRemoved' property for 'item_id'
+            if (item.name === 'item_id' && Number(payload['resource_type_id']) === 29) {
+                return {...item, isRemoved: false, value: objKeyValue};
+            }
 
-        setModalBodyArray(newModalBodyArray)
-    }
+            // Maintain the 'value' while updating 'isRemoved' property for 'quantity'
+            if (item.name === 'quantity' && Number(payload['resource_type_id']) === 29) {
+                return {...item, isRemoved: false, value: objKeyValue};
+            }
+
+            // Maintain the 'value' while updating 'isRemoved' for 'personnel_id' when resource_type_id is 23
+            if (item.name === 'personnel_id' && Number(payload['resource_type_id']) === 23) {
+                return {...item, isRemoved: false, value: objKeyValue};
+            }
+
+            // Maintain the 'value' while updating 'isRemoved' for 'service_id' when resource_type_id is 30
+            if (item.name === 'service_id' && Number(payload['resource_type_id']) === 30) {
+                return {...item, isRemoved: false, value: objKeyValue};
+            }
+
+            // Return the new item with updated value
+            return {...item, value: objKeyValue};
+        });
+
+        setModalBodyArray(newModalBodyArray);
+    };
 
     useEffect(() => {
         setModalBodyArray(formInputData)
@@ -121,82 +138,98 @@ export const useCrudOperator = (
     }
 
     const handleClick = (type: string, payload?: any) => {
+        const insertIdBeforeQueryParams = (url: string, id: string | number) => {
+            const [baseUrl, queryParams] = url.split('?');
+            return queryParams ? `${baseUrl}/${id}?${queryParams}` : `${baseUrl}/${id}`;
+        };
+
         if (type.toLowerCase() === 'create') {
-            setIsModalOpen(true)
-            setModalTitle(`Create ${incomingModalTitle}`)
-            setIsForm(true)
-            setOnSaveButtonName('Save')
-            setUrl(!isApiV2 ? `${incomingUrl}/store`: incomingUrl )
-            setHttpMethod('post')
-            handleNotificationPayload('create')
+            setIsModalOpen(true);
+            setModalTitle(`Create ${incomingModalTitle}`);
+            setIsForm(true);
+            setOnSaveButtonName('Save');
+            setUrl(!isApiV2 ? `${incomingUrl}/store` : incomingUrl);
+            setHttpMethod('post');
+            handleNotificationPayload('create');
         }
 
         if (type.toLowerCase() === 'add-price') {
-            setIsModalOpen(true)
-            setModalTitle(`Add Price to Item ${payload?.name}`)
-            setUrl(!isApiV2 ?`${incomingUrl}/update/${payload?.id}`:`${incomingUrl}/${payload?.id}/add-price`)
-            setIsForm(true)
-            setValueLocalStorage('add-price', 'add-price')
-            setOnSaveButtonName('Save')
-            setHttpMethod('post')
-            handleNotificationPayload('create')
+            setIsModalOpen(true);
+            setModalTitle(`Add Price to Item ${payload?.name}`);
+            const newUrl = !isApiV2
+                ? insertIdBeforeQueryParams(`${incomingUrl}/update`, payload?.id)
+                : insertIdBeforeQueryParams(`${incomingUrl}/add-price`, payload?.id);
+            setUrl(newUrl);
+            setIsForm(true);
+            setValueLocalStorage('add-price', 'add-price');
+            setOnSaveButtonName('Save');
+            setHttpMethod('post');
+            handleNotificationPayload('create');
         }
 
         if (type.toLowerCase() === 'edit') {
-            populateFormForEdit(payload)
-            setIsModalOpen(true)
-            setModalTitle(`Edit ${incomingModalTitle}`)
-            setIsForm(true)
-            setOnSaveButtonName('Save')
-            setSelected(payload)
-            setUrl(!isApiV2 ?`${incomingUrl}/update/${payload?.id}`:`${incomingUrl}/${payload?.id}` )
-            setHttpMethod('put')
-            handleNotificationPayload('edit')
+            populateFormForEdit(payload);
+            setIsModalOpen(true);
+            setModalTitle(`Edit ${incomingModalTitle}`);
+            setIsForm(true);
+            setOnSaveButtonName('Save');
+            setSelected(payload);
+            const newUrl = !isApiV2
+                ? insertIdBeforeQueryParams(`${incomingUrl}/update`, payload?.id)
+                : insertIdBeforeQueryParams(incomingUrl, payload?.id);
+            setUrl(newUrl);
+            setHttpMethod('put');
+            handleNotificationPayload('edit');
         }
 
         if (type.toLowerCase() === 'delete') {
-            setIsModalOpen(true)
-            setUrl(!isApiV2 ?`${incomingUrl}/delete/${payload?.id}`:`${incomingUrl}/${payload?.id}` )
-            setHttpMethod('delete')
-            setModalTitle(`Delete ${incomingModalTitle}`)
-            setIsForm(false)
-            setOnSaveButtonName('Yes')
-            setModalBodyString(`Are You Sure You Want to Delete this ${incomingModalTitle} ${payload.name ?? payload.formatted_code }`)
-            handleNotificationPayload('delete')
+            setIsModalOpen(true);
+            const newUrl = !isApiV2
+                ? insertIdBeforeQueryParams(`${incomingUrl}/delete`, payload?.id)
+                : insertIdBeforeQueryParams(incomingUrl, payload?.id);
+            setUrl(newUrl);
+            setHttpMethod('delete');
+            setModalTitle(`Delete ${incomingModalTitle}`);
+            setIsForm(false);
+            setOnSaveButtonName('Yes');
+            setModalBodyString(`Are You Sure You Want to Delete this ${incomingModalTitle} ${payload.name ?? payload.formatted_code}`);
+            handleNotificationPayload('delete');
         }
 
         if (type.toLowerCase() === 'show') {
-            handleNotificationPayload("show")
+            handleNotificationPayload('show');
 
-            if(isApiV2){
-                dispatch({type: "SET_SUB_VIEW_ITEM", payload: {id: payload?.id, from} })
-                setValueLocalStorage('sub_view_item', JSON.stringify({id: payload?.id, from}))
-                return
+            if (isApiV2) {
+                dispatch({ type: 'SET_SUB_VIEW_ITEM', payload: { id: payload?.id, from } });
+                setValueLocalStorage('sub_view_item', JSON.stringify({ id: payload?.id, from }));
+                return;
             }
+
             if (callBackFunction) {
                 if (selectedViewCard === 'goal/show') {
-                    callBackFunction('goal/show', payload?.id)
+                    callBackFunction('goal/show', payload?.id);
                 } else if (selectedViewCard === 'outcome/show') {
-                    callBackFunction('outcome/show', payload?.id)
+                    callBackFunction('outcome/show', payload?.id);
                 } else if (selectedViewCard === 'output/show') {
-                    callBackFunction('output/show', payload?.id)
+                    callBackFunction('output/show', payload?.id);
                 } else if (selectedViewCard === 'activity/show') {
-                    callBackFunction('activity/show', payload?.id)
+                    callBackFunction('activity/show', payload?.id);
                 } else if (selectedViewCard === 'task/show') {
-                    callBackFunction('task/show', payload?.id)
+                    callBackFunction('task/show', payload?.id);
                 }
             } else {
-                router.push(`${viewUrl}${payload?.id}`)
+                const newUrl = insertIdBeforeQueryParams(`${viewUrl}`, payload?.id);
+                router.push(newUrl);
                 if (payload.has_parent) {
-                    setValueLocalStorage('parent_id', payload.parent_id)
+                    setValueLocalStorage('parent_id', payload.parent_id);
                 }
             }
         }
 
         if (type.toLowerCase() === 'assign') {
-            router.push(`roles/assign/${payload?.id}`)
+            router.push(`roles/assign/${payload?.id}`);
         }
-    }
+    };
 
     return {
         handleClick,
