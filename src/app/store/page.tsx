@@ -10,13 +10,17 @@ import Delivery from "@/app/store/delivery/delivery";
 import Inspection from "@/app/store/inspection/inspection";
 import InspectionView from "@/app/store/inspection/inspection-view";
 import StoreRequest from "@/app/store/store-request/store-request";
-import StoreRequestView from "@/app/store/store-request/store-request-view";
+import ServiceRequestView from "@/app/store/store-request/service-request/service-request-view";
+import ItemRequest from "@/app/store/store-request/item-request/item-request";
+import ItemRequestView from "@/app/store/store-request/item-request/item-request-view";
+import ServiceRequest from "@/app/store/store-request/service-request/service-request";
 
 const StoreManagementItems = [
     { name: 'stores', title: 'Stores', item: <Stores />, itemView: <StoresView /> },
     { name: 'deliveries', title: 'Deliveries', item: <Delivery />, itemView: <DeliveryView /> },
     { name: 'inspections', title: 'Inspections', item: <Inspection />, itemView: <InspectionView /> },
-    { name: 'store-request', title: 'Store Requests', item: <StoreRequest />, itemView: <StoreRequestView /> },
+    { name: 'store-item-request', title: 'Store Item Requests', item: <ItemRequest />, itemView: <ItemRequestView /> },
+    { name: 'service-request', title: 'Service Requests', item: <ServiceRequest />, itemView: <ServiceRequestView /> },
 ];
 
 function StoreManagementPage() {

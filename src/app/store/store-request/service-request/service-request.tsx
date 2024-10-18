@@ -5,65 +5,48 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
+import {tr} from "date-fns/locale";
+import {DELIVERY_APPROVAL_SLUG, ITEM_APPROVAL_SLUG, SERVICE_REQUESTS_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
-    {
-        name: 'delivery_quantity',
-        type: 'text',
-        label: 'Delivery Quantity',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
+
 ]
 
 const columns = [
     {
-        id: 'item_name',
+        id: 'resource_name',
         numeric: false,
         disablePadding: false,
-        label: 'Item Name',
-        width: '20%'
+        label: 'Service Name',
     },
     {
-        id: 'item_price',
+        id: 'requester_name',
         numeric: false,
         disablePadding: false,
-        label: 'Item Price',
+        label: 'Name of Requester',
     },
     {
-        id: 'price',
+        id: 'formatted_requested_date',
         numeric: false,
         disablePadding: false,
-        label: 'Quotation Price',
+        label: 'Requested Date',
     },
     {
-        id: 'quantity',
+        id: 'formatted_dispatched_date',
         numeric: false,
         disablePadding: false,
-        label: 'Requisition Quantity',
+        label: 'Dispatched Date',
     },
     {
-        id: 'quantity',
+        id: 'status',
         numeric: false,
         disablePadding: false,
-        label: 'Purchased Quantity',
+        label: 'Status',
     },
-    {
-    id: 'delivery_quantity',
-        numeric: false,
-        disablePadding: false,
-        label: 'Delivered Quantity',
-    }
 ]
 
-interface Props {
-    delivery: any
-}
-
-function StoreRequestItems({delivery}: Props) {
-    const permission = 'delivery_item'
+function StoreRequest() {
+    const permission = 'delivery'
 
     const {
         loading,
@@ -74,16 +57,16 @@ function StoreRequestItems({delivery}: Props) {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: `deliveries/${delivery?.id}/bids`,
-        modalTitle: 'Delivery Item',
-        viewUrl: '/inventory/items-categories/',
+        url: 'store-requests?resource_type_id=30',
+        modalTitle: 'Service Requests',
+        viewUrl: '/procurement/rfq/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'delivery-items',
-        isHideShow: true,
+        from: 'service-requests',
+        isHideEdit: true,
         isHideDelete: true,
-        isHideEdit: delivery?.status !== 'pending'
+        approval_slug: SERVICE_REQUESTS_APPROVAL_SLUG
     })
 
     return (
@@ -94,10 +77,9 @@ function StoreRequestItems({delivery}: Props) {
                         :
                         <>
                             <PageHeader
-                                title={"Delivery Items"}
+                                title={"Service Request"}
                                 handleClick={handleClick}
                                 isShowAddButton={false}
-
                                />
                             {tabular()}
                             {createdForm()}
@@ -111,4 +93,4 @@ function StoreRequestItems({delivery}: Props) {
     )
 }
 
-export default StoreRequestItems
+export default StoreRequest

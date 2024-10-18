@@ -41,7 +41,7 @@ function Output({
             type: 'select',
             label: `Means of Verification`,
             value: '',
-            optionsUrlData: `settings/measurement`,
+            optionsUrlData: `settings?group=measurement`,
             optionDataKey: 'departments',
             required: true,
             isError: false,
