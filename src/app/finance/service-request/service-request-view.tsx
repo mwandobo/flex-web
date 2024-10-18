@@ -3,59 +3,52 @@
 import ProtectedRoute from "@/components/authentication/protected-route";
 import MuiCardComponent from "@/components/card/mui-card.component";
 import ViewCardComponent from "@/components/card/view.card.component";
-import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
-import {get} from "@/utils/api";
-import React, {useEffect, useState} from "react";
-import {useRouter} from "next/navigation";
+import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
+import { get } from "@/utils/api";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
-import RequisitionRequestItem from "@/app/procurement/requisition-requests/requisition-request-items";
-import {useCrudOperator} from "@/hooks/crud/crud-operator";
-import {ReusableButton} from "@/components/button/reusable-button";
-import {FileOutput} from "lucide-react";
-import RfqItems from "@/app/procurement/rfq/rfq-items";
-import QuotationItems from "@/app/procurement/quotation/quotation-items";
-import PurchaseOrderItems from "@/app/procurement/purchase-order/purchase-order-items";
-import moneyFormater from "@/components/moneyFormater";
-import Payment from "@/app/finance/payment/payment";
-import {COST_CENTER_APPROVAL_SLUG, INVOICE_APPROVAL_SLUG, ITEM_APPROVAL_SLUG} from "@/utils/constant";
+import { SERVICE_REQUESTS_APPROVAL_SLUG} from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
+import {ReusableButton} from "@/components/button/reusable-button";
+import {FileOutput} from "lucide-react";
 
-const CostCenterView = () => {
-
+const ServiceRequestView = () => {
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
-    const [refresh, setRefresh] = useState(false)
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
+    const [refresh, setRefresh] = useState(false)
 
     const {state, dispatch} = useGlobalContextHook()
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
 
-    const url = `cost-centers/${id}`
-    const approval_url = `approval/approved-items/by-item?from=${COST_CENTER_APPROVAL_SLUG}&&from_id=${id}`
-
+    const url = `store-requests/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
+
+    const approval_url = `approval/approved-items/by-item?from=${SERVICE_REQUESTS_APPROVAL_SLUG}&&from_id=${id}`
+
     const {
         isNeedApprove,
         isLastLevel,
         latestApproveStatus,
         approvalButtonsWrapper,
     } = useApprovalHook({
-        approval_slug: COST_CENTER_APPROVAL_SLUG,
-        from: COST_CENTER_APPROVAL_SLUG,
+        approval_slug: SERVICE_REQUESTS_APPROVAL_SLUG,
+        from: SERVICE_REQUESTS_APPROVAL_SLUG,
         from_id: id
     })
 
     const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
-    const onSave = async (url: string) => {
+    const onSave = async (url) => {
         try {
             const res = await get(url, token);
             if (data && res.status === 200) {
@@ -66,11 +59,21 @@ const CostCenterView = () => {
         }
     };
 
+
     const handleSubmit = (data: any) => {
         showConfirmationModal({
             title: 'Are You Sure?',
-            text: `Are You Sure You Want To Submit Cost Center: ${data.formatted_code}?`,
+            text: `Are You Sure You Want To Submit Service Store Request: ${data.name}?`,
             onConfirm: () => onSave(`${url}/submit-draft`),  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
+
+    const handleItemDispatch = (data: any) => {
+        showConfirmationModal({
+            title: 'Are You Sure?',
+            text: `Are You Sure You Want To Dispatch Service ${data.name} for this Service Request?`,
+            onConfirm: () => onSave(`${url}/dispatch`),  // Action to perform on confirmation
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
     };
@@ -103,22 +106,22 @@ const CostCenterView = () => {
                     :
                     <>
                         <PageHeader
-                            title={'Cost Center'}
+                            title={'Service Store Request View'}
                             isShowBackButton={true}
                         />
                         <MuiCardComponent>
                             <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
-                                        {label: 'Cost Center Code', value: data?.formatted_code},
-                                        {label: 'Cost Center Name', value: data?.name},
-                                        {label: 'Cost Center Amount', value:  moneyFormater({amount:data?.amount}) },
-                                        {label: 'Cost Center Handler', value: data?.handler_name},
+                                        {label: 'Service Name', value: data?.resource_name},
+                                        {label: 'Requester Name', value: data?.requester_name},
+                                        {label: 'Requested Date', value: data?.formatted_requested_date},
+                                        {label: 'Submitted Date', value: data?.formatted_submitted_date},
+                                        {label: 'Dispatched Date', value: data?.formatted_dispatched_date},
                                         {label: 'Status', value: data?.status},
-                                        {label: 'Description', value: data?.description},
                                     ]}
-                                    titleA={`Cost Center`}
-                                    titleB={` ${data?.formatted_code} `}
+                                    titleA={`Service Store Request`}
+                                    titleB={` ${data?.resource_name} `}
                                 />
                                 <div className={'flex justify-between mt-2'}>
                                     <>
@@ -134,16 +137,24 @@ const CostCenterView = () => {
                                 </div>
                             </div>
                             <hr className="bg-gray-100"/>
-
-                            <hr className="bg-gray-100"/>
-                            {approveStatus() && data?.status === 'pending' &&
+                            {approveStatus() &&
                                 <div className={'flex justify-end gap-2 mt-2'}>
-                                    <ReusableButton
-                                        name={'Submit Cost Center'}
-                                        onClick={() => handleSubmit(data)}
-                                    >
-                                        <FileOutput size={12}/>
-                                    </ReusableButton>
+                                    {data?.status === 'pending' &&
+                                        <ReusableButton
+                                            name={'Submit Service Request'}
+                                            onClick={() => handleSubmit(data)}
+                                        >
+                                            <FileOutput size={12}/>
+                                        </ReusableButton>
+                                    }
+                                    {data?.status === 'submitted' &&
+                                        <ReusableButton
+                                            name={'Dispatch Service'}
+                                            onClick={() => handleItemDispatch(data)}
+                                        >
+                                            <FileOutput size={12}/>
+                                        </ReusableButton>
+                                    }
                                 </div>
                             }
                         </MuiCardComponent>
@@ -153,4 +164,4 @@ const CostCenterView = () => {
     );
 };
 
-export default CostCenterView;
+export default ServiceRequestView;

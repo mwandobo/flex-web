@@ -10,8 +10,8 @@ import Payment from "@/app/finance/payment/payment";
 import PaymentView from "@/app/finance/payment/payment-view";
 import CostCenter from "@/app/finance/cost-center/cost-center";
 import CostCenterView from "@/app/finance/cost-center/cost-center-view";
-import FinanceRequest from "@/app/finance/finance-request/finance-request";
-import FinanceRequestView from "@/app/finance/finance-request/finance-request-view";
+import FinanceRequest from "@/app/finance/finance-requests/finance-request";
+import FinanceRequestView from "@/app/finance/finance-requests/finance-request-view";
 
 const FinanceItems = [
     {name: 'invoice', title: 'Invoices', item: <Invoice/>, itemView: <InvoiceView/>},

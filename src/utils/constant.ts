@@ -21,6 +21,7 @@ export const WARRANTY_APPROVAL_SLUG = "warranty_approval"
 export const STORE_REQUESTS_APPROVAL_SLUG = "store_requests_approval"
 export const ITEMS_REQUESTS_APPROVAL_SLUG = "item_requests_approval"
 export const SERVICE_REQUESTS_APPROVAL_SLUG = "service_request_approval"
+export const PERSONNEL_REQUESTS_APPROVAL_SLUG = "personnel_request_approval"
 export const FINANCE_APPROVAL_SLUG = "finance_requests_approval"
 
 

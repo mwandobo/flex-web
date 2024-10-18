@@ -5,65 +5,53 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
+import {tr} from "date-fns/locale";
+import {
+    DELIVERY_APPROVAL_SLUG,
+    FINANCE_APPROVAL_SLUG,
+    ITEM_APPROVAL_SLUG,
+    SERVICE_REQUESTS_APPROVAL_SLUG
+} from "@/utils/constant";
 
 const formInputs = [
-    {
-        name: 'delivery_quantity',
-        type: 'text',
-        label: 'Delivery Quantity',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
+
 ]
 
 const columns = [
     {
-        id: 'item_name',
+        id: 'requester_name',
         numeric: false,
         disablePadding: false,
-        label: 'Item Name',
-        width: '20%'
+        label: 'Name of Requester',
     },
     {
-        id: 'item_price',
+        id: 'amount',
         numeric: false,
         disablePadding: false,
-        label: 'Item Price',
+        label: 'Requested Amount',
     },
     {
-        id: 'price',
+        id: 'formatted_requested_date',
         numeric: false,
         disablePadding: false,
-        label: 'Quotation Price',
+        label: 'Requested Date',
     },
     {
-        id: 'quantity',
+        id: 'formatted_dispatched_date',
         numeric: false,
         disablePadding: false,
-        label: 'Requisition Quantity',
+        label: 'Dispatched Date',
     },
     {
-        id: 'quantity',
+        id: 'status',
         numeric: false,
         disablePadding: false,
-        label: 'Purchased Quantity',
+        label: 'Status',
     },
-    {
-    id: 'delivery_quantity',
-        numeric: false,
-        disablePadding: false,
-        label: 'Delivered Quantity',
-    }
 ]
 
-interface Props {
-    delivery: any
-}
-
-function FinanceRequestItems({delivery}: Props) {
-    const permission = 'delivery_item'
+function FinanceRequest() {
+    const permission = 'finance-request'
 
     const {
         loading,
@@ -74,16 +62,16 @@ function FinanceRequestItems({delivery}: Props) {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: `deliveries/${delivery?.id}/bids`,
-        modalTitle: 'Delivery Item',
-        viewUrl: '/inventory/items-categories/',
+        url: 'finance-requests',
+        modalTitle: 'Finance Requests',
+        viewUrl: '/procurement/rfq/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'delivery-items',
-        isHideShow: true,
+        from: 'finance-requests',
+        isHideEdit: true,
         isHideDelete: true,
-        isHideEdit: delivery?.status !== 'pending'
+        approval_slug: FINANCE_APPROVAL_SLUG
     })
 
     return (
@@ -94,10 +82,9 @@ function FinanceRequestItems({delivery}: Props) {
                         :
                         <>
                             <PageHeader
-                                title={"Delivery Items"}
+                                title={"Finance Request"}
                                 handleClick={handleClick}
                                 isShowAddButton={false}
-
                                />
                             {tabular()}
                             {createdForm()}
@@ -111,4 +98,4 @@ function FinanceRequestItems({delivery}: Props) {
     )
 }
 
-export default FinanceRequestItems
+export default FinanceRequest

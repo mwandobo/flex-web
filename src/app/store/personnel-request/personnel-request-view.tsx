@@ -9,9 +9,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
-import DeliveryItems from "@/app/store/delivery/delivery-items";
-import moneyFormater from "@/components/moneyFormater";
-import {DELIVERY_APPROVAL_SLUG, ITEM_APPROVAL_SLUG} from "@/utils/constant";
+import {PERSONNEL_REQUESTS_APPROVAL_SLUG, SERVICE_REQUESTS_APPROVAL_SLUG} from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
@@ -19,7 +17,7 @@ import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {ReusableButton} from "@/components/button/reusable-button";
 import {FileOutput} from "lucide-react";
 
-const FinanceRequestView = () => {
+const PersonnelRequestView = () => {
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
     const router = useRouter()
@@ -30,12 +28,12 @@ const FinanceRequestView = () => {
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
 
-    const url = `deliveries/${id}`
+    const url = `store-requests/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
 
-    const approval_url = `approval/approved-items/by-item?from=${DELIVERY_APPROVAL_SLUG}&&from_id=${id}`
+    const approval_url = `approval/approved-items/by-item?from=${PERSONNEL_REQUESTS_APPROVAL_SLUG}&&from_id=${id}`
 
     const {
         isNeedApprove,
@@ -43,16 +41,16 @@ const FinanceRequestView = () => {
         latestApproveStatus,
         approvalButtonsWrapper,
     } = useApprovalHook({
-        approval_slug: DELIVERY_APPROVAL_SLUG,
-        from: DELIVERY_APPROVAL_SLUG,
+        approval_slug: PERSONNEL_REQUESTS_APPROVAL_SLUG,
+        from: PERSONNEL_REQUESTS_APPROVAL_SLUG,
         from_id: id
     })
 
     const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
-    const onSave = async () => {
+    const onSave = async (url) => {
         try {
-            const res = await get(`${url}/submit-draft`, token);
+            const res = await get(url, token);
             if (data && res.status === 200) {
                 setRefresh(!refresh);
             }
@@ -64,8 +62,17 @@ const FinanceRequestView = () => {
     const handleSubmit = (data: any) => {
         showConfirmationModal({
             title: 'Are You Sure?',
-            text: `Are You Sure You Want To Submit Delivery Code: ${data.formatted_code}?`,
-            onConfirm: onSave,  // Action to perform on confirmation
+            text: `Are You Sure You Want To Submit Personnel Request: ${data.name}?`,
+            onConfirm: () => onSave(`${url}/submit-draft`),  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
+
+    const handleItemDispatch = (data: any) => {
+        showConfirmationModal({
+            title: 'Are You Sure?',
+            text: `Are You Sure You Want To Dispatch Personnel ${data.name} f?`,
+            onConfirm: () => onSave(`${url}/dispatch`),  // Action to perform on confirmation
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
     };
@@ -90,8 +97,6 @@ const FinanceRequestView = () => {
         fetchData()
     }, [refresh])
 
-    console.log(data)
-
     return (
 
         <ProtectedRoute>
@@ -100,27 +105,22 @@ const FinanceRequestView = () => {
                     :
                     <>
                         <PageHeader
-                            title={'Delivery View'}
+                            title={'Personnel Request View'}
                             isShowBackButton={true}
                         />
                         <MuiCardComponent>
                             <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
-                                        {label: 'Delivery Code', value: data?.formatted_code},
-                                        {label: 'Purchase Order', value: data?.purchase_order_name},
-                                        {label: 'Request For Quotation', value: data?.rfq_name},
-                                        {label: 'Supplier', value: data?.supplier_name},
-                                        {label: 'Quotation', value: data?.quotation_name},
-                                        {label: 'Delivery Cost', value: moneyFormater({amount: data?.delivery_cost})},
-                                        {label: 'Delivery Date', value: data?.delivery_date},
-                                        {label: 'Delivery Date', value: data?.delivery_date},
-                                        {label: 'Delivery Address', value: data?.delivery_address},
-                                        {label: 'Description', value: data?.description},
+                                        {label: 'Personnel Name', value: data?.resource_name},
+                                        {label: 'Requester Name', value: data?.requester_name},
+                                        {label: 'Requested Date', value: data?.formatted_requested_date},
+                                        {label: 'Submitted Date', value: data?.formatted_submitted_date},
+                                        {label: 'Dispatched Date', value: data?.formatted_dispatched_date},
                                         {label: 'Status', value: data?.status},
                                     ]}
-                                    titleA={`Delivery`}
-                                    titleB={` ${data?.formatted_code} `}
+                                    titleA={`Personnel Request`}
+                                    titleB={` ${data?.resource_name} `}
                                 />
                                 <div className={'flex justify-between mt-2'}>
                                     <>
@@ -136,16 +136,24 @@ const FinanceRequestView = () => {
                                 </div>
                             </div>
                             <hr className="bg-gray-100"/>
-                            <DeliveryItems delivery={data}/>
-                            <hr className="bg-gray-100"/>
-                            {approveStatus() && data?.status === 'pending' &&
-                                <div className={'flex justify-end gap-2'}>
-                                    <ReusableButton
-                                        name={'Submit Delivery'}
-                                        onClick={() => handleSubmit(data)}
-                                    >
-                                        <FileOutput size={12}/>
-                                    </ReusableButton>
+                            {approveStatus() &&
+                                <div className={'flex justify-end gap-2 mt-2'}>
+                                    {data?.status === 'pending' &&
+                                        <ReusableButton
+                                            name={'Submit Personnel Request'}
+                                            onClick={() => handleSubmit(data)}
+                                        >
+                                            <FileOutput size={12}/>
+                                        </ReusableButton>
+                                    }
+                                    {data?.status === 'submitted' &&
+                                        <ReusableButton
+                                            name={'Dispatch Personnel Request'}
+                                            onClick={() => handleItemDispatch(data)}
+                                        >
+                                            <FileOutput size={12}/>
+                                        </ReusableButton>
+                                    }
                                 </div>
                             }
                         </MuiCardComponent>
@@ -155,4 +163,4 @@ const FinanceRequestView = () => {
     );
 };
 
-export default FinanceRequestView;
+export default PersonnelRequestView;
