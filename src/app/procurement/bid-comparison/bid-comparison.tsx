@@ -51,7 +51,7 @@ function BidComparison() {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'bid-comparison',
+        url: 'bid-comparison?type=internal',
         modalTitle: 'Quotation',
         viewUrl: '/procurement/rfq/',
         state_properties: [],

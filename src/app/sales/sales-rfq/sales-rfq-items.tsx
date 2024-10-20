@@ -5,74 +5,73 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import {tr} from "date-fns/locale";
-import {ITEM_APPROVAL_SLUG, PURCHASE_ORDER_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
-
+    {
+        name: 'quantity',
+        type: 'text',
+        label: 'Quantity',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
 ]
 
 const columns = [
     {
-        id: 'formatted_code',
+        id: 'name',
         numeric: false,
         disablePadding: false,
-        label: 'Purchase Order ',
+        label: 'Item Name',
+        width: '20%'
     },
     {
-        id: 'supplier_name',
+        id: 'price',
         numeric: false,
         disablePadding: false,
-        label: 'Supplier Name',
+        label: 'Price',
     },
     {
-        id: 'quotation_name',
+        id: 'requisition_quantity',
         numeric: false,
         disablePadding: false,
-        label: 'Quotation',
+        label: 'Requested Quantity',
     },
     {
-        id: 'rfq_name',
+        id: 'quantity',
         numeric: false,
         disablePadding: false,
-        label: 'RFQ',
-    },
-    {
-        id: 'total_amount',
-        numeric: false,
-        disablePadding: false,
-        label: 'Amount',
-    },
-    {
-        id: 'status',
-        numeric: false,
-        disablePadding: false,
-        label: 'Status',
-    },
+        label: 'RFQ Quantity',
+    }
 ]
 
-function PurchaseOrder() {
-    const permission = 'purchase_order'
+interface Props {
+    rfq_id: string,
+    status: string
+}
+
+function SalesRfqItems({rfq_id, status}: Props) {
+    const permission = 'rfq_item'
 
     const {
         loading,
         createdForm,
         handleClick,
         tabular
-
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'purchase-orders?type=internal',
-        modalTitle: 'Purchase Order',
-        viewUrl: '/procurement/rfq/',
+        url: `rfq/${rfq_id}/items`,
+        modalTitle: 'Rfq Item',
+        viewUrl: '/inventory/items-categories/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'bid-comparison',
-        isHideDelete: false,
-        isHideEdit: true,
-        approval_slug: PURCHASE_ORDER_APPROVAL_SLUG
+        from: 'rfq-items',
+        isHideShow:true,
+        isHideDelete:true,
+        isHideEdit: status !== 'pending'
     })
 
     return (
@@ -83,9 +82,10 @@ function PurchaseOrder() {
                         :
                         <>
                             <PageHeader
-                                title={"Purchase Order"}
+                                title={"RFQ Items"}
                                 handleClick={handleClick}
-                                isShowAddButton={true}
+                                isShowAddButton={false}
+
                                />
                             {tabular()}
                             {createdForm()}
@@ -99,4 +99,4 @@ function PurchaseOrder() {
     )
 }
 
-export default PurchaseOrder
+export default SalesRfqItems

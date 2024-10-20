@@ -128,7 +128,7 @@ function Rfq() {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'rfq',
+        url: 'rfq?type=internal',
         modalTitle: 'Rfq',
         viewUrl: '/procurement/rfq/',
         state_properties: [],

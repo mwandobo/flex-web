@@ -24,4 +24,6 @@ export const SERVICE_REQUESTS_APPROVAL_SLUG = "service_request_approval"
 export const PERSONNEL_REQUESTS_APPROVAL_SLUG = "personnel_request_approval"
 export const FINANCE_APPROVAL_SLUG = "finance_requests_approval"
 
-
+export const CUSTOMER_APPROVAL_SLUG = "customer_approval"
+export const SALE_RFQ_APPROVAL_SLUG = "sale_rfq_approval"
+export const SALE_QUOTATION_APPROVAL_SLUG = "sale_quotation_approval"

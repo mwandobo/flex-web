@@ -6,7 +6,7 @@ import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
 import {tr} from "date-fns/locale";
-import {ITEM_APPROVAL_SLUG, QUOTATION_APPROVAL_SLUG} from "@/utils/constant";
+import {ITEM_APPROVAL_SLUG, QUOTATION_APPROVAL_SLUG, SALE_QUOTATION_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
     {
@@ -14,20 +14,9 @@ const formInputs = [
         type: 'select',
         label: 'Request For Quotation',
         value: '',
-        optionsUrlData: `/rfq?approved=approved&status=quotation?type=internal`,
+        optionsUrlData: `/rfq?approved=approved&status=quotation&type=external`,
         optionDataKey: 'rfq',
         control_for: "quotation-item",
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
-        name: 'supplier_id',
-        type: 'select',
-        label: 'Supplier',
-        value: '',
-        optionsUrlData: `/suppliers`,
-        optionDataKey: 'departments',
         required: true,
         isError: false,
         errorMessage: ''
@@ -101,46 +90,28 @@ const formInputs = [
 
 const columns = [
     {
-        id: 'rfq_name',
-        numeric: false,
-        disablePadding: false,
-        label: 'RFQ ',
-    },
-    {
         id: 'formatted_code',
         numeric: false,
         disablePadding: false,
         label: 'Quotation Code',
     },
     {
-        id: 'supplier_name',
+        id: 'rfq_name',
         numeric: false,
         disablePadding: false,
-        label: 'Supplier',
+        label: 'RFQ ',
+    },
+    {
+        id: 'customer_name',
+        numeric: false,
+        disablePadding: false,
+        label: 'Customer Name ',
     },
     {
         id: 'payment_method',
         numeric: false,
         disablePadding: false,
         label: 'Payment Method',
-    },
-    {
-        id: 'evaluation_method',
-        numeric: false,
-        disablePadding: false,
-        label: 'Evaluation Method',
-    },
-    {
-        id: 'decision_timeline',
-        numeric: false,
-        disablePadding: false,
-        label: 'Decision Timeline',
-    },
-    {
-        id: 'submission_requirement',
-        numeric: false,
-        disablePadding: false,
-        label: 'Submission Requirement',
     },
     {
         id: 'delivery_time',
@@ -150,8 +121,8 @@ const columns = [
     }
 ]
 
-function Quotation() {
-    const permission = 'quotation'
+function SalesQuotation() {
+    const permission = 'sales-quotation'
 
     const {
         loading,
@@ -161,14 +132,14 @@ function Quotation() {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'quotations?type=internal',
+        url: 'quotations?type=external',
         modalTitle: 'Quotation',
         viewUrl: '/procurement/rfq/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
         from: 'quotation',
-        approval_slug: QUOTATION_APPROVAL_SLUG,
+        approval_slug: SALE_QUOTATION_APPROVAL_SLUG,
         isHideEdit:true
     })
 
@@ -196,4 +167,4 @@ function Quotation() {
     )
 }
 
-export default Quotation
+export default SalesQuotation

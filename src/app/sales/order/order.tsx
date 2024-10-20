@@ -9,7 +9,18 @@ import {tr} from "date-fns/locale";
 import {ITEM_APPROVAL_SLUG, PURCHASE_ORDER_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
-
+    {
+        name: 'quotation_id',
+        type: 'select',
+        label: 'Quotation',
+        value: '',
+        optionsUrlData: `/quotations?approved=approved&status=bid_comparison&type=external`,
+        optionDataKey: 'rfq',
+        control_for: "rfq",
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
 ]
 
 const columns = [
@@ -51,7 +62,7 @@ const columns = [
     },
 ]
 
-function PurchaseOrder() {
+function Order() {
     const permission = 'purchase_order'
 
     const {
@@ -63,7 +74,7 @@ function PurchaseOrder() {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'purchase-orders?type=internal',
+        url: `purchase-orders?type=external`,
         modalTitle: 'Purchase Order',
         viewUrl: '/procurement/rfq/',
         state_properties: [],
@@ -99,4 +110,4 @@ function PurchaseOrder() {
     )
 }
 
-export default PurchaseOrder
+export default Order

@@ -202,6 +202,12 @@ const items: ISidebarItem[] = [
         icon: Book,
     },
     {
+        name: 'Sales',
+        path: '/sales',
+        permission: 'sales-list',
+        icon: Book,
+    },
+    {
         name: 'Finance',
         path: '/finance',
         permission: 'finance-list',

@@ -5,43 +5,72 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import {tr} from "date-fns/locale";
-import {ITEM_APPROVAL_SLUG, PURCHASE_ORDER_APPROVAL_SLUG} from "@/utils/constant";
+import {CUSTOMER_APPROVAL_SLUG, REQUEST_FOR_QUOTATION_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
-
+    {
+        name: 'name',
+        type: 'text',
+        label: 'Customer Name',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'email',
+        type: 'text',
+        label: 'Customer Email',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'phone',
+        type: 'text',
+        label: 'Customer Phone',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'address',
+        type: 'text',
+        label: 'Customer Address',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
 ]
+
 
 const columns = [
     {
-        id: 'formatted_code',
+        id: 'name',
         numeric: false,
         disablePadding: false,
-        label: 'Purchase Order ',
+        label: 'Customer Name',
     },
     {
-        id: 'supplier_name',
+        id: 'email',
         numeric: false,
         disablePadding: false,
-        label: 'Supplier Name',
+        label: 'Customer Email',
     },
     {
-        id: 'quotation_name',
+        id: 'phone',
         numeric: false,
         disablePadding: false,
-        label: 'Quotation',
+        label: 'Customer Phone',
     },
     {
-        id: 'rfq_name',
+        id: 'address',
         numeric: false,
         disablePadding: false,
-        label: 'RFQ',
-    },
-    {
-        id: 'total_amount',
-        numeric: false,
-        disablePadding: false,
-        label: 'Amount',
+        label: 'Customer Address',
     },
     {
         id: 'status',
@@ -51,8 +80,8 @@ const columns = [
     },
 ]
 
-function PurchaseOrder() {
-    const permission = 'purchase_order'
+function Customer() {
+    const permission = 'customers'
 
     const {
         loading,
@@ -63,16 +92,14 @@ function PurchaseOrder() {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'purchase-orders?type=internal',
-        modalTitle: 'Purchase Order',
+        url: 'customers',
+        modalTitle: 'Customer',
         viewUrl: '/procurement/rfq/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'bid-comparison',
-        isHideDelete: false,
-        isHideEdit: true,
-        approval_slug: PURCHASE_ORDER_APPROVAL_SLUG
+        from: 'rfq',
+        approval_slug: CUSTOMER_APPROVAL_SLUG
     })
 
     return (
@@ -83,7 +110,7 @@ function PurchaseOrder() {
                         :
                         <>
                             <PageHeader
-                                title={"Purchase Order"}
+                                title={"Customers"}
                                 handleClick={handleClick}
                                 isShowAddButton={true}
                                />
@@ -99,4 +126,4 @@ function PurchaseOrder() {
     )
 }
 
-export default PurchaseOrder
+export default Customer
