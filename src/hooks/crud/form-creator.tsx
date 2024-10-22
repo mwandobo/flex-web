@@ -1,7 +1,7 @@
 import CrudFormComponent from "@/components/forms/crud.form.component"
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage"
 import {send_email} from "@/utils/actions/send-email"
-import {post, put, remove} from "@/utils/api"
+import {baseURL, post, put, remove} from "@/utils/api"
 import {ReactNode, useEffect, useState} from "react"
 import Swal from "sweetalert2"
 import {gracefulApprovalUpdater} from "@/utils/actions/update-approvals.helper";
@@ -196,12 +196,33 @@ export const useCrudFormCreator = ({
         }
 
         if (control_for === 'quotation-item') {
-            const foundInput = formInputs.find(item => item.control === 'quotation-item');
-            const selectUrl = foundInput.optionsUrlData
-            const split = selectUrl.split('/')
-            split[1] = value
-            foundInput.optionsUrlData = split.join('/')
+            const foundInput = newfoundInputs.find(item => item.control === 'quotation-item'); // Update formInputs copy
+            const selectUrl = foundInput.optionsUrlData;
+            const split = selectUrl.split('/');
+            split[1] = value;
+            foundInput.optionsUrlData = split.join('/');
         }
+
+        if (control_for === 'invoice') {
+            const foundInput = newfoundInputs.find(item => item.control === 'invoice'); // Get input from copy
+
+            // Check if optionsUrlData is a valid URL
+            let selectUrl;
+            try {
+                // Try to construct a URL object, assuming it's a valid URL
+                selectUrl = new URL(foundInput.optionsUrlData);
+            } catch (error) {
+                // If it's not a valid URL, prepend a base URL to make it valid
+                selectUrl = new URL(`api${foundInput.optionsUrlData}`, baseURL);
+            }
+
+            // Set the query parameter
+            selectUrl.searchParams.set('type', value);
+
+            // Update optionsUrlData with the new URL
+            foundInput.optionsUrlData = selectUrl.toString();
+        }
+
 
         if (control_for === 'sponsorship') {
             newfoundInputs = sideUpdatePayloadSponsorship(value); // Update inputs for sponsors
@@ -218,13 +239,13 @@ export const useCrudFormCreator = ({
         if (from) {
             newfoundInputs = newfoundInputs.map(input => {
                 if (input.name === from) {
-                    return {...input, value: value}
+                    return {...input, value: value};
                 }
-                return input
+                return input;
             });
         }
 
-        setFormInputs(newfoundInputs);
+        setFormInputs(newfoundInputs); // Update the form inputs state
     };
 
     const handleError = (item: any, error: any) => {

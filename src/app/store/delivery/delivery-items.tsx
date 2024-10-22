@@ -42,12 +42,6 @@ const columns = [
         id: 'quantity',
         numeric: false,
         disablePadding: false,
-        label: 'Requisition Quantity',
-    },
-    {
-        id: 'quantity',
-        numeric: false,
-        disablePadding: false,
         label: 'Purchased Quantity',
     },
     {
@@ -74,7 +68,7 @@ function DeliveryItems({delivery}: Props) {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: `deliveries/${delivery?.id}/bids`,
+        url: `deliveries/${delivery?.id}/bids?type=${delivery.type}`,
         modalTitle: 'Delivery Item',
         viewUrl: '/inventory/items-categories/',
         state_properties: [],

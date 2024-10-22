@@ -110,7 +110,7 @@ const DeliveryView = () => {
                                         {label: 'Delivery Code', value: data?.formatted_code},
                                         {label: 'Purchase Order', value: data?.purchase_order_name},
                                         {label: 'Request For Quotation', value: data?.rfq_name},
-                                        {label: 'Supplier', value: data?.supplier_name},
+                                        {label: data?.supplier_name ? 'Supplier' : 'Customer', value: data?.supplier_name || data?.customer_name},
                                         {label: 'Quotation', value: data?.quotation_name},
                                         {label: 'Delivery Cost', value: moneyFormater({amount: data?.delivery_cost})},
                                         {label: 'Delivery Date', value: data?.delivery_date},

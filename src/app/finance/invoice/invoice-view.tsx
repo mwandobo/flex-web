@@ -9,20 +9,16 @@ import React, {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
-import RequisitionRequestItem from "@/app/procurement/requisition-requests/requisition-request-items";
-import {useCrudOperator} from "@/hooks/crud/crud-operator";
 import {ReusableButton} from "@/components/button/reusable-button";
 import {FileOutput} from "lucide-react";
-import RfqItems from "@/app/procurement/rfq/rfq-items";
-import QuotationItems from "@/app/procurement/quotation/quotation-items";
-import PurchaseOrderItems from "@/app/procurement/purchase-order/purchase-order-items";
 import moneyFormater from "@/components/moneyFormater";
 import Payment from "@/app/finance/payment/payment";
-import {INVOICE_APPROVAL_SLUG, ITEM_APPROVAL_SLUG} from "@/utils/constant";
+import {INVOICE_APPROVAL_SLUG} from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
+import {capitalizeFirstWord} from "@/utils/actions/string-manipulations";
 
 const InvoiceView = () => {
 
@@ -32,9 +28,9 @@ const InvoiceView = () => {
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
 
-    const {state, dispatch} = useGlobalContextHook()
-    const {selectedSubSidebarItem: selected, viewedItem} = state;
-    const {id, from: viewFrom} = viewedItem;
+    const {state} = useGlobalContextHook()
+    const {viewedItem} = state;
+    const {id} = viewedItem;
 
     const url = `invoices/${id}`
     const approval_url = `approval/approved-items/by-item?from=${INVOICE_APPROVAL_SLUG}&&from_id=${id}`
@@ -111,9 +107,10 @@ const InvoiceView = () => {
                                 <ViewCardComponent
                                     data={[
                                         {label: 'Invoice Code', value: data?.formatted_code},
+                                        {label: 'Invoice Type', value: capitalizeFirstWord(data?.type)},
                                         {label: 'Purchase Order Code', value: data?.formatted_code},
                                         {label: 'RFQ Code', value: data?.rfq_name},
-                                        {label: 'Supplier', value: data?.supplier_name},
+                                        {label: data?.supplier_name ? 'Supplier' : 'Customer', value: data?.supplier_name || data?.customer_name},
                                         {label: 'Quotation Code', value: data?.quotation_name},
                                         {label: 'Payment Method', value: data?.quotation?.payment_method},
                                         {label: 'Paid Amount', value: moneyFormater({amount: data?.paid_amount})},

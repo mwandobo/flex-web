@@ -9,12 +9,25 @@ import {INVOICE_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
     {
+        name: 'type',
+        type: 'select',
+        label: 'Invoice Type',
+        value: '',
+        optionsUrlData: `/invoices/types`,
+        optionDataKey: 'invoice-type',
+        control_for: 'invoice',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
         name: 'purchase_order_id',
         type: 'select',
-        label: 'Purchase_order',
+        label: 'Purchase Order',
         value: '',
         optionsUrlData: `/purchase-orders?approved=approved&status=invoice`,
         optionDataKey: 'rfq',
+        control: 'invoice',
         required: true,
         isError: false,
         errorMessage: ''
@@ -38,6 +51,12 @@ const columns = [
         label: 'Invoice Code',
     },
     {
+        id: 'type',
+        numeric: false,
+        disablePadding: false,
+        label: 'Invoice Type',
+    },
+    {
         id: 'purchase_order_name',
         numeric: false,
         disablePadding: false,
@@ -49,12 +68,12 @@ const columns = [
         disablePadding: false,
         label: 'RFQ Name',
     },
-    {
-        id: 'supplier_name',
-        numeric: false,
-        disablePadding: false,
-        label: 'Supplier',
-    },
+    // {
+    //     id: 'supplier_name',
+    //     numeric: false,
+    //     disablePadding: false,
+    //     label: 'Supplier',
+    // },
     {
         id: 'quotation_name',
         numeric: false,

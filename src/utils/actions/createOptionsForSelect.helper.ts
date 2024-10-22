@@ -36,9 +36,15 @@ const CreateOptionsForselectHelper = (payload?: any[], from?: string, id?: strin
     }
 
     if (payload && payload.length && from === 'quotation-item') {
-        console.log("payload", payload)
         payload.map(item => {
             const data = { label: item.name, value: item.id }
+            output.push(data)
+        })
+    }
+
+    if (payload && payload.length && from === 'invoice-type') {
+        payload.map(item => {
+            const data = { label: item, value: item }
             output.push(data)
         })
     }

@@ -66,6 +66,12 @@ const columns = [
         label: 'Delivery Code',
     },
     {
+        id: 'type',
+        numeric: false,
+        disablePadding: false,
+        label: 'Type',
+    },
+    {
         id: 'purchase_order_name',
         numeric: false,
         disablePadding: false,
@@ -77,12 +83,7 @@ const columns = [
         disablePadding: false,
         label: 'Request For Quotation',
     },
-    {
-        id: 'supplier_name',
-        numeric: false,
-        disablePadding: false,
-        label: 'Supplier',
-    },
+
     {
         id: 'quotation_name',
         numeric: false,
