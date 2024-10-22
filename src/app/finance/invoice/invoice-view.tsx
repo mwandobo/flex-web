@@ -19,6 +19,7 @@ import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {capitalizeFirstWord} from "@/utils/actions/string-manipulations";
+import DocumentViewer from "@/components/page-components/document-viewer";
 
 const InvoiceView = () => {
 
@@ -124,6 +125,8 @@ const InvoiceView = () => {
                                     titleA={`Invoice`}
                                     titleB={` ${data?.formatted_code} `}
                                 />
+                                <DocumentViewer data={{ file_url: data.file_url}} />
+
                                 <div className={'flex justify-between mt-2'}>
                                     <>
                                         {approvalButtonsWrapper()}

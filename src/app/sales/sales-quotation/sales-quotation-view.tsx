@@ -20,6 +20,7 @@ import TreeList from "@/components/list/tree-list.component";
 import {ITEM_APPROVAL_SLUG, QUOTATION_APPROVAL_SLUG, SALE_QUOTATION_APPROVAL_SLUG} from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
+import DocumentViewer from "@/components/page-components/document-viewer";
 
 const SalesQuotationView = () => {
 
@@ -149,6 +150,7 @@ const SalesQuotationView = () => {
                                     titleA={`Quotation`}
                                     titleB={` ${data?.formatted_code} `}
                                 />
+                                <DocumentViewer data={{ file_url: data.file_url}} />
                                 <div className={'flex justify-between mt-2'}>
                                     <>
                                         {approvalButtonsWrapper()}

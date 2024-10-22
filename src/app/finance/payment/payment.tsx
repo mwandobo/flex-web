@@ -6,6 +6,7 @@ import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
 import { PAYMENT_APPROVAL_SLUG} from "@/utils/constant";
+import {tr} from "date-fns/locale";
 
 interface Props {
     invoice?: any
@@ -52,7 +53,16 @@ function Payment({invoice}: Props) {
             required: true,
             isError: false,
             errorMessage: ''
-        }
+        },
+        {
+            name: 'file',
+            type: 'file',
+            label: 'Attachment',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
     ]
 
     const columns = [
@@ -105,7 +115,8 @@ function Payment({invoice}: Props) {
         permission: permission,
         isApiV2:true,
         from: 'payment',
-        approval_slug: PAYMENT_APPROVAL_SLUG
+        approval_slug: PAYMENT_APPROVAL_SLUG,
+        isFormData: true
     })
 
     return (

@@ -6,6 +6,7 @@ import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
 import {INVOICE_APPROVAL_SLUG} from "@/utils/constant";
+import {tr} from "date-fns/locale";
 
 const formInputs = [
     {
@@ -40,7 +41,16 @@ const formInputs = [
         required: true,
         isError: false,
         errorMessage: ''
-    }
+    },
+    {
+        name: 'file',
+        type: 'file',
+        label: 'Attachment',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
 ]
 
 const columns = [
@@ -127,7 +137,8 @@ function Invoice() {
         from: 'invoices',
         isHideDelete: true,
         isHideEdit: true,
-        approval_slug: INVOICE_APPROVAL_SLUG
+        approval_slug: INVOICE_APPROVAL_SLUG,
+        isFormData:true
     })
 
     return (

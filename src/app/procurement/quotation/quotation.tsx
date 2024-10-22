@@ -97,6 +97,15 @@ const formInputs = [
         isError: false,
         errorMessage: ''
     },
+    {
+        name: 'file',
+        type: 'file',
+        label: 'Attachment',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
 ]
 
 const columns = [
@@ -169,7 +178,8 @@ function Quotation() {
         isApiV2:true,
         from: 'quotation',
         approval_slug: QUOTATION_APPROVAL_SLUG,
-        isHideEdit:true
+        isHideEdit:true,
+        isFormData: true
     })
 
     return (

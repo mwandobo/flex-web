@@ -86,6 +86,15 @@ const formInputs = [
         isError: false,
         errorMessage: ''
     },
+    {
+        name: 'file',
+        type: 'file',
+        label: 'Attachment',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
 ]
 
 const columns = [
@@ -119,6 +128,7 @@ const columns = [
         disablePadding: false,
         label: 'Deliver Time',
     }
+
 ]
 
 function SalesQuotation() {
@@ -140,7 +150,8 @@ function SalesQuotation() {
         isApiV2:true,
         from: 'quotation',
         approval_slug: SALE_QUOTATION_APPROVAL_SLUG,
-        isHideEdit:true
+        isHideEdit:true,
+        isFormData:true
     })
 
     return (

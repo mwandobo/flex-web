@@ -16,6 +16,7 @@ import TreeList from "@/components/list/tree-list.component";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {ReusableButton} from "@/components/button/reusable-button";
 import {FileOutput} from "lucide-react";
+import DocumentViewer from "@/components/page-components/document-viewer";
 
 const PaymentView = () => {
 
@@ -115,6 +116,7 @@ const PaymentView = () => {
                                     titleA={`Payment`}
                                     titleB={` ${data?.formatted_code} `}
                                 />
+                                <DocumentViewer data={{ file_url: data.file_url}} />
                                 <hr className="bg-gray-100"/>
                                 <div className={'flex justify-between mt-2'}>
                                     <>
