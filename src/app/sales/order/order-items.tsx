@@ -5,13 +5,21 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import RequisitionFormComponent from "@/app/procurement/requisition-requests/components/requisition-form.component";
 
 const formInputs = [
     {
-        name: 'price',
+        name: 'quotation_price',
         type: 'text',
         label: 'Item Price',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
+        name: 'quantity',
+        type: 'text',
+        label: 'Quantity',
         value: '',
         required: true,
         isError: false,
@@ -34,13 +42,13 @@ const columns = [
         label: 'Item Price',
     },
     {
-        id: 'price',
+        id: 'quotation_price',
         numeric: false,
         disablePadding: false,
         label: 'Quotation Price',
     },
     {
-        id: 'quantity',
+        id: 'rfq_quantity',
         numeric: false,
         disablePadding: false,
         label: 'RFQ Quantity',
@@ -54,10 +62,10 @@ const columns = [
 ]
 
 interface Props {
-    purchase_order_id: string
+    purchase_order: any
 }
 
-function OrderItems({purchase_order_id}: Props) {
+function OrderItems({purchase_order}: Props) {
     const permission = 'purchase_order_item'
 
     const {
@@ -69,7 +77,7 @@ function OrderItems({purchase_order_id}: Props) {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: `purchase-orders/${purchase_order_id}/items`,
+        url: `purchase-orders/${purchase_order?.id}/items?type=external`,
         modalTitle: 'Quotation Item',
         viewUrl: '/inventory/items-categories/',
         state_properties: [],
@@ -77,8 +85,8 @@ function OrderItems({purchase_order_id}: Props) {
         isApiV2:true,
         from: 'purchase-order-items',
         isHideShow: true,
-        isHideDelete: true,
-        isHideEdit: true
+        isHideDelete: purchase_order?.status !== 'pending',
+        isHideEdit: purchase_order?.status !== 'pending'
     })
 
     return (

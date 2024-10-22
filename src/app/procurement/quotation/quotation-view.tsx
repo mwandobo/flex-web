@@ -50,9 +50,9 @@ const QuotationView = () => {
         from_id: id
     })
 
-    const onSave = async () => {
+    const onSave = async (url:string) => {
         try {
-            const res = await get(`${url}/submit-draft`, token);
+            const res = await get(url, token);
             if (data && res.status === 200) {
                 setRefresh(!refresh);
             }
@@ -65,40 +65,21 @@ const QuotationView = () => {
         showConfirmationModal({
             title: 'Are you sure?',
             text: `Are you sure you want to submit Quotation code: ${data.formatted_code}?`,
-            onConfirm: onSave,  // Action to perform on confirmation
+            onConfirm: () =>  onSave(`${url}/submit-draft`),  // Action to perform on confirmation
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
-    };
-
-    const onRefresh = async () => {
-        try {
-            const res = await get(`${url}/refresh-draft`, token);
-            if (data && res.status === 200) {
-                setRefresh(!refresh);
-            }
-        } catch (error: any) {
-            console.log(error);
-        }
     };
 
     const handleRefresh = (data: any) => {
         showConfirmationModal({
             title: 'Are you sure?',
             text: `Are you sure you want to Refresh Saved Changes for Quotation code: ${data.formatted_code}?`,
-            onConfirm: onRefresh,  // Action to perform on confirmation
+            onConfirm: () =>  onSave(`${url}/refresh-draft`),  // Action to perform on confirmation
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
     };
 
     const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
-
-    const [dataFromChild, setDataFromChild] = useState(null);
-
-    // This function will be passed to the child to receive data
-    const sendRefresh = () => {
-        console.log('sendRefresh', 'refreshed')
-        setRefresh(!refresh);
-    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -169,7 +150,7 @@ const QuotationView = () => {
                             {approveStatus() && data?.status === 'pending' &&
                                 <div className={'flex justify-end gap-2'}>
                                     <ReusableButton
-                                        name={'Refresh Quotation'}
+                                        name={'Refresh'}
                                         onClick={() => handleRefresh(data)}
                                     >
                                         <RotateCcw size={12}/>

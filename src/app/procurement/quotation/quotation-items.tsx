@@ -5,7 +5,6 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React, {useEffect} from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import {get} from "@/utils/api";
 
 const formInputs = [
     {

@@ -22,6 +22,7 @@ import {useApprovalHook} from "@/hooks/useApprove";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
+import OrderItems from "@/app/sales/order/order-items";
 
 const OrderView = () => {
 
@@ -55,9 +56,9 @@ const OrderView = () => {
 
     const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
-    const onSave = async () => {
+    const onSave = async (url:string) => {
         try {
-            const res = await get(`${url}/submit-draft`, token);
+            const res = await get(url, token);
             if (data && res.status === 200) {
                 setRefresh(!refresh);
             }
@@ -70,7 +71,16 @@ const OrderView = () => {
         showConfirmationModal({
             title: 'Are You Sure?',
             text: `Are You Sure You Want To Submit Purchase Order Code: ${data.formatted_code}?`,
-            onConfirm: onSave,  // Action to perform on confirmation
+            onConfirm: () =>  onSave(`${url}/submit-draft`),  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
+
+    const handleRefresh = (data: any) => {
+        showConfirmationModal({
+            title: 'Are you sure?',
+            text: `Are you sure you want to Refresh Saved Changes for Quotation code: ${data.formatted_code}?`,
+            onConfirm: () =>  onSave(`${url}/refresh-draft`),  // Action to perform on confirmation
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
     };
@@ -145,10 +155,16 @@ const OrderView = () => {
                             </div>
                             <hr className="bg-gray-100"/>
                             <div className={'mt-2'}>
-                                <PurchaseOrderItems purchase_order_id={id}/>
+                                <OrderItems purchase_order={data}/>
                             </div>
                             {approveStatus() && data?.status === 'pending' &&
                                 <div className={'flex justify-end gap-2'}>
+                                    <ReusableButton
+                                        name={'Refresh'}
+                                        onClick={() => handleRefresh(data)}
+                                    >
+                                        <RotateCcw size={12}/>
+                                    </ReusableButton>
                                     <ReusableButton
                                         name={'Submit Purchase Order'}
                                         onClick={() => handleSubmit(data)}
