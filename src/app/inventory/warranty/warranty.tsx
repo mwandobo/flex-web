@@ -147,7 +147,8 @@ function Warranty({
         from: 'services',
         isHideDelete: true,
         isHideEdit: true,
-        approval_slug: WARRANTY_APPROVAL_SLUG
+        approval_slug: WARRANTY_APPROVAL_SLUG,
+        isFormData: true
     })
 
     return (

@@ -20,6 +20,7 @@ interface Props {
     itHasCustomForm?: boolean
     customForm?: ReactNode;
     isShowAddPriceButton?: boolean,
+    isFormData?: boolean
 }
 
 export const useCrudOperator = (
@@ -30,6 +31,7 @@ export const useCrudOperator = (
         viewUrl,
         state_properties,
         callBackFunction,
+        isFormData,
         selectedViewCard,
         from,
         itHasCustomForm,
@@ -72,6 +74,7 @@ export const useCrudOperator = (
         itHasCustomForm:itHasCustomForm,
         customForm:customForm,
         isShowAddPriceButton,
+        isFormData
     }
 
     const {

@@ -23,7 +23,8 @@ interface Props {
     isForm?: boolean
     state_properties: any[]
     isMultipart?: boolean,
-    emailNotificationBody?: any
+    emailNotificationBody?: any,
+    isFormData?: boolean
 }
 
 export const useCrudFormCreator = ({
@@ -42,7 +43,8 @@ export const useCrudFormCreator = ({
                                        state_properties = [],
                                        isShowAddPriceButton,
                                        emailNotificationBody,
-                                       from
+                                       from,
+    isFormData
                                    }: Props) => {
     const createPayload = (body: any[]) => {
         const payload: any = {};
@@ -73,13 +75,16 @@ export const useCrudFormCreator = ({
 
     const handleInputChange = (e: any, from?: any, control_for?: string) => {
         try {
-            formData[from] = e.target.value
-            updateFormDataPayload(from, from === 'file'?  e.target.files[0] : e.target.value , '', '', control_for)
+            formData[from] = from === 'file' ? e.target.files[0] : e.target.value
+            updateFormDataPayload(from,  e.target.value , '', '', control_for)
             setFormData(formData)
         } catch (error: any) {
             console.log(error)
         }
     };
+
+    console.log('formDataPayloafd', formData)
+
 
     const sideUpdatePayload = (payload?: any, value?: string) => {
         return formInputs?.map((input) => {
@@ -291,7 +296,7 @@ export const useCrudFormCreator = ({
                 if (validator()) {
                     let _formData = itHasCustomForm && !add_price ?  getValueFromLocalStorage('customFormData') : formData
                     if (httpMethod === 'post') {
-                        response = await post<any>(url, _formData, token)
+                        response = await post<any>(url, _formData, token, isFormData)
                     }
                     if (httpMethod === 'put') {
                         response = await put<any>(url, _formData, token)

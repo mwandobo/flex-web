@@ -8,18 +8,18 @@ export const nextBaseURL = 'http://localhost:3000';
 // export const nextBaseURL = 'https://flexprojects.int.cits.co.tz';
 
 // Axios instance
-const api = axios.create({
+const index = axios.create({
     baseURL,
 });
 
 // Function to get headers for authenticated requests
-export const config = (token: string | undefined | null) => {
+export const config = (token: string | undefined | null, isFormData?: boolean) => {
     const _token = getValueFromLocalStorage('token');
     const strippedToken = _token?.substring(1, _token.length - 1);
 
     return {
         headers: {
-            "Content-Type": "application/json",
+            "Content-Type": isFormData ? 'multipart/form-data':"application/json",
             "Accept": "*",
             "Access-Control-Allow-Origin": "*",
             "Authorization": `${strippedToken && `Bearer ${strippedToken}`}`,
@@ -55,19 +55,19 @@ const requestWithRetry = async <T>(requestFn: () => Promise<T>, retries = 5): Pr
 
 // Request method implementations
 const get = async <T>(url?: string, token?: string | null): Promise<any> => {
-    return url && await requestWithRetry(() => requestQueue.pushRequest(() => api.get(url, config(token))));
+    return url && await requestWithRetry(() => requestQueue.pushRequest(() => index.get(url, config(token))));
 };
 
-const post = async <T>(url: string, data: any, token?: string | null): Promise<any> => {
-    return url && await requestWithRetry(() => requestQueue.pushRequest(() => api.post(url, data, config(token))));
+const post = async <T>(url: string, data: any, token?: string | null, isFormData?: boolean): Promise<any> => {
+    return url && await requestWithRetry(() => requestQueue.pushRequest(() => index.post(url, data, config(token, isFormData))));
 };
 
 const put = async <T>(url: string, data: any, token?: string | null): Promise<any> => {
-    return url && await requestWithRetry(() => requestQueue.pushRequest(() => api.put(url, data, config(token))));
+    return url && await requestWithRetry(() => requestQueue.pushRequest(() => index.put(url, data, config(token))));
 };
 
 const remove = async <T>(url: string, token?: string | null): Promise<any> => {
-    return url && await requestWithRetry(() => requestQueue.pushRequest(() => api.delete(url, config(token))));
+    return url && await requestWithRetry(() => requestQueue.pushRequest(() => index.delete(url, config(token))));
 };
 
 export { get, post, put, remove };

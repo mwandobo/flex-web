@@ -35,6 +35,7 @@ interface Props {
     isApiV2?: boolean
     itHasCustomForm?: boolean
     customForm?: ReactNode;
+    isFormData?: boolean
 }
 
 export const usePageData = ({
@@ -50,6 +51,7 @@ export const usePageData = ({
                                 itHasCustomForm,
                                 customForm,
                                 selectedViewCard,
+                                isFormData,
                                 show_assign,
                                 permission,
                                 isHideShow,
@@ -90,7 +92,8 @@ export const usePageData = ({
         from,
         isApiV2,
         itHasCustomForm: itHasCustomForm,
-        customForm: customForm
+        customForm: customForm,
+        isFormData
     })
 
     const {tabular} = usePopulateTable({
