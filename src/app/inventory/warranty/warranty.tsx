@@ -76,6 +76,16 @@ function Warranty({
             isError: false,
             errorMessage: ''
         },
+
+        {
+            name: 'file',
+            type: 'file',
+            label: 'Warranty Document',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
     ]
 
     const columns: ColumnInputProps[] = [
@@ -129,7 +139,7 @@ function Warranty({
         columns: columns,
         formInputs: formInputs,
         url: `warranties?from=${from}&from_id=${from_id}`,
-        modalTitle: 'Services',
+        modalTitle: 'Warranty',
         viewUrl: '/procurement/rfq/',
         state_properties: [],
         permission: permission,

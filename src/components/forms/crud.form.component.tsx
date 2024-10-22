@@ -10,6 +10,7 @@ import MuiMultiSelectSelect from "@/components/inputs/mui-multi-select";
 import {ReactNode, useState} from "react"
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import PushNotification from "@/components/notificarion/push-notification";
+import FileInputComponent from "@/components/inputs/file-input.component";
 
 interface Props {
     isModalOpen: boolean,
@@ -75,6 +76,18 @@ const CrudFormComponent = ({
                                             <div className="" key={index}>
                                                 {item?.type === 'text' && (
                                                     <TextFieldComponent
+                                                        placeholder={item?.placeholder}
+                                                        type={item.textType}
+                                                        from={item?.name}
+                                                        label={item?.label}
+                                                        value={item.value}
+                                                        onChange={handleInputChange}
+                                                        isError={item.isError}
+                                                        errorMessage={item.errorMessage}
+                                                    />
+                                                )}
+                                                {item?.type === 'file' && (
+                                                    <FileInputComponent
                                                         placeholder={item?.placeholder}
                                                         type={item.textType}
                                                         from={item?.name}

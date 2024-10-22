@@ -28,6 +28,7 @@ import {useApprovalHook} from "@/hooks/useApprove";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
+import Image from "next/image";
 
 const WarrantyView = () => {
 
@@ -118,7 +119,7 @@ const WarrantyView = () => {
                                     data={[
                                         {label: 'Warranty Code', value: data?.formatted_code},
                                         {label: 'Warranty Name', value: data?.name},
-                                        {label: 'Service Name', value:  moneyFormater({amount:data?.cost}) },
+                                        {label: 'Service Name', value: moneyFormater({amount: data?.cost})},
                                         {label: 'Start Date', value: data?.formatted_start_date},
                                         {label: 'End Date', value: data?.formatted_end_date},
                                         {label: 'Status', value: data?.status},
@@ -128,6 +129,9 @@ const WarrantyView = () => {
                                     titleA={`Service`}
                                     titleB={` ${data?.formatted_code} `}
                                 />
+                                <a href={data.file_url} target="_blank" rel="noopener noreferrer">
+                                    {data.file_url}
+                                </a>
                                 <div className={'flex justify-between mt-2'}>
                                     <>
                                         {approvalButtonsWrapper()}
