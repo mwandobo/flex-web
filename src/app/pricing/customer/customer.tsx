@@ -5,93 +5,83 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import {ITEM_APPROVAL_SLUG} from "@/utils/constant";
+import {CUSTOMER_APPROVAL_SLUG, REQUEST_FOR_QUOTATION_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
     {
         name: 'name',
         type: 'text',
-        label: 'Category Name',
+        label: 'Customer Name',
         value: '',
         required: true,
         isError: false,
         errorMessage: ''
     },
     {
-        name: 'category_id',
-        type: 'select',
-        label: 'Item Category',
-        value: '',
-        optionsUrlData: 'items-categories?approved=approved',
-        optionDataKey: 'departments',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
-        name: 'price',
+        name: 'email',
         type: 'text',
-        label: 'Item price',
+        label: 'Customer Email',
         value: '',
         required: true,
         isError: false,
         errorMessage: ''
     },
     {
-        name: 'quantity',
+        name: 'phone',
         type: 'text',
-        label: 'Quantity',
+        label: 'Customer Phone',
         value: '',
         required: true,
         isError: false,
         errorMessage: ''
     },
     {
-        name: 'description',
-        type: 'textArea',
-        label: 'Description',
+        name: 'address',
+        type: 'text',
+        label: 'Customer Address',
         value: '',
         required: true,
         isError: false,
         errorMessage: ''
     },
 ]
+
 
 const columns = [
     {
         id: 'name',
         numeric: false,
         disablePadding: false,
-        label: 'Item Name',
+        label: 'Customer Name',
     },
     {
-        id: 'category_name',
+        id: 'email',
         numeric: false,
         disablePadding: false,
-        label: 'Item Category',
+        label: 'Customer Email',
     },
     {
-        id: 'price',
+        id: 'phone',
         numeric: false,
         disablePadding: false,
-        label: 'Item Price',
+        label: 'Customer Phone',
     },
     {
-        id: 'quantity',
+        id: 'address',
         numeric: false,
         disablePadding: false,
-        label: 'Item Quantity',
+        label: 'Customer Address',
     },
     {
-        id: 'description',
+        id: 'status',
         numeric: false,
         disablePadding: false,
-        label: 'Description',
-    }
+        label: 'Status',
+    },
 ]
 
-function Items() {
-    const permission = 'item'
+function Customer() {
+    const permission = 'customers'
 
     const {
         loading,
@@ -102,14 +92,14 @@ function Items() {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'item',
-        modalTitle: 'Item',
-        viewUrl: '/inventory/items-categories/',
+        url: 'customers',
+        modalTitle: 'Customer',
+        viewUrl: '/procurement/rfq/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'item',
-        approval_slug: ITEM_APPROVAL_SLUG
+        from: 'rfq',
+        approval_slug: CUSTOMER_APPROVAL_SLUG
     })
 
     return (
@@ -120,7 +110,7 @@ function Items() {
                         :
                         <>
                             <PageHeader
-                                title={"Items"}
+                                title={"Customers"}
                                 handleClick={handleClick}
                                 isShowAddButton={true}
                                />
@@ -136,4 +126,4 @@ function Items() {
     )
 }
 
-export default Items
+export default Customer

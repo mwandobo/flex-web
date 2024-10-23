@@ -9,20 +9,12 @@ import React, {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
-import {ReusableButton} from "@/components/button/reusable-button";
-import {FileOutput} from "lucide-react";
-import moneyFormater from "@/components/moneyFormater";
-import {
-    WARRANTY_APPROVAL_SLUG
-} from "@/utils/constant";
-import {useApprovalHook} from "@/hooks/useApprove";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
-import {showConfirmationModal} from "@/utils/showAlertDialog";
-import Image from "next/image";
-import DocumentViewer from "@/components/page-components/document-viewer";
+import {CUSTOMER_APPROVAL_SLUG } from "@/utils/constant";
+import {useApprovalHook} from "@/hooks/useApprove";
 
-const WarrantyView = () => {
+const CustomerView = () => {
 
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
@@ -34,46 +26,25 @@ const WarrantyView = () => {
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
 
-    const url = `warranties/${id}`
-    const approval_url = `approval/approved-items/by-item?from=${WARRANTY_APPROVAL_SLUG}&&from_id=${id}`
-
+    const url = `customers/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
+
+    const approval_url = `approval/approved-items/by-item?from=${CUSTOMER_APPROVAL_SLUG}&&from_id=${id}`
+
     const {
         isNeedApprove,
         isLastLevel,
         latestApproveStatus,
         approvalButtonsWrapper,
     } = useApprovalHook({
-        approval_slug: WARRANTY_APPROVAL_SLUG,
-        from: WARRANTY_APPROVAL_SLUG,
+        approval_slug: CUSTOMER_APPROVAL_SLUG,
+        from: CUSTOMER_APPROVAL_SLUG,
         from_id: id
     })
 
     const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
-
-    const onSave = async () => {
-        try {
-            const res = await get(`${url}/submit-draft`, token);
-            if (data && res.status === 200) {
-                setRefresh(!refresh);
-            }
-        } catch (error: any) {
-            console.log(error);
-        }
-    };
-
-    console.log(refresh)
-
-    const handleSubmit = (data: any) => {
-        showConfirmationModal({
-            title: 'Are You Sure?',
-            text: `Are You Sure You Want To Submit Warranty: ${data.formatted_code}?`,
-            onConfirm: onSave,  // Action to perform on confirmation
-            onCancel: () => console.log('User canceled the action'), // Optional cancel action
-        });
-    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -96,36 +67,29 @@ const WarrantyView = () => {
     }, [refresh])
 
     return (
+
         <ProtectedRoute>
             {
                 loading ? <p>Loading...</p>
                     :
                     <>
                         <PageHeader
-                            title={'Warranty'}
+                            title={'Customer View'}
                             isShowBackButton={true}
                         />
                         <MuiCardComponent>
-                            <div className="mb-3 flex flex-col">
+                            <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
-                                        {label: 'Warranty Code', value: data?.formatted_code},
-                                        {label: 'Warranty Name', value: data?.name},
-                                        {
-                                            label: data?.from === 'item' ? 'Item Name' : 'Service Name',
-                                            value: data?.service_item_name
-                                        },
-                                        {label: 'Start Date', value: data?.formatted_start_date},
-                                        {label: 'End Date', value: data?.formatted_end_date},
+                                        {label: 'Customer Name', value: data?.name},
+                                        {label: 'Customer Email', value: data?.email},
+                                        {label: 'Customer Phone', value: data?.phone},
+                                        {label: 'Customer Address', value: data?.address},
                                         {label: 'Status', value: data?.status},
-                                        {label: 'Terms', value: data?.terms},
-                                        {label: 'Description', value: data?.description},
                                     ]}
-                                    titleA={`Warranty`}
-                                    titleB={` ${data?.formatted_code} `}
+                                    titleA={`Customer`}
+                                    titleB={` ${data?.name} `}
                                 />
-                                <DocumentViewer data={{file_url: data.file_url}}/>
-
                                 <div className={'flex justify-between mt-2'}>
                                     <>
                                         {approvalButtonsWrapper()}
@@ -139,19 +103,6 @@ const WarrantyView = () => {
                                     </SlideOver>
                                 </div>
                             </div>
-                            <hr className="bg-gray-100"/>
-
-                            <hr className="bg-gray-100"/>
-                            {approveStatus() && data?.status === 'pending' &&
-                                <div className={'flex justify-end gap-2 mt-2'}>
-                                    <ReusableButton
-                                        name={'Submit Warranty'}
-                                        onClick={() => handleSubmit(data)}
-                                    >
-                                        <FileOutput size={12}/>
-                                    </ReusableButton>
-                                </div>
-                            }
                         </MuiCardComponent>
                     </>
             }
@@ -159,4 +110,4 @@ const WarrantyView = () => {
     );
 };
 
-export default WarrantyView;
+export default CustomerView;

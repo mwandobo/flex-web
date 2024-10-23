@@ -9,49 +9,47 @@ import React, {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
+import RequisitionRequestItem from "@/app/procurement/requisition-requests/requisition-request-items";
+import {useCrudOperator} from "@/hooks/crud/crud-operator";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {FileOutput} from "lucide-react";
-import moneyFormater from "@/components/moneyFormater";
-import {
-    WARRANTY_APPROVAL_SLUG
-} from "@/utils/constant";
-import {useApprovalHook} from "@/hooks/useApprove";
+import {FileOutput, RotateCcw} from "lucide-react";
+import RfqItems from "@/app/procurement/rfq/rfq-items";
+import QuotationItems from "@/app/procurement/quotation/quotation-items";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
+import {ITEM_APPROVAL_SLUG, QUOTATION_APPROVAL_SLUG, SALE_QUOTATION_APPROVAL_SLUG} from "@/utils/constant";
+import {useApprovalHook} from "@/hooks/useApprove";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
-import Image from "next/image";
 import DocumentViewer from "@/components/page-components/document-viewer";
 
-const WarrantyView = () => {
+const SalesQuotationView = () => {
 
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
-    const [refresh, setRefresh] = useState(false)
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
-
+    const [refresh, setRefresh] = useState(false)
     const {state, dispatch} = useGlobalContextHook()
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
 
-    const url = `warranties/${id}`
-    const approval_url = `approval/approved-items/by-item?from=${WARRANTY_APPROVAL_SLUG}&&from_id=${id}`
-
+    const url = `quotations/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
+
+    const approval_url = `approval/approved-items/by-item?from=${SALE_QUOTATION_APPROVAL_SLUG}&&from_id=${id}`
+
     const {
         isNeedApprove,
         isLastLevel,
         latestApproveStatus,
         approvalButtonsWrapper,
     } = useApprovalHook({
-        approval_slug: WARRANTY_APPROVAL_SLUG,
-        from: WARRANTY_APPROVAL_SLUG,
+        approval_slug: SALE_QUOTATION_APPROVAL_SLUG,
+        from: SALE_QUOTATION_APPROVAL_SLUG,
         from_id: id
     })
-
-    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
     const onSave = async () => {
         try {
@@ -64,15 +62,43 @@ const WarrantyView = () => {
         }
     };
 
-    console.log(refresh)
-
     const handleSubmit = (data: any) => {
         showConfirmationModal({
-            title: 'Are You Sure?',
-            text: `Are You Sure You Want To Submit Warranty: ${data.formatted_code}?`,
+            title: 'Are you sure?',
+            text: `Are you sure you want to submit Quotation code: ${data.formatted_code}?`,
             onConfirm: onSave,  // Action to perform on confirmation
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
+    };
+
+    const onRefresh = async () => {
+        try {
+            const res = await get(`${url}/refresh-draft`, token);
+            if (data && res.status === 200) {
+                setRefresh(!refresh);
+            }
+        } catch (error: any) {
+            console.log(error);
+        }
+    };
+
+    const handleRefresh = (data: any) => {
+        showConfirmationModal({
+            title: 'Are you sure?',
+            text: `Are you sure you want to Refresh Saved Changes for Quotation code: ${data.formatted_code}?`,
+            onConfirm: onRefresh,  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
+
+    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
+
+    const [dataFromChild, setDataFromChild] = useState(null);
+
+    // This function will be passed to the child to receive data
+    const sendRefresh = () => {
+        console.log('sendRefresh', 'refreshed')
+        setRefresh(!refresh);
     };
 
     useEffect(() => {
@@ -96,36 +122,35 @@ const WarrantyView = () => {
     }, [refresh])
 
     return (
+
         <ProtectedRoute>
             {
                 loading ? <p>Loading...</p>
                     :
                     <>
                         <PageHeader
-                            title={'Warranty'}
+                            title={'Quotation View'}
                             isShowBackButton={true}
                         />
                         <MuiCardComponent>
-                            <div className="mb-3 flex flex-col">
+                            <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
-                                        {label: 'Warranty Code', value: data?.formatted_code},
-                                        {label: 'Warranty Name', value: data?.name},
-                                        {
-                                            label: data?.from === 'item' ? 'Item Name' : 'Service Name',
-                                            value: data?.service_item_name
-                                        },
-                                        {label: 'Start Date', value: data?.formatted_start_date},
-                                        {label: 'End Date', value: data?.formatted_end_date},
-                                        {label: 'Status', value: data?.status},
-                                        {label: 'Terms', value: data?.terms},
-                                        {label: 'Description', value: data?.description},
+                                        {label: 'Quotation Code', value: data?.formatted_code},
+                                        {label: 'Customer Name', value: data?.customer_name},
+                                        {label: 'Request for Quotation Code', value: data?.rfq_name},
+                                        {label: 'Payment Method', value: data?.payment_method},
+                                        {label: 'Evaluation Method', value: data?.evaluation_method},
+                                        {label: 'Decision Timeline', value: data?.decision_timeline},
+                                        {label: 'Submission Requirement', value: data?.submission_requirement},
+                                        {label: 'Delivery Time', value: data?.delivery_time},
+                                        {label: 'status', value: data?.status},
+                                        {label: 'Terms and Conditions', value: data?.terms_and_conditions},
                                     ]}
-                                    titleA={`Warranty`}
+                                    titleA={`Quotation`}
                                     titleB={` ${data?.formatted_code} `}
                                 />
-                                <DocumentViewer data={{file_url: data.file_url}}/>
-
+                                <DocumentViewer data={{ file_url: data.file_url}} />
                                 <div className={'flex justify-between mt-2'}>
                                     <>
                                         {approvalButtonsWrapper()}
@@ -140,12 +165,19 @@ const WarrantyView = () => {
                                 </div>
                             </div>
                             <hr className="bg-gray-100"/>
-
-                            <hr className="bg-gray-100"/>
+                            <div className={'mt-2'}>
+                                <QuotationItems quotation={data}/>
+                            </div>
                             {approveStatus() && data?.status === 'pending' &&
-                                <div className={'flex justify-end gap-2 mt-2'}>
+                                <div className={'flex justify-end gap-2'}>
                                     <ReusableButton
-                                        name={'Submit Warranty'}
+                                        name={'Refresh Quotation'}
+                                        onClick={() => handleRefresh(data)}
+                                    >
+                                        <RotateCcw size={12}/>
+                                    </ReusableButton>
+                                    <ReusableButton
+                                        name={'Submit Quotation'}
                                         onClick={() => handleSubmit(data)}
                                     >
                                         <FileOutput size={12}/>
@@ -159,4 +191,4 @@ const WarrantyView = () => {
     );
 };
 
-export default WarrantyView;
+export default SalesQuotationView;

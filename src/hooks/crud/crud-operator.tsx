@@ -237,6 +237,6 @@ export const useCrudOperator = (
     return {
         handleClick,
         createdForm,
-        isStateChanged
+        isStateChanged,
     }
 }

@@ -5,51 +5,12 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import {ITEM_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
-    {
-        name: 'name',
-        type: 'text',
-        label: 'Category Name',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
-        name: 'category_id',
-        type: 'select',
-        label: 'Item Category',
-        value: '',
-        optionsUrlData: 'items-categories?approved=approved',
-        optionDataKey: 'departments',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
-        name: 'price',
-        type: 'text',
-        label: 'Item price',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
     {
         name: 'quantity',
         type: 'text',
         label: 'Quantity',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
-        name: 'description',
-        type: 'textArea',
-        label: 'Description',
         value: '',
         required: true,
         isError: false,
@@ -63,53 +24,54 @@ const columns = [
         numeric: false,
         disablePadding: false,
         label: 'Item Name',
-    },
-    {
-        id: 'category_name',
-        numeric: false,
-        disablePadding: false,
-        label: 'Item Category',
+        width: '20%'
     },
     {
         id: 'price',
         numeric: false,
         disablePadding: false,
-        label: 'Item Price',
+        label: 'Price',
+    },
+    {
+        id: 'requisition_quantity',
+        numeric: false,
+        disablePadding: false,
+        label: 'Requested Quantity',
     },
     {
         id: 'quantity',
         numeric: false,
         disablePadding: false,
-        label: 'Item Quantity',
-    },
-    {
-        id: 'description',
-        numeric: false,
-        disablePadding: false,
-        label: 'Description',
+        label: 'RFQ Quantity',
     }
 ]
 
-function Items() {
-    const permission = 'item'
+interface Props {
+    rfq_id: string,
+    status: string
+}
+
+function SalesRfqItems({rfq_id, status}: Props) {
+    const permission = 'rfq_item'
 
     const {
         loading,
         createdForm,
         handleClick,
         tabular
-
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'item',
-        modalTitle: 'Item',
+        url: `rfq/${rfq_id}/items`,
+        modalTitle: 'Rfq Item',
         viewUrl: '/inventory/items-categories/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'item',
-        approval_slug: ITEM_APPROVAL_SLUG
+        from: 'rfq-items',
+        isHideShow:true,
+        isHideDelete:true,
+        isHideEdit: status !== 'pending'
     })
 
     return (
@@ -120,9 +82,10 @@ function Items() {
                         :
                         <>
                             <PageHeader
-                                title={"Items"}
+                                title={"RFQ Items"}
                                 handleClick={handleClick}
-                                isShowAddButton={true}
+                                isShowAddButton={false}
+
                                />
                             {tabular()}
                             {createdForm()}
@@ -136,4 +99,4 @@ function Items() {
     )
 }
 
-export default Items
+export default SalesRfqItems

@@ -5,52 +5,18 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import {ITEM_APPROVAL_SLUG} from "@/utils/constant";
+import {tr} from "date-fns/locale";
+import {ITEM_APPROVAL_SLUG, PURCHASE_ORDER_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
     {
-        name: 'name',
-        type: 'text',
-        label: 'Category Name',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
-        name: 'category_id',
+        name: 'quotation_id',
         type: 'select',
-        label: 'Item Category',
+        label: 'Quotation',
         value: '',
-        optionsUrlData: 'items-categories?approved=approved',
-        optionDataKey: 'departments',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
-        name: 'price',
-        type: 'text',
-        label: 'Item price',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
-        name: 'quantity',
-        type: 'text',
-        label: 'Quantity',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
-        name: 'description',
-        type: 'textArea',
-        label: 'Description',
-        value: '',
+        optionsUrlData: `/quotations?approved=approved&status=bid_comparison&type=external`,
+        optionDataKey: 'rfq',
+        control_for: "rfq",
         required: true,
         isError: false,
         errorMessage: ''
@@ -59,39 +25,45 @@ const formInputs = [
 
 const columns = [
     {
-        id: 'name',
+        id: 'formatted_code',
         numeric: false,
         disablePadding: false,
-        label: 'Item Name',
+        label: 'Purchase Order ',
     },
     {
-        id: 'category_name',
+        id: 'supplier_name',
         numeric: false,
         disablePadding: false,
-        label: 'Item Category',
+        label: 'Supplier Name',
     },
     {
-        id: 'price',
+        id: 'quotation_name',
         numeric: false,
         disablePadding: false,
-        label: 'Item Price',
+        label: 'Quotation',
     },
     {
-        id: 'quantity',
+        id: 'rfq_name',
         numeric: false,
         disablePadding: false,
-        label: 'Item Quantity',
+        label: 'RFQ',
     },
     {
-        id: 'description',
+        id: 'total_amount',
         numeric: false,
         disablePadding: false,
-        label: 'Description',
-    }
+        label: 'Amount',
+    },
+    {
+        id: 'status',
+        numeric: false,
+        disablePadding: false,
+        label: 'Status',
+    },
 ]
 
-function Items() {
-    const permission = 'item'
+function Order() {
+    const permission = 'purchase_order'
 
     const {
         loading,
@@ -102,14 +74,16 @@ function Items() {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'item',
-        modalTitle: 'Item',
-        viewUrl: '/inventory/items-categories/',
+        url: `purchase-orders?type=external`,
+        modalTitle: 'Purchase Order',
+        viewUrl: '/procurement/rfq/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'item',
-        approval_slug: ITEM_APPROVAL_SLUG
+        from: 'bid-comparison',
+        isHideDelete: false,
+        isHideEdit: true,
+        approval_slug: PURCHASE_ORDER_APPROVAL_SLUG
     })
 
     return (
@@ -120,7 +94,7 @@ function Items() {
                         :
                         <>
                             <PageHeader
-                                title={"Items"}
+                                title={"Purchase Order"}
                                 handleClick={handleClick}
                                 isShowAddButton={true}
                                />
@@ -136,4 +110,4 @@ function Items() {
     )
 }
 
-export default Items
+export default Order

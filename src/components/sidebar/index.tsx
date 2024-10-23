@@ -190,6 +190,12 @@ const items: ISidebarItem[] = [
         ]
     },
     {
+        name: 'Finance',
+        path: '/finance',
+        permission: 'finance-list',
+        icon: Book,
+    },
+    {
         name: 'Inventory',
         path: '/inventory',
         permission: 'inventory-list',
@@ -208,9 +214,9 @@ const items: ISidebarItem[] = [
         icon: Book,
     },
     {
-        name: 'Finance',
-        path: '/finance',
-        permission: 'finance-list',
+        name: 'Pricing and Profitability Management',
+        path: '/pricing',
+        permission: 'pricing-list',
         icon: Book,
     },
     {
@@ -237,7 +243,6 @@ const items: ISidebarItem[] = [
         permission: 'settings-list',
         icon: Book,
     },
-
 ]
 
 function Sidebar() {

@@ -17,6 +17,7 @@ import {from} from "stylis";
 interface Props {
     from?: string,
     from_id?: string,
+    is_warranted?: boolean,
 }
 
 interface ColumnInputProps {
@@ -29,9 +30,10 @@ interface ColumnInputProps {
 
 function Warranty({
                       from,
-                      from_id
+                      from_id,
+                      is_warranted
                   }: Props) {
-    const permission = 'service'
+    const permission = 'warranties'
     const formInputs = [
         {
             name: 'name',
@@ -128,13 +130,11 @@ function Warranty({
         },
     ]
 
-
     const {
         loading,
         createdForm,
         handleClick,
         tabular
-
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
@@ -144,9 +144,10 @@ function Warranty({
         state_properties: [],
         permission: permission,
         isApiV2: true,
-        from: 'services',
+        from: 'warranties',
         isHideDelete: true,
         isHideEdit: true,
+        isHideShow: !!(from && from_id),
         approval_slug: WARRANTY_APPROVAL_SLUG,
         isFormData: true
     })
@@ -161,7 +162,7 @@ function Warranty({
                             <PageHeader
                                 title={"Warranties"}
                                 handleClick={handleClick}
-                                isShowAddButton={!!(from && from_id)}
+                                isShowAddButton={!!(from && from_id) && !is_warranted}
                             />
                             {tabular()}
                             {createdForm()}

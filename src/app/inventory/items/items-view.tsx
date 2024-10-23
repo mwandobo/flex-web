@@ -64,6 +64,7 @@ const ItemsView = () => {
     const {
         handleClick,
         createdForm,
+        isStateChanged
     } = useCrudOperator({
         formInputData: formInputs,
         incomingUrl: `requisition-request/item/${id}`,
@@ -92,7 +93,7 @@ const ItemsView = () => {
             }
         };
         fetchData()
-    }, [])
+    }, [isStateChanged])
 
     return (
 
@@ -130,7 +131,7 @@ const ItemsView = () => {
                                 }
                             </div>
                             <hr className="bg-gray-100"/>
-                            <Warranty from={'item'} from_id={id}/>
+                            <Warranty from={'item'} from_id={id} is_warranted={data.is_warranted}/>
                             <hr className="bg-gray-100"/>
                             <div className={'flex justify-between mt-2'}>
                                 <>

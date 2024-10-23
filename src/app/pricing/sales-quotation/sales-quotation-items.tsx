@@ -3,35 +3,15 @@
 import ProtectedRoute from '@/components/authentication/protected-route'
 import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
-import React from 'react'
+import React, {useEffect} from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import {ITEM_APPROVAL_SLUG} from "@/utils/constant";
+import {get} from "@/utils/api";
 
 const formInputs = [
     {
-        name: 'name',
-        type: 'text',
-        label: 'Category Name',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
-        name: 'category_id',
-        type: 'select',
-        label: 'Item Category',
-        value: '',
-        optionsUrlData: 'items-categories?approved=approved',
-        optionDataKey: 'departments',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
         name: 'price',
         type: 'text',
-        label: 'Item price',
+        label: 'Item Price',
         value: '',
         required: true,
         isError: false,
@@ -46,15 +26,6 @@ const formInputs = [
         isError: false,
         errorMessage: ''
     },
-    {
-        name: 'description',
-        type: 'textArea',
-        label: 'Description',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
 ]
 
 const columns = [
@@ -63,12 +34,7 @@ const columns = [
         numeric: false,
         disablePadding: false,
         label: 'Item Name',
-    },
-    {
-        id: 'category_name',
-        numeric: false,
-        disablePadding: false,
-        label: 'Item Category',
+        width: '20%'
     },
     {
         id: 'price',
@@ -77,39 +43,54 @@ const columns = [
         label: 'Item Price',
     },
     {
+        id: 'quotation_price',
+        numeric: false,
+        disablePadding: false,
+        label: 'Quotation Price',
+    },
+
+    {
+        id: 'rfq_quantity',
+        numeric: false,
+        disablePadding: false,
+        label: 'RFQ Quantity',
+    },
+    {
         id: 'quantity',
         numeric: false,
         disablePadding: false,
-        label: 'Item Quantity',
-    },
-    {
-        id: 'description',
-        numeric: false,
-        disablePadding: false,
-        label: 'Description',
+        label: 'Quotation Quantity',
     }
 ]
 
-function Items() {
-    const permission = 'item'
+interface Props {
+    quotation: any
+}
+
+function SalesQuotationItems({quotation}: Props) {
+    const permission = 'quotation_item'
 
     const {
         loading,
         createdForm,
         handleClick,
-        tabular
-
+        tabular,
+        isStateChanged
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'item',
-        modalTitle: 'Item',
+        url: `quotations/${quotation?.id}/items`,
+        modalTitle: 'Quotation Item',
         viewUrl: '/inventory/items-categories/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'item',
-        approval_slug: ITEM_APPROVAL_SLUG
+        from: 'quotation-items',
+        isHideShow:true,
+        isShowAddPriceButton:true,
+        addPriceFormInputData: formInputs,
+        isHideDelete: quotation?.status !== 'pending',
+        isHideEdit: quotation?.status !== 'pending'
     })
 
     return (
@@ -120,9 +101,10 @@ function Items() {
                         :
                         <>
                             <PageHeader
-                                title={"Items"}
+                                title={"Quotation Items"}
                                 handleClick={handleClick}
-                                isShowAddButton={true}
+                                isShowAddButton={false}
+
                                />
                             {tabular()}
                             {createdForm()}
@@ -136,4 +118,4 @@ function Items() {
     )
 }
 
-export default Items
+export default SalesQuotationItems
