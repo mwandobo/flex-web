@@ -220,18 +220,6 @@ const items: ISidebarItem[] = [
         icon: Book,
     },
     {
-        name: 'Store',
-        path: '/store',
-        permission: 'store-list',
-        icon: Book,
-    },
-    {
-        name: 'Notifications',
-        path: '/notification',
-        permission: 'notification-list',
-        icon: Bell,
-    },
-    {
         name: 'Configurations',
         path: '/configurations',
         permission: 'configurations-list',

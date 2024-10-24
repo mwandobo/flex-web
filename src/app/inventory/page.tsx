@@ -14,6 +14,18 @@ import Service from "@/app/inventory/services/service";
 import ServiceView from "@/app/inventory/services/service-view";
 import Warranty from "@/app/inventory/warranty/warranty";
 import WarrantyView from "@/app/inventory/warranty/warranty-view";
+import Stores from "@/app/inventory/stores/stores";
+import StoresView from "@/app/inventory/stores/stores-view";
+import Delivery from "@/app/inventory/delivery/delivery";
+import DeliveryView from "@/app/inventory/delivery/delivery-view";
+import Inspection from "@/app/inventory/inspection/inspection";
+import InspectionView from "@/app/inventory/inspection/inspection-view";
+import ItemRequest from "@/app/inventory/store-request/item-request/item-request";
+import ItemRequestView from "@/app/inventory/store-request/item-request/item-request-view";
+import ServiceRequest from "@/app/inventory/store-request/service-request/service-request";
+import ServiceRequestView from "@/app/inventory/store-request/service-request/service-request-view";
+import PersonnelRequest from "@/app/inventory/personnel-request/personnel-request";
+import PersonnelRequestView from "@/app/inventory/personnel-request/personnel-request-view";
 
 const InventoryItems = [
     { name: 'item-categories', title: 'Item Categories', item: <ItemsCategories />, itemView: <ItemsCategoryView /> },
@@ -21,6 +33,12 @@ const InventoryItems = [
     { name: 'services', title: 'Services', item: <Service />, itemView: <ServiceView /> },
     { name: 'warranties', title: 'Warranties', item: <Warranty />, itemView: <WarrantyView /> },
     { name: 'suppliers', title: 'Suppliers', item: <Suppliers />, itemView: <SuppliersView /> },
+    { name: 'stores', title: 'Stores', item: <Stores />, itemView: <StoresView /> },
+    { name: 'deliveries', title: 'Deliveries', item: <Delivery />, itemView: <DeliveryView /> },
+    { name: 'inspections', title: 'Inspections', item: <Inspection />, itemView: <InspectionView /> },
+    { name: 'store-item-request', title: 'Store Item Requests', item: <ItemRequest />, itemView: <ItemRequestView /> },
+    { name: 'service-request', title: 'Service Requests', item: <ServiceRequest />, itemView: <ServiceRequestView /> },
+    { name: 'personnel-request', title: 'Personnel Requests', item: <PersonnelRequest />, itemView: <PersonnelRequestView /> },
 ];
 
 function InventoryPage() {

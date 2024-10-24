@@ -14,7 +14,7 @@ const formInputs = [
         type: 'select',
         label: 'Request For Quotation',
         value: '',
-        optionsUrlData: `/rfq?approved=approved&status=quotation?type=internal`,
+        optionsUrlData: `/rfq?approved=approved&type=internal`,
         optionDataKey: 'rfq',
         control_for: "quotation-item",
         required: true,

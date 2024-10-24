@@ -9,33 +9,33 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
-import DeliveryItems from "@/app/store/delivery/delivery-items";
 import moneyFormater from "@/components/moneyFormater";
-import {DELIVERY_APPROVAL_SLUG, ITEM_APPROVAL_SLUG} from "@/utils/constant";
-import {useApprovalHook} from "@/hooks/useApprove";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
+import {INSPECTION_APPROVAL_SLUG} from "@/utils/constant";
+import {useApprovalHook} from "@/hooks/useApprove";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {ReusableButton} from "@/components/button/reusable-button";
 import {FileOutput} from "lucide-react";
+import InspectionItems from "@/app/inventory/inspection/inspection-items";
 
-const DeliveryView = () => {
+const InspectionView = () => {
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
+    const [refresh, setRefresh] = useState(false)
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
-    const [refresh, setRefresh] = useState(false)
 
     const {state, dispatch} = useGlobalContextHook()
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
 
-    const url = `deliveries/${id}`
+    const url = `inspections/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
 
-    const approval_url = `approval/approved-items/by-item?from=${DELIVERY_APPROVAL_SLUG}&&from_id=${id}`
+    const approval_url = `approval/approved-items/by-item?from=${INSPECTION_APPROVAL_SLUG}&&from_id=${id}`
 
     const {
         isNeedApprove,
@@ -43,8 +43,8 @@ const DeliveryView = () => {
         latestApproveStatus,
         approvalButtonsWrapper,
     } = useApprovalHook({
-        approval_slug: DELIVERY_APPROVAL_SLUG,
-        from: DELIVERY_APPROVAL_SLUG,
+        approval_slug: INSPECTION_APPROVAL_SLUG,
+        from: INSPECTION_APPROVAL_SLUG,
         from_id: id
     })
 
@@ -64,7 +64,7 @@ const DeliveryView = () => {
     const handleSubmit = (data: any) => {
         showConfirmationModal({
             title: 'Are You Sure?',
-            text: `Are You Sure You Want To Submit Delivery Code: ${data.formatted_code}?`,
+            text: `Are You Sure You Want To Submit Inspection Code: ${data.formatted_code}?`,
             onConfirm: onSave,  // Action to perform on confirmation
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
@@ -90,8 +90,6 @@ const DeliveryView = () => {
         fetchData()
     }, [refresh])
 
-    console.log(data)
-
     return (
 
         <ProtectedRoute>
@@ -100,26 +98,29 @@ const DeliveryView = () => {
                     :
                     <>
                         <PageHeader
-                            title={'Delivery View'}
+                            title={'Inspection View'}
                             isShowBackButton={true}
                         />
                         <MuiCardComponent>
                             <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
+                                        {label: 'Inspection Code', value: data?.formatted_code},
                                         {label: 'Delivery Code', value: data?.formatted_code},
                                         {label: 'Purchase Order', value: data?.purchase_order_name},
                                         {label: 'Request For Quotation', value: data?.rfq_name},
-                                        {label: data?.supplier_name ? 'Supplier' : 'Customer', value: data?.supplier_name || data?.customer_name},
+                                        {label: 'Supplier', value: data?.supplier_name},
                                         {label: 'Quotation', value: data?.quotation_name},
-                                        {label: 'Delivery Cost', value: moneyFormater({amount: data?.delivery_cost})},
-                                        {label: 'Delivery Date', value: data?.delivery_date},
-                                        {label: 'Delivery Date', value: data?.delivery_date},
-                                        {label: 'Delivery Address', value: data?.delivery_address},
+                                        {label: 'Inspection By', value: data?.inspected_by},
+                                        {
+                                            label: 'Inspection Cost',
+                                            value: moneyFormater({amount: data?.inspection_cost})
+                                        },
+                                        {label: 'Inspection Date', value: data?.inspection_date},
                                         {label: 'Description', value: data?.description},
                                         {label: 'Status', value: data?.status},
                                     ]}
-                                    titleA={`Delivery`}
+                                    titleA={`Inspection Code`}
                                     titleB={` ${data?.formatted_code} `}
                                 />
                                 <div className={'flex justify-between mt-2'}>
@@ -136,12 +137,12 @@ const DeliveryView = () => {
                                 </div>
                             </div>
                             <hr className="bg-gray-100"/>
-                            <DeliveryItems delivery={data}/>
+                            <InspectionItems inspection={data}/>
                             <hr className="bg-gray-100"/>
                             {approveStatus() && data?.status === 'pending' &&
                                 <div className={'flex justify-end gap-2'}>
                                     <ReusableButton
-                                        name={'Submit Delivery'}
+                                        name={'Submit Inspection'}
                                         onClick={() => handleSubmit(data)}
                                     >
                                         <FileOutput size={12}/>
@@ -155,4 +156,4 @@ const DeliveryView = () => {
     );
 };
 
-export default DeliveryView;
+export default InspectionView;
