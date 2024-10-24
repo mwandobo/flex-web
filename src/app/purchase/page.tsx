@@ -34,10 +34,14 @@ const ProcurementItems = [
     {name: 'quotation', title: 'Quotations', item: <Quotation/>, itemView: <QuotationView/>},
     {name: 'bid-comparison', title: 'Bid Comparison', item: <BidComparison/>, itemView: <BidComparisonView/>},
     {name: 'purchase-order', title: 'Purchase Orders', item: <PurchaseOrder/>, itemView: <PurchaseOrderView/>},
+    {name: 'invoice', title: 'Invoices', item: <Invoice/>, itemView: <InvoiceView/>},
+    {name: 'payment', title: 'Payments', item: <Payment/>, itemView: <PaymentView/>},
+    {name: 'cost-center', title: 'Cost Centers', item: <CostCenter/>, itemView: <CostCenterView/>},
+    {name: 'finance-request', title: 'Finance Requests', item: <FinanceRequest/>, itemView: <FinanceRequestView/>},
 ];
 
 function InventoryPage() {
-    const { dispatch} = useGlobalContextHook();
+    const {state, dispatch} = useGlobalContextHook();
     useEffect(() => {
         const selectedItem = getValueFromLocalStorage('selected_sub_sidebar_item')
         const sideViewPayload = JSON.parse(getValueFromLocalStorage('sub_view_item'))

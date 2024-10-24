@@ -33,6 +33,8 @@ function SettingItem({group}: Props) {
         viewUrl: `/settings/${group}/view?id=`,
         state_properties: [group],
         isHideShow: true,
+        isHideDelete: group !== 'project',
+        isHideEdit: group !== 'project',
         isApiV2:true
     })
 
@@ -46,7 +48,7 @@ function SettingItem({group}: Props) {
                             handleClick={handleClick}
                             links={[]}
                             subHeader={`${capitalizeFirstWord(group)} Types`}
-                            isHideAdd={false}
+                            isHideAdd={group !== 'project'}
                         />
                         {tabular()}
                         {createdForm()}

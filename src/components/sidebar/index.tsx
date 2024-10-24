@@ -131,6 +131,38 @@ const items: ISidebarItem[] = [
         ]
     },
     {
+        name: 'Procurement and Management',
+        path: '/procurement',
+        permission: 'procurement-list',
+        icon: Book,
+        items: [
+            {
+                name: 'Finance',
+                path: '/finance',
+                permission: 'finance-list',
+                icon: Book,
+            },
+            {
+                name: 'Inventory',
+                path: '/inventory',
+                permission: 'inventory-list',
+                icon: Book,
+            },
+            {
+                name: 'Purchase',
+                path: '/procurement',
+                permission: 'purchase-list',
+                icon: Book,
+            },
+            {
+                name: 'Sales',
+                path: '/sales',
+                permission: 'sales-list',
+                icon: Book,
+            },
+        ]
+    },
+    {
         name: 'Administration',
         path: '/administration',
         permission: 'administration-list',
@@ -189,42 +221,7 @@ const items: ISidebarItem[] = [
             },
         ]
     },
-    {
-        name: 'Finance',
-        path: '/finance',
-        permission: 'finance-list',
-        icon: Book,
-    },
-    {
-        name: 'Inventory',
-        path: '/inventory',
-        permission: 'inventory-list',
-        icon: Book,
-    },
-    {
-        name: 'Procurement',
-        path: '/procurement',
-        permission: 'procurement-list',
-        icon: Book,
-    },
-    {
-        name: 'Sales',
-        path: '/sales',
-        permission: 'sales-list',
-        icon: Book,
-    },
-    {
-        name: 'Pricing and Profitability Management',
-        path: '/pricing',
-        permission: 'pricing-list',
-        icon: Book,
-    },
-    {
-        name: 'Configurations',
-        path: '/configurations',
-        permission: 'configurations-list',
-        icon: Book,
-    },
+
     {
         name: 'Settings',
         path: '/settings',

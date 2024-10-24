@@ -6,11 +6,18 @@ import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import SettingItem from "@/app/settings/setting-item";
 
-const SettingsItems = [
+const SettingItems = [
+    { name: 'resource-type', title: 'Resource Types', item: <SettingItem group={'resource'} /> },
+    { name: 'stakeholder-type', title: 'Stakeholder Types', item: <SettingItem group={'stakeholder'} /> },
+    { name: 'sponsor-type', title: 'Sponsor Types', item: <SettingItem group={'sponsor'} /> },
+    { name: 'representative-type', title: 'Representative Types', item: <SettingItem group={'representative'} /> },
+    { name: 'sponsorship-type', title: 'Sponsorship Types', item: <SettingItem group={'sponsorship'} /> },
+    { name: 'measurement-type', title: 'Indicator Measurements Types', item: <SettingItem group={'measurement'} /> },
+    { name: 'assignment-type', title: 'Resource Types', item: <SettingItem group={'assignment'} /> },
     { name: 'project-type', title: 'Project Types', item: <SettingItem group={'project'} /> },
 ];
 
-function SettingPage() {
+function ConfigurationPage() {
     const {state, dispatch} = useGlobalContextHook();
 
     useEffect(() => {
@@ -20,7 +27,7 @@ function SettingPage() {
         dispatch({type: "SET_SUB_VIEW_ITEM", payload: sideViewPayload})
     }, []);
 
-    return <InternalMenuSkeletonComponent pageItems={SettingsItems} title="Settings Management"  subtitle="Setting Items" />;
+    return <InternalMenuSkeletonComponent pageItems={SettingItems} title="Settings Management"  subtitle="Setting Items" />;
 }
 
-export default SettingPage;
+export default ConfigurationPage;
