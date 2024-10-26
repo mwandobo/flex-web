@@ -9,33 +9,32 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
-import moneyFormater from "@/components/moneyFormater";
-import {DELIVERY_APPROVAL_SLUG} from "@/utils/constant";
+import {ReusableButton} from "@/components/button/reusable-button";
+import { ShoppingCart} from "lucide-react";
 import {useApprovalHook} from "@/hooks/useApprove";
+import {DELIVERY_APPROVAL_SLUG} from "@/utils/constant";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
+import Warranty from "@/app/inventory/warranty/warranty";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
-import {ReusableButton} from "@/components/button/reusable-button";
-import {FileOutput} from "lucide-react";
-import DeliveryItems from "@/app/inventory/delivery/delivery-items";
 
-const DeliveryView = () => {
+const ItemDeliverableView = () => {
+    const [refresh, setRefresh] = useState(false)
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
-    const [refresh, setRefresh] = useState(false)
 
     const {state} = useGlobalContextHook()
-    const { viewedItem} = state;
+    const {viewedItem} = state;
     const {id} = viewedItem;
 
-    const url = `deliveries/${id}`
+    const url = `deliverable/${id}`
+
     const navigateToLogin = () => {
         return router.push('/login')
     }
-
-    const approval_url = `approval/approved-items/by-item?from=${DELIVERY_APPROVAL_SLUG}&&from_id=${id}`
+    const approval_url = `approval/approved-items/by-item?from=${DELIVERY_APPROVAL_SLUG}&from_id=${id}`
 
     const {
         isNeedApprove,
@@ -88,9 +87,7 @@ const DeliveryView = () => {
             }
         };
         fetchData()
-    }, [refresh])
-
-    console.log(data)
+    }, [])
 
     return (
 
@@ -100,54 +97,53 @@ const DeliveryView = () => {
                     :
                     <>
                         <PageHeader
-                            title={'Delivery View'}
-                            isShowBackButton={true}
+                           title={'Deliverable View'}
+                           isShowBackButton={true}
                         />
                         <MuiCardComponent>
                             <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
-                                        {label: 'Delivery Code', value: data?.formatted_code},
-                                        {label: 'Purchase Order', value: data?.purchase_order_name},
-                                        {label: 'Request For Quotation', value: data?.rfq_name},
-                                        {label: data?.supplier_name ? 'Supplier' : 'Customer', value: data?.supplier_name || data?.customer_name},
-                                        {label: 'Quotation', value: data?.quotation_name},
-                                        {label: 'Delivery Cost', value: moneyFormater({amount: data?.delivery_cost})},
-                                        {label: 'Delivery Date', value: data?.delivery_date},
-                                        {label: 'Delivery Date', value: data?.delivery_date},
-                                        {label: 'Delivery Address', value: data?.delivery_address},
-                                        {label: 'Description', value: data?.description},
+                                        {label: 'Deliverable Name', value: data?.name},
+                                        {label: 'Project Name', value: data?.project_name},
+                                        {label: 'Activity Name', value: data?.activity_name},
                                         {label: 'Status', value: data?.status},
+                                        {label: 'Description', value: data?.description},
                                     ]}
-                                    titleA={`Delivery`}
-                                    titleB={` ${data?.formatted_code} `}
+                                    titleA={`Deliverable`}
+                                    titleB={` ${data?.name} `}
                                 />
-                                <div className={'flex justify-between mt-2'}>
-                                    <>
-                                        {approvalButtonsWrapper()}
-                                    </>
-                                    <SlideOver
-                                        showButton={isNeedApprove}
-                                        title="Approval Trail">
-                                        <TreeList
-                                            url={approval_url}
-                                        />
-                                    </SlideOver>
-                                </div>
+                                {
+                                    approveStatus() && <div className="flex gap-2 justify-end">
+                                        <ReusableButton
+                                            name={'Move to Services'}
+                                            onClick={() => handleSubmit('create')}
+                                        >
+                                            <ShoppingCart size={12}/>
+                                        </ReusableButton>
+                                        <ReusableButton
+                                            name={'Move to Items'}
+                                            onClick={() => handleSubmit('create')}
+                                        >
+                                            <ShoppingCart size={12}/>
+                                        </ReusableButton>
+                                    </div>
+                                }
                             </div>
                             <hr className="bg-gray-100"/>
-                            <DeliveryItems delivery={data}/>
                             <hr className="bg-gray-100"/>
-                            {approveStatus() && data?.status === 'pending' &&
-                                <div className={'flex justify-end gap-2'}>
-                                    <ReusableButton
-                                        name={'Submit Delivery'}
-                                        onClick={() => handleSubmit(data)}
-                                    >
-                                        <FileOutput size={12}/>
-                                    </ReusableButton>
-                                </div>
-                            }
+                            <div className={'flex justify-between mt-2'}>
+                                <>
+                                    {approvalButtonsWrapper()}
+                                </>
+                                <SlideOver
+                                    showButton={isNeedApprove}
+                                    title="Approval Trail">
+                                    <TreeList
+                                        url={approval_url}
+                                    />
+                                </SlideOver>
+                            </div>
                         </MuiCardComponent>
                     </>
             }
@@ -155,4 +151,4 @@ const DeliveryView = () => {
     );
 };
 
-export default DeliveryView;
+export default ItemDeliverableView;

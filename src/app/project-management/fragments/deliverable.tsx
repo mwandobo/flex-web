@@ -57,7 +57,7 @@ function Deliverable(
     }: Props
 ) {
 
-    const url = `deliverable/${project_id}/activity/${activity_id}`
+    const url = `deliverable?project_id=${project_id}&for=activity&for_id=${activity_id}`
 
     const {
         loading,
@@ -72,7 +72,8 @@ function Deliverable(
         modalTitle: 'Deliverable',
         viewUrl: '',
         state_properties: [],
-        isHideShow: true
+        isHideShow: true,
+        isApiV2: true
     })
 
     return (

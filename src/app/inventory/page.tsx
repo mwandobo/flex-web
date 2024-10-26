@@ -26,10 +26,13 @@ import ServiceRequest from "@/app/inventory/store-request/service-request/servic
 import ServiceRequestView from "@/app/inventory/store-request/service-request/service-request-view";
 import PersonnelRequest from "@/app/inventory/personnel-request/personnel-request";
 import PersonnelRequestView from "@/app/inventory/personnel-request/personnel-request-view";
+import ItemDeliverableView from "@/app/inventory/item-deliverable/item-deliverable-view";
+import ItemDeliverable from "@/app/inventory/item-deliverable/item-deliverable";
 
 const InventoryItems = [
     { name: 'item-categories', title: 'Item Categories', item: <ItemsCategories />, itemView: <ItemsCategoryView /> },
     { name: 'items', title: 'Items', item: <Items />, itemView: <ItemsView /> },
+    { name: 'deliverable', title: 'Deliverables', item: <ItemDeliverable />, itemView: <ItemDeliverableView /> },
     { name: 'services', title: 'Services', item: <Service />, itemView: <ServiceView /> },
     { name: 'warranties', title: 'Warranties', item: <Warranty />, itemView: <WarrantyView /> },
     { name: 'suppliers', title: 'Suppliers', item: <Suppliers />, itemView: <SuppliersView /> },
