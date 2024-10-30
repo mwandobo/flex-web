@@ -35,7 +35,7 @@ export default function ForgotPasswordPage() {
                     const user = response?.data?.user
                     setLoading(!loading)
 
-                    router.push(`change-password?email=${email}`)
+                    router.push(`change-password/${user.id}`)
                 }
             }
             catch (error) {

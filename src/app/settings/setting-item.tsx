@@ -11,12 +11,24 @@ interface Props {
 }
 
 function SettingItem({group}: Props) {
-    const _columns = [
+    const columns = [
         {
             id: 'name',
             numeric: false,
             disablePadding: false,
             label: 'Name',
+        },
+    ]
+
+    const formInputs = [
+        {
+            name: 'name',
+            type: 'text',
+            label: 'Name',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
         },
     ]
 
@@ -26,15 +38,13 @@ function SettingItem({group}: Props) {
         handleClick,
         tabular,
     } = usePageData({
-        columns: _columns,
-        formInputs: [],
+        columns,
+        formInputs,
         url: `settings?group=${group}`,
         modalTitle: `${capitalizeFirstWord(group)} Settings`,
         viewUrl: `/settings/${group}/view?id=`,
         state_properties: [group],
         isHideShow: true,
-        isHideDelete: group !== 'project',
-        isHideEdit: group !== 'project',
         isApiV2:true
     })
 

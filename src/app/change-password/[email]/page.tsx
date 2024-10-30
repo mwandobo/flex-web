@@ -14,8 +14,6 @@ const ChangePasswordPage = ({ params }: { params: { userId: string } }) => {
     const [loading, setLoading] = useState(false)
     const userId = params.userId
 
-    const email = ''
-
     const router = useRouter()
 
     const handleChange = (event: any, from: string) => {
