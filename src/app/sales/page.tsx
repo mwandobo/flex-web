@@ -12,12 +12,15 @@ import SalesQuotation from "@/app/sales/sales-quotation/sales-quotation";
 import SalesQuotationView from "@/app/sales/sales-quotation/sales-quotation-view";
 import SalesRfq from "@/app/sales/sales-rfq/sales-rfq";
 import SalesRfqView from "@/app/sales/sales-rfq/sales-rfq-view";
+import PricingView from "@/app/sales/pricing/pricing-view";
+import Pricing from "@/app/sales/pricing/pricing";
 
 const SalesItems = [
     {name: 'rfq', title: 'Rfq', item: <SalesRfq/>, itemView: <SalesRfqView/>},
     {name: 'customer', title: 'Customers', item: <Customer/>, itemView: <CustomerView/>},
     {name: 'quotation', title: 'Quotations', item: <SalesQuotation/>, itemView: <SalesQuotationView/>},
     {name: 'Orders', title: 'Orders', item: <Order/>, itemView: <OrderView/>},
+    {name: 'Pricing', title: 'Pricing', item: <Pricing/>, itemView: <PricingView/>},
 ];
 
 function SalesPage() {

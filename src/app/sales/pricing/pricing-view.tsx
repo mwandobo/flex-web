@@ -13,8 +13,10 @@ import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
 import {CUSTOMER_APPROVAL_SLUG } from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
+import QuotationItems from "@/app/procurement/quotation/quotation-items";
+import PricingModes from "@/app/sales/pricing/pricing-modes";
 
-const CustomerView = () => {
+const PricingView = () => {
 
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
@@ -26,7 +28,7 @@ const CustomerView = () => {
     const { viewedItem} = state;
     const {id} = viewedItem;
 
-    const url = `customers/${id}`
+    const url = `pricing/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
@@ -74,20 +76,17 @@ const CustomerView = () => {
                     :
                     <>
                         <PageHeader
-                            title={'Customer View'}
+                            title={'Pricing View'}
                             isShowBackButton={true}
                         />
                         <MuiCardComponent>
                             <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
-                                        {label: 'Customer Name', value: data?.name},
-                                        {label: 'Customer Email', value: data?.email},
-                                        {label: 'Customer Phone', value: data?.phone},
-                                        {label: 'Customer Address', value: data?.address},
-                                        {label: 'Status', value: data?.status},
+                                        {label: 'Pricing Name', value: data?.name},
+                                        {label: 'Description', value: data?.description},
                                     ]}
-                                    titleA={`Customer`}
+                                    titleA={`Pricing`}
                                     titleB={` ${data?.name} `}
                                 />
                                 <div className={'flex justify-between mt-2'}>
@@ -102,6 +101,10 @@ const CustomerView = () => {
                                         />
                                     </SlideOver>
                                 </div>
+                                <hr className="bg-gray-100"/>
+                                {/*<div className={'mt-2'}>*/}
+                                {/*    <PricingModes quotation={data}/>*/}
+                                {/*</div>*/}
                             </div>
                         </MuiCardComponent>
                     </>
@@ -110,4 +113,4 @@ const CustomerView = () => {
     );
 };
 
-export default CustomerView;
+export default PricingView;

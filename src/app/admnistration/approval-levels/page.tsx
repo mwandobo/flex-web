@@ -66,7 +66,7 @@ function ApprovalLevel({
         columns: _columns,
         formInputs: _deptFormInputs,
         url: url,
-        modalTitle: 'Position',
+        modalTitle: 'Approval Level',
         viewUrl: '/admnistration/positions/',
         state_properties: [],
         permission: permission,
