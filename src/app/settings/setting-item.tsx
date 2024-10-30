@@ -58,7 +58,7 @@ function SettingItem({group}: Props) {
                             handleClick={handleClick}
                             links={[]}
                             subHeader={`${capitalizeFirstWord(group)} Types`}
-                            isHideAdd={group !== 'project'}
+                            isHideAdd={false}
                         />
                         {tabular()}
                         {createdForm()}
