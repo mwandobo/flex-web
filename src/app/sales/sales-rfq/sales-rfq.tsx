@@ -24,7 +24,7 @@ const formInputs = [
         type: 'multi-select',
         label: 'Items',
         value: '',
-        optionsUrlData: 'item',
+        optionsUrlData: 'item?type=deliverable',
         optionDataKey: 'quotation-item',
         control: "quotation-item",
         required: true,

@@ -68,7 +68,7 @@ function ItemDeliverable() {
                             <PageHeader
                                 title={"Deliverables"}
                                 handleClick={handleClick}
-                                isShowAddButton={true}
+                                isShowAddButton={false}
                             />
                             {tabular()}
                             {createdForm()}
