@@ -15,10 +15,8 @@ import {useApprovalHook} from "@/hooks/useApprove";
 import {DELIVERY_APPROVAL_SLUG} from "@/utils/constant";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
-import Warranty from "@/app/inventory/warranty/warranty";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import PopupModal from "@/components/modal/popup-modal";
-import {Input} from "@mui/material";
 import TextFieldComponent from "@/components/inputs/text-field";
 import TextArea from "@/components/inputs/text-area";
 import MuiSelect from "@/components/inputs/mui-select";
@@ -73,6 +71,8 @@ const ItemDeliverableView = () => {
             setEndDate(e.target.value)
         }
     }
+
+
 
     const {state} = useGlobalContextHook()
     const {viewedItem} = state;
@@ -226,7 +226,7 @@ const ItemDeliverableView = () => {
                             onSaveButtonName={'Save'}
                             onClose={toggleModal}
                             isDisabled={false}
-                            title={"Document"}
+                            title={"Deliverable"}
                         >
                             <form onSubmit={(event) =>handleSubmit('move', event)}>
                                 {

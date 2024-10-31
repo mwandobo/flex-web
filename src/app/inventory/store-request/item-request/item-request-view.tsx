@@ -62,7 +62,7 @@ const ItemRequestView = () => {
     const handleSubmit = (data: any) => {
         showConfirmationModal({
             title: 'Are You Sure?',
-            text: `Are You Sure You Want To Submit Item Store Request: ${data.name}?`,
+            text: `Are You Sure You Want To Submit Item Store Request: ${data.resource_name}?`,
             onConfirm: () => onSave(`${url}/submit-draft`),  // Action to perform on confirmation
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
@@ -71,7 +71,7 @@ const ItemRequestView = () => {
     const handleItemDispatch = (data: any) => {
         showConfirmationModal({
             title: 'Are You Sure?',
-            text: `Are You Sure You Want To Dispatch Item ${data.name} for this Store Request?`,
+            text: `Are You Sure You Want To Dispatch Item ${data.resource_name} for this Store Request?`,
             onConfirm: () => onSave(`${url}/dispatch`),  // Action to perform on confirmation
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
@@ -80,7 +80,7 @@ const ItemRequestView = () => {
     const handleCompleteDispatch = (data: any) => {
         showConfirmationModal({
             title: 'Are You Sure?',
-            text: `Are You Sure You Want To Complete Dispatch for Item ${data.name}?`,
+            text: `Are You Sure You Want To Complete Dispatch for Item ${data.resource_name}?`,
             onConfirm: () => onSave(`${url}/complete-dispatch`),  // Action to perform on confirmation
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });

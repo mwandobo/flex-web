@@ -4,7 +4,7 @@ import ProtectedRoute from "@/components/authentication/protected-route";
 import MuiCardComponent from "@/components/card/mui-card.component";
 import ViewCardComponent from "@/components/card/view.card.component";
 import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
-import { get } from "@/utils/api";
+import {get, post} from "@/utils/api";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
@@ -16,6 +16,12 @@ import TreeList from "@/components/list/tree-list.component";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {ReusableButton} from "@/components/button/reusable-button";
 import {FileOutput} from "lucide-react";
+import PopupModal from "@/components/modal/popup-modal";
+import MuiSelect from "@/components/inputs/mui-select";
+import TextFieldComponent from "@/components/inputs/text-field";
+import MuiDate from "@/components/inputs/mui-date";
+import TextArea from "@/components/inputs/text-area";
+import moneyFormater from "@/components/moneyFormater";
 
 const PersonnelRequestView = () => {
     const [data, setData] = useState<any>([])
@@ -23,10 +29,22 @@ const PersonnelRequestView = () => {
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
     const [refresh, setRefresh] = useState(false)
-
     const {state, dispatch} = useGlobalContextHook()
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
+
+    //modal
+    const [amount, setAmount] = useState('')
+
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const toggleModal = () => {
+            setIsModalOpen(!isModalOpen)
+    }
+    const handleInputChange = (e: any, from?: any) => {
+        if (from === 'amount') {
+            setAmount(e.target.value)
+        }
+    }
 
     const url = `store-requests/${id}`
     const navigateToLogin = () => {
@@ -48,22 +66,47 @@ const PersonnelRequestView = () => {
 
     const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
-    const onSave = async (url) => {
+    // const onSave = async (url) => {
+    //     try {
+    //         const res = await get(url, token);
+    //         if (data && res.status === 200) {
+    //             setRefresh(!refresh);
+    //         }
+    //     } catch (error: any) {
+    //         console.log(error);
+    //     }
+    // };
+
+
+    const onSave = async (path: string) => {
         try {
-            const res = await get(url, token);
+            const payload = {
+                amount
+            }
+
+            let res = null;
+            if (path !== 'submit-draft'){
+                res = await get(`${url}/${path}`, token);
+            } else {
+                res = await post(`${url}/${path}`, payload, token);
+            }
+
             if (data && res.status === 200) {
                 setRefresh(!refresh);
+                setIsModalOpen(false)
             }
         } catch (error: any) {
             console.log(error);
         }
     };
 
-    const handleSubmit = (data: any) => {
+
+    const handleSubmit = ( path?: string, event?: any) => {
+        event?.preventDefault();  // Prevents page reload
         showConfirmationModal({
             title: 'Are You Sure?',
-            text: `Are You Sure You Want To Submit Personnel Request: ${data.name}?`,
-            onConfirm: () => onSave(`${url}/submit-draft`),  // Action to perform on confirmation
+            text: `Are You Sure You Want To Submit Personnel Request Named: ${data.resource_name}?`,
+            onConfirm: () => onSave(path),  // Action to perform on confirmation
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
     };
@@ -71,8 +114,8 @@ const PersonnelRequestView = () => {
     const handleItemDispatch = (data: any) => {
         showConfirmationModal({
             title: 'Are You Sure?',
-            text: `Are You Sure You Want To Dispatch Personnel ${data.name} f?`,
-            onConfirm: () => onSave(`${url}/dispatch`),  // Action to perform on confirmation
+            text: `Are You Sure You Want To Dispatch Personnel ${data.resource_name}?`,
+            onConfirm: () => onSave(`dispatch`),  // Action to perform on confirmation
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
     };
@@ -114,6 +157,7 @@ const PersonnelRequestView = () => {
                                     data={[
                                         {label: 'Personnel Name', value: data?.resource_name},
                                         {label: 'Requester Name', value: data?.requester_name},
+                                        {label: 'Amount', value: moneyFormater({amount: data?.amount, isShowCurrency: true}) },
                                         {label: 'Requested Date', value: data?.formatted_requested_date},
                                         {label: 'Submitted Date', value: data?.formatted_submitted_date},
                                         {label: 'Dispatched Date', value: data?.formatted_dispatched_date},
@@ -141,7 +185,7 @@ const PersonnelRequestView = () => {
                                     {data?.status === 'pending' &&
                                         <ReusableButton
                                             name={'Submit Personnel Request'}
-                                            onClick={() => handleSubmit(data)}
+                                            onClick={() => toggleModal()}
                                         >
                                             <FileOutput size={12}/>
                                         </ReusableButton>
@@ -157,6 +201,40 @@ const PersonnelRequestView = () => {
                                 </div>
                             }
                         </MuiCardComponent>
+                        <PopupModal
+                            isOpen={isModalOpen}
+                            onSaveButtonName={'Save'}
+                            onClose={toggleModal}
+                            isDisabled={false}
+                            title={"Personnel Request"}
+                        >
+                            <form onSubmit={(event) =>handleSubmit('submit-draft', event)}>
+                                {
+                                    <>
+                                        <TextFieldComponent
+                                            placeholder={"Amount"}
+                                            from={"amount"}
+                                            label={"Amount"}
+                                            value={amount}
+                                            onChange={handleInputChange}
+                                            isRequired={true}
+                                        />
+                                    </>
+                                }
+
+                                <div className={'flex gap-2 justify-end'}>
+                                    <ReusableButton
+                                        name={'Submit'}
+                                        type='submit'
+                                    />
+                                </div>
+
+
+                                {/* <button type="submit">Upload</button> */}
+                            </form>
+                        </PopupModal>
+
+
                     </>
             }
         </ProtectedRoute>
