@@ -11,6 +11,7 @@ interface Props {
   label?: string;
   from: string;
   isDisabled?: boolean;
+  isRequired?: boolean;
   optionsUrlData?: string;
   optionDataKey?: string;
   value: any;
@@ -26,6 +27,7 @@ const MuiSelect = ({
   optionDataKey,
   from,
   isDisabled,
+                     isRequired,
   placeholder = 'Enter your text here...',
   value,
   error,
@@ -87,6 +89,7 @@ const MuiSelect = ({
           label={label}
           onChange={onChange}
           disabled={isDisabled}
+          required={isRequired}
           size="small"
           style={{
             marginBottom: "20px"

@@ -40,6 +40,12 @@ const columns = [
         disablePadding: false,
         label: 'Description',
     },
+    {
+        id: 'status',
+        numeric: false,
+        disablePadding: false,
+        label: 'Status',
+    },
 ]
 
 interface Props {

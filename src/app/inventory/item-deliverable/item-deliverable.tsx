@@ -29,10 +29,10 @@ const columns = [
         label: 'Activity Name',
     },
     {
-        id: 'description',
+        id: 'status',
         numeric: false,
         disablePadding: false,
-        label: 'Description',
+        label: 'Status',
     }
 ]
 
