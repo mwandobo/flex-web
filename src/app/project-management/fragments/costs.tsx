@@ -37,24 +37,24 @@ function Cost(
         {
             name: 'amount',
             type: 'text',
-            label: 'Amount',
+            label: 'Amount (Tzs)',
             textType: 'number',
             value: '',
             required: true,
             isError: false,
             errorMessage: ''
         },
-        {
-            name: 'currency_id',
-            type: 'select',
-            label: `Select Currency`,
-            value: '',
-            optionsUrlData: `currency`,
-            optionDataKey: 'departments',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
+        // {
+        //     name: 'currency_id',
+        //     type: 'select',
+        //     label: `Select Currency`,
+        //     value: '',
+        //     optionsUrlData: `currency`,
+        //     optionDataKey: 'departments',
+        //     required: true,
+        //     isError: false,
+        //     errorMessage: ''
+        // },
         {
             name: 'purpose',
             type: 'textArea',
@@ -67,26 +67,15 @@ function Cost(
     ]
 
     const columns = [
-        {
-            id: 'type',
-            numeric: false,
-            disablePadding: false,
-            label: `${prefix} Type`,
-        },
+
         {
             id: 'name',
             numeric: false,
             disablePadding: false,
-            label: `${prefix} Name`,
+            label: `Cost Name`,
         },
         {
-            id: 'activity',
-            numeric: false,
-            disablePadding: false,
-            label: 'Activity Name',
-        },
-        {
-            id: 'description',
+            id: 'purpose',
             numeric: false,
             disablePadding: false,
             label: 'Description',
@@ -95,13 +84,13 @@ function Cost(
             id: 'amount',
             numeric: false,
             disablePadding: false,
-            label: 'Amount',
+            label: 'Amount (Tzs)',
         },
         {
             id: 'occured_cost',
             numeric: false,
             disablePadding: false,
-            label: 'Expense',
+            label: 'Expense (Tzs)',
         },
 
     ]

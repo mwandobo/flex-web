@@ -11,7 +11,7 @@ const formInputs = [
     {
         name: 'name',
         type: 'text',
-        label: 'Category Name',
+        label: 'Item Name',
         value: '',
         required: true,
         isError: false,
