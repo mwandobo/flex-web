@@ -28,6 +28,8 @@ import PersonnelRequest from "@/app/inventory/personnel-request/personnel-reques
 import PersonnelRequestView from "@/app/inventory/personnel-request/personnel-request-view";
 import ItemDeliverableView from "@/app/inventory/item-deliverable/item-deliverable-view";
 import ItemDeliverable from "@/app/inventory/item-deliverable/item-deliverable";
+import Equipment from "@/app/inventory/equipment/equipment";
+import EquipmentView from "@/app/inventory/equipment/equipment-view";
 
 const InventoryItems = [
     { name: 'item-categories', title: 'Item Categories', item: <ItemsCategories />, itemView: <ItemsCategoryView /> },
@@ -42,6 +44,7 @@ const InventoryItems = [
     { name: 'store-item-request', title: 'Store Item Requests', item: <ItemRequest />, itemView: <ItemRequestView /> },
     { name: 'service-request', title: 'Service Requests', item: <ServiceRequest />, itemView: <ServiceRequestView /> },
     { name: 'personnel-request', title: 'Personnel Requests', item: <PersonnelRequest />, itemView: <PersonnelRequestView /> },
+    { name: 'equipment', title: 'Equipments and Spares', item: <Equipment />, itemView: <EquipmentView /> },
 ];
 
 function InventoryPage() {

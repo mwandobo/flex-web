@@ -29,3 +29,5 @@ export const PRICING_APPROVAL_SLUG = "pricing_approval"
 export const SALE_RFQ_APPROVAL_SLUG = "sale_rfq_approval"
 export const SALE_QUOTATION_APPROVAL_SLUG = "sale_quotation_approval"
 export const DELIVERABLE_APPROVAL_SLUG = "deliverable_approval"
+
+export const EQUIPMENT_APPROVAL_SLUG = "equipment_approval"
