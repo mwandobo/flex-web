@@ -123,6 +123,7 @@ const ItemRequestView = () => {
                                     data={[
                                         {label: 'Item Name', value: data?.resource_name},
                                         {label: 'Requested Quantity', value: data?.quantity},
+                                        {label: 'Total Amount', value: data?.amount},
                                         {label: 'Dispatched Quantity', value: data?.dispatched_quantity},
                                         {label: 'Requester Name', value: data?.requester_name},
                                         {label: 'Requested Date', value: data?.formatted_requested_date},

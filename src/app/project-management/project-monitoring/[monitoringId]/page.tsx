@@ -32,7 +32,6 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
         ]
 
         setPayload(monitoringPayload)
-
         const selcted_monitoring_item = getValueFromLocalStorage('selected_monitoring_item')
         const expanded_monitoring_item = getValueFromLocalStorage('expanded_monitoring_item')
 
@@ -40,7 +39,7 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
         dispatch({ type: "UPDATE_SELECTED_MONITORING_ITEM", payload: { for: 'expanded', value: expanded_monitoring_item } })
     }
 
-    const progresRender = (progress?: any) => {
+    const progressRender = (progress?: any) => {
         if (progress === 0) {
             return <LinearWithValueLabel value={0} />
         } else if (Number(progress) > 0) {
@@ -48,6 +47,17 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
 
         } else {
             return "No Indicator";
+        }
+    }
+
+    const fundProgressRender = (progress?: any) => {
+        if (progress === 0) {
+            return <LinearWithValueLabel value={0} />
+        } else if (Number(progress) > 0) {
+            return <LinearWithValueLabel value={Number(progress)} />
+
+        } else {
+            return "No Budget";
         }
     }
 
@@ -167,7 +177,7 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                                             <input type="text" placeholder="Enter Data" className="ps-1 h-7 w-20" onChange={(e) => handleFormInputChange(e, item, 'progress')} />
                                         </div>
                                         :
-                                        <p className="border-r border-gray-300 ps-2 py-1">{progresRender(item.progress)}</p>
+                                        <p className="border-r border-gray-300 ps-2 py-1">{progressRender(item.progress)}</p>
                                     }
 
                                     {checkIsMonitoredItem(item.from, item.id) ?
@@ -238,8 +248,7 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                                                     <input type="text" placeholder="Enter Expense" className="ps-1 h-7 w-full" onChange={(e) => handleFormInputChange(e, item, 'cost')} />
                                                 </div>
                                                 :
-                                                <p className="border-r border-gray-300 ps-2 py-1">{progresRender(item.utilization)}</p>
-
+                                                <p className="border-r border-gray-300 ps-2 py-1">{fundProgressRender(item.utilization)}</p>
                                         }
 
                                         {checkIsMonitoredItem(item.type, item.id) ?
@@ -300,18 +309,18 @@ const ProjectMonitoringShow = ({ params }: { params: { monitoringId: string } })
                                             <p className="border-r border-gray-300 ps-2 py-2">{item.name}</p>
                                             <p className="text-end border-r border-gray-300 pe-2 py-2">{FormattedMoney({ amount: item.total_cost, isHideCurrency: true })}</p>
                                             <p className="text-end border-r border-gray-300 pe-2 py-2">{FormattedMoney({ amount: item.occured_cost, isHideCurrency: true })}</p>
-                                            <p className="ps-2 py-2">{progresRender(item.progress)}</p>
+                                            <p className="ps-2 py-2">{progressRender(item.progress)}</p>
                                             <p className={`flex justify-end me-12 py-2`}
                                                 onClick={() => handleItemExpand(item, index)}
                                             >
-                                                {expandedItem === index && progresRender(item.progress) !== "No Indicator" ?
+                                                {expandedItem === index && progressRender(item.progress) !== "No Indicator" ?
                                                     <ChevronUp className="text-gray-900" size={18} /> :
                                                     <ChevronDown className="text-gray-400" size={20} />}
                                             </p>
                                         </div>
                                         <>
                                             {
-                                                expandedItem === index && progresRender(item.progress) !== "No Indicator" &&
+                                                expandedItem === index && progressRender(item.progress) !== "No Indicator" &&
                                                 <div className="mb-6">
                                                     {indicatorBodyCreator(item.indicators)}
                                                 </div>

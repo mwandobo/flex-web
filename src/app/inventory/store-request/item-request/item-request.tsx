@@ -27,6 +27,12 @@ function ItemRequest() {
             label: 'Item Quantity',
         },
         {
+            id: 'amount',
+            numeric: false,
+            disablePadding: false,
+            label: 'Amount',
+        },
+        {
             id: 'requester_name',
             numeric: false,
             disablePadding: false,
