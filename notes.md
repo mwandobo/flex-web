@@ -37,3 +37,7 @@ from_id: id
 
 
 Handle render when error
+
+
+
+&& progressRender(item.progress) !== "No Indicator" 
