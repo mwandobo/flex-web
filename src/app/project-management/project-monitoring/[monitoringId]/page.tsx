@@ -71,7 +71,7 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
     const handleMonitoringItemChange = (item: string) => {
         dispatch({type: "UPDATE_SELECTED_MONITORING_ITEM", payload: {for: 'selected', value: item}})
         setValueLocalStorage('expanded_monitoring_item', null);
-        setExpandedItem(null);
+        setExpandedItem(0);
         setValueLocalStorage('selected_monitoring_item', item)
     }
 
@@ -125,7 +125,6 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
         if (from === monitoredItemState?.from && id === monitoredItemState.id) {
             check = true
         }
-
         return check
     }
 
@@ -150,10 +149,6 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
         fetchData()
     }, [id, token, isSubmitted])
 
-    useEffect(() => {
-        const selected_monitoring_item = getValueFromLocalStorage('selected_monitoring_item')
-        dispatch({type: "UPDATE_SELECTED_MONITORING_ITEM", payload: {for: 'selected', value: selected_monitoring_item}})
-    }, [])
 
     useEffect(() => {
         const foundIndex = getValueFromLocalStorage('expanded_monitoring_item');

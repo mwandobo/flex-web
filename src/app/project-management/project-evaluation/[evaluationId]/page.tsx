@@ -27,7 +27,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
     const { selected, expandedItem } = selectedMonitoringItem
     const id = params.evaluationId
 
-    const handleMonotiringPayload = (input: any) => {
+    const handleMonitoringPayload = (input: any) => {
         const monitoringPayload = [
             { name: "Project Goals", data: input.goals, type: 'goal', progress: input.goals_progress },
             { name: "Project Outcomes", data: input.outcomes, type: 'outcome', progress: input.outcomes_progress },
@@ -77,7 +77,8 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
 
     const handleMonitoringItemChange = (item: string) => {
         dispatch({ type: "UPDATE_SELECTED_MONITORING_ITEM", payload: { for: 'selected', value: item } })
-        dispatch({ type: "UPDATE_SELECTED_MONITORING_ITEM", payload: { for: 'expanded', value: 'no' } })
+        // dispatch({ type: "UPDATE_SELECTED_MONITORING_ITEM", payload: { for: 'expanded', value: 'no' } })
+        dispatch({ type: "UPDATE_SELECTED_MONITORING_ITEM", payload: { for: 'expanded', value: 0 } })
         setValueLocalStorage('selected_monitoring_item', item)
     }
 
@@ -185,7 +186,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                 const res = await get(url, token)
                 if (data && res.status === 200) {
                     setData(res.data.data)
-                    handleMonotiringPayload(res.data.data)
+                    handleMonitoringPayload(res.data.data)
                     setLoading(false)
                 }
 
@@ -206,6 +207,8 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
 
     useEffect(() => {
         dispatch({ type: "UPDATE_SELECTED_MONITORING_ITEM", payload: { for: 'selected', value: 'goal' } })
+        dispatch({ type: "UPDATE_SELECTED_MONITORING_ITEM", payload: { for: 'expanded', value: 0 } })
+
         setValueLocalStorage('selected_monitoring_item', 'goal')
     }, [])
 
@@ -329,7 +332,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                                             >
                                                 {progresRender(item.progress) !== "No Indicator" ?
                                                     <>
-                                                        {expandedItem === index ?
+                                                        {Number(expandedItem) === Number(index) ?
                                                             <ChevronUp className="text-gray-900 cursor-pointer" size={22} /> :
                                                             <ChevronDown className="text-gray-400 cursor-pointer" size={20} />
                                                         }
@@ -339,7 +342,7 @@ const ProjectEvaluationShow = ({ params }: { params: { evaluationId: string } })
                                             </p>
                                         </div>
                                         <>
-                                            {expandedItem === index && selected === payload.type && progresRender(item.progress) !== "No Indicator" &&
+                                            {Number(expandedItem) === Number(index) && selected === payload.type && progresRender(item.progress) !== "No Indicator" &&
                                                 < div className="mb-6">
                                                     {indicatorBodyCreator(item.indicators)}
                                                 </div>

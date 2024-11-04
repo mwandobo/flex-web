@@ -83,9 +83,6 @@ export const useCrudFormCreator = ({
         }
     };
 
-    console.log('formDataPayloafd', formData)
-
-
     const sideUpdatePayload = (payload?: any, value?: string) => {
         return formInputs?.map((input) => {
             if (input.name === payload.name) {
@@ -285,8 +282,6 @@ export const useCrudFormCreator = ({
     const handleSubmit = async () => {
         try {
             const add_price  = getValueFromLocalStorage('add-price')
-            console.log('add_price', add_price)
-
             setIsDisabled(true)
             let response;
             const token = getValueFromLocalStorage('token')

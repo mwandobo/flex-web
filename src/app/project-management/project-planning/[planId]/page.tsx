@@ -1,41 +1,32 @@
 "use client"
-
-import ExternalUsers from "@/app/admnistration/external/page";
 import ProtectedRoute from "@/components/authentication/protected-route";
 import MuiCardComponent from "@/components/card/mui-card.component";
 import PageHeader from "@/components/header/page-header";
 import { get } from "@/utils/api";
-import { dateFormatterHelper } from "@/utils/mapper/date-format";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Goal from "../fragments/goal/goal";
 import GoalShow from "../fragments/goal/goal-view";
 import Outcome from "../fragments/outcome/outcome";
 import OutcomeShow from "../fragments/outcome/outcome-view";
-
-import Task from "../fragments/task/task";
 import Output from "../fragments/output/output";
 import Activity from "../fragments/activity/activity";
 import OutputShow from "../fragments/output/output-view";
 import ActivityShow from "../fragments/activity/activity-view";
-import TaskShow from "../fragments/task/task-view";
-import { getValueFromLocalStorage, setValueLocalStorage } from "@/utils/actions/local-starage";
+import {getValueFromLocalStorage, setValueLocalStorage} from "@/utils/actions/local-starage";
 import { useGlobalContextHook } from "@/hooks/useGlobalContextHook";
 
-
-const ProjectShow = ({ params }: { params: { planId: string } }) => {
+const ProjectPlanningShow = ({ params }: { params: { planId: string } }) => {
     const router = useRouter()
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
-    const [selected, setSelcted] = useState('')
-    const [selectedId, setSelctedId] = useState<any>('')
+    const [selected, setSelected] = useState('')
+    const [selectedId, setSelectedId] = useState<any>('')
 
     const token = getValueFromLocalStorage('token')
     const { state, dispatch } = useGlobalContextHook()
-    // const { selected, selectedId } = state.planningSelectedCard
 
     const id = params.planId
-
     const { planningCount } = state;
 
     const url = `project_planning/show/${id}`
@@ -64,58 +55,26 @@ const ProjectShow = ({ params }: { params: { planId: string } }) => {
     }, [])
 
     useEffect(() => {
-        const handleExit = () => {
-            dispatch({ type: "UPDATE_PLANNING_SELECTED_CARD", payload: { value: "", for: "selected" } })
-            dispatch({ type: "UPDATE_PLANNING_SELECTED_CARD", payload: { value: '', for: "selectedId" } })
-
-            console.log('Page exited!');
-        };
-
-        // Add the exit handler to the window object (cleanup in useEffect)
-        window.addEventListener('beforeunload', handleExit);
-
-        return () => {
-            // Cleanup function to remove the event listener on unmount
-            window.removeEventListener('beforeunload', handleExit);
-        };
-    }, []);
-
-
-    useEffect(() => {
-        // if (data) {
         dispatch({ type: "UPDATE_PLANNING_PAYLOAD", payload: { value: data.goals?.length, for: "goals" } })
         dispatch({ type: "UPDATE_PLANNING_PAYLOAD", payload: { value: data.outcomes?.length, for: "outcomes" } })
         dispatch({ type: "UPDATE_PLANNING_PAYLOAD", payload: { value: data.outputs?.length, for: "outputs" } })
         dispatch({ type: "UPDATE_PLANNING_PAYLOAD", payload: { value: data.activities?.length, for: "activities" } })
         dispatch({ type: "UPDATE_PLANNING_PAYLOAD", payload: { value: data.tasks?.length, for: "tasks" } })
-        // }
-
     }, [data])
 
-
     const handleCardClick = (cardName: string, id?: string) => {
-        dispatch({ type: "UPDATE_PLANNING_SELECTED_CARD", payload: { value: cardName, for: "selected" } })
-        dispatch({ type: "UPDATE_PLANNING_SELECTED_CARD", payload: { value: id, for: "selectedId" } })
-        // setValueLocalStorage('selected', cardName)
-        // setValueLocalStorage('selectedId', id)
-
-        setSelcted(cardName)
-        setSelctedId(id)
+        setSelected(cardName)
+        setSelectedId(id)
+        setValueLocalStorage('selected_plan_item', cardName )
+        setValueLocalStorage('selected_plan_item_id', id )
     }
 
-    const nodes: React.ReactNode[] = [
-        <ExternalUsers
-            key={'sponsor'}
-            groupProp="sponsor"
-            project_id={id}
-        />,
-
-        <ExternalUsers
-            key={'stakeholder'}
-            groupProp="stakeholder"
-            project_id={id}
-        />,
-    ];
+    useEffect(() => {
+        const selected_plan_item = getValueFromLocalStorage('selected_plan_item');
+        const selected_plan_item_id = getValueFromLocalStorage('selected_plan_item_id');
+        setSelected(selected_plan_item)
+        setSelectedId(selected_plan_item_id)
+    }, [])
 
     return (
         <ProtectedRoute>
@@ -195,8 +154,6 @@ const ProjectShow = ({ params }: { params: { planId: string } }) => {
                                         goal_id='undefined'
                                         outcome_id={selectedId}
                                     />}
-
-
                                     {selected === 'output' &&
                                         <Output
                                             project={data.data}
@@ -215,7 +172,6 @@ const ProjectShow = ({ params }: { params: { planId: string } }) => {
                                         outcome_id='undefined'
                                         output_id={selectedId}
                                     />}
-
 
                                     {selected === 'activity' &&
                                         <Activity
@@ -241,11 +197,10 @@ const ProjectShow = ({ params }: { params: { planId: string } }) => {
                             </div>
 
                         </MuiCardComponent>
-
                     </>
             }
         </ProtectedRoute>
     );
 };
 
-export default ProjectShow;
+export default ProjectPlanningShow;

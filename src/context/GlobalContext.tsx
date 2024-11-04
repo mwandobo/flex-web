@@ -10,11 +10,6 @@ interface PlanningCountProps {
     tasks: number
 }
 
-interface PlanningSelectedCardProps {
-    selected?: string,
-    selectedId?: string,
-}
-
 interface CurrentUserProps {
     first_name: string,
     last_name: string,
@@ -40,7 +35,6 @@ interface viewedItem {
 type State = {
     currentUser: CurrentUserProps | null;
     planningCount: PlanningCountProps;
-    planningSelectedCard: PlanningSelectedCardProps;
     selectedMonitoringItem: SelectedMonitoringItemProps;
     evaluationForm: evaluationForm
     selectedSubSidebarItem: string
@@ -54,11 +48,6 @@ type Action = {
 };
 
 type Dispatch = (action: Action) => void;
-
-const initialPlanningSelectedCard: PlanningSelectedCardProps = {
-    selected: '',
-    selectedId: '',
-}
 
 const initialPlanning: PlanningCountProps = {
     goals: 0,
@@ -85,7 +74,6 @@ const initialEvaluationForm: evaluationForm = {
 const initialState: State = {
     currentUser: null,
     planningCount: initialPlanning,
-    planningSelectedCard: initialPlanningSelectedCard,
     selectedMonitoringItem: initialSelectedMonitoringItem,
     evaluationForm: initialEvaluationForm,
     selectedSubSidebarItem: '',
@@ -133,22 +121,6 @@ export const updateContextReducer = (state: State, action: Action): State => {
                 ...state,
                 planningCount: newPlanningState
             }
-
-        case 'UPDATE_PLANNING_SELECTED_CARD':
-            let newPlanningSelectedCardState: any;
-
-            if (action.payload.for === 'selected') {
-                newPlanningSelectedCardState = { ...state.planningSelectedCard, selected: action.payload.value }
-            }
-
-            if (action.payload.for === 'selectedId') {
-                newPlanningSelectedCardState = { ...state.planningSelectedCard, selectedId: action.payload.value }
-            }
-
-            return {
-                ...state,
-                planningSelectedCard: newPlanningSelectedCardState
-            };
 
         case 'UPDATE_SELECTED_MONITORING_ITEM':
             let newMonitoringState: any
