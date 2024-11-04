@@ -20,10 +20,18 @@ const FinanceItems = [
     {name: 'finance-request', title: 'Finance Requests', item: <FinanceRequest/>, itemView: <FinanceRequestView/>},
 ];
 
+const checkNotIncluded = (item: string) => {
+    return FinanceItems.find(finance => finance.name === item)
+}
+
 function FinancePage() {
     const {state, dispatch} = useGlobalContextHook();
     useEffect(() => {
-        const selectedItem = getValueFromLocalStorage('selected_sub_sidebar_item')
+        let selectedItem = getValueFromLocalStorage('selected_sub_sidebar_item')
+
+        if(!checkNotIncluded(selectedItem)){
+            selectedItem = 'invoice'
+        }
         const sideViewPayload = JSON.parse(getValueFromLocalStorage('sub_view_item'))
         dispatch({type: "SET_SUB_SIDEBAR_ITEM", payload: selectedItem});
         dispatch({type: "SET_SUB_VIEW_ITEM", payload: sideViewPayload})

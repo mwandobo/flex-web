@@ -25,9 +25,15 @@ const SalesItems = [
 
 function SalesPage() {
     const {state, dispatch} = useGlobalContextHook();
+    const checkNotIncluded = (item: string) => {
+        return SalesItems.find(finance => finance.name === item)
+    }
     useEffect(() => {
-        const selectedItem = getValueFromLocalStorage('selected_sub_sidebar_item')
+        let selectedItem = getValueFromLocalStorage('selected_sub_sidebar_item')
         const sideViewPayload = JSON.parse(getValueFromLocalStorage('sub_view_item'))
+        if(!checkNotIncluded(selectedItem)){
+            selectedItem = 'rfq'
+        }
         dispatch({type: "SET_SUB_SIDEBAR_ITEM", payload: selectedItem});
         dispatch({type: "SET_SUB_VIEW_ITEM", payload: sideViewPayload})
     }, []);
