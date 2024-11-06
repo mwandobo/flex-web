@@ -37,24 +37,23 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
       {/*<div className="flex h-screen w-full bg-gray-100">*/}
-        <div className="flex h-screen w-full bg-gray-200">
+        <div className="flex w-full bg-gray-200">
         <HydrationZustand>
-
           <GlobalContextProvider>
-              <>
-
-                < Sidebar />
-                <div className="flex flex-col h-full w-full ml-64">
-                  <Header />
-                  <div className="p-4">
+            <div className={'flex flex-col w-full'}>
+              <Header/>
+              <div className="flex w-full gap-4 mt-6 ">
+                < Sidebar/>
+                <div className="flex flex-col w-full bg-white mb-2 me-4">
+                  <div className="p-4 ">
                     {children}
                   </div>
-                  <Footer />
-
                 </div>
-              </>
-            </GlobalContextProvider>
-          </HydrationZustand>
+              </div>
+              <Footer/>
+            </div>
+          </GlobalContextProvider>
+        </HydrationZustand>
         </div>
         {/* </div> */}
       </body>

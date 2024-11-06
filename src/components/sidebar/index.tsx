@@ -28,7 +28,7 @@ import {
 } from 'lucide-react'
 import React from 'react'
 import SidebarItem from './item'
-import { checkPermissions } from '@/utils/actions/check-permissions'
+import {checkPermissions} from '@/utils/actions/check-permissions'
 
 interface ISidebarItem {
     name: string
@@ -232,9 +232,8 @@ const items: ISidebarItem[] = [
 
 function Sidebar() {
     return (
-        <div className='fixed top-0 left-0 h-screen w-64 bg-white shadow-lg z-10 p-4'>
-            <div className="flex flex-col space-y-10">
-                <img className='h-10 w-fit' src="/logo.png" alt="logo" />
+        <div className='w-64 bg-white z-60 p-4 -mt-7 sticky top-16  h-[calc(100vh-64px)] overflow-y-auto z-50'>
+            <div className="flex flex-col space-y-10 mt-6">
                 <div
                     className='flex flex-col space-y-2'
                 >
@@ -242,7 +241,8 @@ function Sidebar() {
                         items.map(item =>
                             <>
                                 {
-                                    checkPermissions(item?.permission) && <> <SidebarItem key={item.path} item={item} /></>
+                                    checkPermissions(item?.permission) && <> <SidebarItem key={item.path}
+                                                                                          item={item}/></>
                                 }
                             </>
                         )

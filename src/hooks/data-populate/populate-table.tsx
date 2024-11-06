@@ -178,7 +178,7 @@ export const usePopulateTable = ({
 
     const tabular = () => {
         return (
-            <div className="w-96" style={{width: '100%'}}>
+            <div className={'w-full'}>
                 <MuiTable
                     data={createRowData()}
                     columns={createRowHeader()}
