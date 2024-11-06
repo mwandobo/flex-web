@@ -42,7 +42,7 @@ export default function RootLayout({
           <GlobalContextProvider>
             <div className={'flex flex-col w-full'}>
               <Header/>
-              <div className="flex w-full gap-4 mt-6 ">
+              <div className="flex w-full gap-4">
                 < Sidebar/>
                 <div className="flex flex-col w-full bg-white mb-2 me-4">
                   <div className="p-4 ">
