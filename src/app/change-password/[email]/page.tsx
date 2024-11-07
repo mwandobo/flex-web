@@ -1,19 +1,18 @@
 "use client"
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { post } from '@/utils/api'
+import {useState} from 'react'
+import {useRouter} from 'next/navigation'
+import {post} from '@/utils/api'
 import Button from '@/components/button'
 import TextFieldComponent from '@/components/inputs/text-field'
 import Swal from "sweetalert2"
-import Loading from "@/components/status/loading.component";
+import AuthSkeletonComponent from "@/components/page-components/auth-skeleton-component";
 
-const ChangePasswordPage = ({ params }: { params: { userId: string } }) => {
+const ChangePasswordPage = ({params}: { params: { userId: string } }) => {
     const [new_password, setNewPassword] = useState('')
     const [new_password_confirmation, setNewPasswordConformation] = useState('')
     const [loading, setLoading] = useState(false)
     const userId = params.userId
-
     const router = useRouter()
 
     const handleChange = (event: any, from: string) => {
@@ -75,51 +74,38 @@ const ChangePasswordPage = ({ params }: { params: { userId: string } }) => {
     }
 
     return (
-        <div className='w-screen h-screen fixed top-0 left-0 flex items-center justify-center bg-gray-300 z-30'>
-            <div className="w-[80] border border-gray-300 bg-white">
-                {loading ? (
-                    <div className={'w-3/4'}>
-                        <Loading/>
-                    </div>
-                ) :
-                    <div className='p-5'>
-                            <div className="flex flex-col p-[15%] justify-center items-center w-full">
-                                <img className='h-full'
-                                    width={'40%'}
-                                    src="/logo.png" />
-                            </div>
-                            <>
-                                <TextFieldComponent
-                                    placeholder={'New Password'}
-                                    from={'new_password'}
-                                    label={'New Password'}
-                                    value={new_password}
-                                    onChange={handleChange}
-                                    isError={false}
-                                    errorMessage={''}
-                                />
+        <AuthSkeletonComponent
+            loading={loading}
+        >
+            <>
+                <TextFieldComponent
+                    placeholder={'New Password'}
+                    from={'new_password'}
+                    label={'New Password'}
+                    value={new_password}
+                    onChange={handleChange}
+                    isError={false}
+                    errorMessage={''}
+                />
 
-                                <TextFieldComponent
-                                    placeholder={'New Password Confirmation'}
-                                    from={'new_password_confirmation'}
-                                    label={'New Password Confirmation'}
-                                    value={new_password_confirmation}
-                                    onChange={handleChange}
-                                    isError={false}
-                                    errorMessage={''}
-                                />
+                <TextFieldComponent
+                    placeholder={'New Password Confirmation'}
+                    from={'new_password_confirmation'}
+                    label={'New Password Confirmation'}
+                    value={new_password_confirmation}
+                    onChange={handleChange}
+                    isError={false}
+                    errorMessage={''}
+                />
 
-                                <div className="flex justify-end">
-                                    <Button
-                                        text='Send'
-                                        onClick={handleSubmit}
-                                    />
-                                </div>
-                            </>
-                        </div>
-                }
-            </div>
-        </div>
+                <div className="flex justify-end">
+                    <Button
+                        text='Send'
+                        onClick={handleSubmit}
+                    />
+                </div>
+            </>
+        </AuthSkeletonComponent>
     )
 }
 

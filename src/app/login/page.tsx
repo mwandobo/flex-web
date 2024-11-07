@@ -8,15 +8,13 @@ import TextFieldComponent from '@/components/inputs/text-field'
 import {setValueLocalStorage} from '@/utils/actions/local-starage'
 import {useGlobalContextHook} from '@/hooks/useGlobalContextHook'
 import Swal from "sweetalert2"
-import Loading from "@/components/status/loading.component";
-
+import AuthSkeletonComponent from "@/components/page-components/auth-skeleton-component";
 
 export default function LoginPage() {
     const [email, setEmail] = useState('')
     const [loading, setLoading] = useState(false)
     const [password, setPassword] = useState('')
     const {dispatch} = useGlobalContextHook()
-
     const router = useRouter()
 
     const handleChange = (event: any, from: string) => {
@@ -101,44 +99,35 @@ export default function LoginPage() {
     }
 
     return (
-        <div className='w-screen h-screen fixed top-0 left-0 flex items-center justify-center bg-gray-300 z-30'>
-            <div className="w-[80] border border-gray-300 bg-white">
-                {loading ? (
-                        <div className={'w-3/4'}>
-                            <Loading/>
-                        </div>
-                ) : (
-                    // <Card raised={true} className='p-5'>
-                    <div className='p-5'>
-                        <div className="flex flex-col p-[15%] justify-center items-center w-full">
-                            <img className='h-full' width={'40%'} src="/logo.png" />
-                        </div>
-                        <TextFieldComponent
-                            placeholder={'email'}
-                            from={'email'}
-                            label={'Email'}
-                            value={email}
-                            onChange={handleChange}
-                            isError={false}
-                            errorMessage={''}
-                        />
-                        <TextFieldComponent
-                            placeholder={'password'}
-                            from={'password'}
-                            label={"Password"}
-                            value={password}
-                            onChange={handleChange}
-                            isError={false}
-                            type='password'
-                            errorMessage={''}
-                        />
-                        <div className="flex justify-between">
-                            <Button text='Forgot Password' onClick={handleForgotPassword} />
-                            <Button text='Login' onClick={handleSubmit} />
-                        </div>
+        <AuthSkeletonComponent
+            loading={loading}
+        >
+                <>
+                    <TextFieldComponent
+                        placeholder={'email'}
+                        from={'email'}
+                        label={'Email'}
+                        value={email}
+                        onChange={handleChange}
+                        isError={false}
+                        errorMessage={''}
+                    />
+                    <TextFieldComponent
+                        placeholder={'password'}
+                        from={'password'}
+                        label={"Password"}
+                        value={password}
+                        onChange={handleChange}
+                        isError={false}
+                        type='password'
+                        errorMessage={''}
+                    />
+                    <div className="flex justify-between">
+                        <Button text='Forgot Password' onClick={handleForgotPassword}/>
+                        <Button text='Login' onClick={handleSubmit}/>
                     </div>
-                )}
-            </div>
-        </div>
+                </>
+
+        </AuthSkeletonComponent>
     )
 }

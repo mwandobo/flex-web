@@ -5,8 +5,8 @@ import {useRouter} from 'next/navigation'
 import {post} from '@/utils/api'
 import Button from '@/components/button'
 import TextFieldComponent from '@/components/inputs/text-field'
-import Loading from "@/components/status/loading.component";
 import BackButton from "@/components/button/back-button";
+import AuthSkeletonComponent from "@/components/page-components/auth-skeleton-component";
 
 const VerifyOtp = ({params}: { params: { userId: string } }) => {
     const [otp, setNewOtp] = useState('')
@@ -45,42 +45,29 @@ const VerifyOtp = ({params}: { params: { userId: string } }) => {
     }
 
     return (
-        <div className='w-screen h-screen fixed top-0 left-0 flex items-center justify-center bg-gray-300 z-30'>
-            <div className="w-[80] border border-gray-300 bg-white">
-                {loading ? (
-                        <div className={'w-3/4'}>
-                            <Loading/>
-                        </div>
-                    ) :
-                    <div className='p-5'>
-                        <div className="flex flex-col p-[15%] justify-center items-center w-full">
-                            <img
-                                width={'40%'}
-                                src="/logo.png"/>
-                        </div>
-                        <>
-                            <TextFieldComponent
-                                placeholder={'Otp'}
-                                from={'otp'}
-                                label={'OTP'}
-                                value={otp}
-                                onChange={handleChange}
-                                isError={false}
-                                errorMessage={''}
-                            />
+        <AuthSkeletonComponent
+            loading={loading}
+        >
+            <>
+                <TextFieldComponent
+                    placeholder={'Otp'}
+                    from={'otp'}
+                    label={'OTP'}
+                    value={otp}
+                    onChange={handleChange}
+                    isError={false}
+                    errorMessage={''}
+                />
 
-                            <div className="flex justify-between">
-                                <BackButton/>
-                                <Button
-                                    text='Send'
-                                    onClick={handleSubmit}
-                                />
-                            </div>
-                        </>
-                    </div>
-                }
-            </div>
-        </div>
+                <div className="flex justify-between">
+                    <BackButton/>
+                    <Button
+                        text='Send'
+                        onClick={handleSubmit}
+                    />
+                </div>
+            </>
+        </AuthSkeletonComponent>
     )
 }
 
