@@ -4,9 +4,9 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { post } from '@/utils/api'
 import Button from '@/components/button'
-import { Card } from '@mui/material'
 import TextFieldComponent from '@/components/inputs/text-field'
 import Swal from "sweetalert2"
+import Loading from "@/components/status/loading.component";
 
 const ChangePasswordPage = ({ params }: { params: { userId: string } }) => {
     const [new_password, setNewPassword] = useState('')
@@ -29,7 +29,6 @@ const ChangePasswordPage = ({ params }: { params: { userId: string } }) => {
         try {
             setLoading(true);
 
-            // Validate inputs using regular flow control
             if (!new_password) {
                 return Swal.fire({
                     title: 'Error Occured!',
@@ -54,7 +53,6 @@ const ChangePasswordPage = ({ params }: { params: { userId: string } }) => {
                 }).then(() => setLoading(false));
             }
 
-            // Attempt the API call
             const response = await post<any>('user/changePassword', {
                 new_password, new_password_confirmation, user_id: userId
             });
@@ -72,25 +70,19 @@ const ChangePasswordPage = ({ params }: { params: { userId: string } }) => {
                 text: message,
                 icon: 'error',
             }).then(() => setLoading(false));
-
             console.error(error);
         }
     }
 
-
-
     return (
-
-        <div className='w-screen flex fixed top-0 left-0 h-screen shadow-lg z-20 -mr-64 flex-col items-center justify-center bg-white '>
-            <img className='h-full' src="/background.png" />
-
-            <div className="absolute mx-auto my-0 border border-gray-300 rounded bg-white" >
-                {
-                    loading ? <p>..... Loading......</p> :
-                        <Card
-                            raised={true}
-                            className='p-5'
-                        >
+        <div className='w-screen h-screen fixed top-0 left-0 flex items-center justify-center bg-gray-300 z-30'>
+            <div className="w-[80] border border-gray-300 bg-white">
+                {loading ? (
+                    <div className={'w-3/4'}>
+                        <Loading/>
+                    </div>
+                ) :
+                    <div className='p-5'>
                             <div className="flex flex-col p-[15%] justify-center items-center w-full">
                                 <img className='h-full'
                                     width={'40%'}
@@ -124,7 +116,7 @@ const ChangePasswordPage = ({ params }: { params: { userId: string } }) => {
                                     />
                                 </div>
                             </>
-                        </Card>
+                        </div>
                 }
             </div>
         </div>

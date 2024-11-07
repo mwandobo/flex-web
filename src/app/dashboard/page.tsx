@@ -14,22 +14,35 @@ function Dashboard() {
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
 
-    const fetchProjectStats = async () => {
-        try {
-            const res = await get('dashboard/project-stats', token)
-            if (res.status === 200) {
-                setData(  {projectStats: res.data.data })
-            }
-        } catch (error: any) {
-            if (error?.code === "ERR_NETWORK") {
-                navigateToLogin()
-            }
-        }
-    };
-
     useEffect(() => {
-        fetchProjectStats()
-    }, [])
+        const fetchAllData = async () => {
+            try {
+                const [projectStatsRes, projectExpenseStatsRes, assignedTasksRes, salesPurchaseStats] = await Promise.all([
+                    get('dashboard/project-stats', token),
+                    get('dashboard/project-expenses-stats', token),
+                    get('dashboard/assigned-tasks', token),
+                    get('dashboard/sales-purchase-stats', token)
+                ]);
+
+                if (projectStatsRes.status === 200 && projectExpenseStatsRes.status === 200 && assignedTasksRes.status === 200 && salesPurchaseStats.status === 200) {
+                    setData({
+                        ...data,
+                        projectStats: projectStatsRes.data.data,
+                        projectExpenseStats: projectExpenseStatsRes.data.data,
+                        assignedTasks: assignedTasksRes.data.data,
+                        salesPurchaseStats: salesPurchaseStats.data.data
+                    });
+                }
+            } catch (error) {
+                if (error?.code === "ERR_NETWORK") {
+                    navigateToLogin();
+                }
+            }
+        };
+
+        fetchAllData();
+    }, []);
+
 
     const navigateToLogin = () => {
         return router.push('/login')
@@ -44,20 +57,17 @@ function Dashboard() {
         {name: "Closed Projects", quantity: projectStats?.closed_projects},
     ]
 
+    const salesPurchaseStats = data?.salesPurchaseStats
+
     const salesStats = [
-        {name: "Current Year Sales", quantity: 123000},
-        {name: "Budget Sales", quantity: 12200},
-        {name: "Budget Variance (%)", quantity: '36%'},
-        {name: "Past Year Sales", quantity: 294294},
-        {name: "Sales Growth (%)", quantity: '54%'},
+        {name: "Total Sales", quantity: salesPurchaseStats?.total_sales},
+        {name: "Total Purchase", quantity: salesPurchaseStats?.total_purchases},
+        {name: "Total IN Payment", quantity: salesPurchaseStats?.total_in_payments},
+        {name: "Total OUT Payment", quantity: salesPurchaseStats?.total_out_payments},
+        {name: "Total Pending IN Payment", quantity: salesPurchaseStats?.total_pending_in_payments},
+        {name: "Total Pending OUT Payment", quantity: salesPurchaseStats?.total_pending_out_payments},
     ]
 
-    const tasks = [
-        {name: "Do Something", status: 'pending'},
-        {name: "Do Something", status: 'pending'},
-        {name: "Do Something", status: 'pending'},
-        {name: "Do Something", status: 'pending'},
-    ]
     const years = [2020, 2021, 2022, 2023, 2024]
     return (
         <ProtectedRoute>
@@ -73,37 +83,43 @@ function Dashboard() {
                                 </div>
                             ))}
                         </div>
+                        {
+                            data?.projectExpenseStats &&
                         <div className={'mt-2 bg-white shadow-md rounded-md p-2 border border-gray-200'}>
                             <div className={'mb-2'}>
                                 <h3 className={'font-semibold'}>Project Expenses </h3>
                             </div>
-                            <BarChartComponent/>
+                            <BarChartComponent data={data?.projectExpenseStats}/>
                         </div>
+                        }
                     </div>
-                    <div className="w-1/3 bg-white p-2 border border-gray-200 shadow-md rounded-md">
-                        <div className="flex flex-col border-b border-gray-100">
-                            <h3 className="mb-2 font-semibold">Assigned Tasks</h3>
+                    { data?.assignedTasks &&
+                        <div className="w-1/3 bg-white p-2 border border-gray-200 shadow-md rounded-md">
+                            <div className="flex flex-col border-b border-gray-100">
+                                <h3 className="mb-2 font-semibold">Assigned Tasks</h3>
 
-                            {tasks.map((task, index) => (
-                                <div
-                                    key={index}
-                                    className={`flex items-center justify-between p-2 ${
-                                        index % 2 === 0 ? 'bg-gray-100' : 'bg-white'
-                                    }`}
-                                >
-                                    <p className="w-[20px] text-center">{`${index + 1}.`}</p>
-                                    <p className="flex-1 text-start">{task.name}</p>
-                                    <p className="ml-4">{task.status}</p>
-                                </div>
-                            ))}
+                                {data?.assignedTasks.map((task, index) => (
+                                    <div
+                                        key={index}
+                                        className={`flex items-center justify-between p-2 ${
+                                            index % 2 === 0 ? 'bg-gray-100' : 'bg-white'
+                                        }`}
+                                    >
+                                        <p className="w-[20px] text-center">{`${index + 1}.`}</p>
+                                        <p className="flex-1 text-start">{task.name}</p>
+                                        <p className="ml-4">{task.status}</p>
+                                    </div>
+                                ))}
 
+                            </div>
                         </div>
-                    </div>
+                    }
+
                 </div>
                 <div className={'flex bg-white flex-col mt-2 p-2 border border-gray-200 shadow-md rounded-md  '}>
                     <h3 className={'mb-2 font-semibold'}>Sales Dashboard</h3>
                     <div className={'bg-white p-2'}>
-                        <div className={'grid grid-cols-5 gap-2 '}>
+                        <div className={'grid grid-cols-6 gap-2 '}>
                             {salesStats.map((item, index) => (
                                 <div key={index}
                                      className={'bg-white h-20 flex flex-col justify-center items-center border border-gray-200 shadow-md rounded-md'}>
@@ -115,13 +131,16 @@ function Dashboard() {
                     </div>
                     <div className={'flex mt-2 gap-2'}>
                         <div className={'bg-white shadow-md rounded-md p-2 border border-gray-200'}>
-                            <h3 className={'mb-2 font-semibold'}>Project Expenses </h3>
-                            <AreaChartComponent/>
+                            <h3 className={'mb-2 font-semibold'}>Sales Vs Purchase</h3>
+                            <AreaChartComponent data={[]}/>
                         </div>
-                        <div className={'w-3/4 border border-gray-200 p-2 shadow-md rounded-md'}>
-                            <h3 className={'mb-2 font-semibold'}>Project Expenses </h3>
-                            <BarChartComponent/>
-                        </div>
+                        {
+                            data?.projectExpenseStats &&
+                            <div className={'w-3/4 border border-gray-200 p-2 shadow-md rounded-md'}>
+                                <h3 className={'mb-2 font-semibold'}>Project Expenses </h3>
+                                <BarChartComponent data={data?.projectExpenseStats}/>
+                            </div>
+                        }
                         <div className={'flex flex-col bg-white shadow-md rounded-md border border-gray-200 p-2'}>
                             <div className={'mb-2  shadow-md rounded-md border border-gray-200  p-2'}>
                                 <h3 className={'mb-2 font-semibold'}>Years </h3>

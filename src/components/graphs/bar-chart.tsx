@@ -18,22 +18,11 @@ interface Props {
     expenses: string;
 }
 
-const data: Props[] = [
-    { name: 'Jan', budget: '1200', expenses: '24000' },
-    { name: 'Feb', budget: '1000', expenses: '1398' },
-    { name: 'Mar', budget: '7000', expenses: '9800' },
-    { name: 'Apr', budget: '6800', expenses: '9800' },
-    { name: 'May', budget: '8000', expenses: '9800' },
-    { name: 'Jun', budget: "2000", expenses: '3908' },
-    { name: 'Jul', budget: '3500', expenses: '4800' },
-    { name: 'Aug', budget: '3200', expenses: '3800' },
-    { name: 'Sep', budget: '2500', expenses: '3800' },
-    { name: 'Oct', budget: '1500', expenses: '3800' },
-    { name: 'Nov', budget: '2000', expenses: '3800' },
-    { name: 'Dec', budget: '17000', expenses: '3800' },
-];
+interface BarChartProps{
+    data: Props[]
+}
 
-const BarChartComponent = () => (
+const BarChartComponent = ( {data}: BarChartProps ) => (
     <div style={{ width: '100%', height: 400 }}>
         <ResponsiveContainer>
             <BarChart
