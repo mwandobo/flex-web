@@ -16,6 +16,8 @@ import MultiColorCircularProgress from "@/components/graphs/multi-color-circular
 function Dashboard() {
     const [data, setData] = useState<any>(null)
     const [isLoading, setIsLoading] = useState(false)
+    const [budgetData, setBudgetData] = useState([]);
+    const [totalBudget, setTotalBudget] = useState(0);
     const [refresh, setRefresh] = useState(false)
     const [selectedYears, setSelectedYears] = useState<number[]>([]);
     const [isSideOverOpened, setIsSideOverOpen] = useState(false)
@@ -50,13 +52,15 @@ function Dashboard() {
                     assignedTasksRes,
                     salesPurchaseStats,
                     salesVsPurchase,
+                    projectBudgetSummary,
                 ] = await Promise.all([
                     get(`dashboard/project-stats${queryParams}`, token),
                     get(`dashboard/project-expenses-stats${queryParams}`, token),
                     get(`dashboard/project-pie-chart-stats${queryParams}`, token),
                     get(`dashboard/assigned-tasks${queryParams}`, token),
                     get(`dashboard/sales-purchase-stats${queryParams}`, token),
-                    get(`dashboard/sales-vs-purchase${queryParams}`, token)
+                    get(`dashboard/sales-vs-purchase${queryParams}`, token),
+                    get(`dashboard/project-budget-summary${queryParams}`, token)
                 ]);
 
                 if (
@@ -65,16 +69,33 @@ function Dashboard() {
                     projectPieChartStatsRes.status === 200 &&
                     assignedTasksRes.status === 200 &&
                     salesPurchaseStats.status === 200 &&
-                    salesVsPurchase.status === 200
+                    salesVsPurchase.status === 200 &&
+                    projectBudgetSummary.status === 200
                 ) {
+                    const _projectBudgetSummary = projectBudgetSummary.data.data;
                     setData({
                         projectStats: projectStatsRes.data.data,
                         projectExpenseStats: projectExpenseStatsRes.data.data,
                         projectPieChartStatsRes: projectPieChartStatsRes.data.data,
                         assignedTasks: assignedTasksRes.data.data,
                         salesPurchaseStats: salesPurchaseStats.data.data,
-                        salesVsPurchase: salesVsPurchase.data.data
+                        salesVsPurchase: salesVsPurchase.data.data,
+                        projectBudgetSummary: _projectBudgetSummary
                     });
+
+                    const total = _projectBudgetSummary.reduce((sum, item) => sum + item.grandTotal, 0);
+                    setTotalBudget(total);
+
+                    console.log('budgetData', budgetData)
+
+
+                    const calculatedBudgetData = _projectBudgetSummary.map(item => ({
+                        ...item,
+                        percentage: ((item.grandTotal / total) * 100).toFixed(2) // rounded to 2 decimal places
+                    }));
+
+                    setBudgetData(calculatedBudgetData);
+
                     setIsLoading(false)
 
                     // setSelectedYears([])
@@ -86,8 +107,12 @@ function Dashboard() {
             }
         };
 
+
         fetchAllData();
     }, [refresh]); // Fet
+
+
+    console.log('budgetData', budgetData)
 
     const navigateToLogin = () => {
         return router.push('/login')
@@ -131,6 +156,13 @@ function Dashboard() {
         {name: "Total Pending IN Payment", quantity: salesPurchaseStats?.total_pending_in_payments},
         {name: "Total Pending OUT Payment", quantity: salesPurchaseStats?.total_pending_out_payments},
     ]
+
+    const segments = [
+        {percentage: 25, color: '#4CAF50', label: 'Segment 1'},
+        {percentage: 35, color: '#FFA500', label: 'Segment 2'},
+        {percentage: 20, color: '#FF6347', label: 'Segment 3'},
+        {percentage: 20, color: '#1E90FF', label: 'Segment 4'},
+    ];
 
     const years = [2020, 2021, 2022, 2023, 2024]
     return (
@@ -213,11 +245,11 @@ function Dashboard() {
                                         </div>
                                     </div>
                                 }
-
                             </div>
                             <div
                                 className={'flex bg-white flex-col mt-2 p-2 border border-gray-200 shadow-md rounded-md  '}>
                                 <h3 className={'mb-2 font-semibold'}>Sales Dashboard</h3>
+
                                 <div className={'bg-white p-2'}>
                                     <div className={'grid grid-cols-6 gap-2 '}>
                                         {salesStats.map((item, index) => (
@@ -229,34 +261,48 @@ function Dashboard() {
                                         ))}
                                     </div>
                                 </div>
-                                <div className={'flex mt-2 gap-2'}>
+
+                                <div className={'flex mt-2 gap-2 w-full'}>
                                     {
                                         data?.salesVsPurchase &&
-                                        <div className={'bg-white shadow-md rounded-md p-2 border border-gray-200'}>
-                                            <h3 className={'mb-2 font-semibold'}>Sales Vs Purchase</h3>
-                                            <AreaChartComponent data={data?.salesVsPurchase}/>
+                                        <div className={'bg-white w-2/5 shadow-md rounded-md p-2 border border-gray-200'}>
+                                            <h3 className={'mb-2 mt-2 font-semibold'}>Sales Vs Purchase</h3>
+                                            <div className={'flex justify-center items-center w-full h-full'}>
+                                                <AreaChartComponent data={data?.salesVsPurchase}/>
+
+                                            </div>
                                         </div>
                                     }
                                     {
                                         data?.projectExpenseStats &&
-                                        <div className={'w-3/4 border border-gray-200 p-2 shadow-md rounded-md'}>
+                                        <div className={'w-2/5 border border-gray-200 p-2 shadow-md rounded-md'}>
                                             <h3 className={'mb-2 font-semibold'}>Project Expenses </h3>
                                             <BarChartComponent data={data?.projectExpenseStats}/>
                                         </div>
                                     }
-                                    <div className={'flex flex-col bg-white items-center justify-center shadow-md rounded-md border border-gray-200 p-2'}>
-                                        <div className={'mb-2'}>
-                                            <MultiColorCircularProgress percentage={75}/>
-                                            <p>Legend:</p>
-                                            <ul>
-                                                <li><span style={{color: "#4CAF50"}}>•</span> Segment 1 - 25%</li>
-                                                <li><span style={{color: "#FFA500"}}>•</span> Segment 2 - 35%</li>
-                                                <li><span style={{color: "#FF6347"}}>•</span> Segment 3 - 20%</li>
-                                                <li><span style={{color: "#1E90FF"}}>•</span> Segment 4 - 20%</li>
-                                            </ul>
+                                    {
+                                        budgetData?.length > 0 &&
+                                        <div
+                                            className="flex w-1/5 flex-col bg-white items-center justify-center shadow-md rounded-md border border-gray-200 p-4">
+                                            <div className="mb-4 text-center">
+                                                <MultiColorCircularProgress segments={segments} totalBudget={506046}/>
+                                            </div>
+                                            <div className={'flex flex-col'}>
+                                                <p className={'font-medium'}>Budget Summary for All Projects:</p>
+                                                <ul className="mt-2 ms-2">
+                                                    {budgetData.map((item, index) => (
+                                                        <li key={index} className="flex items-center space-x-2">
+                                                            <span>{item.name} - {item.percentage}% ({item.grandTotal.toFixed(2)})</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                                <p className="mt-4 ms-2">Total Budget: ${totalBudget.toFixed(2)}</p>
+                                            </div>
+
                                         </div>
-                                    </div>
+                                    }
                                 </div>
+
                             </div>
                         </div>
                         <SlideOverV1
