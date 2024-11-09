@@ -8,10 +8,9 @@ interface Segment {
 
 interface MultiColorCircularProgressProps {
     segments: Segment[];
-    totalBudget: number; // Total budget prop
 }
 
-const MultiColorCircularProgress: React.FC<MultiColorCircularProgressProps> = ({ segments, totalBudget }) => {
+const MultiColorCircularProgress: React.FC<MultiColorCircularProgressProps> = ({ segments }) => {
     const radius = 50;
     const circumference = 2 * Math.PI * radius;
 
@@ -19,8 +18,8 @@ const MultiColorCircularProgress: React.FC<MultiColorCircularProgressProps> = ({
     const dashArraySegments = segments.map(segment => (segment.percentage / 100) * circumference);
 
     return (
-        <div style={{ width: '200px', height: '200px', position: 'relative', textAlign: 'center' }}>
-            <svg width="150" height="150" viewBox="0 0 120 120" style={{ transform: "rotate(-90deg)", margin: '0 auto' }}>
+        <div style={{width: '200px', height: '160px', position: 'relative', textAlign: 'center'}}>
+            <svg width="150" height="150" viewBox="0 0 120 120" style={{transform: "rotate(-90deg)", margin: '0 auto'}}>
                 <circle
                     cx="60"
                     cy="60"
@@ -48,19 +47,23 @@ const MultiColorCircularProgress: React.FC<MultiColorCircularProgressProps> = ({
             </svg>
 
             {/* Total Budget Display */}
-            <div
-                style={{
-                    position: 'absolute',
-                    top: '40%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    fontSize: '10px',  // Adjust font size for readability
-                    fontWeight: 'medium',
-                    color: '#333',
-                }}
-            >
-                Tzs. {totalBudget?.toFixed(2)} {/* Show the total budget */}
-            </div>
+            {/*<div*/}
+            {/*    style={{*/}
+            {/*        position: 'absolute',*/}
+            {/*        top: '48%',*/}
+            {/*        left: '50%',*/}
+            {/*        transform: 'translate(-50%, -50%)',*/}
+            {/*        fontSize: '12px',*/}
+            {/*        fontWeight: '500',  // 'medium' is not valid in CSS, use 500 or other numeric values*/}
+            {/*        color: '#333',*/}
+            {/*        maxWidth: '100px',  // Set a maximum width (adjust as needed)*/}
+            {/*        textAlign: 'center',  // Center-align text for a balanced look*/}
+            {/*        overflowWrap: 'break-word',  // Break long words to fit the width*/}
+            {/*        whiteSpace: 'normal',  // Allow text to wrap to new lines*/}
+            {/*    }}*/}
+            {/*>*/}
+            {/*    <p style={{margin: 0}}>Tzs. {totalBudget}</p>*/}
+            {/*</div>*/}
         </div>
     );
 };

@@ -72,7 +72,7 @@ const SlideOverV1: React.FC<SlideOverProps> = ({
                         <button
                             disabled={isSubmitDisabled}
                             onClick={onSubmit}
-                            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+                            className="w-full bg-gray-500 text-white py-2 rounded-md hover:bg-gray-600"
                         >
                             Submit Filters
                         </button>

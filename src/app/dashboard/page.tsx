@@ -12,6 +12,7 @@ import {Filter} from "lucide-react";
 import SlideOverV1 from "@/components/slide-over/slide-over-v1.component";
 import LoadingComponent from "@/components/status/loading.component";
 import MultiColorCircularProgress from "@/components/graphs/multi-color-circular-chart";
+import moneyFormater from "@/components/moneyFormater";
 
 function Dashboard() {
     const [data, setData] = useState<any>(null)
@@ -84,14 +85,12 @@ function Dashboard() {
                     });
 
                     const total = _projectBudgetSummary.reduce((sum, item) => sum + item.grandTotal, 0);
+
                     setTotalBudget(total);
-
-                    console.log('budgetData', budgetData)
-
-
                     const calculatedBudgetData = _projectBudgetSummary.map(item => ({
                         ...item,
-                        percentage: ((item.grandTotal / total) * 100).toFixed(2) // rounded to 2 decimal places
+                        percentage: ((item.grandTotal / total) * 100).toFixed(2) ,// rounded to 2 decimal places
+                        color: `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`
                     }));
 
                     setBudgetData(calculatedBudgetData);
@@ -124,6 +123,7 @@ function Dashboard() {
 
     const handleClearFilters = () => {
         setSelectedYears([])
+        setRefresh(!refresh)
         setIsSubmitted(false)
     }
 
@@ -157,12 +157,6 @@ function Dashboard() {
         {name: "Total Pending OUT Payment", quantity: salesPurchaseStats?.total_pending_out_payments},
     ]
 
-    const segments = [
-        {percentage: 25, color: '#4CAF50', label: 'Segment 1'},
-        {percentage: 35, color: '#FFA500', label: 'Segment 2'},
-        {percentage: 20, color: '#FF6347', label: 'Segment 3'},
-        {percentage: 20, color: '#1E90FF', label: 'Segment 4'},
-    ];
 
     const years = [2020, 2021, 2022, 2023, 2024]
     return (
@@ -191,7 +185,7 @@ function Dashboard() {
                                 </div>
 
                                 <button
-                                    className={' flex justify-center items-center p-2 border border-gray-200 shadow-sm rounded-md mb-2 gap-1'}
+                                    className={' flex justify-center items-center p-2 border border-gray-200 shadow-sm rounded-md hover:bg-gray-50 mb-2 gap-1'}
                                     onClick={handleOpenFilters}
                                 >
                                     <Filter size={12}/>Filters
@@ -283,20 +277,30 @@ function Dashboard() {
                                     {
                                         budgetData?.length > 0 &&
                                         <div
-                                            className="flex w-1/5 flex-col bg-white items-center justify-center shadow-md rounded-md border border-gray-200 p-4">
-                                            <div className="mb-4 text-center">
-                                                <MultiColorCircularProgress segments={segments} totalBudget={506046}/>
+                                            className="flex w-1/5 flex-col bg-white shadow-md rounded-md border border-gray-200 p-4">
+                                            <h3 className={'font-medium'}>Budget Summary for All Projects:</h3>
+
+                                            <div className="flex w-full justify-center">
+                                                <MultiColorCircularProgress segments={budgetData}
+                                                />
                                             </div>
-                                            <div className={'flex flex-col'}>
-                                                <p className={'font-medium'}>Budget Summary for All Projects:</p>
-                                                <ul className="mt-2 ms-2">
+                                            <div className={'flex flex-col w-full text-xs'}>
+                                                <p className="flex gap-1 mb-1">Total Budget: {moneyFormater({amount: totalBudget, isShowCurrency:true })}</p>
+                                                <div className="">
                                                     {budgetData.map((item, index) => (
-                                                        <li key={index} className="flex items-center space-x-2">
-                                                            <span>{item.name} - {item.percentage}% ({item.grandTotal.toFixed(2)})</span>
-                                                        </li>
+                                                        <div key={index}className={'flex mb-1 gap-1'}>
+                                                            <span className={'w-4 '} style={{backgroundColor: item.color }}></span>
+                                                            <p
+                                                               className="flex items-center ">{item.name} - {item.percentage}%
+                                                                ({moneyFormater({
+                                                                    amount: item.grandTotal,
+                                                                    isShowCurrency: true
+                                                                })})</p>
+
+                                                        </div>
                                                     ))}
-                                                </ul>
-                                                <p className="mt-4 ms-2">Total Budget: ${totalBudget.toFixed(2)}</p>
+                                                </div>
+                                                {/*<p className="mt-4 ms-2">Total Budget: ${totalBudget.toFixed(2)}</p>*/}
                                             </div>
 
                                         </div>
@@ -324,9 +328,9 @@ function Dashboard() {
                                                     <button
                                                         key={item}
                                                         onClick={() => toggleYearSelection(item)}
-                                                        className={`h-10 gap-2 shadow-md rounded-md mb-1 border ${
+                                                        className={`h-10 gap-2 shadow-md rounded-md mb-1 border hover:bg-gray-100 ${
                                                             selectedYears.includes(item)
-                                                                ? 'bg-blue-500 text-white border-blue-500'
+                                                                ? 'bg-gray-300 border-gray-100'
                                                                 : 'bg-white border-gray-200'
                                                         }`}
                                                     >
