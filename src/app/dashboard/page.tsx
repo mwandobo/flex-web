@@ -285,7 +285,7 @@ function Dashboard() {
                                                 />
                                             </div>
                                             <div className={'flex flex-col w-full text-xs'}>
-                                                <p className="flex gap-1 mb-1">Total Budget: {moneyFormater({amount: totalBudget, isShowCurrency:true })}</p>
+                                                <p className="flex gap-1 mb-1 font-medium">Total Budget: {moneyFormater({amount: totalBudget, isShowCurrency:true })}</p>
                                                 <div className="">
                                                     {budgetData.map((item, index) => (
                                                         <div key={index}className={'flex mb-1 gap-1'}>

@@ -33,12 +33,13 @@ function SubMenuItem({ item }: { item: ISubItem }) {
 
     return (
         <>
-            <div className={`flex items-center justify-between mt-1 p-2 hover:bg-sidebar-background hover:text-sidebar-active rounded-lg cursor-pointer text-sidebar-iconColor ${isActive && "text-indigo-700 bg-sidebar-background"}`}
+            {/*<div className={`flex items-center justify-between mt-1 p-2 hover:bg-sidebar-background hover:text-sidebar-active rounded-lg cursor-pointer text-sidebar-iconColor ${isActive && "text-indigo-700 bg-sidebar-background"}`}*/}
+            <div className={`flex items-center justify-between py-1 ps-2 rounded cursor-pointer mb-1 hover:bg-gray-200 ${isActive && "bg-gray-200 "}`}
                 onClick={onclick}
             >
                 <div className='flex items-center space-x-2'>
                     <Icon size={13} />
-                    <p className="text-sm font-semibold"> {name} </p>
+                    <p className=''> {name} </p>
                 </div>
             </div>
 

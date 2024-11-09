@@ -233,16 +233,16 @@ const items: ISidebarItem[] = [
 function Sidebar() {
     return (
         <div className='w-64 bg-white z-60 p-4 -mt-7 sticky top-16 h-[calc(100vh-64px)] overflow-y-auto z-10'>
-            <div className="flex flex-col space-y-10 mt-6">
+            <div className="flex flex-col  mt-6">
                 <div
-                    className='flex flex-col space-y-2'
+                    className='flex flex-col'
                 >
                     {
                         items.map(item =>
                             <>
                                 {
-                                    checkPermissions(item?.permission) && <> <SidebarItem key={item.path}
-                                                                                          item={item}/></>
+                                    checkPermissions(item?.permission) &&
+                                    <SidebarItem key={item.path} item={item}/>
                                 }
                             </>
                         )
