@@ -108,7 +108,7 @@ export const usePageData = ({
         isHideActions,
         isShowAddPriceButton,
         from,
-        approval_slug
+        approval_slug,
     })
 
     useEffect(() => {

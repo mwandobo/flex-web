@@ -128,6 +128,12 @@ const items: ISidebarItem[] = [
                 permission: 'projects-list',
                 icon: FolderOpenDot
             },
+            {
+                name: 'Procurement Reports',
+                path: '/report/procurement-report',
+                permission: 'projects-list',
+                icon: FolderOpenDot
+            },
         ]
     },
     {

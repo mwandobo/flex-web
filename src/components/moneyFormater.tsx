@@ -27,7 +27,6 @@ const FormattedMoney = ({ amount, currency = 'Tzs', isHideCurrency, isShowCurren
     }
 
 
-
 };
 
 export default FormattedMoney;

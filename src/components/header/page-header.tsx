@@ -6,7 +6,7 @@ import { ReactNode } from "react"
 
 interface Props {
     handleClick?: (type: string) => void
-    links: any[]
+    links?: any[]
     isShowPage?: boolean
     showrefresh?: boolean
     isHideAdd?: boolean
@@ -30,7 +30,7 @@ const PageHeader = ({
     return (<div className='flex justify-between items-center p-1'>
         <>
             {subHeader ?
-                <h4 className="text-sm font-semibold">{subHeader}</h4>
+                <h4 className="text-sm font-medium">{subHeader}</h4>
                 :
                 (subHeader === "" ? <></> : <MuiBreadcrumbs links={links} />)
             }
