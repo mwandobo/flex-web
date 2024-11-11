@@ -16,6 +16,8 @@ import SupplierReport from "@/app/report/procurement-report/items/supplier.repor
 import ItemReport from "@/app/report/procurement-report/items/item.report";
 import CustomerReport from "@/app/report/procurement-report/items/customer.report";
 import StoreReport from "@/app/report/procurement-report/items/store.report";
+import DeliverableReport from "@/app/report/procurement-report/items/deliverable.report";
+import DeliveryReport from "@/app/report/procurement-report/items/deliveries.report";
 
 const ProcurementItems = [
     {
@@ -77,6 +79,16 @@ const ProcurementItems = [
         name: 'store',
         title: 'Stores',
         item: <StoreReport/>,
+    },
+    {
+        name: 'deliverable',
+        title: 'Deliverables',
+        item: <DeliverableReport/>,
+    },
+    {
+        name: 'deliveries',
+        title: 'Delivery',
+        item: <DeliveryReport/>,
     },
 ];
 
