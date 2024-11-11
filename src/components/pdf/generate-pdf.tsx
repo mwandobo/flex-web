@@ -50,9 +50,9 @@ const GeneratePdf = ({ content, fileName = 'document.pdf', buttonLabel = 'Downlo
                         <p class="text-sm">Email: support@flex.co.tz</p>
                     </div>
                 </header>
-        
-                <!-- Report Content -->
+                
                 ${renderedContent}
+                <!-- Report Content -->
             </body>
             </html>
         `;

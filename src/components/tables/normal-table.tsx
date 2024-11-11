@@ -30,7 +30,7 @@ const ReusableTable: React.FC<TableProps> = ({
                     <th
                         key={column.accessor}
                         className={`px-2 py-1 text-left text-xs border-b border-gray-200 bg-gray-50 font-medium text-gray-600 ${
-                            index < columns.length - 1 ? 'border-r' : ''
+                            index < subTableColumns.length - 1 ? 'border-r' : ''
                         }`}
                     >
                         {column.header}
@@ -45,14 +45,12 @@ const ReusableTable: React.FC<TableProps> = ({
                         <td
                             key={column.accessor}
                             className={`px-2 py-1 text-xs border-b border-gray-200 text-gray-500 ${
-                                colIndex < columns.length - 1 ? 'border-r' : ''
-                            }  ${column?.isAlignRight ? 'text-right' : 'text-left'}`}
+                                colIndex < subTableColumns.length - 1 ? 'border-r' : ''
+                            } ${column?.isAlignRight ? 'text-right' : 'text-left'}`}
                         >
-                            {
-                                column.isMoney
-                                    ? moneyFormater({amount: item[column.accessor]}) // Format as currency if `isMoney` is true
-                                    : item[column.accessor] ?? '-'
-                            }
+                            {column.isMoney
+                                ? moneyFormater({ amount: item[column.accessor] }) // Format as currency if `isMoney` is true
+                                : item[column.accessor] ?? '-'}
                         </td>
                     ))}
                 </tr>
@@ -90,15 +88,14 @@ const ReusableTable: React.FC<TableProps> = ({
                         {columns.map((column, colIndex) => (
                             <td
                                 key={column.accessor}
-                                className={`px-4 py-2 border-b text-xs border-gray-200 text-gray-600  ${
+                                className={`px-4 py-2 border-b text-xs border-gray-200 text-gray-600 ${
                                     colIndex < columns.length - 1 ? 'border-r' : ''
-                                // } ${column.isAlignRight ? 'text-right' : 'text-left'}`}
                                 } ${column?.isAlignRight ? 'text-right' : 'text-left'}`}
                             >
                                 {Array.isArray(row[column.accessor]) && subTableAccessor === column.accessor
                                     ? renderSubTable(row[column.accessor]) // Render sub-table if it's an array
                                     : column.isMoney
-                                        ? moneyFormater({amount: row[column.accessor]}) // Format as currency if `isMoney` is true
+                                        ? moneyFormater({ amount: row[column.accessor] }) // Format as currency if `isMoney` is true
                                         : row[column.accessor] ?? '-'}
                             </td>
                         ))}

@@ -7,10 +7,15 @@ import PageHeader from "@/components/header/page-header";
 import GeneratePdf from "@/components/pdf/generate-pdf";
 import {get} from "@/utils/api";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
+import CustomTable from "@/components/tables/flexible-normal-table";
 
 const columns = [
     {header: 'Requisition Code', accessor: 'formatted_code'},
+    {header: 'Requisition Code', accessor: 'formatted_code'},
+    {header: 'Requisition Code', accessor: 'formatted_code'},
     {header: 'Store', accessor: 'store_name'},
+    {header: 'Store Keeper', accessor: 'store_keeper'},
+    {header: 'Store Keeper', accessor: 'store_keeper'},
     {header: 'Store Keeper', accessor: 'store_keeper'},
     {header: 'Store Keeper', accessor: 'store_keeper'},
     {header: 'Items', accessor: 'items'},
@@ -55,7 +60,7 @@ function RequisitionRequestReport() {
 
     const pageRender = () =>{
         return <div className={'mt-2'}>
-            <ReusableTable
+            <CustomTable
                 columns={columns}
                 data={data}
                 subTableColumns={subTableColumns}
