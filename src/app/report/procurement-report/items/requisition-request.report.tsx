@@ -11,12 +11,7 @@ import CustomTable from "@/components/tables/flexible-normal-table";
 
 const columns = [
     {header: 'Requisition Code', accessor: 'formatted_code'},
-    {header: 'Requisition Code', accessor: 'formatted_code'},
-    {header: 'Requisition Code', accessor: 'formatted_code'},
     {header: 'Store', accessor: 'store_name'},
-    {header: 'Store Keeper', accessor: 'store_keeper'},
-    {header: 'Store Keeper', accessor: 'store_keeper'},
-    {header: 'Store Keeper', accessor: 'store_keeper'},
     {header: 'Store Keeper', accessor: 'store_keeper'},
     {header: 'Items', accessor: 'items'},
     {header: 'Amount (Tzs)', accessor: 'amount',  isAlignRight: true, isMoney: true},
