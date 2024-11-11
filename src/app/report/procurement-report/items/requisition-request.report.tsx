@@ -13,7 +13,7 @@ const columns = [
     {header: 'Requisition Code', accessor: 'formatted_code'},
     {header: 'Store', accessor: 'store_name'},
     {header: 'Store Keeper', accessor: 'store_keeper'},
-    {header: 'Items', accessor: 'items'},
+    {header: 'Items', accessor: 'items', width: "300px"},
     {header: 'Amount (Tzs)', accessor: 'amount',  isAlignRight: true, isMoney: true},
     {header: 'Status', accessor: 'status'},
 ];
