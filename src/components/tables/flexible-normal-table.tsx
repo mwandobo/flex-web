@@ -109,7 +109,7 @@ const ReusableTable: React.FC<TableProps> = ({
                         <tr key={rowIndex} className="text-gray-700">
                             <td
                                 className="px-2 py-2 text-xs border border-gray-200 text-center"
-                                style={{ width: "50px" }}
+                                style={{width: "50px"}}
                             >
                                 {rowIndex + 1}
                             </td>
@@ -117,9 +117,11 @@ const ReusableTable: React.FC<TableProps> = ({
                             {columns.map((column, colIndex) => (
                                 <td
                                     key={column.accessor}
-                                    className={`px-2 py-2 text-xs border border-gray-200 break-words ${
-                                        colIndex < columns.length - 1 ? 'border-r' : ''
-                                    } ${column?.isAlignRight ? 'text-right' : 'text-left'}`}
+                                    className={
+                                        `px-2 py-2 text-xs border border-gray-200 break-words 
+                                        ${colIndex < columns.length - 1 ? 'border-r' : ''} 
+                                        ${column?.isAlignRight ? 'text-right' : 'text-left'}`
+                                    }
                                     style={{
                                         wordBreak: 'break-word', // Allow text to wrap in body cells
                                         minWidth: "100px", // Ensure minimum width for each column
