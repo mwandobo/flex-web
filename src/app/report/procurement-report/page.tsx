@@ -6,6 +6,11 @@ import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import RequisitionRequestReport from "@/app/report/procurement-report/items/requisition-request.report";
 import RfqReport from "@/app/report/procurement-report/items/rfq.report";
+import PurchaseOrderReport from "@/app/report/procurement-report/items/purchase-order.report";
+import InternalInvoiceReport from "@/app/report/procurement-report/items/internal-invoice.report";
+import ExternalInvoiceReport from "@/app/report/procurement-report/items/external-invoice.report";
+import PaymentReport from "@/app/report/procurement-report/items/payment.report";
+import OrderReport from "@/app/report/procurement-report/items/order.report";
 
 const ProcurementItems = [
     {
@@ -17,6 +22,31 @@ const ProcurementItems = [
         name: 'rfq',
         title: 'Request For Quotation',
         item: <RfqReport/>,
+    },
+    {
+        name: 'purchase-order',
+        title: 'Purchase Order',
+        item: <PurchaseOrderReport/>,
+    },
+    {
+        name: 'internal-invoice',
+        title: 'Internal Invoice (purchase)',
+        item: <InternalInvoiceReport/>,
+    },
+    {
+        name: 'external-invoice',
+        title: 'External Invoice (sale)',
+        item: <ExternalInvoiceReport/>,
+    },
+    {
+        name: 'payment',
+        title: 'Payments',
+        item: <PaymentReport/>,
+    },
+    {
+        name: 'order',
+        title: 'Orders',
+        item: <OrderReport/>,
     },
 ];
 
