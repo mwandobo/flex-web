@@ -11,9 +11,12 @@ import CustomTable from "@/components/tables/flexible-normal-table";
 import moneyFormater from "@/components/moneyFormater";
 
 const columns = [
-    {header: 'Requisition Code', accessor: 'formatted_code'},
-    {header: 'Store', accessor: 'store_name'},
-    {header: 'Store Keeper', accessor: 'store_keeper'},
+    {header: 'Rfq Code', accessor: 'formatted_code'},
+    {header: 'Requisition Code', accessor: 'requisition_request_name'},
+    {header: 'Payment Method', accessor: 'payment_method'},
+    {header: 'Evaluation Method', accessor: 'evaluation_method'},
+    {header: 'Decision Timeline', accessor: 'decision_timeline', },
+    {header: 'Delivery Time', accessor: 'delivery_time'},
     {header: 'Items', accessor: 'items', width: "300px"},
     {header: 'Amount (Tzs)', accessor: 'amount',  isAlignRight: true, isMoney: true},
     {header: 'Status', accessor: 'status'},
@@ -26,13 +29,13 @@ const subTableColumns: TableColumn[] = [
 ];
 
 
-function RequisitionRequestReport() {
+function RfqReport() {
     const [data, setData] = useState<any>([])
     const [total, setTotal] = useState(0)
     const [loading, setLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const token = getValueFromLocalStorage('token')
-    const url = 'report/procurement/requisition-request'
+    const url = 'report/procurement/rfq'
 
     useEffect(() => {
         const fetchData = async () => {
@@ -86,7 +89,7 @@ function RequisitionRequestReport() {
                     :
                     <>
                         <PageHeader
-                            subHeader={'Requisition Requests Report'}
+                            subHeader={'Request For Quotation Report'}
                             isShowPage={true}
                             isDownload={true}
                             ButtonDownloadComponent={
@@ -107,4 +110,4 @@ function RequisitionRequestReport() {
     )
 }
 
-export default RequisitionRequestReport
+export default RfqReport

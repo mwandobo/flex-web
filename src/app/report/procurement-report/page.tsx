@@ -5,13 +5,18 @@ import React, {useEffect} from "react";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import RequisitionRequestReport from "@/app/report/procurement-report/items/requisition-request.report";
-
+import RfqReport from "@/app/report/procurement-report/items/rfq.report";
 
 const ProcurementItems = [
     {
         name: 'requisition-requests',
         title: 'Requisition Requests',
         item: <RequisitionRequestReport/>,
+    },
+    {
+        name: 'rfq',
+        title: 'Request For Quotation',
+        item: <RfqReport/>,
     },
 ];
 
