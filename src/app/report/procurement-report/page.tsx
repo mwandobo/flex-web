@@ -11,6 +11,11 @@ import InternalInvoiceReport from "@/app/report/procurement-report/items/interna
 import ExternalInvoiceReport from "@/app/report/procurement-report/items/external-invoice.report";
 import PaymentReport from "@/app/report/procurement-report/items/payment.report";
 import OrderReport from "@/app/report/procurement-report/items/order.report";
+import ServiceReport from "@/app/report/procurement-report/items/service.report";
+import SupplierReport from "@/app/report/procurement-report/items/supplier.report";
+import ItemReport from "@/app/report/procurement-report/items/item.report";
+import CustomerReport from "@/app/report/procurement-report/items/customer.report";
+import StoreReport from "@/app/report/procurement-report/items/store.report";
 
 const ProcurementItems = [
     {
@@ -47,6 +52,31 @@ const ProcurementItems = [
         name: 'order',
         title: 'Orders',
         item: <OrderReport/>,
+    },
+    {
+        name: 'item',
+        title: 'Items',
+        item: <ItemReport/>,
+    },
+    {
+        name: 'service',
+        title: 'Services',
+        item: <ServiceReport/>,
+    },
+    {
+        name: 'supplier',
+        title: 'Suppliers',
+        item: <SupplierReport/>,
+    },
+    {
+        name: 'customer',
+        title: 'Customer',
+        item: <CustomerReport/>,
+    },
+    {
+        name: 'store',
+        title: 'Stores',
+        item: <StoreReport/>,
     },
 ];
 
