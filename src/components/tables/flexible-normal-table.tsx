@@ -23,17 +23,19 @@ const ReusableTable: React.FC<TableProps> = ({
                                                  subTableAccessor,
                                              }) => {
 
+    console.log('Dtaaaa', data)
+
     // Function to render the nested sub-table
     const renderSubTable = (nestedData: Record<string, any>[]) => {
         return (
             <div className="w-full mt-2">
                 <table className="w-full table-fixed">
                     <thead>
-                    <tr className="font-semibold text-gray-700 bg-gray-100">
+                    <tr className="font-medium text-gray-700 bg-gray-100">
                         {subTableColumns.map((column, index) => (
                             <th
                                 key={index}
-                                className="px-2 py-2 border border-gray-200 text-center"
+                                className="px-2 text-xs py-2 font-medium border border-gray-200 text-center"
                                 style={{
                                     minWidth: "100px",
                                     wordBreak: 'break-word', // Allow text to wrap in header
@@ -50,7 +52,7 @@ const ReusableTable: React.FC<TableProps> = ({
                             {subTableColumns.map((column, colIndex) => (
                                 <td
                                     key={column.accessor}
-                                    className={`px-2 py-2 border border-gray-200 break-words ${
+                                    className={`px-2 text-xs py-2 border border-gray-200 break-words ${
                                         colIndex < subTableColumns.length - 1 ? 'border-r' : ''
                                     } ${column?.isAlignRight ? 'text-right' : 'text-left'}`}
                                     style={{
@@ -77,9 +79,9 @@ const ReusableTable: React.FC<TableProps> = ({
             <div className="w-full overflow-x-auto">
                 <table className="w-full table-fixed">
                     <thead>
-                    <tr className="font-semibold text-gray-700 bg-gray-100">
+                    <tr className="text-gray-700 bg-gray-100">
                         <th
-                            className="px-2 py-2 border border-gray-200 text-center"
+                            className="px-2 py-2 border text-xs font-medium border-gray-200 text-center"
                             style={{
                                 width: "50px",
                                 wordBreak: 'break-word', // Allow text to wrap in header
@@ -90,7 +92,7 @@ const ReusableTable: React.FC<TableProps> = ({
                         {columns.map((column, index) => (
                             <th
                                 key={index}
-                                className="px-2 py-2 border border-gray-200 text-center"
+                                className="px-2 py-2 text-xs font-medium border border-gray-200 text-center"
                                 style={{
                                     minWidth: "100px", // Ensure minimum width for each column
                                     wordBreak: 'break-word', // Allow text to wrap in header
@@ -106,7 +108,7 @@ const ReusableTable: React.FC<TableProps> = ({
                     {data.map((row, rowIndex) => (
                         <tr key={rowIndex} className="text-gray-700">
                             <td
-                                className="px-2 py-2 border border-gray-200 text-center"
+                                className="px-2 py-2 text-xs border border-gray-200 text-center"
                                 style={{ width: "50px" }}
                             >
                                 {rowIndex + 1}
@@ -115,7 +117,7 @@ const ReusableTable: React.FC<TableProps> = ({
                             {columns.map((column, colIndex) => (
                                 <td
                                     key={column.accessor}
-                                    className={`px-2 py-2 border border-gray-200 break-words ${
+                                    className={`px-2 py-2 text-xs border border-gray-200 break-words ${
                                         colIndex < columns.length - 1 ? 'border-r' : ''
                                     } ${column?.isAlignRight ? 'text-right' : 'text-left'}`}
                                     style={{

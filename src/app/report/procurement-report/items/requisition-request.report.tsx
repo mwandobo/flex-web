@@ -8,6 +8,7 @@ import GeneratePdf from "@/components/pdf/generate-pdf";
 import {get} from "@/utils/api";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import CustomTable from "@/components/tables/flexible-normal-table";
+import moneyFormater from "@/components/moneyFormater";
 
 const columns = [
     {header: 'Requisition Code', accessor: 'formatted_code'},
@@ -27,6 +28,7 @@ const subTableColumns: TableColumn[] = [
 
 function RequisitionRequestReport() {
     const [data, setData] = useState<any>([])
+    const [total, setTotal] = useState(0)
     const [loading, setLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const token = getValueFromLocalStorage('token')
@@ -38,8 +40,9 @@ function RequisitionRequestReport() {
                 setLoading(true)
                 const res = await get(url, token)
 
-                if (data && res.status === 200) {
-                    setData(res.data.data)
+                if ( res.status === 200) {
+                    setData(res.data.data.data)
+                    setTotal(res.data.data.total)
                     setLoading(false)
                 }
 
@@ -51,6 +54,7 @@ function RequisitionRequestReport() {
         };
         fetchData()
     }, [refresh])
+
 
 
     const pageRender = () =>{
@@ -66,7 +70,7 @@ function RequisitionRequestReport() {
                     <h3 className={'text-xs font-medium'}>Summary</h3>
                     <div className={'grid grid-cols-2 gap-2 text-xs font-medium'}>
                         <p className={'border-r border-gray-400 pr-2'}> Total Amount:</p>
-                        <p>17874524 TZS</p>
+                        <p>{moneyFormater({amount:total, isShowCurrency: true})}</p>
                     </div>
                 </div>
             </div>
