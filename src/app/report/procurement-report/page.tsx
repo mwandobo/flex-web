@@ -19,6 +19,9 @@ import StoreReport from "@/app/report/procurement-report/items/store.report";
 import DeliverableReport from "@/app/report/procurement-report/items/deliverable.report";
 import DeliveryReport from "@/app/report/procurement-report/items/deliveries.report";
 import InspectionReport from "@/app/report/procurement-report/items/inspection.report";
+import ResourceRequestReport from "@/app/report/procurement-report/items/resource-request.report";
+import FundRequestReport from "@/app/report/procurement-report/items/fund-request.report";
+import EquipmentReport from "@/app/report/procurement-report/items/equipment.report";
 
 const ProcurementItems = [
     {
@@ -96,6 +99,22 @@ const ProcurementItems = [
         title: 'Inspection',
         item: <InspectionReport/>,
     },
+    {
+        name: 'resource-request',
+        title: 'Resource Requests',
+        item: <ResourceRequestReport/>,
+    },
+    {
+        name: 'fund-request',
+        title: 'Fund Request',
+        item: <FundRequestReport/>,
+    },   {
+        name: 'equipment',
+        title: 'Equipment',
+        item: <EquipmentReport/>,
+    },
+
+
 ];
 
 function InventoryPage() {
