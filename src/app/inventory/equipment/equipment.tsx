@@ -18,7 +18,15 @@ const formInputs = [
         isError: false,
         errorMessage: ''
     },
-
+    {
+        name: 'price',
+        type: 'text',
+        label: 'Equipment Price',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
     {
         name: 'quantity',
         type: 'text',
@@ -51,6 +59,12 @@ const columns = [
         numeric: false,
         disablePadding: false,
         label: 'Serial Number',
+    },
+    {
+        id: 'price',
+        numeric: false,
+        disablePadding: false,
+        label: 'Price',
     },
     {
         id: 'quantity',

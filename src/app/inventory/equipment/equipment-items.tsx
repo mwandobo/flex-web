@@ -20,44 +20,37 @@ const formInputs = [
 
 const columns = [
     {
-        id: 'item_name',
+        id: 'user_name',
         numeric: false,
         disablePadding: false,
-        label: 'Item Name',
-        width: '20%'
+        label: 'Assigned To',
     },
     {
-        id: 'item_price',
+        id: 'formatted_checked_out_date',
         numeric: false,
         disablePadding: false,
-        label: 'Item Price',
+        label: 'Assigned Date',
     },
     {
-        id: 'price',
+        id: 'formatted_return_date',
         numeric: false,
         disablePadding: false,
-        label: 'Quotation Price',
+        label: 'Return Date',
     },
     {
-        id: 'quantity',
+        id: 'status',
         numeric: false,
         disablePadding: false,
-        label: 'Purchased Quantity',
-    },
-    {
-    id: 'delivery_quantity',
-        numeric: false,
-        disablePadding: false,
-        label: 'Delivered Quantity',
+        label: 'Status',
     }
 ]
 
 interface Props {
-    delivery: any
+    equipment: any
 }
 
-function EquipmentItems({delivery}: Props) {
-    const permission = 'delivery_item'
+function EquipmentItems({equipment}: Props) {
+    const permission = 'equipment'
 
     const {
         loading,
@@ -68,16 +61,16 @@ function EquipmentItems({delivery}: Props) {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: `deliveries/${delivery?.id}/bids?type=${delivery.type}`,
-        modalTitle: 'Delivery Item',
+        url: `equipment/${equipment?.id}/history`,
+        modalTitle: 'Equipment History',
         viewUrl: '/inventory/items-categories/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'delivery-items',
+        from: 'equipment-history',
         isHideShow: true,
         isHideDelete: true,
-        isHideEdit: delivery?.status !== 'pending'
+        isHideEdit: true
     })
 
     return (
@@ -88,7 +81,7 @@ function EquipmentItems({delivery}: Props) {
                         :
                         <>
                             <PageHeader
-                                title={"Delivery Items"}
+                                title={"Equipment History"}
                                 handleClick={handleClick}
                                 isShowAddButton={false}
 

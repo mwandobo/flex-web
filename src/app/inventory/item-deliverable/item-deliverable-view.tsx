@@ -72,8 +72,6 @@ const ItemDeliverableView = () => {
         }
     }
 
-
-
     const {state} = useGlobalContextHook()
     const {viewedItem} = state;
     const {id} = viewedItem;
@@ -206,7 +204,6 @@ const ItemDeliverableView = () => {
                                     </div>
                                 }
                             </div>
-                            <hr className="bg-gray-100"/>
                             <hr className="bg-gray-100"/>
                             <div className={'flex justify-between mt-2'}>
                                 <>
