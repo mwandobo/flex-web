@@ -113,8 +113,6 @@ const ProcurementItems = [
         title: 'Equipment',
         item: <EquipmentReport/>,
     },
-
-
 ];
 
 function InventoryPage() {
@@ -132,8 +130,8 @@ function InventoryPage() {
         dispatch({type: "SET_SUB_VIEW_ITEM", payload: sideViewPayload})
     }, []);
 
-    return <InternalMenuSkeletonComponent pageItems={ProcurementItems} title="Procurement Management"
-                                          subtitle='Procurement Items'/>;
+    return <InternalMenuSkeletonComponent pageItems={ProcurementItems} title="All Procurement Reports"
+                                          subtitle='Reports'/>;
 }
 
 export default InventoryPage;

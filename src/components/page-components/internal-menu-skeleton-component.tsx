@@ -51,7 +51,6 @@ function InternalMenuSkeletonComponent({ pageItems, title , subtitle}: Inventory
             </div>
 
             {/* Content */}
-            <div className="flex flex-col p-4 h-full w-full bg-white">
               <div className="flex flex-col p-4 h-full w-full bg-white">
                 {pageItems.map((item, index) => (
                     <div key={index}>
@@ -62,7 +61,6 @@ function InternalMenuSkeletonComponent({ pageItems, title , subtitle}: Inventory
                       )}
                     </div>
                 ))}
-              </div>
             </div>
           </div>
         </div>
