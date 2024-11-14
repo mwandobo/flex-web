@@ -9,6 +9,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import HydrationZustand from "./Hydrated";
 import { GlobalContextProvider } from "@/context/GlobalContext";
+import NotificationComponent from "@/components/notification.component";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -51,6 +52,7 @@ export default function RootLayout({
                 </div>
               </div>
               <Footer/>
+              <NotificationComponent/>
             </div>
           </GlobalContextProvider>
         </HydrationZustand>
