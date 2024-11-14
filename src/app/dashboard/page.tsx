@@ -27,7 +27,6 @@ function Dashboard() {
     const token = getValueFromLocalStorage('token')
 
     const toggleYearSelection = (year: number) => {
-        console.log('toggled')
         setSelectedYears(prevSelectedYears =>
             prevSelectedYears.includes(year)
                 ? prevSelectedYears.filter(selectedYear => selectedYear !== year)
@@ -109,9 +108,6 @@ function Dashboard() {
 
         fetchAllData();
     }, [refresh]); // Fet
-
-
-    console.log('budgetData', budgetData)
 
     const navigateToLogin = () => {
         return router.push('/login')

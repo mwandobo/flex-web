@@ -17,9 +17,9 @@ import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {ReusableButton} from "@/components/button/reusable-button";
 import {FileOutput} from "lucide-react";
 import DocumentViewer from "@/components/page-components/document-viewer";
+import {toast} from "react-toastify";
 
 const PaymentView = () => {
-
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
     const router = useRouter()
@@ -55,6 +55,15 @@ const PaymentView = () => {
             const res = await get(`${url}/submit-draft`, token);
             if (data && res.status === 200) {
                 setRefresh(!refresh);
+                toast.success("Action completed successfully!", {
+                    position: "top-right",
+                    autoClose: 5000, // 5 seconds
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
         } catch (error: any) {
             console.log(error);

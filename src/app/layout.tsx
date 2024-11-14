@@ -10,6 +10,7 @@ import Footer from "@/components/footer";
 import HydrationZustand from "./Hydrated";
 import { GlobalContextProvider } from "@/context/GlobalContext";
 import NotificationComponent from "@/components/notification.component";
+import {ToastContainer} from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -53,6 +54,7 @@ export default function RootLayout({
               </div>
               <Footer/>
               <NotificationComponent/>
+              <ToastContainer position="top-right" autoClose={5000} />
             </div>
           </GlobalContextProvider>
         </HydrationZustand>
@@ -62,11 +64,6 @@ export default function RootLayout({
     </html >
 
   );
-
-
-
-  return <p>Authenticated</p>
-
 }
 
 

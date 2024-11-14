@@ -21,11 +21,9 @@ async function connectToRabbitMQ() {
 
                 try {
                     const message = JSON.parse(msg.content.toString());
-                    console.log('Parsed message:', message);
 
                     if (message && message.data && message.data.command) {
                         const serializedCommand = message.data.command;
-                        console.log('Found serialized command:', serializedCommand);
 
                         // Extract the message part from the serialized command string
                         const regex = /s:\d+:"message";s:\d+:"(.*?)";/;
@@ -37,20 +35,15 @@ async function connectToRabbitMQ() {
                             // Now parse it as a JSON object
                             try {
                                 const parsedData = JSON.parse(jsonString);
-                                console.log('Parsed JSON data:', parsedData);
 
                                 // Extract the new fields from the parsed data
-                                const { text, user_id, for: forField, for_id } = parsedData;
-                                console.log('Text:', text);
-                                console.log('User ID:', user_id);
-                                console.log('For:', forField);      // New field
-                                console.log('For ID:', for_id);     // New field
+                                const { text, user_id, for_name, for_id } = parsedData;
 
                                 // Send it to WebSocket clients
                                 wss.clients.forEach(client => {
                                     if (client.readyState === WebSocket1.OPEN) {
                                         // Include the new fields in the WebSocket message
-                                        client.send(JSON.stringify({ text, user_id, for: forField, for_id }));
+                                        client.send(JSON.stringify({ text, user_id, for_name, for_id }));
                                     }
                                 });
                             } catch (jsonError) {
