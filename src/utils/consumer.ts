@@ -1,6 +1,6 @@
 const amqp = require('amqplib');
 const WebSocket1 = require('ws');
-// const phpSerialize = require('php-serialize');
+const phpSerialize = require('php-serialize');
 
 
 const wss = new WebSocket1.Server({ port: 8083 }); // WebSocket server on port 8080
@@ -17,26 +17,55 @@ async function connectToRabbitMQ() {
 
         channel.consume(queue, (msg) => {
             if (msg) {
-                const message = JSON.parse(msg.content.toString());
+                console.log('Received raw message:', msg.content.toString());
 
-                console.log('Received message:', message);
+                try {
+                    const message = JSON.parse(msg.content.toString());
+                    console.log('Parsed message:', message);
 
-                // const deserializedData = phpSerialize.unserialize(message.data.command);
+                    if (message && message.data && message.data.command) {
+                        const serializedCommand = message.data.command;
+                        console.log('Found serialized command:', serializedCommand);
 
-                // const { text, user_id } = deserializedData.message;
-                //
-                // console.log('Text:', text); // "Resource Was Requested"
-                // console.log('User ID:', user_id); // 1
+                        // Extract the message part from the serialized command string
+                        const regex = /s:\d+:"message";s:\d+:"(.*?)";/;
+                        const match = regex.exec(serializedCommand);
 
+                        if (match && match[1]) {
+                            const jsonString = match[1]; // Extract the JSON string
 
-                // Send message to all connected WebSocket clients
-                wss.clients.forEach(client => {
-                    if (client.readyState === WebSocket1.OPEN) {
-                        client.send(JSON.stringify(message));
+                            // Now parse it as a JSON object
+                            try {
+                                const parsedData = JSON.parse(jsonString);
+                                console.log('Parsed JSON data:', parsedData);
+
+                                // Extract the new fields from the parsed data
+                                const { text, user_id, for: forField, for_id } = parsedData;
+                                console.log('Text:', text);
+                                console.log('User ID:', user_id);
+                                console.log('For:', forField);      // New field
+                                console.log('For ID:', for_id);     // New field
+
+                                // Send it to WebSocket clients
+                                wss.clients.forEach(client => {
+                                    if (client.readyState === WebSocket1.OPEN) {
+                                        // Include the new fields in the WebSocket message
+                                        client.send(JSON.stringify({ text, user_id, for: forField, for_id }));
+                                    }
+                                });
+                            } catch (jsonError) {
+                                console.error('Error parsing JSON:', jsonError);
+                            }
+                        } else {
+                            console.error('Failed to extract JSON string from serialized command');
+                        }
+
+                        channel.ack(msg);
                     }
-                });
-
-                channel.ack(msg);
+                } catch (error) {
+                    console.error('Error processing message:', error);
+                    channel.nack(msg);  // Optionally nack the message to retry processing
+                }
             }
         });
     } catch (error) {
