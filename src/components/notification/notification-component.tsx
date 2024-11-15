@@ -32,7 +32,7 @@ const NotificationComponent = () => {
 
     const handleDispatch = (notifications: any[]) => {
         const notificationPayload = {
-            count: notifications.length,
+            count: notifications.filter((note: any) => !note.is_read ).length,
             notifications: notifications,
         };
 

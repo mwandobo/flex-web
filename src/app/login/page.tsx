@@ -43,10 +43,14 @@ export default function LoginPage() {
                 if (response.status === 200) {
                     const user = response?.data?.user
                     const role = response?.data?.role
-                    const permissions = response?.data?.permissions
-                    const approvals = response?.data?.approvals
-                    const sys_approvals = response?.data?.sys_approvals
-                    const approved_items = response?.data?.approved_items
+                    const {
+                        permissions,
+                        approvals,
+                        sys_approvals,
+                        approved_items,
+                        notifications,
+                    } =response?.data
+
                     const token = JSON.stringify(user?.token);
 
                     if (Number(user.is_otp_verified) === 0) {
@@ -59,15 +63,23 @@ export default function LoginPage() {
                         return;
                     }
 
-                    // dispatch 
+                    const notificationPayload = {
+                        count: notifications.filter((note: any) => !note.is_read).length,
+                        notifications: notifications,
+                    };
+
+                    dispatch({type: "UPDATE_NOTIFICATION_BODY", payload: notificationPayload});
                     dispatch({type: 'SET_CURRENT_USER', payload: user})
+
+                    // dispatch
                     if (setValueLocalStorage('token', token) === 1 &&
                         setValueLocalStorage('user', JSON.stringify(user)) &&
                         setValueLocalStorage('role', JSON.stringify(role)) &&
                         setValueLocalStorage('permissions', JSON.stringify(permissions)) &&
                         setValueLocalStorage('approvals', JSON.stringify(approvals)) &&
                         setValueLocalStorage('sys_approvals', JSON.stringify(sys_approvals)) &&
-                        setValueLocalStorage('approved_items', JSON.stringify(approved_items))
+                        setValueLocalStorage('approved_items', JSON.stringify(approved_items)) &&
+                        setValueLocalStorage("notificationBody", JSON.stringify(notificationPayload))
                     ) {
                         setLoading(!loading)
                         router.push('/')
