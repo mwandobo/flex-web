@@ -27,7 +27,7 @@ const NotificationComponent = () => {
     }, []);
 
     const toggleIsDropdownOpen = () => {
-        numberOfNotifications > 0 && setIsDropdownOpen(!isDropdownOpen);
+         setIsDropdownOpen(!isDropdownOpen);
     };
 
     const handleDispatch = (notifications: any[]) => {
@@ -66,10 +66,6 @@ const NotificationComponent = () => {
             const updatedNotification = await remove(`notifications/${note?.id}`, token);
             if (updatedNotification.status === 200) {
                 const newNotes = notes.filter((note, _index) => Number(_index) !== Number(index))
-
-                console.log('notes', notes)
-                console.log('newNotes', newNotes)
-
                 handleDispatch(newNotes)
             }
         } catch (error) {
@@ -154,7 +150,7 @@ const NotificationComponent = () => {
                                                 <p className={'ms-2'}></p>
                                             }
                                             <p className="me-1">{index + 1}</p>
-                                            <p>{note.text}</p>
+                                            <p>{note.title}</p>
                                         </div>
                                         <div className={'flex gap-2 items-center'}>
                                             <button
@@ -168,9 +164,12 @@ const NotificationComponent = () => {
 
                                     {/* Expanded details */}
                                     {expandedNotification === index && (
-                                        <div className="mt-2 text-gray-500 ">
-                                            <p>Sender: {note?.user_name || 'Unknown'}</p>
-                                            <p>Sent On: {note?.formatted_date || 'Unknown'}</p>
+                                        <div className="mt-2 text-gray-700 ps-4">
+                                            <p className={`border  ${index % 2 === 0 ? 'border-gray-200' : 'border-gray-300'} p-1 ps-2 rounded-md`}>{note?.description }</p>
+                                            <div className={'flex gap-3 justify-end'}>
+                                                <p style={{fontSize: '9px'}}>Sender: {note?.user_name || 'Unknown'}</p>
+                                                <p style={{fontSize: '9px'}}>Sent On: {note?.formatted_date || 'Unknown'}</p>
+                                            </div>
                                         </div>
                                     )}
                                 </div>

@@ -17,7 +17,7 @@ function WebSocketComponent() {
         // Make the onmessage handler asynchronous
         socket.onmessage = async (event) => {
             const data = JSON.parse(event.data);
-            const {for_id, for_name, text, user_id} = data;
+            const {for_id, for_name, description, title, user_id} = data;
 
             const user_from_storage = getValueFromLocalStorage("user");
             const user = JSON.parse(user_from_storage);
@@ -37,7 +37,7 @@ function WebSocketComponent() {
                         setValueLocalStorage("notificationBody", JSON.stringify(notificationPayload));
 
                         ToastComponent({
-                            text: text,
+                            text: title,
                             duration: 10000,
                         });
                     }
