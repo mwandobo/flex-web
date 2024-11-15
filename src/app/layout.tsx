@@ -9,7 +9,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import HydrationZustand from "./Hydrated";
 import { GlobalContextProvider } from "@/context/GlobalContext";
-import NotificationComponent from "@/components/notification.component";
+import WebSocketComponent from "@/components/web-socket.component";
 import {ToastContainer} from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -34,7 +34,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
 
-
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -53,7 +52,7 @@ export default function RootLayout({
                 </div>
               </div>
               <Footer/>
-              <NotificationComponent/>
+              <WebSocketComponent/>
               <ToastContainer position="top-right" autoClose={5000} />
             </div>
           </GlobalContextProvider>

@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var amqp = require('amqplib');
 var WebSocket1 = require('ws');
-// const phpSerialize = require('php-serialize');
+var phpSerialize = require('php-serialize');
 var wss = new WebSocket1.Server({ port: 8083 }); // WebSocket server on port 8080
 function connectToRabbitMQ() {
     return __awaiter(this, void 0, void 0, function () {
@@ -58,20 +58,43 @@ function connectToRabbitMQ() {
                     console.log('Waiting for messages in %s. To exit press CTRL+C', queue);
                     channel_1.consume(queue, function (msg) {
                         if (msg) {
-                            var message_1 = JSON.parse(msg.content.toString());
-                            console.log('Received message:', message_1);
-                            // const deserializedData = phpSerialize.unserialize(message.data.command);
-                            // const { text, user_id } = deserializedData.message;
-                            //
-                            // console.log('Text:', text); // "Resource Was Requested"
-                            // console.log('User ID:', user_id); // 1
-                            // Send message to all connected WebSocket clients
-                            wss.clients.forEach(function (client) {
-                                if (client.readyState === WebSocket1.OPEN) {
-                                    client.send(JSON.stringify(message_1));
+                            console.log('Received raw message:', msg.content.toString());
+                            try {
+                                var message = JSON.parse(msg.content.toString());
+                                if (message && message.data && message.data.command) {
+                                    var serializedCommand = message.data.command;
+                                    // Extract the message part from the serialized command string
+                                    var regex = /s:\d+:"message";s:\d+:"(.*?)";/;
+                                    var match = regex.exec(serializedCommand);
+                                    if (match && match[1]) {
+                                        var jsonString = match[1]; // Extract the JSON string
+                                        // Now parse it as a JSON object
+                                        try {
+                                            var parsedData = JSON.parse(jsonString);
+                                            // Extract the new fields from the parsed data
+                                            var text_1 = parsedData.text, user_id_1 = parsedData.user_id, for_name_1 = parsedData.for_name, for_id_1 = parsedData.for_id;
+                                            // Send it to WebSocket clients
+                                            wss.clients.forEach(function (client) {
+                                                if (client.readyState === WebSocket1.OPEN) {
+                                                    // Include the new fields in the WebSocket message
+                                                    client.send(JSON.stringify({ text: text_1, user_id: user_id_1, for_name: for_name_1, for_id: for_id_1 }));
+                                                }
+                                            });
+                                        }
+                                        catch (jsonError) {
+                                            console.error('Error parsing JSON:', jsonError);
+                                        }
+                                    }
+                                    else {
+                                        console.error('Failed to extract JSON string from serialized command');
+                                    }
+                                    channel_1.ack(msg);
                                 }
-                            });
-                            channel_1.ack(msg);
+                            }
+                            catch (error) {
+                                console.error('Error processing message:', error);
+                                channel_1.nack(msg); // Optionally nack the message to retry processing
+                            }
                         }
                     });
                     return [3 /*break*/, 5];

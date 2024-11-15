@@ -105,7 +105,6 @@ function Dashboard() {
             }
         };
 
-
         fetchAllData();
     }, [refresh]); // Fet
 
@@ -152,7 +151,6 @@ function Dashboard() {
         {name: "Total Pending IN Payment", quantity: salesPurchaseStats?.total_pending_in_payments},
         {name: "Total Pending OUT Payment", quantity: salesPurchaseStats?.total_pending_out_payments},
     ]
-
 
     const years = [2020, 2021, 2022, 2023, 2024]
     return (

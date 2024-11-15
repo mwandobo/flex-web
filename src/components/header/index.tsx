@@ -1,9 +1,10 @@
 'use client'
-import React, {  useEffect } from "react";
+import React, {useEffect,} from "react";
 import { useRouter } from "next/navigation";
 import { getValueFromLocalStorage, removeValueFromLocalStorage } from "@/utils/actions/local-starage";
 import { useGlobalContextHook } from "@/hooks/useGlobalContextHook";
 import ProfileDropdown from "@/components/dropdown/profile-dropdown.component";
+import NotificationComponent from "@/components/notification/notification-component";
 
 function Header() {
     const router = useRouter();
@@ -34,7 +35,8 @@ function Header() {
     return (
         <nav className="w-full flex justify-between p-2 py-4 bg-white border-b border-gray-200 sticky top-0 z-20 mb-6">
             <img className='h-10 w-fit ms-4' src="/logo.png" alt="logo"/>
-            <div className="flex items-center justify-end me-8">
+            <div className="flex items-center justify-end me-8 gap-2">
+                <NotificationComponent />
                 <ProfileDropdown name={currentUser?.email} handleLogout={handleLogout}/>
             </div>
         </nav>

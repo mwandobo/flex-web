@@ -1,4 +1,4 @@
-import { CircleUserRound} from 'lucide-react';
+import {Bell, CircleUserRound} from 'lucide-react';
 import {useState, useRef, useEffect} from 'react';
 
 interface Props {
@@ -31,8 +31,15 @@ const ProfileDropdown = ({
     }, []);
 
     return (
-        <div className="relative" ref={dropdownRef}>
+        <div className="relative flex gap-4" ref={dropdownRef}>
             {/* Trigger Button */}
+            <button
+                onClick={() => console.log('hi')}
+                className="flex items-center space-x-2 focus:outline-none"
+            >
+                <Bell className={'text-gray-500'}/>
+            </button>
+
             <button
                 onClick={toggleDropdown}
                 className="flex items-center space-x-2 focus:outline-none"

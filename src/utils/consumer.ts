@@ -42,7 +42,6 @@ async function connectToRabbitMQ() {
                                 // Send it to WebSocket clients
                                 wss.clients.forEach(client => {
                                     if (client.readyState === WebSocket1.OPEN) {
-                                        // Include the new fields in the WebSocket message
                                         client.send(JSON.stringify({ text, user_id, for_name, for_id }));
                                     }
                                 });
