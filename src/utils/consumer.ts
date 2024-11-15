@@ -1,7 +1,5 @@
 const amqp = require('amqplib');
 const WebSocket1 = require('ws');
-const phpSerialize = require('php-serialize');
-
 
 const wss = new WebSocket1.Server({ port: 8083 }); // WebSocket server on port 8080
 

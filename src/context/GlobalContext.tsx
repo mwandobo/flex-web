@@ -30,16 +30,22 @@ interface viewedItem {
     from: string
 }
 
+interface notificationBody {
+    count: string,
+    notifications: any
+}
+
 
 
 type State = {
     currentUser: CurrentUserProps | null;
     planningCount: PlanningCountProps;
     selectedMonitoringItem: SelectedMonitoringItemProps;
-    evaluationForm: evaluationForm
+    evaluationForm
     selectedSubSidebarItem: string
     viewItemRefreshAfterApproval: boolean
-    viewedItem: viewedItem
+    viewedItem
+    notificationBody
 };
 
 type Action = {
@@ -67,6 +73,15 @@ const initialViewedItem: viewedItem = {
     from: ''
 }
 
+const initialNotificationBody: notificationBody = {
+    count: '3',
+    notifications: [
+        {text: "This is sample notification text"},
+        {text: "This is sample notification text"},
+        {text: "This is sample notification text"},
+    ]
+}
+
 const initialEvaluationForm: evaluationForm = {
     data: [],
 }
@@ -78,8 +93,8 @@ const initialState: State = {
     evaluationForm: initialEvaluationForm,
     selectedSubSidebarItem: '',
     viewItemRefreshAfterApproval: false,
-    viewedItem: initialViewedItem
-
+    viewedItem: initialViewedItem,
+    notificationBody: initialNotificationBody
 };
 
 export const GlobalContext = createContext<{ state: State; dispatch: Dispatch }>({
@@ -161,6 +176,11 @@ export const updateContextReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 viewItemRefreshAfterApproval: !state.viewItemRefreshAfterApproval
+            };
+        case 'UPDATE_NOTIFICATION_BODY':
+            return {
+                ...state,
+                notificationBody: action.payload
             };
         default:
             return state;
