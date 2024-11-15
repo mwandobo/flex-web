@@ -74,12 +74,8 @@ const initialViewedItem: viewedItem = {
 }
 
 const initialNotificationBody: notificationBody = {
-    count: '3',
-    notifications: [
-        {text: "This is sample notification text"},
-        {text: "This is sample notification text"},
-        {text: "This is sample notification text"},
-    ]
+    count: '0',
+    notifications: [ ]
 }
 
 const initialEvaluationForm: evaluationForm = {
