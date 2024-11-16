@@ -9,7 +9,6 @@ import PopupModal from "../modal/popup-modal"
 import MuiMultiSelectSelect from "@/components/inputs/mui-multi-select";
 import {ReactNode, useState} from "react"
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
-import PushNotification from "@/components/notification/push-notification";
 import FileInputComponent from "@/components/inputs/file-input.component";
 
 interface Props {
@@ -177,11 +176,6 @@ const CrudFormComponent = ({
                 >
                     {!isDisabled && <CheckCircle2 size={13}/>}
                 </ReusableButton>
-                <PushNotification
-                    message={notification.message}
-                    type={notification.type}
-                    onClose={() => setNotification({message: '', type: ''})}
-                />
             </div>
         </>
 

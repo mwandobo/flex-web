@@ -5,6 +5,7 @@ import {baseURL, post, put, remove} from "@/utils/api"
 import {ReactNode, useEffect, useState} from "react"
 import Swal from "sweetalert2"
 import {gracefulApprovalUpdater} from "@/utils/actions/update-approvals.helper";
+import ToastComponent from "@/components/tables/toast";
 
 interface Props {
     isModalOpen: boolean
@@ -299,7 +300,11 @@ export const useCrudFormCreator = ({
                 }
             }
             if ([200, 201].includes(response?.status)) {
+
+                console.log('response', response)
                 await gracefulApprovalUpdater(from)
+
+                ToastComponent({text: response?.data?.message?? "Operation Went Successfully", duration: 1000})
 
                 if (emailNotificationBody &&
                     Object.keys(emailNotificationBody).length > 0 &&
