@@ -34,13 +34,10 @@ async function connectToRabbitMQ() {
                             try {
                                 const parsedData = JSON.parse(jsonString);
 
-                                // Extract the new fields from the parsed data
-                                const { text, user_id, for_name, for_id } = parsedData;
-
                                 // Send it to WebSocket clients
                                 wss.clients.forEach(client => {
                                     if (client.readyState === WebSocket1.OPEN) {
-                                        client.send(JSON.stringify({ text, user_id, for_name, for_id }));
+                                        client.send(JSON.stringify(parsedData));
                                     }
                                 });
                             } catch (jsonError) {

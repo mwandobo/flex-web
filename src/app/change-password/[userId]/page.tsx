@@ -58,7 +58,7 @@ const ChangePasswordPage = ({params}: { params: { userId: string } }) => {
 
             if (response.status === 200) {
                 setLoading(false);
-                router.push('login');
+                router.push('/login');
             }
         } catch (error) {
             const message = error?.response?.data?.message || error.message || 'Unknown error occurred';

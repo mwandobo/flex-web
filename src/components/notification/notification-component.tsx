@@ -30,7 +30,7 @@ const NotificationComponent = () => {
          setIsDropdownOpen(!isDropdownOpen);
     };
 
-    const handleDispatch = (notifications: any[]) => {
+    const handleNotificationDispatch = (notifications: any[]) => {
         const notificationPayload = {
             count: notifications.filter((note: any) => !note.is_read ).length,
             notifications: notifications,
@@ -50,7 +50,7 @@ const NotificationComponent = () => {
                 const updatedNotification = await get(`notifications/${note?.id}/read`, token);
                 if (updatedNotification.status === 200) {
                     notes[index] = {...note, is_read: true}
-                    handleDispatch(notes)
+                    handleNotificationDispatch(notes)
                 }
             } catch (error) {
                 console.error("Error fetching notifications:", error);
@@ -66,7 +66,7 @@ const NotificationComponent = () => {
             const updatedNotification = await remove(`notifications/${note?.id}`, token);
             if (updatedNotification.status === 200) {
                 const newNotes = notes.filter((note, _index) => Number(_index) !== Number(index))
-                handleDispatch(newNotes)
+                handleNotificationDispatch(newNotes)
             }
         } catch (error) {
             console.error("Error fetching notifications:", error);
@@ -80,7 +80,7 @@ const NotificationComponent = () => {
                 const newNotes = notes.map(note => {
                     return {...note, is_read: true }
                 })
-                handleDispatch(newNotes)
+                handleNotificationDispatch(newNotes)
             }
         } catch (error) {
             console.error("Error fetching notifications:", error);
@@ -91,7 +91,7 @@ const NotificationComponent = () => {
         try {
             const updatedNotificationResult = await get(`notifications/delete-all`, token);
             if (updatedNotificationResult.status === 200) {
-                handleDispatch([])
+                handleNotificationDispatch([])
             }
         } catch (error) {
             console.error("Error fetching notifications:", error);
