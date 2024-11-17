@@ -1,6 +1,5 @@
 import CrudFormComponent from "@/components/forms/crud.form.component"
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage"
-import {send_email} from "@/utils/actions/send-email"
 import {baseURL, post, put, remove} from "@/utils/api"
 import {ReactNode, useEffect, useState} from "react"
 import Swal from "sweetalert2"
@@ -24,7 +23,6 @@ interface Props {
     isForm?: boolean
     state_properties: any[]
     isMultipart?: boolean,
-    emailNotificationBody?: any,
     isFormData?: boolean
 }
 
@@ -43,7 +41,6 @@ export const useCrudFormCreator = ({
                                        isForm,
                                        state_properties = [],
                                        isShowAddPriceButton,
-                                       emailNotificationBody,
                                        from,
     isFormData
                                    }: Props) => {
@@ -269,16 +266,6 @@ export const useCrudFormCreator = ({
         return validation
     }
 
-    const sendEmail = async (emailBody: any) => {
-        const emailresponse = await send_email(emailBody)
-        if (emailresponse.status === 200) {
-            Swal.fire({
-                title: "Email Sent SuccessFully",
-                text: "Email was sent successfully",
-                icon: "success"
-            })
-        }
-    }
 
     const handleSubmit = async () => {
         try {
@@ -300,20 +287,8 @@ export const useCrudFormCreator = ({
                 }
             }
             if ([200, 201].includes(response?.status)) {
-
-                console.log('response', response)
                 await gracefulApprovalUpdater(from)
-
                 ToastComponent({text: response?.data?.message?? "Operation Went Successfully", duration: 1000})
-
-                if (emailNotificationBody &&
-                    Object.keys(emailNotificationBody).length > 0 &&
-                    emailNotificationBody['code'] === 'create-employee' &&
-                    emailNotificationBody['operation'] === 'create'
-                ) {
-                    const emailBody = {...emailNotificationBody, id: response?.data?.data?.id}
-                    sendEmail(emailBody)
-                }
                 setIsStateChanged(!isStateChanged)
                 closeModel()
             }

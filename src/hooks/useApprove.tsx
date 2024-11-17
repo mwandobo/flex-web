@@ -145,7 +145,6 @@ export const useApprovalHook = ({
         const approveUrl = 'approval/approve';
         const {current_level} = getApprovalLevel();
 
-
         if (current_level) {
             body = {...body, approval_level_id: current_level.id};
             const response = await post(approveUrl, body, token);

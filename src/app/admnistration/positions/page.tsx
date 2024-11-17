@@ -32,7 +32,7 @@ function Positions({
             label: 'Department',
             value: parent_id,
             optionsData: [{ label: 'test', value: 'value' }],
-            optionsUrlData: 'department',
+            optionsUrlData: 'department?approved=approved',
             optionDataKey: 'departments',
             required: true,
             isError: false,

@@ -18,7 +18,6 @@ import Budget from "../../fragments/budget";
 import OutcomeCost from "../../fragments/outcome-cost";
 import LogFrameIndicator from "../../fragments/logframe-indicator";
 import Purpose from "../../fragments/purpose";
-import ApprovalWrapper from "@/components/wrappers/approval.wrapper";
 import ApprovalComponent from "@/components/page-components/approval-component";
 import {useApprovalHook} from "@/hooks/useApprove";
 import {PROJECT_APPROVAL_SLUG} from "@/utils/constant";

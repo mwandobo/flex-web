@@ -10,6 +10,8 @@ import { StatusCreatorHelperActive } from "@/utils/statusHelper/active";
 import { useEffect, useState } from "react";
 import Positions from "../../positions/page";
 import { useRouter } from "next/navigation";
+import {useApprovalHook} from "@/hooks/useApprove";
+import {DEPARTMENT_APPROVAL_SLUG, PROJECT_APPROVAL_SLUG} from "@/utils/constant";
 
 const DepartmentShow = ({ params }: { params: { departmentId: string } }) => {
 
@@ -20,11 +22,21 @@ const DepartmentShow = ({ params }: { params: { departmentId: string } }) => {
     const token = getValueFromLocalStorage('token')
 
     const id = params.departmentId
-
     const url = `department/show/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
+
+    const {
+        isNeedApprove,
+        isLastLevel,
+        latestApproveStatus,
+        approvalButtonsWrapper,
+    } = useApprovalHook({
+        approval_slug: DEPARTMENT_APPROVAL_SLUG,
+        from: DEPARTMENT_APPROVAL_SLUG,
+        from_id: id
+    })
 
     useEffect(() => {
         const fetchData = async () => {
@@ -68,6 +80,8 @@ const DepartmentShow = ({ params }: { params: { departmentId: string } }) => {
                                     ]}
                                     titleA={`Department`}
                                     titleB={` ${data?.name} `}
+                                    OptionalElement={approvalButtonsWrapper()}
+
                                 />
                             </div>
                             <hr className="bg-gray-100" />
