@@ -36,7 +36,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var amqp = require('amqplib');
 var WebSocket1 = require('ws');
-var phpSerialize = require('php-serialize');
 var wss = new WebSocket1.Server({ port: 8083 }); // WebSocket server on port 8080
 function connectToRabbitMQ() {
     return __awaiter(this, void 0, void 0, function () {
@@ -70,14 +69,11 @@ function connectToRabbitMQ() {
                                         var jsonString = match[1]; // Extract the JSON string
                                         // Now parse it as a JSON object
                                         try {
-                                            var parsedData = JSON.parse(jsonString);
-                                            // Extract the new fields from the parsed data
-                                            var text_1 = parsedData.text, user_id_1 = parsedData.user_id, for_name_1 = parsedData.for_name, for_id_1 = parsedData.for_id;
+                                            var parsedData_1 = JSON.parse(jsonString);
                                             // Send it to WebSocket clients
                                             wss.clients.forEach(function (client) {
                                                 if (client.readyState === WebSocket1.OPEN) {
-                                                    // Include the new fields in the WebSocket message
-                                                    client.send(JSON.stringify({ text: text_1, user_id: user_id_1, for_name: for_name_1, for_id: for_id_1 }));
+                                                    client.send(JSON.stringify(parsedData_1));
                                                 }
                                             });
                                         }
