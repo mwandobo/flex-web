@@ -1,5 +1,5 @@
-import { Button, CircularProgress, } from "@mui/material"
-import { ReactNode } from "react"
+import {Button, CircularProgress,} from "@mui/material"
+import {ReactNode} from "react"
 
 interface Props {
     name?: string,
@@ -8,42 +8,58 @@ interface Props {
     bg_color?: string
     text_color?: string
     hover?: string
+    hover_text?: string
     type?: "button" | "submit" | "reset"
     variant?: "contained" | "text" | "outlined" | undefined
     isDisabled?: boolean
     isClickable?: boolean
     isEndIcon?: boolean
     width?: string
-    _styles?: any
+    rounded?: string
+    padding?: string
+    border?: string
+    shadow?: string
+    isSmallButton?: boolean
 }
 
 export function ReusableButton({
-    name,
-    onClick,
-    children,
-    bg_color = 'gray',
-    text_color = 'white',
-    hover = 'black',
-    variant = 'contained',
-    isDisabled,
-    type = 'button',
-    isClickable = true,
-    isEndIcon,
-    width,
-    _styles,
-}: Props) {
-    return (
+                                   name,
+                                   onClick,
+                                   children,
+                                   bg_color = 'bg-gray-500',
+                                   text_color = 'text-white',
+                                   hover = 'hover:bg-gray-900',
+                                   hover_text = 'white',
+                                   variant = 'contained',
+                                   isDisabled,
+                                   type = 'button',
+                                   isClickable = true,
+                                   isEndIcon,
+                                   width,
+                                   rounded,
+    shadow,
+                                   padding,
+                                   border,
+                                   isSmallButton,
 
-        <button type={type} className={`bg-${bg_color}-500 text-white text-xs hover:bg-gray-900 active:bg-gray-800`} onClick={onClick}>
-            {isDisabled ? <CircularProgress size={20} /> :
-                <div className="flex gap-1 px-1 h-5 items-center">
+                               }: Props) {
+    return (
+        <button
+            type={type}
+            className={`${bg_color} ${text_color} ${border} text-xs ${hover}  ${shadow}  ${padding && padding} ${rounded && `rounded-${rounded}`}`}
+            onClick={onClick}
+            style={{
+                fontSize: isSmallButton && "8px"
+            }}
+        >
+            {isDisabled ? <CircularProgress size={20}/> :
+                <div className={`flex gap-1 ${text_color} ${hover_text} px-1 h-5 items-center`}>
                     {children}
                     {name}
                 </div>
             }
-        </button >
+        </button>
     )
-
 }
 
 

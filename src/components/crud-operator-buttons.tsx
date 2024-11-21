@@ -33,68 +33,110 @@ const CrudButtonsComponent = ({
         {show_assign && checkPermissions(`${permission ? `${permission}-assign` : ""}`) &&
             <ReusableButton
                 name='Assign'
-                text_color='text-dark'
                 onClick={() => handleClick && handleClick('assign', input)}
+                text_color={'text-gray-700'}
+                isSmallButton={true}
+                bg_color={'bg-gray-50'}
+                hover={'hover:bg-gray-200 hover:border-gray-400'}
+                hover_text={'hover:text-gray-900 hover:font-semibold'}
+                rounded={'md'}
+                border={'border border-gray-300'}
             >
-                <ShieldCheck size={10} color={color}/>
+                <ShieldCheck size={16} color={color}/>
             </ReusableButton>
         }
         {!hide_view && checkPermissions(`${permission ? `${permission}-show` : ""}`) &&
             <ReusableButton
                 name='View'
-                text_color='text-dark'
                 onClick={() => handleClick && handleClick('show', input)}
+                text_color={'text-gray-700'}
+                isSmallButton={true}
+                bg_color={'bg-gray-50'}
+                hover={'hover:bg-gray-200 hover:border-gray-400'}
+                hover_text={'hover:text-gray-900 hover:font-semibold'}
+                rounded={'md'}
+                border={'border border-gray-300'}
             >
-                <EyeIcon size={10} color={color}/>
+                <EyeIcon size={16} color={'black'}/>
             </ReusableButton>
         }
         {
             !hide_approve && checkPermissions(`${permission ? `${permission}-approve` : ""}`) &&
             <ReusableButton
                 name='Approve'
-                text_color='text-dark'
                 onClick={() => handleClick && handleClick('approve', input)}
+                text_color={'text-gray-700'}
+                isSmallButton={true}
+                bg_color={'bg-gray-50'}
+                hover={'hover:bg-gray-200 hover:border-gray-400'}
+                hover_text={'hover:text-gray-900 hover:font-semibold'}
+                rounded={'md'}
+                border={'border border-gray-300'}
             >
-                <CheckCircle2 size={10} color={color}/>
+                <CheckCircle2 size={16} color={'black'}/>
             </ReusableButton>
         }
         {
             !hide_approve && checkPermissions(`${permission ? `${permission}-approve` : ""}`) &&
             <ReusableButton
                 name='Disapprove'
-                text_color='text-dark'
                 onClick={() => handleClick && handleClick('disapprove', input)}
+                text_color={'text-gray-700'}
+                isSmallButton={true}
+                bg_color={'bg-gray-50'}
+                hover={'hover:bg-gray-200 hover:border-gray-400'}
+                hover_text={'hover:text-gray-900 hover:font-semibold'}
+                rounded={'md'}
+                border={'border border-gray-300'}
             >
-                <X size={10} color={'red'}/>
+                <X size={16} color={'red'}/>
             </ReusableButton>
         }
         {
             !hide_delete && checkPermissions(`${permission ? `${permission}-delete` : ''}`) &&
             <ReusableButton
                 name='Delete'
-                text_color='text-dark'
                 onClick={() => handleClick && handleClick('delete', input)}
+                text_color={'text-gray-700'}
+                isSmallButton={true}
+                bg_color={'bg-gray-50'}
+                hover={'hover:bg-gray-200 hover:border-gray-400'}
+                hover_text={'hover:text-gray-900 hover:font-semibold'}
+                rounded={'md'}
+                border={'border border-gray-300'}
             >
-                <Trash2 size={10} color='red'/>
+                <Trash2 size={16} color='red'/>
             </ReusableButton>}
 
         {
             !hide_edit && checkPermissions(`${permission ? `${permission}-edit` : ""}`) &&
             <ReusableButton
                 name='Edit'
-                text_color='text-dark'
                 onClick={() => handleClick && handleClick('edit', input)}
+                text_color={'text-gray-700'}
+                isSmallButton={true}
+                bg_color={'bg-gray-50'}
+                hover={'hover:bg-gray-200 hover:border-gray-400'}
+                hover_text={'hover:text-gray-900 hover:font-semibold'}
+                rounded={'md'}
+                border={'border border-gray-300'}
             >
-                <Pen size={10} color={color}/>
+                <Pen size={16} color={'black'}/>
             </ReusableButton>
         }
         {isShowAddPriceButton && checkPermissions(`${permission ? `${permission}-add-price` : ""}`) &&
             <ReusableButton
                 name='Price'
-                text_color='text-dark'
                 onClick={() => handleClick && handleClick('add-price', input)}
+                text_color={'text-gray-700'}
+                isSmallButton={true}
+                bg_color={'bg-gray-50'}
+                hover={'hover:bg-gray-200 hover:border-gray-400'}
+                hover_text={'hover:text-gray-900 hover:font-semibold'}
+                rounded={'md'}
+                border={'border border-gray-300'}
             >
-                <ShieldCheck size={10} color={color}/>
+                <ShieldCheck size={16} color={'black'}/>
             </ReusableButton>
         }
     </div>

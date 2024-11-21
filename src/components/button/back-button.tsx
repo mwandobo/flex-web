@@ -15,8 +15,17 @@ const BackButton = () => {
         <div>
             <ReusableButton
                 name="Back"
-                onClick={handleNavigateBack}>
-                <ArrowLeftSquare size={13} />
+                onClick={handleNavigateBack}
+                rounded={'md'}
+                padding={'p-1'}
+                shadow={'shadow-md'}
+                bg_color={'bg-gray-50'}
+                hover={'hover:bg-gray-200 hover:border-gray-400'}
+                hover_text={'hover:text-gray-900 hover:font-semibold'}
+                border={'border border-gray-300'}
+                text_color={'text-gray-700'}
+            >
+                <ArrowLeftSquare size={18} />
             </ReusableButton>
         </div>
     )
