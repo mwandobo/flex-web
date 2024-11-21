@@ -27,12 +27,12 @@ const TextFieldComponent = ({
     from
 }: TextFieldsProps) => {
     const labelStyles = {
-        fontSize: '13px',
+        fontSize: '16px',
         color: 'black',
     };
 
     const inputStyles = {
-        fontSize: '12px',
+        fontSize: '16px',
         color: 'black',
     };
 
@@ -44,7 +44,7 @@ const TextFieldComponent = ({
         }}
         InputLabelProps={{ style: labelStyles }}
         inputProps={{ style: inputStyles }}
-        size="small"
+        size="medium"
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e, from)}
