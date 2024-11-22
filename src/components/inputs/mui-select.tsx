@@ -69,19 +69,35 @@ const MuiSelect = ({
 
   return (
     <>
+      {error && <p className="text-red-400 mb-2" style={{fontSize: '12px'}}>{error}</p>
+      }
       <FormControl fullWidth>
         <InputLabel
           id={`${label}-select-label`}
           style={{
             display: 'flex',
-            fontSize: '13px',
+            fontSize: '16px',
             justifyContent: 'center',
             marginTop: "-5px",
             color: 'black'
           }}
         >
-          {`${label}`}
-        </InputLabel>
+          {isRequired ? (
+              <span style={{ display: "flex", alignItems: "center" }}>
+              {label}{" "}
+                <span
+                    style={{
+                      color: "red",
+                      marginLeft: "4px",
+                      fontSize: "16px",
+                    }}
+                >
+                *
+              </span>
+            </span>
+          ) : (
+              label
+          )}        </InputLabel>
         <Select
           labelId={`${label}-select-label`}
           id={`${label}-select`}
@@ -90,7 +106,7 @@ const MuiSelect = ({
           onChange={onChange}
           disabled={isDisabled}
           required={isRequired}
-          size="small"
+          size="medium"
           style={{
             marginBottom: "20px"
           }}
@@ -101,7 +117,7 @@ const MuiSelect = ({
                 key={option.value}
                 value={option.value}
                 style={{
-                  fontSize: '13px'
+                  fontSize: '16px'
                 }}
               >
                 {option.label}
@@ -109,8 +125,7 @@ const MuiSelect = ({
             ))}
         </Select>
       </FormControl >
-      {error && <p className="text-red-700 p-3">{error}</p>
-      }
+
     </>
   )
 };

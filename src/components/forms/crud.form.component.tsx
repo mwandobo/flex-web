@@ -83,6 +83,8 @@ const CrudFormComponent = ({
                                                         onChange={handleInputChange}
                                                         isError={item.isError}
                                                         errorMessage={item.errorMessage}
+                                                        isRequired={item.required}
+                                                        isDisabled={item.isDisabled}
                                                     />
                                                 )}
                                                 {item?.type === 'file' && (
@@ -111,6 +113,7 @@ const CrudFormComponent = ({
                                                         value={item.value}
                                                         error={item.errorMessage}
                                                         isDisabled={isDisabled}
+                                                        isRequired={item.required}
                                                     />
                                                 )}
 

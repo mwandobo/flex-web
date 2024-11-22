@@ -42,7 +42,7 @@ export const useCrudFormCreator = ({
                                        state_properties = [],
                                        isShowAddPriceButton,
                                        from,
-    isFormData
+                                       isFormData
                                    }: Props) => {
     const createPayload = (body: any[]) => {
         const payload: any = {};
@@ -74,19 +74,24 @@ export const useCrudFormCreator = ({
     const handleInputChange = (e: any, from?: any, control_for?: string) => {
         try {
             formData[from] = from === 'file' ? e.target.files[0] : e.target.value
-            updateFormDataPayload(from,  e.target.value , '', '', control_for)
+            const body = {
+                from,
+                value: e.target.value,
+                control_for
+            }
+            updateFormDataPayload(body)
             setFormData(formData)
         } catch (error: any) {
-            console.log(error)
+            console.log(formData)
         }
     };
 
     const sideUpdatePayload = (payload?: any, value?: string) => {
         return formInputs?.map((input) => {
             if (input.name === payload.name) {
-                const splited = payload.optionsUrlData.split('/');
-                splited[1] = value
-                const joined = splited.join('/')
+                const split = payload.optionsUrlData.split('/');
+                split[1] = value
+                const joined = split.join('/')
 
                 return {...payload, optionsUrlData: joined}
             }
@@ -148,27 +153,27 @@ export const useCrudFormCreator = ({
             switch (Number(value)) {
                 case 23:
                     if (input.name === 'personnel_id') {
-                        return { ...input, isRemoved: false };
+                        return {...input, isRemoved: false};
                     }
                     if (input.name === 'quantity' || input.name === 'item_id' || input.name === 'service_id') {
-                        return { ...input, isRemoved: true };
+                        return {...input, isRemoved: true};
                     }
                     return input;
 
                 case 29:
                     if (input.name === 'quantity' || input.name === 'item_id') {
-                        return { ...input, isRemoved: false };
+                        return {...input, isRemoved: false};
                     }
                     if (input.name === 'personnel_id' || input.name === 'service_id') {
-                        return { ...input, isRemoved: true };
+                        return {...input, isRemoved: true};
                     }
                     return input;
                 case 30:
-                    if ( input.name === 'service_id') {
-                        return { ...input, isRemoved: false };
+                    if (input.name === 'service_id') {
+                        return {...input, isRemoved: false};
                     }
                     if (input.name === 'personnel_id' || input.name === 'item_id' || input.name === 'quantity') {
-                        return { ...input, isRemoved: true };
+                        return {...input, isRemoved: true};
                     }
                     return input;
 
@@ -178,16 +183,25 @@ export const useCrudFormCreator = ({
         });
     };
 
-    const updateFormDataPayload = (from?: string, value?: string, clear?: string, error?: string, control_for?: string) => {
-        let newfoundInputs = [...formInputs]; // Copy the formInputs array
+    interface UpdateFormDataProps {
+        from?: string
+        value?: string
+        clear?: string
+        control_for?: string
+    }
 
-        if (clear === 'clear') {
-            // Clear all inputs
-            newfoundInputs = newfoundInputs.map(input => ({...input, value: ''}));
-        }
+    const updateFormDataPayload = (body: UpdateFormDataProps) => {
+        const {
+            from,
+            value,
+            clear,
+            control_for,
+        } = body
+        let newfoundInputs = [...formInputs];
 
-        if (error === 'error') {
-            // Handle error logic if needed
+        // Copy the formInputs array
+        if (clear) {
+            newfoundInputs = newfoundInputs.map(input => ({...input, value: '', errorMessage: ''}));
         }
 
         if (control_for === 'sponsors') {
@@ -239,7 +253,7 @@ export const useCrudFormCreator = ({
         if (from) {
             newfoundInputs = newfoundInputs.map(input => {
                 if (input.name === from) {
-                    return {...input, value: value};
+                    return {...input, value: value, errorMessage: ""};
                 }
                 return input;
             });
@@ -248,28 +262,33 @@ export const useCrudFormCreator = ({
         setFormInputs(newfoundInputs); // Update the form inputs state
     };
 
-    const handleError = (item: any, error: any) => {
-        updateFormDataPayload(item?.name, error, 'not clear', 'error')
-    }
-
     const validator = () => {
-        let validation = true
-        formInputs?.forEach((item) => {
-            if (item.required && !item.isRemoved
-                && !formData[item.name]) {
-                console.log('error happened ' + item.name)
-                handleError(item, `${item.name} is Required`)
-                validation = false
+        let validation = true;
+
+        // Collect errors for all inputs
+        const updatedInputs = formInputs.map(item => {
+            if (item.required && !item.isRemoved && !formData[item.name]) {
+                validation = false;
+                return {
+                    ...item,
+                    errorMessage: `${item.name} is Required`, // Add error message
+                };
             }
-        })
 
-        return validation
-    }
+            return {
+                ...item,
+                errorMessage: '', // Clear error if no validation issue
+            };
+        });
 
+        // Update the state with the new input errors
+        setFormInputs(updatedInputs);
+        return validation;
+    };
 
     const handleSubmit = async () => {
         try {
-            const add_price  = getValueFromLocalStorage('add-price')
+            const add_price = getValueFromLocalStorage('add-price')
             setIsDisabled(true)
             let response;
             const token = getValueFromLocalStorage('token')
@@ -277,7 +296,7 @@ export const useCrudFormCreator = ({
                 response = await remove<any>(url, token)
             } else {
                 if (validator()) {
-                    let _formData = itHasCustomForm && !add_price ?  getValueFromLocalStorage('customFormData') : formData
+                    let _formData = itHasCustomForm && !add_price ? getValueFromLocalStorage('customFormData') : formData
                     if (httpMethod === 'post') {
                         response = await post<any>(url, _formData, token, isFormData)
                     }
@@ -288,7 +307,7 @@ export const useCrudFormCreator = ({
             }
             if ([200, 201].includes(response?.status)) {
                 await gracefulApprovalUpdater(from)
-                ToastComponent({text: response?.data?.message?? "Operation Went Successfully", duration: 1000})
+                ToastComponent({text: response?.data?.message ?? "Operation Went Successfully", duration: 1000})
                 setIsStateChanged(!isStateChanged)
                 closeModel()
             }
@@ -306,10 +325,9 @@ export const useCrudFormCreator = ({
         }
     }
 
-
     const closeModel = () => {
         onCloseModal()
-        updateFormDataPayload('clear', 'clear', 'clear')
+        updateFormDataPayload({clear: 'clear'})
     }
 
     useEffect(() => {
