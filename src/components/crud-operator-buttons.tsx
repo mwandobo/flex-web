@@ -42,7 +42,7 @@ const CrudButtonsComponent = ({
                 rounded={'md'}
                 border={'border border-gray-300'}
             >
-                <ShieldCheck size={16} color={color}/>
+                <ShieldCheck size={16} color={'black'}/>
             </ReusableButton>
         }
         {!hide_view && checkPermissions(`${permission ? `${permission}-show` : ""}`) &&

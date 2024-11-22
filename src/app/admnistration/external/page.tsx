@@ -38,13 +38,8 @@ function ExternalUsers({
         return hide
     }
 
-    console.log(groupProp)
-    console.log(project)
-
     const groupRoute = getValueFromLocalStorage('group')
-
     const group = groupProp ?? groupRoute
-
     const permission = `${group}s`
 
     const _deptFormInputs = [
@@ -53,7 +48,7 @@ function ExternalUsers({
             type: 'select',
             label: `${group} type`,
             value: '',
-            optionsUrlData: `settings/${group}`,
+            optionsUrlData: `settings?group=${group}`,
             optionDataKey: 'departments',
             required: true,
             isError: false,
@@ -80,7 +75,7 @@ function ExternalUsers({
             type: 'select',
             label: `Sponsorship type`,
             value: '',
-            optionsUrlData: `settings/sponsorship`,
+            optionsUrlData: `settings?group=sponsorship`,
             optionDataKey: 'departments',
             required: true,
             isError: false,

@@ -1,4 +1,5 @@
 import { FormControlLabel, Checkbox } from "@mui/material"
+import {padding} from "@mui/system";
 
 interface Props {
     handleChange: (event: any, from: any) => void,
@@ -16,6 +17,8 @@ const MuiCheckbox = ({
 
     return <div>
         <FormControlLabel
+            sx={{padding:0}}
+
             control={
                 <Checkbox
                     onChange={(e) => handleChange(e, from)}
