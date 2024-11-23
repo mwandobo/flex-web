@@ -17,7 +17,9 @@ const MuiCheckbox = ({
 
     return <div>
         <FormControlLabel
-            sx={{padding:0}}
+            sx={{
+                padding:0,
+        }}
 
             control={
                 <Checkbox
