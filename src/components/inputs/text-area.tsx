@@ -14,12 +14,13 @@ interface Props {
 
 const StyledTextareaAutosize = styled(TextareaAutosize)({
     '&::placeholder': {
-        color: '#666666',
+        color: 'black',
         fontStyle: 'italic',
         fontSize: '13px'
     },
     "& .MuiInputLabel-root": {
         marginBottom: 80,
+        color: 'black'
 
     },
 });
@@ -43,8 +44,8 @@ const TextArea = ({
             <InputLabel
                 id={`${label}-select-label`}
                 style={{
-                    fontSize: '13px'
-
+                    fontSize: '16px',
+                    color: 'black'
                 }}
             >
                 {`${label}`}
@@ -60,8 +61,8 @@ const TextArea = ({
                     border: '2px solid #d1d1d1',
                     borderRadius: '5px',
                     padding: '2px 10px',
-                    color: '#666666',
-                    fontSize: '13px',
+                    color: 'black',
+                    fontSize: '15px',
                     marginBottom: "10px"
                 }}
             />

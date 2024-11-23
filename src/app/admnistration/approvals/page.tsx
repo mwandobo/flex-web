@@ -19,9 +19,9 @@ const deptFormInputs = [
     {
         name: 'sys_approval_id',
         type: 'select',
-        label: 'Sytem Approval',
+        label: 'System Approval',
         value: "",
-        optionsUrlData: 'approval/sys',
+        optionsUrlData: 'approval/sys?status=pending',
         optionDataKey: "approvals",
         required: true,
         isError: false,
