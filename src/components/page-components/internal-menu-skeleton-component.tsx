@@ -21,7 +21,7 @@ type InventoryProps = {
 function InternalMenuSkeletonComponent({ pageItems, title , subtitle}: InventoryProps) {
   const { state, dispatch } = useGlobalContextHook();
   const { selectedSubSidebarItem: selected, viewedItem } = state;
-  const { id: viewId } = viewedItem;
+ const viewId = viewedItem?.id
 
   const handleMonitoringItemChange = (item: string) => {
     dispatch({ type: "SET_SUB_SIDEBAR_ITEM", payload: item });
