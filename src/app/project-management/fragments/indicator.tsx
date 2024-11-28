@@ -126,42 +126,14 @@ function Indicator({
             disablePadding: false,
             label: 'Indicator Name',
         },
+
         {
             id: 'mov',
             numeric: false,
             disablePadding: false,
             label: 'Means of verification',
         },
-        {
-            id: 'mov',
-            numeric: false,
-            disablePadding: false,
-            label: 'Means of verification',
-        },
-        {
-            id: 'collection_method',
-            numeric: false,
-            disablePadding: false,
-            label: 'Collection Method',
-        },
-        {
-            id: 'frequency',
-            numeric: false,
-            disablePadding: false,
-            label: 'Frequency',
-        },
-        {
-            id: 'responsibilities',
-            numeric: false,
-            disablePadding: false,
-            label: 'Responsibilities',
-        },
-        {
-            id: 'audience',
-            numeric: false,
-            disablePadding: false,
-            label: 'Audience',
-        },
+
         {
             id: 'baseline_data',
             numeric: false,
@@ -216,7 +188,7 @@ function Indicator({
                             isHideAdd={isHideAdd}
                         />
                         {tabular()}
-                        {createdForm()}
+                        {createdForm('md')}
                     </>
             }
         </ProtectedRoute>
