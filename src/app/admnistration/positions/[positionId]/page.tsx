@@ -20,7 +20,7 @@ const PositionView = ({ params }: { params: { positionId: string } }) => {
     const departmentId = getValueFromLocalStorage('parent_id')
     const id = params.positionId
 
-    const url = `position/${departmentId}/show/${id}`
+    const url = `position/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }

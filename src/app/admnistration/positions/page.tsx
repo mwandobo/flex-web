@@ -72,7 +72,8 @@ function Positions({
         viewUrl: '/admnistration/positions/',
         state_properties: [],
         permission: permission,
-        isApiV2: true
+        isApiV2: true,
+        isMaintainViewNavigationForV1: true
 
     })
     return (

@@ -33,6 +33,7 @@ interface Props {
     from?: string
     approval_slug?: string
     isApiV2?: boolean
+    isMaintainViewNavigationForV1?: boolean
     itHasCustomForm?: boolean
     customForm?: ReactNode;
     isFormData?: boolean
@@ -63,6 +64,7 @@ export const usePageData = ({
                                 tableData,
                                 from,
                                 isApiV2,
+                                isMaintainViewNavigationForV1,
                                 approval_slug
                             }: Props
 ) => {
@@ -91,6 +93,7 @@ export const usePageData = ({
         emailNotificationBody,
         from,
         isApiV2,
+        isMaintainViewNavigationForV1,
         itHasCustomForm: itHasCustomForm,
         customForm: customForm,
         isFormData

@@ -17,6 +17,7 @@ interface Props {
     emailNotificationBody?: any
     from?: string
     isApiV2?: boolean
+    isMaintainViewNavigationForV1?: boolean
     itHasCustomForm?: boolean
     customForm?: ReactNode;
     isShowAddPriceButton?: boolean,
@@ -38,7 +39,8 @@ export const useCrudOperator = (
         customForm,
         isShowAddPriceButton,
         emailNotificationBody: incomingEmailNotificationBody,
-        isApiV2
+        isApiV2,
+        isMaintainViewNavigationForV1
     }: Props
 ) => {
     const router = useRouter()
@@ -202,7 +204,7 @@ export const useCrudOperator = (
         if (type.toLowerCase() === 'show') {
             handleNotificationPayload('show');
 
-            if (isApiV2) {
+            if (isApiV2 && !isMaintainViewNavigationForV1) {
                 dispatch({ type: 'SET_SUB_VIEW_ITEM', payload: { id: payload?.id, from } });
                 setValueLocalStorage('sub_view_item', JSON.stringify({ id: payload?.id, from }));
                 return;
