@@ -141,7 +141,7 @@ function Employees({
     ]
 
     const permission = 'employees'
-    const url = `/employee/${parent_id}`
+    const url = `/employee?position_id=${parent_id}`
 
     const {
         loading,
