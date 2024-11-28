@@ -26,6 +26,7 @@ function Positions({
             isError: false,
             errorMessage: ''
         },
+        !parent_id &&
         {
             name: 'dept_id',
             type: 'select',
@@ -56,7 +57,7 @@ function Positions({
         },
     ]
 
-    const url = `position/${parent_id}`;
+    const url = `position?dept_id=${parent_id}`;
 
     const {
         loading,
@@ -70,7 +71,8 @@ function Positions({
         modalTitle: 'Position',
         viewUrl: '/admnistration/positions/',
         state_properties: [],
-        permission: permission
+        permission: permission,
+        isApiV2: true
 
     })
     return (
