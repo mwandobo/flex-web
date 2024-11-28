@@ -70,6 +70,7 @@ const EmployeeShow = ({ params }: { params: { employeeId: string } }) => {
                                     { label: 'Email', value: data?.email },
                                     { label: 'Department', value: data?.department },
                                     { label: 'Position', value: data?.position },
+                                    { label: 'Role', value: data?.role },
                                     { label: 'Birth Date', value: data?.formatted_d_o_b },
                                     // { label: 'Status', value: StatusCreatorHelperActive(passedData?.status) },
 

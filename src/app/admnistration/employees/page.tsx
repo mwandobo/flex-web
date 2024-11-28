@@ -64,21 +64,22 @@ function Employees({
             errorMessage: ''
         },
         {
-            name: 'emp_type',
-            type: 'text',
-            label: 'Employee Type',
-            value: 'employee',
-            required: true,
-            isHidden: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
             name: 'position_id',
             type: 'select',
             label: 'Position',
             value: parent_id,
             optionsUrlData: `/position`,
+            optionDataKey: 'departments',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+        {
+            name: 'role_id',
+            type: 'select',
+            label: 'Role',
+            value: parent_id,
+            optionsUrlData: `/role`,
             optionDataKey: 'departments',
             required: true,
             isError: false,
@@ -131,6 +132,12 @@ function Employees({
             disablePadding: false,
             label: 'Position',
         },
+        {
+            id: 'role',
+            numeric: false,
+            disablePadding: false,
+            label: 'Role',
+        },
     ]
 
     const permission = 'employees'
@@ -166,7 +173,7 @@ function Employees({
 
                                 />
                                 {tabular()}
-                                {createdForm()}
+                                {createdForm('md')}
                             </>
                     }
                 </>

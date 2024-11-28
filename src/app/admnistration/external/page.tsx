@@ -317,7 +317,7 @@ function ExternalUsers({
                                     isHideAdd={isHideAdd}
                                 />
                                 {tabular()}
-                                {createdForm()}
+                                {createdForm('md')}
                             </>
                     }
                 </>

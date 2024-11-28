@@ -336,7 +336,7 @@ export const useCrudFormCreator = ({
 
     }, [modalBodyArray, ...state_properties])
 
-    const createdForm = (gridSize?: number) => {
+    const createdForm = (size?: string) => {
         return < CrudFormComponent
             isModalOpen={isModalOpen}
             onCloseModal={onCloseModal}
@@ -346,7 +346,7 @@ export const useCrudFormCreator = ({
             isForm={isForm}
             formInputs={formInputs}
             handleInputChange={handleInputChange}
-            gridSize={gridSize}
+            size={size}
             isDisabled={isDisabled}
             modalBodyString={modalBodyString}
             onSaveButtonName={onSaveButtonName}

@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 
 interface Props {
     isOpen: boolean
-    isLarge?: boolean
+    size?: string
     onClose: () => void
     onSaveButtonName: string
     title: string
@@ -15,15 +15,22 @@ const PopupModal = ({
     onClose,
     children,
     title,
-    onSaveButtonName,
-    isLarge,
+                        size,
     isDisabled
 }: Props) => {
+
+    const sizeWidth = () => {
+        if(size === "md") {return 'w-3/4'}
+        if(size === "lg") {return 'w-full'}
+        if(size === "sm") {return 'w-1/2'}
+        return 'w-1/2'
+    }
+
     if (!isOpen) return null;
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
             <div className="absolute inset-0 bg-black opacity-50"></div>
-            <div className={`relative w-full max-w-md max-h-full`}>
+            <div className={`relative ${sizeWidth()}  max-h-full ps-64 pe-6`}>
                 <div className="relative bg-white rounded-lg shadow dark:bg-white max-h-[90vh] overflow-y-auto">
                     {!isDisabled && <button
                         type="button"

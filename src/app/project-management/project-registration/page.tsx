@@ -9,11 +9,20 @@ import {PROJECT_APPROVAL_SLUG} from "@/utils/constant";
 function Project() {
     const permission = 'projects'
 
-    const _deptFormInputs = [
+    const projectInputs = [
         {
             name: 'name',
             type: 'text',
             label: 'Name',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+        {
+            name: 'owner',
+            type: 'text',
+            label: 'Owner',
             value: '',
             required: true,
             isError: false,
@@ -56,15 +65,7 @@ function Project() {
             isError: false,
             errorMessage: ''
         },
-        {
-            name: 'owner',
-            type: 'text',
-            label: 'Owner',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
+
         {
             name: 'prepared_by',
             type: 'text',
@@ -182,7 +183,7 @@ function Project() {
         tabular,
     } = usePageData({
         columns: _columns,
-        formInputs: _deptFormInputs,
+        formInputs: projectInputs,
         url: 'project',
         modalTitle: 'Project',
         viewUrl: '/project-management/project-registration/',
@@ -205,7 +206,7 @@ function Project() {
                                     links={[{ name: 'Projects / List', linkTo: '/project-management/project-registration', permission: '' }]}
                                 />
                                 {tabular()}
-                                {createdForm(2)}
+                                {createdForm('lg')}
                             </>
                     }
                 </>
