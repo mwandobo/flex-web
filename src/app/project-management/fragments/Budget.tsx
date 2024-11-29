@@ -60,7 +60,7 @@ function Budget(
         },
     ]
 
-    const url = `cost/${project?.id}/activity/${activity_id}`
+    const url = `cost/all-project-cost?project_id=${project?.id}`
 
     const {
         loading,
@@ -88,7 +88,7 @@ function Budget(
                         <PageHeader
                             handleClick={handleClick}
                             subHeader='Budget / List'
-                            links={[{ name: 'Cost', linkTo: `/admnistration/external/` }]}
+                            links={[{ name: 'Budget', linkTo: `/admnistration/external/` }]}
                             isHideAdd={isHideAdd}
                         />
                         {tabular()}

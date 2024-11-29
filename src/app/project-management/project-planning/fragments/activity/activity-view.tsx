@@ -34,8 +34,6 @@ const ActivityShow = (
         activity_id,
         output_id,
         project,
-        callBackFunction
-
     }: Props
 ) => {
     const [data, setData] = useState<any>([])
@@ -81,7 +79,7 @@ const ActivityShow = (
             project_id={project_id}
         />,
         <Deliverable
-            key={'delivareble'}
+            key={'deliverable'}
             activity_id={activity_id}
             project_id={project_id}
         />,

@@ -162,7 +162,7 @@ function Indicator({
     ]
 
 
-    const url = `indicator/${project_id}/${from}/${from_id}`
+    const url = `indicator?project_id=${project_id}&from=${from}&from_id=${from_id}`
 
     const {
         loading,

@@ -20,7 +20,6 @@ function Cost(
         activity_id,
         project_id,
         isHideAdd,
-        prefix
     }: Props
 ) {
 
@@ -95,7 +94,7 @@ function Cost(
 
     ]
 
-    const url = `cost/${project_id}/activity/${activity_id}`
+    const url = `cost?project_id=${project_id}&activity_id=${activity_id}`
 
     const {
         loading,
