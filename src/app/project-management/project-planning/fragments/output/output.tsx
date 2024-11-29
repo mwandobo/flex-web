@@ -104,25 +104,7 @@ function Output({
             disablePadding: false,
             label: 'End Date',
         },
-        {
-            id: 'description',
-            numeric: false,
-            disablePadding: false,
-            label: 'Description',
 
-        },
-        {
-            id: 'cost',
-            numeric: false,
-            disablePadding: false,
-            label: 'Direct Cost Budget',
-        },
-        {
-            id: 'resource_cost',
-            numeric: false,
-            disablePadding: false,
-            label: 'Resource Cost Budget',
-        },
         {
             id: 'total_cost',
             numeric: false,
