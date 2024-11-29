@@ -109,7 +109,9 @@ function Cost(
         modalTitle: 'Cost',
         viewUrl: '',
         state_properties: [],
-        isHideShow: true
+        isHideShow: true,
+        isApiV2: true,
+        isMaintainViewNavigationForV1: true
     })
 
     return (

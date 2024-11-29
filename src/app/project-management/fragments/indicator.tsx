@@ -131,6 +131,8 @@ function Indicator({
             numeric: false,
             disablePadding: false,
             label: 'From',
+            isHidden: ['output', 'activity', 'goal', 'outcome'].includes(from)
+
         },
 
         {
