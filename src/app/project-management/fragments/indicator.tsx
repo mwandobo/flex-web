@@ -126,6 +126,12 @@ function Indicator({
             disablePadding: false,
             label: 'Indicator Name',
         },
+        {
+            id: 'formatted_from',
+            numeric: false,
+            disablePadding: false,
+            label: 'From',
+        },
 
         {
             id: 'mov',

@@ -231,7 +231,7 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
 
     const inputBodyCreator = (payload: any[]) => {
 
-        if (payload.length <= 0) {
+        if (payload?.length <= 0) {
             return <p>No Inputs</p>
         }
 
@@ -253,7 +253,7 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
                 <div className="">
                     <div className="">
                         {
-                            payload.map((item: any, index: any) =>
+                            payload && payload.map((item: any, index: any) =>
                                 <div key={index} className="flex flex-col odd:bg-gray-200">
                                     <div className="grid grid-cols-7 w-full text-xs border-b border-gray-300 ">
                                         <p className="border-r border-gray-300 ps-2 py-1">{index + 1}</p>
