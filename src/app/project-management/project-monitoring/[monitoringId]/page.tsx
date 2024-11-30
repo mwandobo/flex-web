@@ -18,28 +18,14 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
     const [loading, setLoading] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
     const [monitoredItemState, setMonitoredItemState] = useState<any>()
+
+    const [selected, setSelected] = useState<any>()
     const [expandedV1Item, setExpandedItem] = useState<any>()
 
     const [formPayload, setFormPayload] = useState<any>()
     const token = getValueFromLocalStorage('token')
-    const {state, dispatch} = useGlobalContextHook()
-    const {selectedMonitoringItem} = state;
-    const {selected} = selectedMonitoringItem
     const id = params.monitoringId
 
-    const handleMonitoringPayload = (input: any) => {
-        const monitoringPayload = [
-            {name: "Project Output", data: input.outputs, type: 'outputs', progress: input.output_progress},
-            {name: "Project Activity", data: input.activities, type: 'activities', progress: input.activity_progress},
-        ]
-
-        setPayload(monitoringPayload)
-        const selected_monitoring_item = getValueFromLocalStorage('selected_monitoring_item')
-        const expanded_monitoring_item = getValueFromLocalStorage('expanded_monitoring_item')
-
-        dispatch({type: "UPDATE_SELECTED_MONITORING_ITEM", payload: {for: 'selected', value: selected_monitoring_item}})
-        dispatch({type: "UPDATE_SELECTED_MONITORING_ITEM", payload: {for: 'expanded', value: expanded_monitoring_item}})
-    }
 
     const progressRender = (progress?: any) => {
         if (progress === 0) {
@@ -69,10 +55,10 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
     }
 
     const handleMonitoringItemChange = (item: string) => {
-        dispatch({type: "UPDATE_SELECTED_MONITORING_ITEM", payload: {for: 'selected', value: item}})
-        setValueLocalStorage('expanded_monitoring_item', null);
-        setExpandedItem(0);
+        setSelected(item)
         setValueLocalStorage('selected_monitoring_item', item)
+        setExpandedItem(null)
+        setValueLocalStorage('expanded_monitoring_item', null);
     }
 
     const handleItemExpand = (index: number) => {
@@ -133,11 +119,34 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
             try {
                 setLoading(true)
                 const res = await get(url, token)
+                console.log('res', res)
 
-                if (data && res.status === 200) {
+                if (res.status === 200) {
+                    console.log('status', res.status)
+
                     setData(res.data.data)
-                    handleMonitoringPayload(res.data.data)
+
+                    const input = res.data.data
+                    const monitoringPayload = [
+                        {
+                            name: "Project Output",
+                            data: input.outputs,
+                            type: 'outputs',
+                            progress: input.output_progress
+                        },
+                        {
+                            name: "Project Activity",
+                            data: input.activities,
+                            type: 'activities',
+                            progress: input.activity_progress
+                        },
+                    ]
+
+                    setPayload(monitoringPayload)
+
                     setLoading(false)
+
+
                 }
 
             } catch (error: any) {
@@ -151,8 +160,12 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
 
 
     useEffect(() => {
-        const foundIndex = getValueFromLocalStorage('expanded_monitoring_item');
-        setExpandedItem(foundIndex)
+        // Retrieve values from local storage
+        const selected_monitoring_item = getValueFromLocalStorage('selected_monitoring_item');
+        const expanded_monitoring_item = getValueFromLocalStorage('expanded_monitoring_item');
+        setSelected(selected_monitoring_item ?? 'outputs');
+        setExpandedItem(expanded_monitoring_item);
+
     }, []);
 
     const indicatorBodyCreator = (payload: any[]) => {

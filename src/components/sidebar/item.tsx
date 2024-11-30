@@ -36,6 +36,11 @@ function SidebarItem({ item }: { item: ISidebarItem }) {
         }
         else {
             router.push(path)
+
+            if(path=== '/project-management/project-planning'){
+                setValueLocalStorage('selected_plan_item', 'goal' )
+                setValueLocalStorage('selected_plan_item_id', null )
+            }
         }
     }
 

@@ -14,7 +14,6 @@ import Activity from "../fragments/activity/activity";
 import OutputShow from "../fragments/output/output-view";
 import ActivityShow from "../fragments/activity/activity-view";
 import {getValueFromLocalStorage, setValueLocalStorage} from "@/utils/actions/local-starage";
-import { useGlobalContextHook } from "@/hooks/useGlobalContextHook";
 
 const ProjectPlanningShow = ({ params }: { params: { planId: string } }) => {
     const router = useRouter()
@@ -24,11 +23,8 @@ const ProjectPlanningShow = ({ params }: { params: { planId: string } }) => {
     const [selectedId, setSelectedId] = useState<any>('')
 
     const token = getValueFromLocalStorage('token')
-    const { state, dispatch } = useGlobalContextHook()
 
     const id = params.planId
-    const { planningCount } = state;
-
     const url = `project_planning/show/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
@@ -54,13 +50,6 @@ const ProjectPlanningShow = ({ params }: { params: { planId: string } }) => {
         fetchData()
     }, [])
 
-    useEffect(() => {
-        dispatch({ type: "UPDATE_PLANNING_PAYLOAD", payload: { value: data.goals?.length, for: "goals" } })
-        dispatch({ type: "UPDATE_PLANNING_PAYLOAD", payload: { value: data.outcomes?.length, for: "outcomes" } })
-        dispatch({ type: "UPDATE_PLANNING_PAYLOAD", payload: { value: data.outputs?.length, for: "outputs" } })
-        dispatch({ type: "UPDATE_PLANNING_PAYLOAD", payload: { value: data.activities?.length, for: "activities" } })
-        dispatch({ type: "UPDATE_PLANNING_PAYLOAD", payload: { value: data.tasks?.length, for: "tasks" } })
-    }, [data])
 
     const handleCardClick = (cardName: string, id?: string) => {
         setSelected(cardName)
@@ -70,11 +59,20 @@ const ProjectPlanningShow = ({ params }: { params: { planId: string } }) => {
     }
 
     useEffect(() => {
+        // Retrieve values from local storage
         const selected_plan_item = getValueFromLocalStorage('selected_plan_item');
         const selected_plan_item_id = getValueFromLocalStorage('selected_plan_item_id');
-        setSelected(selected_plan_item)
-        setSelectedId(selected_plan_item_id)
-    }, [])
+
+        if (selected_plan_item?.endsWith('/show')) {
+            const modified_plan_item = selected_plan_item.substring(0, selected_plan_item.lastIndexOf('/show'));
+            setSelected(modified_plan_item);
+            setSelectedId(null);
+        } else {
+            // Update the state with the original values if no modification is needed
+            setSelected(selected_plan_item);
+            setSelectedId(selected_plan_item_id);
+        }
+    }, []);
 
     return (
         <ProtectedRoute>
@@ -99,28 +97,28 @@ const ProjectPlanningShow = ({ params }: { params: { planId: string } }) => {
                                         onClick={() => handleCardClick('goal')}
                                     >
                                         <h3>Goals</h3>
-                                        <p>{planningCount?.goals}</p>
+                                        <p>{data.goals?.length}</p>
                                     </div>
                                     <div
                                         className={` ${['outcome', 'outcome/show'].includes(selected) ? 'bg-gray-500 text-white text-2xl font-bold w-2/6 h-40 hover:h-40' : 'bg-gray-300  w-1/4 h-32 hover:h-40'}  flex flex-col justify-center items-center cursor-pointer rounded-sm shadow-md`}
                                         onClick={() => handleCardClick('outcome')}
                                     >
                                         <h3>Outcomes</h3>
-                                        <p>{planningCount?.outcomes}</p>
+                                        <p>{data?.outcomes?.length}</p>
                                     </div>
                                     <div
                                         className={` ${['output', 'output/show'].includes(selected) ? 'bg-gray-500 text-white text-2xl font-bold w-2/6 h-40 hover:h-40' : 'bg-gray-300  w-1/4 h-32 hover:h-40'}  flex flex-col justify-center items-center cursor-pointer rounded-sm shadow-md`}
                                         onClick={() => handleCardClick('output')}
                                     >
                                         <h3>Outputs</h3>
-                                        <p>{planningCount?.outputs}</p>
+                                        <p>{data?.outputs?.length}</p>
                                     </div>
                                     <div
                                         className={` ${['activity', 'activity/show'].includes(selected) ? 'bg-gray-500 text-white text-2xl font-bold w-2/6 h-40 hover:h-40' : 'bg-gray-300  w-1/4 h-32 hover:h-40'}  flex flex-col justify-center items-center cursor-pointer rounded-sm shadow-md`}
                                         onClick={() => handleCardClick('activity')}
                                     >
                                         <h3>Activities</h3>
-                                        <p>{planningCount?.activities}</p>
+                                        <p>{data?.activities?.length}</p>
                                     </div>
 
                                 </div>
@@ -181,7 +179,6 @@ const ProjectPlanningShow = ({ params }: { params: { planId: string } }) => {
                                             output_id={selectedId}
                                             selectedViewCard={'activity/show'}
                                             isHideAdd={true}
-
                                         />
                                     }
 
