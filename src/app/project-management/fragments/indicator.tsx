@@ -179,7 +179,9 @@ function Indicator({
         modalTitle: 'Indicator',
         viewUrl: '',
         state_properties: [],
-        isHideShow: true
+        isHideShow: true,
+        isApiV2: true,
+        isMaintainViewNavigationForV1: true
     })
 
 
