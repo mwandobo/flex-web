@@ -3,24 +3,29 @@
 import ProtectedRoute from '@/components/authentication/protected-route'
 import PageHeader from '@/components/header/page-header'
 import { usePageData } from '@/hooks/use-page/use-page-data'
-import { checkPermissions } from '@/utils/actions/check-permissions'
-import { capitalizeFirstWord } from '@/utils/actions/string-manipulations'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
-function CollectedData() {
 
-    const _deptFormInputs = [
-        {
-            name: 'indicator_id',
-            type: 'select',
-            label: `Select Indicator`,
-            value: '',
-            optionsUrlData: `indicator`,
-            optionDataKey: 'indicators',
-            required: true,
-            isError: false,
-            errorMessage: '',
-        },
+interface Props {
+    from?: string | null
+    from_id?: string | null
+    means_of_verification?: string | null
+    project_id?: string | null
+    isHideAdd?: boolean
+
+}
+
+function Page({
+    from,
+    from_id,
+    project_id,
+    means_of_verification,
+    isHideAdd
+
+}: Props) {
+
+
+    const formInputs = [
         {
             name: 'name',
             type: 'text',
@@ -28,100 +33,178 @@ function CollectedData() {
             value: '',
             required: true,
             isError: false,
-            errorMessage: '',
+            errorMessage: ''
         },
 
         {
-            name: 'quantity',
+            name: 'measurement_type_id',
+            type: 'select',
+            label: `Means of Verification`,
+            value: means_of_verification,
+            optionsUrlData: `settings?group=measurement`,
+            optionDataKey: 'departments',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+        ['goal', 'outcome'].includes(from) &&
+        {
+            name: 'baseline_data',
             type: 'text',
-            label: 'Quantity',
+            label: 'Baseline Data',
             value: '',
             required: true,
             isError: false,
-            errorMessage: '',
+            errorMessage: ''
+        },
+        {
+            name: 'target_data',
+            type: 'text',
+            label: 'Target Data',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+        {
+            name: 'collection_method',
+            type: 'text',
+            label: 'Collection Method',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+        {
+            name: 'frequency',
+            type: 'text',
+            label: 'Frequency and Schedule',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+        {
+            name: 'responsibilities',
+            type: 'text',
+            label: 'Responsibilities',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+        {
+            name: 'audience',
+            type: 'text',
+            label: 'Information Use / Audience',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+        {
+            name: 'description',
+            type: 'textArea',
+            label: 'Description',
+            value: '',
+            required: false,
+            isError: false,
+            errorMessage: ''
         }
     ]
-    const _columns = [
+
+    const columns = [
+        {
+            id: 'formatted_code',
+            numeric: false,
+            disablePadding: false,
+            label: 'Code',
+        },
         {
             id: 'name',
             numeric: false,
             disablePadding: false,
-            label: 'Data Name',
-            // width: '50%',
+            label: 'Indicator Name',
         },
         {
-            id: 'indicator',
+            id: 'project_name',
             numeric: false,
             disablePadding: false,
-            label: 'Indicator',
-            // width: '50%',
+            label: 'Project Name',
         },
-
+        {
+            id: 'formatted_from',
+            numeric: false,
+            disablePadding: false,
+            label: 'From',
+            isHidden: ['output', 'activity', 'goal', 'outcome'].includes(from)
+        },
+        {
+            id: 'mov',
+            numeric: false,
+            disablePadding: false,
+            label: 'Means of verification',
+        },
         {
             id: 'baseline_data',
             numeric: false,
             disablePadding: false,
-            label: 'baseline_data',
-            // width: '50%',
+            label: 'Baseline Data',
+            isHidden: ['output', 'activity'].includes(from)
         },
         {
             id: 'target_data',
             numeric: false,
             disablePadding: false,
             label: 'Target Data',
-            // width: '50%',
         },
-
         {
-            id: 'quantity',
+            id: 'collected_data',
             numeric: false,
             disablePadding: false,
             label: 'Collected Data',
-            // width: '50%',
         },
-
     ]
 
-    const url = 'collected_data'
-    const permission = 'data'
+
+    const url = `indicator?project_id=${project_id}&from=${from}&from_id=${from_id}`
 
     const {
         loading,
         createdForm,
         handleClick,
-        tabular,
-    } = usePageData({
-        columns: _columns,
-        formInputs: _deptFormInputs,
-        url: url,
-        modalTitle: `Collected Data`,
-        viewUrl: `/indicator-management/`,
-        state_properties: [],
-        permission: permission
+        tabular
 
+    } = usePageData({
+        columns: columns,
+        formInputs: formInputs,
+        url: url,
+        modalTitle: 'Indicator',
+        viewUrl: '/indicator-management/',
+        state_properties: [],
+        isApiV2: true,
+        isMaintainViewNavigationForV1: true
     })
+
 
     return (
         <ProtectedRoute>
-            <>{
-                !checkPermissions(`${permission}-list`) ? <p>You are not authorized</p> : <>
-                    {
-                        loading ? <p>Loading...</p>
-                            :
-                            <>
-                                <PageHeader
-                                    handleClick={handleClick}
-                                    links={[{ name: "Collected Data / List", linkTo: `/admnistration/external/` }]}
-                                />
-                                {tabular()}
-                                {createdForm()}
-                            </>
-                    }
-                </>
+            {
+                loading ? <p>Loading...</p>
+                    :
+                    <>
+                        <PageHeader
+                            handleClick={handleClick}
+                            subHeader='Indicators / List'
+                            links={[{ name: 'Indicator', linkTo: `/admnistration/external/` }]}
+                            isHideAdd={isHideAdd}
+                        />
+                        {tabular()}
+                        {createdForm('md')}
+                    </>
             }
-            </>
         </ProtectedRoute>
     )
 }
 
-export default CollectedData
+export default Page
