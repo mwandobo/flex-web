@@ -94,7 +94,7 @@ function CollectedData({indicator_id}: Props ) {
                                 {tabular()}
                                 {createdForm()}
                             </>
-                    }
+                }
                 </>
         </ProtectedRoute>
     )
