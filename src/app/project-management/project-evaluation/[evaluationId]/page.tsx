@@ -5,17 +5,12 @@ import {get, post} from "@/utils/api";
 import {useEffect, useState} from "react";
 import LinearWithValueLabel from "@/components/bars/progressBar";
 import {getValueFromLocalStorage, setValueLocalStorage} from "@/utils/actions/local-starage";
-import {
-    Check,
-    ClipboardCheck,
-    OctagonX
-} from "lucide-react";
+import {Check, ClipboardCheck, OctagonX} from "lucide-react";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import swal from 'sweetalert2';
 import FormattedMoney from "@/components/moneyFormater";
 
 const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) => {
-    const [allIndicators, setAllIndicators] = useState<any[]>([])
     const [payload, setPayload] = useState<any[]>([])
     const [loading, setLoading] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
@@ -60,6 +55,7 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
         })
         dispatch({type: 'UPDATE_EVALUATION_FORM', payload: form})
         setValueLocalStorage('evaluation_form', JSON.stringify(form))
+        dispatch({type: 'UPDATE_IN_EVALUATION', payload: !inEvaluation})
     }
 
     const handleEvaluationItemChange = (item: string) => {
@@ -139,23 +135,6 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
 
     const validator = () => evaluationForm.data.every((item: any) => item.value && item.value > 0)
 
-    useEffect(() => {
-        if (allIndicators && allIndicators.length > 0) {
-            let newFormPayload = allIndicators.map(item => {
-                const body = {id: item.id, value: '', for: item.from, parent: item.parent}
-                return body
-            })
-            const evaluationForm = getValueFromLocalStorage('evaluation_form')
-            const form = JSON.parse(evaluationForm)
-            if (form && form.length > 0) {
-                dispatch({type: 'UPDATE_EVALUATION_FORM', payload: newFormPayload})
-
-            } else {
-                dispatch({type: 'UPDATE_EVALUATION_FORM', payload: newFormPayload})
-            }
-        }
-    }, [allIndicators])
-
     const url = `project_evaluation/show/${id}`
     useEffect(() => {
         const fetchData = async () => {
@@ -176,8 +155,24 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
                             progress: input.outcomes_progress
                         },
                     ]
-
                     setPayload(evaluationPayload)
+
+                    const allIndicators = input.all_indicators
+
+                    if (allIndicators && allIndicators.length > 0) {
+                        let newFormPayload = allIndicators.map(item => {
+                            return {id: item.id, value: '', for: item.from, parent: item.parent}
+                        })
+
+                        const evaluationForm = getValueFromLocalStorage('evaluation_form')
+                        const form = JSON.parse(evaluationForm)
+                        if (form && form.length > 0) {
+                            dispatch({type: 'UPDATE_EVALUATION_FORM', payload: newFormPayload})
+                        } else {
+                            dispatch({type: 'UPDATE_EVALUATION_FORM', payload: newFormPayload})
+                        }
+                    }
+
                     setLoading(false)
                 }
 
@@ -270,22 +265,35 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
                         <p className="ps-2 py-2">{inEvaluation && 'Evaluated'} Expense</p>
                     </div>
                 </div>
-                <div className="" >
+                <div className="">
                     <div className="">
 
-                        <div className="flex flex-col " >
+                        <div className="flex flex-col ">
                             <div className="grid grid-cols-4 w-full text-xs border-b border-gray-300 ">
-                                <p className="border-r border-gray-300 ps-2 py-1">{FormattedMoney({ amount: item.cost, isHideCurrency: true })}</p>
-                                <p className="border-r border-gray-300 ps-2 py-1">{FormattedMoney({ amount: item.resource_cost, isHideCurrency: true })}</p>
-                                <p className="border-r border-gray-300 ps-2 py-1">{FormattedMoney({ amount: item.total_cost, isHideCurrency: true })}</p>
+                                <p className="border-r border-gray-300 ps-2 py-1">{FormattedMoney({
+                                    amount: item.cost,
+                                    isHideCurrency: true
+                                })}</p>
+                                <p className="border-r border-gray-300 ps-2 py-1">{FormattedMoney({
+                                    amount: item.resource_cost,
+                                    isHideCurrency: true
+                                })}</p>
+                                <p className="border-r border-gray-300 ps-2 py-1">{FormattedMoney({
+                                    amount: item.total_cost,
+                                    isHideCurrency: true
+                                })}</p>
                                 <div className="text-end border-r border-gray-300 p-1">
                                     {
                                         inEvaluation && Number(item.total_cost) > 0 ?
-                                            <input type="text" placeholder="Enter Evaluated Expense" value={valueFinder(item.id, 'cost', from)}
+                                            <input type="text" placeholder="Enter Evaluated Expense"
+                                                   value={valueFinder(item.id, 'cost', from)}
                                                    className={`p-1 h-7 w-full bg-gray-200 border border-gray-300 shadow-md tex-black`}
-                                                   onChange={(e) => handleFormInputChange(e, item, 'cost', from)} />
+                                                   onChange={(e) => handleFormInputChange(e, item, 'cost', from)}/>
                                             :
-                                            <p className="text-end">{FormattedMoney({ amount: item.occured_cost, isHideCurrency: true })}</p>
+                                            <p className="text-end">{FormattedMoney({
+                                                amount: item.occured_cost,
+                                                isHideCurrency: true
+                                            })}</p>
                                     }
                                 </div>
                             </div>
@@ -372,7 +380,7 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
                         <div className="bg-white h-full ">
                             <div className="flex ">
                                 <div className="flex flex-col w-64 mt-4 ml-4 p-2">
-                                <h4 className="text-sm font-semibold mb-2">Evaluation Items</h4>
+                                    <h4 className="text-sm font-semibold mb-2">Evaluation Items</h4>
                                     <div className="flex flex-col justify-between h-full">
                                         <div className="flex flex-col ml-3 text-sm gap-1 cursor-pointer py-5">
                                             <p
