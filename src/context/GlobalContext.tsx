@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useReducer, ReactNode } from 'react';
+import {setValueLocalStorage} from "@/utils/actions/local-starage";
 
 interface CurrentUserProps {
     first_name: string,
@@ -26,6 +27,7 @@ type State = {
     currentUser: CurrentUserProps | null;
     evaluationForm
     selectedSubSidebarItem: string
+    inEvaluation: boolean
     viewItemRefreshAfterApproval: boolean
     viewedItem
     notificationBody
@@ -58,7 +60,8 @@ const initialState: State = {
     selectedSubSidebarItem: '',
     viewItemRefreshAfterApproval: false,
     viewedItem: initialViewedItem,
-    notificationBody: initialNotificationBody
+    notificationBody: initialNotificationBody,
+    inEvaluation: false
 };
 
 export const GlobalContext = createContext<{ state: State; dispatch: Dispatch }>({
@@ -98,6 +101,13 @@ export const updateContextReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 viewItemRefreshAfterApproval: !state.viewItemRefreshAfterApproval
+            };
+        case 'UPDATE_IN_EVALUATION':
+            setValueLocalStorage('inEvaluation', action.payload)
+
+            return {
+                ...state,
+                inEvaluation:  action.payload
             };
         case 'UPDATE_NOTIFICATION_BODY':
             return {
