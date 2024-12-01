@@ -261,6 +261,50 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
         </div>
     }
 
+    const inputBodyCreator = (item: any, from: string) => {
+
+        if (!item) {
+            return <p>No Inputs</p>
+        }
+
+        return <div className="flex">
+            <div className="w-11/12 mx-auto border border-gray-300 flex flex-col">
+                <div className="font-semibold text-sm py-2 ps-2"><h5>Input Evaluation</h5></div>
+
+                <div className="">
+                    <div className="grid grid-cols-4 text-xs border-b border-t border-gray-300 font-semibold">
+                        <p className="border-r border-gray-300 ps-2 py-2">Direct Cost (Tzs)</p>
+                        <p className="border-r border-gray-300 ps-2 py-2">Resource Cost (Tzs)</p>
+                        <p className="border-r border-gray-300 ps-2 py-2">Total Cost (Tzs)</p>
+                        <p className="ps-2 py-2">{isCollecting && 'Evaluated'} Expense</p>
+                    </div>
+                </div>
+                <div className="" >
+                    <div className="">
+
+                        <div className="flex flex-col odd:bg-gray-200" >
+                            <div className="grid grid-cols-4 w-full text-xs border-b border-gray-300 ">
+                                <p className="border-r border-gray-300 ps-2 py-1">{FormattedMoney({ amount: item.cost, isHideCurrency: true })}</p>
+                                <p className="border-r border-gray-300 ps-2 py-1">{FormattedMoney({ amount: item.resource_cost, isHideCurrency: true })}</p>
+                                <p className="border-r border-gray-300 ps-2 py-1">{FormattedMoney({ amount: item.total_cost, isHideCurrency: true })}</p>
+                                <div className="text-end border-r border-gray-300 p-1">
+                                    {
+                                        isCollecting && Number(item.total_cost) > 0 ?
+                                            <input type="text" placeholder="Enter Evaluated Expense" value={valueFinder(item.id, 'cost', from)} className="ps-1 h-7 w-full text-xs" onChange={(e) => handleFormInputChange(e, item, 'cost', from)} />
+                                            :
+                                            <p className="text-end">{FormattedMoney({ amount: item.occured_cost, isHideCurrency: true })}</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+
     const pageRender = (payload: any, from?: string) => {
 
         if (payload && Object.keys(payload).length > 0 && payload.data && payload.data.length > 0) {
