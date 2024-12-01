@@ -25,7 +25,6 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
     const token = getValueFromLocalStorage('token')
     const id = params.monitoringId
 
-
     const progressRender = (progress?: any) => {
         if (progress === 0) {
             return <LinearWithValueLabel value={0}/>
@@ -61,7 +60,6 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
     }
 
     const handleItemExpand = (index: number) => {
-
         setExpandedItem(index === expandedV1Item ? null :index )
         setValueLocalStorage('expanded_monitoring_item', index === expandedV1Item ? null :index);
     };
@@ -185,7 +183,7 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
                     {
                         payload.map((item: any, index: any) =>
                             <div key={index} className="flex ">
-                                <div className="grid grid-cols-8 w-full text-xs border-b border-gray-300 ">
+                                <div className="grid grid-cols-8 w-full text-xs">
                                     <p className="border-r border-gray-300 ps-3  py-1">{index + 1}</p>
                                     <p className="border-r border-gray-300 ps-3 py-1">{item.formatted_code}</p>
                                     <p className="border-r border-gray-300 ps-3 py-1">{item.name}</p>
@@ -262,7 +260,7 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
                         {
                             payload && payload.map((item: any, index: any) =>
                                 <div key={index} className="flex flex-col ">
-                                    <div className="grid grid-cols-7 w-full text-xs border-b border-gray-300 ">
+                                    <div className="grid grid-cols-7 w-full text-xs">
                                         <p className="border-r border-gray-300 ps-2 py-1">{index + 1}</p>
                                         <p className="border-r border-gray-300 ps-2 py-1">{item.type}</p>
                                         <p className="border-r border-gray-300 ps-2 py-1">{item.name}</p>
@@ -407,7 +405,7 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
                                     <h4 className="text-sm font-semibold mb-2">Monitoring Items</h4>
                                     <div className="flex flex-col ml-3 text-sm gap-1 cursor-pointer">
                                         <p
-                                            className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'outputs' && 'bg-sidebar-background text-sidebar-active'}`}
+                                            className={`p-1 hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'outputs' && 'bg-sidebar-background text-sidebar-active'}`}
                                             onClick={() => handleMonitoringItemChange('outputs')}>
                                             Outputs
                                         </p>
