@@ -157,6 +157,8 @@ function Employees({
         state_properties: [],
         permission: permission,
         emailNotificationBody: { code: 'create-employee', operation: null, id: null },
+        isApiV2:true,
+        isMaintainViewNavigationForV1:true
     })
     return (
         <ProtectedRoute>
