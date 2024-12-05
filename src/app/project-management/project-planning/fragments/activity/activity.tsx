@@ -140,7 +140,7 @@ function Activity({
         },
     ]
 
-    const url = `activity/${project_id}/${output_id}`
+    const url = `activity?project_id=${project_id}&output_id=${output_id}`
 
     const { dispatch } = useGlobalContextHook()
 

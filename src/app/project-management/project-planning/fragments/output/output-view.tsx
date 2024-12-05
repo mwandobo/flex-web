@@ -15,7 +15,6 @@ import FormattedMoney from "@/components/moneyFormater";
 import Assignment from "@/app/project-management/fragments/assignment";
 import AssumptionConstraint from "@/app/project-management/fragments/assumption_constraint";
 
-
 interface Props {
     callBackFunction?: (selectedCard: string, id?: string) => void
     outcome_id?: string
@@ -27,7 +26,6 @@ interface Props {
 const OutputShow = (
     {
         project_id,
-        outcome_id,
         output_id,
         project,
         callBackFunction
@@ -41,7 +39,7 @@ const OutputShow = (
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
-            const res = await get(`project_output/${project_id}/${outcome_id}/show/${output_id}`, token)
+            const res = await get(`project_output/${output_id}`, token)
 
             if (res && res.status === 200) {
                 setData(res.data.data)

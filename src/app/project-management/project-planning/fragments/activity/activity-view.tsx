@@ -43,7 +43,7 @@ const ActivityShow = (
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
-            const res = await get(`activity/${project_id}/${output_id}/show/${activity_id}`, token)
+            const res = await get(`activity/${activity_id}`, token)
 
             if (res && res.status === 200) {
                 setData(res.data.data)

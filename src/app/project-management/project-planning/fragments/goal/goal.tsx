@@ -110,7 +110,7 @@ function Goal({
         },
     ]
 
-    const url = `project_goal/${project_id}`
+    const url = `project_goal?project_id=${project_id}`
 
     const { dispatch } = useGlobalContextHook()
 
@@ -135,7 +135,9 @@ function Goal({
         state_properties: [],
         callBackFunction: callBackFunction,
         selectedViewCard: selectedViewCard,
-        planningCallbackFunction: planningCallbackFunction
+        planningCallbackFunction: planningCallbackFunction,
+        isApiV2: true,
+        isMaintainViewNavigationForV1: true
     })
 
     return (

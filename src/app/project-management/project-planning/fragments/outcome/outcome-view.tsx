@@ -37,7 +37,7 @@ const OutcomeShow = (
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
-            const res = await get(`project_outcome/${project?.id}/${goal_id}/show/${outcome_id}`, token)
+            const res = await get(`project_outcome/${outcome_id}`, token)
 
             if (res && res.status === 200) {
                 setData(res.data.data)

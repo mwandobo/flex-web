@@ -114,7 +114,7 @@ function Outcome({
         },
     ]
 
-    const url = `project_outcome/${project_id}/${goal_id}`
+    const url = `project_outcome?project_id=${project_id}&goal_id=${goal_id}`
 
     const { dispatch } = useGlobalContextHook()
 
@@ -140,8 +140,9 @@ function Outcome({
         state_properties: [],
         planningCallbackFunction: planningCallbackFunction,
         callBackFunction: callBackFunction,
-        selectedViewCard: selectedViewCard
-
+        selectedViewCard: selectedViewCard,
+        isApiV2: true,
+        isMaintainViewNavigationForV1: true
     })
     return (
         <ProtectedRoute>
