@@ -5,13 +5,9 @@ import MuiCardComponent from "@/components/card/mui-card.component";
 import ViewCardComponent from "@/components/card/view.card.component";
 import PageHeader from "@/components/header/page-header";
 import {get, post} from "@/utils/api";
-import {StatusCreatorHelperActive} from "@/utils/statusHelper/active";
-import {useSearchParams} from "next/navigation";
 import {useEffect, useState} from "react";
-import {PermTableComponent} from "../../fragments/perm.table.component";
 import {useRouter} from "next/navigation"
 import MuiCheckbox from "@/components/inputs/mui-checkbox";
-import {Card} from "@mui/material";
 import {ReusableButton} from "@/components/button/reusable-button";
 import {CheckCircle2} from "lucide-react";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
@@ -38,7 +34,6 @@ const createPermissionCheckData = (permissionGroups: any[], user_permissions: an
 
 const RolesAssign = ({params}: { params: { roleAssignId: string } }) => {
     const [data, setData] = useState<any>([])
-    const searchParams = useSearchParams()
     const [loading, setLoading] = useState(false)
 
     const token = getValueFromLocalStorage('token')
@@ -178,11 +173,9 @@ const RolesAssign = ({params}: { params: { roleAssignId: string } }) => {
                                 <div className="border border-solid border-gray-200 p-4 tetx-xs">
                                     <>
                                         <h4 className="text-sm font-semibold">Permissions</h4>
-
                                     <div
                                         className={'flex w-full mb-2 border border-gray-300 shadow-md rounded-sm  p-2'}
                                     >
-
                                         <MuiCheckbox
                                             handleChange={handleCheck}
                                             label="All Permissions"
@@ -190,7 +183,6 @@ const RolesAssign = ({params}: { params: { roleAssignId: string } }) => {
                                             checked={checkAll}
                                         />
                                     </div>
-
                                         <div className={'grid grid-cols-2 gap-2'}>
                                             {
                                                 groups && groups.map((group, index) => (

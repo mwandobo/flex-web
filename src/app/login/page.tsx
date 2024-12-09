@@ -86,7 +86,15 @@ export default function LoginPage() {
                     } else {
                         alert('error setting value to local storage')
                     }
+                } else {
+                    Swal.fire({
+                        title: 'Error Occured!',
+                        text: 'error',
+                        icon: 'error',
+                    }).then(() => setLoading(false))
+
                 }
+
             } catch (error) {
                 throw error.message
             }
@@ -98,7 +106,7 @@ export default function LoginPage() {
                 icon: 'error',
             }).then(() => setLoading(false))
 
-            console.error(error);
+            console.log(error);
         }
     }
 
