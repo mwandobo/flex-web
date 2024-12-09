@@ -8,7 +8,7 @@ import { capitalizeFirstWord } from '@/utils/actions/string-manipulations'
 import React, { useEffect, useState } from 'react'
 
 interface Props {
-    indicator_id: number
+    indicator_id: any
 }
 
 function CollectedData({indicator_id}: Props ) {

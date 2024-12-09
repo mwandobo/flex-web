@@ -7,14 +7,18 @@ import PageHeader from "@/components/header/page-header";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import {get} from "@/utils/api";
 import {useRouter} from "next/navigation";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import MuiTab from "@/components/tabs/mui-tab";
 import CollectedData from "@/app/indicator-management/collected-data.component";
+import {showConfirmationModal} from "@/utils/showAlertDialog";
+import {ReusableButton} from "@/components/button/reusable-button";
+import {CheckCircle2, FileOutput} from "lucide-react";
 
 const CollectedDataShow = ({params}: { params: { indicatorId: string } }) => {
     const router = useRouter()
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
+    const [refresh, setRefresh] = useState(false)
     const token = getValueFromLocalStorage('token')
     const id = params.indicatorId
 
@@ -48,7 +52,27 @@ const CollectedDataShow = ({params}: { params: { indicatorId: string } }) => {
             }
         };
         fetchData()
-    }, [])
+    }, [refresh])
+
+    const onSave = async () => {
+        try {
+            const res = await get(`${url}/${data?.status === 'pending'?'disable': 'enable'}`, token);
+            if (data && res.status === 200) {
+                setRefresh(!refresh);
+            }
+        } catch (error: any) {
+            console.log(error);
+        }
+    };
+
+    const handleSubmit = (data: any) => {
+        showConfirmationModal({
+            title: 'Are You Sure?',
+            text: `Are You Sure You Want To ${data?.status === 'pending'?'Disable': 'Enable'}  Indicator: ${data.formatted_code}?`,
+            onConfirm: onSave,  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
 
     return (
 
@@ -79,11 +103,33 @@ const CollectedDataShow = ({params}: { params: { indicatorId: string } }) => {
                                     {label: 'Frequency and Schedule', value: data?.frequency},
                                     {label: 'Responsibilities', value: data?.responsibilities},
                                     {label: 'Description', value: data?.description},
-                                    // { label: 'Status', value: StatusCreatorHelperActive(passedData?.status) },
+                                    { label: 'Status', value:data?.status },
                                 ]}
                                 titleA="Indicator"
                                 titleB={`${data?.formatted_code} : ${data?.name}`}
                             />
+                           <div className={'flex justify-end'}>
+                               <ReusableButton
+                                   name={data?.status ==='pending'?'Disable Indicator': 'Enable Indicator'}
+                                   onClick={() => handleSubmit(data)}
+                                   rounded={'md'}
+                                   padding={'p-3'}
+                                   shadow={'shadow-md'}
+                                   bg_color={'bg-gray-50'}
+                                   hover={'hover:bg-gray-200 hover:border-gray-400'}
+                                   hover_text={'hover:text-gray-900 hover:font-semibold'}
+                                   border={'border border-gray-300'}
+                                   text_color={'text-gray-700'}
+                               >
+                                   <CheckCircle2 size={13}/>
+                               </ReusableButton>
+                           </div>
+
+
+
+
+
+
 
                         </MuiCardComponent>
                         <MuiCardComponent>
