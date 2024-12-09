@@ -44,20 +44,20 @@ const columns = [
 
 interface Props {
     activity_id?: any
-    project_id?: any
+    project?: any
     isHideAdd?: boolean
 }
 
 function Purpose(
     {
         activity_id,
-        project_id,
+        project,
         isHideAdd
 
     }: Props
 ) {
 
-    const url = `${project_id}/project_purpose`
+    const url = `${project.id}/project_purpose`
 
     const {
         loading,
@@ -72,7 +72,9 @@ function Purpose(
         modalTitle: 'Project Purpose',
         viewUrl: '',
         state_properties: [],
-        isHideShow: true
+        isHideShow: true,
+        isHideDelete:isHideAdd,
+        isHideEdit: isHideAdd
     })
 
     return (
@@ -85,7 +87,7 @@ function Purpose(
                             handleClick={handleClick}
                             subHeader='Project Purpose / List'
                             links={[{ name: 'Deliverable', linkTo: `/admnistration/purpose/` }]}
-
+                            isHideAdd={project.status === 'closed'}
                         />
                         {tabular()}
                         {createdForm()}

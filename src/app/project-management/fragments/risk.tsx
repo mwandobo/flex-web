@@ -88,7 +88,9 @@ function Risk({
         modalTitle: 'Risk',
         viewUrl: '',
         state_properties: [],
-        isHideShow: true
+        isHideShow: true,
+        isHideDelete:isHideAdd,
+        isHideEdit: isHideAdd
     })
 
     return (

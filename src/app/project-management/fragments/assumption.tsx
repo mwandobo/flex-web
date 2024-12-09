@@ -45,34 +45,35 @@ const columns = [
 
 interface Props {
     from_id?: any
-    project_id?: any
+    project?: any
     from?: any
     isHideAdd?: boolean
 }
 
 function Assumption({
     from_id,
-    project_id,
+    project,
     from,
     isHideAdd
 
 }: Props) {
 
-    const url = `assumptions_contsraints/${project_id}/${from}/${from_id}/assumption`
+    const url = `assumptions_contsraints/${project.id}/${from}/${from_id}/assumption`
 
     const {
         loading,
         createdForm,
         handleClick,
         tabular
-
     } = usePageData({
         columns: columns,
         url: url,
         isHideShow: true,
         state_properties: [],
         formInputs: formInputs,
-        modalTitle: "Assumption"
+        modalTitle: "Assumption",
+        isHideDelete:isHideAdd,
+        isHideEdit: isHideAdd
     })
 
     return (

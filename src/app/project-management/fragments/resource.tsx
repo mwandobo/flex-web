@@ -135,7 +135,9 @@ function Resource({
         viewUrl: '',
         state_properties: [],
         isHideShow: true,
-        isApiV2:true
+        isApiV2:true,
+        isHideDelete:isHideAdd,
+        isHideEdit: isHideAdd
     })
 
     return (

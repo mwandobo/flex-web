@@ -299,7 +299,9 @@ function ExternalUsers({
         viewUrl: `/admnistration/external/`,
         state_properties: [group],
         permission: permission,
-        isHideShow: isHideShow
+        isHideShow: isHideShow,
+        isHideDelete:isHideAdd,
+        isHideEdit: isHideAdd
     })
 
     return (

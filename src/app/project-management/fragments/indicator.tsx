@@ -181,7 +181,9 @@ function Indicator({
         state_properties: [],
         isHideShow: true,
         isApiV2: true,
-        isMaintainViewNavigationForV1: true
+        isMaintainViewNavigationForV1: true,
+        isHideDelete:isHideAdd,
+        isHideEdit: isHideAdd
     })
 
 

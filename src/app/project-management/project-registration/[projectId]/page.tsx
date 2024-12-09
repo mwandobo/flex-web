@@ -7,7 +7,7 @@ import ViewCardComponent from "@/components/card/view.card.component";
 import PageHeader from "@/components/header/page-header";
 import MuiTab from "@/components/tabs/mui-tab";
 import {get} from "@/utils/api";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import Assumption from "../../fragments/assumption";
 import Resource from "../../fragments/resource";
@@ -21,10 +21,14 @@ import Purpose from "../../fragments/purpose";
 import ApprovalComponent from "@/components/page-components/approval-component";
 import {useApprovalHook} from "@/hooks/useApprove";
 import {PROJECT_APPROVAL_SLUG} from "@/utils/constant";
+import {showConfirmationModal} from "@/utils/showAlertDialog";
+import {ReusableButton} from "@/components/button/reusable-button";
+import {CheckCircle2} from "lucide-react";
 
 const ProjectShow = ({params}: { params: { projectId: string } }) => {
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
+    const [refresh, setRefresh] = useState(false)
     const token = getValueFromLocalStorage('token')
     const id = params.projectId
     const router = useRouter()
@@ -41,7 +45,7 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
 
     const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
-    const url = `department/show/${id}`
+    const url = `project/show/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
@@ -50,31 +54,39 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
             setLoading(true)
             const res = await get(url, token)
 
-            if (data && res.status === 200) {
+            if (res && res.status === 200) {
                 setData(res.data.data)
                 setLoading(false)
             }
-
         } catch (error: any) {
             if (error?.code === "ERR_NETWORK") {
                 navigateToLogin()
             }
         }
-
-        setLoading(true)
-        const res = await get(`project/show/${id}`, token)
-
-        if (res && res.status === 200) {
-            setData(res.data.data)
-            setLoading(false)
-        }
     };
     useEffect(() => {
         fetchData()
-    }, [id, token])
+    }, [refresh])
 
-    const refreshData = () => {
-        fetchData();
+
+    const onSave = async () => {
+        try {
+            const res = await get(`${url}/close`, token);
+            if (data && res.status === 200) {
+                setRefresh(!refresh);
+            }
+        } catch (error: any) {
+            console.log(error);
+        }
+    };
+
+    const handleSubmit = () => {
+        showConfirmationModal({
+            title: 'Are You Sure?',
+            text: `Are You Sure You Want To Close Project: ${data?.name}?`,
+            onConfirm: onSave,  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
     };
 
     const nodes: React.ReactNode[] = [
@@ -84,7 +96,7 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
         />,
         <Purpose
             key={'purpose'}
-            project_id={id}
+            project={data}
             isHideAdd={true}
         />,
         <ExternalUsers
@@ -93,6 +105,7 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
             project={data}
             project_id={id}
             isHideShow={true}
+            isHideAdd={data?.status === 'closed'}
         />,
         <ExternalUsers
             key={'stakeholder'}
@@ -100,6 +113,7 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
             project_id={id}
             project={data}
             isHideShow={true}
+            isHideAdd={data?.status === 'closed'}
         />,
         <Budget
             key={'cost'}
@@ -122,8 +136,8 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
             key={'assumption'}
             from={'project'}
             from_id={id}
-            project_id={id}
-            isHideAdd={false}
+            project={data}
+            isHideAdd={data?.status === 'closed'}
         />,
         <Resource
             key={'resource'}
@@ -181,11 +195,33 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
                                     {label: 'Scope', value: data?.scope},
                                     {label: 'Purpose', value: data?.purpose},
                                     {label: 'Progress', value: data.progress_status},
+                                    {label: 'Status', value: data.status},
+
                                 ]}
                                 titleA="Project"
                                 titleB={data?.name}
                                 OptionalElement={approvalButtonsWrapper()}
                             />
+                            {data?.status === 'pending' &&
+                                <div className={'flex justify-end mt-2'}>
+                                    <ReusableButton
+                                        name={'Close Project'}
+                                        onClick={() => handleSubmit()}
+                                        rounded={'md'}
+                                        padding={'p-3'}
+                                        shadow={'shadow-md'}
+                                        bg_color={'bg-gray-50'}
+                                        hover={'hover:bg-gray-200 hover:border-gray-400'}
+                                        hover_text={'hover:text-gray-900 hover:font-semibold'}
+                                        border={'border border-gray-300'}
+                                        text_color={'text-gray-700'}
+                                    >
+                                        <CheckCircle2 size={13}/>
+                                    </ReusableButton>
+
+                                </div>
+
+                            }
                         </MuiCardComponent>
                         <MuiCardComponent>
                             <MuiTab
