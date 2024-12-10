@@ -148,7 +148,9 @@ function Output({
         planningCallbackFunction: planningCallbackFunction,
         selectedViewCard: selectedViewCard,
         isApiV2: true,
-        isMaintainViewNavigationForV1: true
+        isMaintainViewNavigationForV1: true,
+        isHideEdit: isHideAdd,
+        isHideDelete: isHideAdd
     })
     return (
         <ProtectedRoute>

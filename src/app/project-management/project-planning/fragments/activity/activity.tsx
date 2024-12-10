@@ -166,6 +166,8 @@ function Activity({
         callBackFunction: callBackFunction,
         planningCallbackFunction: planningCallbackFunction,
         selectedViewCard: selectedViewCard,
+        isHideEdit: isHideAdd,
+        isHideDelete: isHideAdd
     })
 
 

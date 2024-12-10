@@ -5,16 +5,19 @@ import PageHeader from '@/components/header/page-header'
 import { usePageData } from '@/hooks/use-page/use-page-data'
 import { useGlobalContextHook } from '@/hooks/useGlobalContextHook'
 import React, { useEffect } from 'react'
+import {is} from "date-fns/locale";
 
 interface Props {
     callBackFunction?: (selectedCard: string, id?: string) => void
     selectedViewCard?: string
-    project_id?: string | null
+    project?: any
+    isHideAdd?: boolean
 }
 function Goal({
-    project_id,
+    project,
     selectedViewCard,
-    callBackFunction
+    callBackFunction,
+                  isHideAdd
 
 }: Props) {
     const _deptFormInputs = [
@@ -110,7 +113,7 @@ function Goal({
         },
     ]
 
-    const url = `project_goal?project_id=${project_id}`
+    const url = `project_goal?project_id=${project?.id}`
 
     const { dispatch } = useGlobalContextHook()
 
@@ -137,7 +140,9 @@ function Goal({
         selectedViewCard: selectedViewCard,
         planningCallbackFunction: planningCallbackFunction,
         isApiV2: true,
-        isMaintainViewNavigationForV1: true
+        isMaintainViewNavigationForV1: true,
+        isHideEdit: isHideAdd,
+        isHideDelete: isHideAdd
     })
 
     return (
@@ -149,6 +154,7 @@ function Goal({
                         <PageHeader
                             handleClick={handleClick}
                             subHeader={`Goals / List`}
+                            isHideAdd={isHideAdd}
                             links={[]} />
                         {tabular()}
                         {createdForm()}

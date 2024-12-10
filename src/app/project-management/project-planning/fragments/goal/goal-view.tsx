@@ -55,6 +55,7 @@ const GoalShow = (
             goal_id={goal_id}
             selectedViewCard="outcome/show"
             callBackFunction={callBackFunction}
+            isHideAdd={project?.status === 'closed'}
         />,
         <Indicator
             key={'outcome'}

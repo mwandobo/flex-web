@@ -125,7 +125,8 @@ const ProjectPlanningShow = ({ params }: { params: { planId: string } }) => {
                                 <div className={`mt-3 p-2`}>
                                     {selected === 'goal' &&
                                         <Goal
-                                            project_id={data?.project?.id}
+                                            project={data?.project}
+                                            isHideAdd={data?.project?.status === 'closed'}
                                             callBackFunction={handleCardClick}
                                             selectedViewCard={'goal/show'}
                                         />}
@@ -145,7 +146,6 @@ const ProjectPlanningShow = ({ params }: { params: { planId: string } }) => {
                                             isHideAdd={true}
                                         />
                                     }
-
                                     {selected === 'outcome/show' && <OutcomeShow
                                         project={data?.project}
                                         callBackFunction={handleCardClick}

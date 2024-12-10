@@ -54,6 +54,7 @@ const OutcomeShow = (
             outcome_id={outcome_id}
             selectedViewCard="output/show"
             callBackFunction={callBackFunction}
+            isHideAdd={project?.status === 'closed'}
         />,
         <Indicator
             key={'outcome'}
