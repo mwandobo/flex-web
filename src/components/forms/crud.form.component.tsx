@@ -10,6 +10,7 @@ import MuiMultiSelectSelect from "@/components/inputs/mui-multi-select";
 import {ReactNode, useState} from "react"
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import FileInputComponent from "@/components/inputs/file-input.component";
+import MuiSelectLocal from "@/components/inputs/mui-select-local";
 
 interface Props {
     isModalOpen: boolean,
@@ -106,6 +107,22 @@ const CrudFormComponent = ({
 
                                                 {item?.type === 'select' && (
                                                     <MuiSelect
+                                                        handleChange={handleInputChange}
+                                                        from={item?.name}
+                                                        label={item?.label}
+                                                        optionsUrlData={item.optionsUrlData}
+                                                        optionDataKey={item.optionDataKey}
+                                                        control={item.control}
+                                                        control_id={item.control_id}
+                                                        control_for={item.control_for}
+                                                        value={item.value}
+                                                        error={item.errorMessage}
+                                                        isDisabled={isDisabled}
+                                                        isRequired={item.required}
+                                                    />
+                                                )}
+                                                {item?.type === 'select-local' && (
+                                                    <MuiSelectLocal
                                                         handleChange={handleInputChange}
                                                         from={item?.name}
                                                         label={item?.label}

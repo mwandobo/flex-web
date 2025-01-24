@@ -166,6 +166,12 @@ const items: ISidebarItem[] = [
                 permission: 'sales-list',
                 icon: Book,
             },
+            {
+                name: 'Workshop',
+                path: '/workshop',
+                permission: 'workshop-list',
+                icon: Book,
+            },
         ]
     },
     {

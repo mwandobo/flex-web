@@ -129,6 +129,7 @@ const ItemRequestView = () => {
                                         {label: 'Requested Date', value: data?.formatted_requested_date},
                                         {label: 'Submitted Date', value: data?.formatted_submitted_date},
                                         {label: 'Dispatched Date', value: data?.formatted_dispatched_date},
+                                        {label: 'Warranty Status', value: data?.warranty_status},
                                         {label: 'Status', value: data?.status},
                                     ]}
                                     titleA={`Item Store Request`}
