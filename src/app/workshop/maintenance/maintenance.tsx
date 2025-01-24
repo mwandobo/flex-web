@@ -19,7 +19,6 @@ const formInputs = [
         isError: false,
         errorMessage: ''
     },
-
     {
         name: 'amount',
         type: 'text',
