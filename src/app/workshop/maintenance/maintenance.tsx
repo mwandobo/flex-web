@@ -9,15 +9,62 @@ import {COST_CENTER_APPROVAL_SLUG, INVOICE_APPROVAL_SLUG, MAINTENANCE_APPROVAL_S
 
 const formInputs = [
     {
-        name: 'role_id',
-        type: 'select',
+        name: 'from',
+        type: 'select-local',
         label: 'Maintenance For',
         value: '',
-        optionsUrlData: 'role',
+        optionsUrlData: [{label: 'Item', value: 'item'},{label: 'Equipment', value: 'equipment'}],
         optionDataKey: 'departments',
         required: true,
         isError: false,
+        errorMessage: '',
+        control_for: 'from_id'
+    },
+    {
+        name: 'from_id',
+        type: 'select',
+        label: 'Equipment',
+        value: '',
+        optionsUrlData: 'maintenance/items',
+        optionDataKey: 'departments',
+        required: true,
+        isError: false,
+        errorMessage: '',
+        control: 'from_id'
+    },
+    {
+        name: 'maintenance_type',
+        type: 'select-local',
+        label: 'Maintenance Type',
+        value: '',
+        optionsUrlData: [{label: 'Internal', value: 'internal'},{label: 'External', value: 'external'}],
+        optionDataKey: 'departments',
+        required: true,
+        isError: false,
+        errorMessage: '',
+        control_for: 'maintenance_items'
+    },
+    {
+        name: 'name',
+        type: 'text',
+        label: 'Enter Name of Technician',
+        value: '',
+        required: true,
+        isError: false,
+        isRemoved: true,
         errorMessage: ''
+    },
+    {
+        name: 'maintained_by_id',
+        type: 'select',
+        label: 'Select Name of Technician',
+        value: '',
+        optionsUrlData: 'employee',
+        optionDataKey: 'users',
+        required: true,
+        isError: false,
+        isRemoved: true,
+        errorMessage: '',
     },
     {
         name: 'amount',
@@ -47,16 +94,40 @@ const columns = [
         label: 'Maintenance Code',
     },
     {
+        id: 'from',
+        numeric: false,
+        disablePadding: false,
+        label: 'Item Type',
+    },
+    {
+        id: 'maintenance_item_name',
+        numeric: false,
+        disablePadding: false,
+        label: 'Maintenance Item ',
+    },
+    {
         id: 'amount',
         numeric: false,
         disablePadding: false,
-        label: 'Cost Center Amount ',
+        label: 'Maintenance Cost ',
+    },
+    {
+        id: 'maintenance_type',
+        numeric: false,
+        disablePadding: false,
+        label: 'Maintenance Type',
     },
     {
         id: 'maintained_by_name',
         numeric: false,
         disablePadding: false,
         label: 'Maintained by',
+    },
+    {
+        id: 'warranty_status',
+        numeric: false,
+        disablePadding: false,
+        label: 'Warranty Status',
     },
     {
         id: 'status',
@@ -78,15 +149,15 @@ function Maintenance() {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'maintenance',
+        url: 'maintenance?kind=maintenance',
         modalTitle: 'Maintenance',
         viewUrl: '/maintenance/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
         from: 'maintenance',
-        isHideDelete: true,
-        isHideEdit: true,
+        isHideDelete: false,
+        isHideEdit: false,
         approval_slug: MAINTENANCE_APPROVAL_SLUG
     })
 
@@ -103,7 +174,7 @@ function Maintenance() {
                                 isShowAddButton={true}
                                />
                             {tabular()}
-                            {createdForm()}
+                            {createdForm('md')}
                         </>
                     }
                 </>

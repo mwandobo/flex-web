@@ -83,6 +83,7 @@ export const useCrudFormCreator = ({
             setFormData(formData)
         } catch (error: any) {
             console.log(formData)
+            console.log(error)
         }
     };
 
@@ -148,6 +149,32 @@ export const useCrudFormCreator = ({
         });
     };
 
+    const sideUpdatePayloadMaintenanceType = (value?: string) => {
+        console.log('sideUpdatePayloadMaintenanceType', sideUpdatePayloadMaintenanceType)
+        return formInputs?.map((input) => {
+            if (value === 'internal') {
+                if (input.name === 'name') {
+                    return {...input, isRemoved: true}
+                }
+                if (input.name === 'maintained_by_id') {
+                    return {...input, isRemoved: false}
+                }
+
+                return input
+            }
+            if (value === 'external') {
+                if (input.name === 'name') {
+                    return {...input, isRemoved: false}
+                }
+                if (input.name === 'maintained_by_id') {
+                    return {...input, isRemoved: true}
+                }
+                return input
+            }
+            return input
+        });
+    };
+
     const sideUpdatePayloadResource = (value?: string) => {
         return formInputs?.map((input) => {
             switch (Number(value)) {
@@ -204,10 +231,36 @@ export const useCrudFormCreator = ({
             newfoundInputs = newfoundInputs.map(input => ({...input, value: '', errorMessage: ''}));
         }
 
+        if(control_for){
+            let foundInput = newfoundInputs.find(input => input.control === control_for);
+
+            if (foundInput){
+                // Check if optionsUrlData is a valid URL
+                let selectUrl;
+                try {
+                    // Try to construct a URL object, assuming it's a valid URL
+                    selectUrl = new URL(foundInput.optionsUrlData);
+                } catch (error) {
+                    // If it's not a valid URL, prepend a base URL to make it valid
+                    selectUrl = new URL(`api/${foundInput.optionsUrlData}`, baseURL);
+                }
+
+                // Set the query parameter
+                selectUrl.searchParams.set('type', value);
+
+                foundInput.optionsUrlData = selectUrl.toString();
+
+            }
+
+
+        }
+
         if (control_for === 'sponsors') {
             const foundInput = formInputs.find(item => item.control === 'sponsor_type');
             newfoundInputs = sideUpdatePayload(foundInput, value); // Update inputs for sponsors
         }
+
+
 
         if (control_for === 'quotation-item') {
             const foundInput = newfoundInputs.find(item => item.control === 'quotation-item'); // Update formInputs copy
@@ -244,6 +297,11 @@ export const useCrudFormCreator = ({
 
         if (control_for === 'assignment') {
             newfoundInputs = sideUpdatePayloadAssignment(value); // Update inputs for sponsors
+        }
+
+
+        if (control_for === 'maintenance_items') {
+            newfoundInputs = sideUpdatePayloadMaintenanceType(value); // Update inputs for sponsors
         }
 
         if (control_for === 'resource') {

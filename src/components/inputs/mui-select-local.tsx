@@ -12,7 +12,7 @@ interface Props {
   from: string;
   isDisabled?: boolean;
   isRequired?: boolean;
-  optionsUrlData?: string;
+  optionsUrlData?: any;
   optionDataKey?: string;
   value: any;
   error?: string
@@ -27,7 +27,7 @@ const MuiSelectLocal = ({
   optionDataKey,
   from,
   isDisabled,
-                     isRequired,
+                          isRequired,
   placeholder = 'Enter your text here...',
   value,
   error,
@@ -39,33 +39,6 @@ const MuiSelectLocal = ({
   const onChange = (event: SelectChangeEvent) => {
     return handleChange(event, from, control_for)
   };
-
-  const assumptionOptions = [
-    { label: "Assumption", value: "assumption" },
-    { label: "Constraint", value: "assumption" }
-  ]
-
-  const [options, setOptions] = useState<any[]>([]);
-  const token = getValueFromLocalStorage('token')
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await get(optionsUrlData, token)
-
-      if (res && res.status === 200) {
-        const payload = CreateOptionsForselectHelper(res.data.data, optionDataKey)
-
-        setOptions(payload)
-      }
-    };
-
-    if (control === "assumption") {
-      setOptions(assumptionOptions)
-
-    } else {
-      fetchData()
-    }
-  }, [optionsUrlData]);
 
   return (
     <>
@@ -111,8 +84,8 @@ const MuiSelectLocal = ({
             marginBottom: "20px"
           }}
         >
-          {options && options.length > 0 &&
-            options.map((option: any) => (
+          {optionsUrlData && optionsUrlData.length > 0 &&
+              optionsUrlData.map((option: any) => (
               < MenuItem
                 key={option.value}
                 value={option.value}

@@ -13,6 +13,7 @@ export const QUOTATION_APPROVAL_SLUG = "quotation_approval"
 export const REQUISITION_REQUEST_APPROVAL_SLUG = "requisition_request_approval"
 export const REQUEST_FOR_QUOTATION_APPROVAL_SLUG = "request_for_quotation_approval"
 export const DELIVERY_APPROVAL_SLUG = "delivery_approval"
+export const EQUIPMENT_APPROVAL_SLUG = "equipment_approval"
 export const INSPECTION_APPROVAL_SLUG = "inspection_approval"
 export const STORE_APPROVAL_SLUG = "store_approval"
 

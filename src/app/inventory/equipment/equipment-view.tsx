@@ -9,21 +9,18 @@ import React, {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
-import moneyFormater from "@/components/moneyFormater";
-import {DELIVERY_APPROVAL_SLUG, EQUIPMENT_APPROVAL_SLUG} from "@/utils/constant";
+import { EQUIPMENT_APPROVAL_SLUG} from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {ReusableButton} from "@/components/button/reusable-button";
 import {FileOutput} from "lucide-react";
-import DeliveryItems from "@/app/inventory/delivery/delivery-items";
 import PopupModal from "@/components/modal/popup-modal";
 import MuiSelect from "@/components/inputs/mui-select";
-import TextFieldComponent from "@/components/inputs/text-field";
-import MuiDate from "@/components/inputs/mui-date";
 import TextArea from "@/components/inputs/text-area";
 import EquipmentItems from "@/app/inventory/equipment/equipment-items";
+import Warranty from "@/app/inventory/warranty/warranty";
 
 const EquipmentView = () => {
     const [data, setData] = useState<any>([])
@@ -196,12 +193,12 @@ const EquipmentView = () => {
                                     }
 
                                     {data.status !== 'defective' &&
-                                            <ReusableButton
-                                                name={'Mark Defective'}
-                                                onClick={() => toggleModal('defective')}
-                                            >
-                                                <FileOutput size={12}/>
-                                            </ReusableButton>
+                                        <ReusableButton
+                                            name={'Mark Defective'}
+                                            onClick={() => toggleModal('defective')}
+                                        >
+                                            <FileOutput size={12}/>
+                                        </ReusableButton>
                                     }
                                     {data.status === 'defective' &&
                                         <ReusableButton
@@ -225,6 +222,8 @@ const EquipmentView = () => {
                             }
                             <hr className="bg-gray-100"/>
                             <EquipmentItems equipment={data}/>
+                            <hr className="bg-gray-100"/>
+                            <Warranty from={'equipment'} from_id={id}/>
                         </MuiCardComponent>
                         <PopupModal
                             isOpen={isModalOpen}

@@ -20,37 +20,26 @@ const formInputs = [
 
 const columns = [
     {
-        id: 'user_name',
+        id: 'description',
         numeric: false,
         disablePadding: false,
-        label: 'Assigned To',
+        label: 'Note',
     },
     {
-        id: 'formatted_checked_out_date',
+        id: 'date',
         numeric: false,
         disablePadding: false,
-        label: 'Assigned Date',
-    },
-    {
-        id: 'formatted_return_date',
-        numeric: false,
-        disablePadding: false,
-        label: 'Return Date',
-    },
-    {
-        id: 'status',
-        numeric: false,
-        disablePadding: false,
-        label: 'Status',
+        label: 'Date',
+        width: '10%'
     }
 ]
 
 interface Props {
-    equipment: any
+    maintenance: any
 }
 
-function EquipmentItems({equipment}: Props) {
-    const permission = 'equipment'
+function MaintenanceHistory({maintenance}: Props) {
+    const permission = 'maintenance'
 
     const {
         loading,
@@ -61,13 +50,13 @@ function EquipmentItems({equipment}: Props) {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: `equipment/${equipment?.id}/history`,
-        modalTitle: 'Equipment History',
+        url: `maintenance/${maintenance?.id}/maintenance-notes`,
+        modalTitle: 'Maintenance History',
         viewUrl: '/inventory/items-categories/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'equipment-history',
+        from: 'maintenance-history',
         isHideShow: true,
         isHideDelete: true,
         isHideEdit: true
@@ -81,9 +70,10 @@ function EquipmentItems({equipment}: Props) {
                         :
                         <>
                             <PageHeader
-                                title={"Equipment History"}
+                                title={"Maintenance History"}
                                 handleClick={handleClick}
                                 isShowAddButton={false}
+
                                />
                             {tabular()}
                             {createdForm()}
@@ -97,4 +87,4 @@ function EquipmentItems({equipment}: Props) {
     )
 }
 
-export default EquipmentItems
+export default MaintenanceHistory

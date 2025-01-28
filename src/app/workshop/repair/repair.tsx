@@ -5,47 +5,82 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
-import {INVOICE_APPROVAL_SLUG, REPAIR_APPROVAL_SLUG} from "@/utils/constant";
-import {tr} from "date-fns/locale";
+import {
+    REPAIR_APPROVAL_SLUG
+} from "@/utils/constant";
 
 const formInputs = [
     {
-        name: 'type',
+        name: 'from',
+        type: 'select-local',
+        label: 'Repair For',
+        value: '',
+        optionsUrlData: [{label: 'Item', value: 'item'},{label: 'Equipment', value: 'equipment'}],
+        optionDataKey: 'departments',
+        required: true,
+        isError: false,
+        errorMessage: '',
+        control_for: 'from_id'
+    },
+    {
+        name: 'from_id',
         type: 'select',
-        label: 'Invoice Type',
+        label: 'Equipment',
         value: '',
-        optionsUrlData: `/invoices/types`,
-        optionDataKey: 'invoice-type',
-        control_for: 'invoice',
+        optionsUrlData: 'maintenance/items',
+        optionDataKey: 'departments',
         required: true,
         isError: false,
+        errorMessage: '',
+        control: 'from_id'
+    },
+    {
+        name: 'maintenance_type',
+        type: 'select-local',
+        label: 'Repair Type',
+        value: '',
+        optionsUrlData: [{label: 'Internal', value: 'internal'},{label: 'External', value: 'external'}],
+        optionDataKey: 'departments',
+        required: true,
+        isError: false,
+        errorMessage: '',
+        control_for: 'maintenance_items'
+    },
+    {
+        name: 'name',
+        type: 'text',
+        label: 'Enter Name of Technician',
+        value: '',
+        required: true,
+        isError: false,
+        isRemoved: true,
         errorMessage: ''
     },
     {
-        name: 'purchase_order_id',
+        name: 'maintained_by_id',
         type: 'select',
-        label: 'Purchase Order',
+        label: 'Select Name of Technician',
         value: '',
-        optionsUrlData: `/purchase-orders?approved=approved&status=invoice`,
-        optionDataKey: 'rfq',
-        control: 'invoice',
+        optionsUrlData: 'employee',
+        optionDataKey: 'users',
+        required: true,
+        isError: false,
+        isRemoved: true,
+        errorMessage: '',
+    },
+    {
+        name: 'amount',
+        type: 'text',
+        label: 'Amount',
+        value: '',
         required: true,
         isError: false,
         errorMessage: ''
     },
     {
-        name: 'invoice_date',
-        type: 'date',
-        label: 'Invoice Date',
-        value: '',
-        required: true,
-        isError: false,
-        errorMessage: ''
-    },
-    {
-        name: 'file',
-        type: 'file',
-        label: 'Attachment',
+        name: 'description',
+        type: 'textArea',
+        label: 'Description',
         value: '',
         required: true,
         isError: false,
@@ -61,16 +96,40 @@ const columns = [
         label: 'Repair Code',
     },
     {
+        id: 'from',
+        numeric: false,
+        disablePadding: false,
+        label: 'Item Type',
+    },
+    {
+        id: 'maintenance_item_name',
+        numeric: false,
+        disablePadding: false,
+        label: 'Repair Item ',
+    },
+    {
         id: 'amount',
         numeric: false,
         disablePadding: false,
-        label: 'Cost Center Amount ',
+        label: 'Repair Cost ',
     },
     {
-        id: 'repaired_by_name',
+        id: 'maintenance_type',
         numeric: false,
         disablePadding: false,
-        label: 'repaired by',
+        label: 'Repair Type',
+    },
+    {
+        id: 'maintained_by_name',
+        numeric: false,
+        disablePadding: false,
+        label: 'Repaired by',
+    },
+    {
+        id: 'warranty_status',
+        numeric: false,
+        disablePadding: false,
+        label: 'Warranty Status',
     },
     {
         id: 'status',
@@ -92,17 +151,16 @@ function Repair() {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'repair',
+        url: 'maintenance?kind=repair',
         modalTitle: 'Repair',
         viewUrl: '/repair/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'repair',
-        isHideDelete: true,
-        isHideEdit: true,
-        approval_slug: REPAIR_APPROVAL_SLUG,
-        isFormData:true
+        from: 'maintenance',
+        isHideDelete: false,
+        isHideEdit: false,
+        approval_slug: REPAIR_APPROVAL_SLUG
     })
 
     return (
@@ -118,7 +176,7 @@ function Repair() {
                                 isShowAddButton={true}
                                />
                             {tabular()}
-                            {createdForm()}
+                            {createdForm('md')}
                         </>
                     }
                 </>
