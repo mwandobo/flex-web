@@ -8,10 +8,13 @@ import Maintenance from "@/app/workshop/maintenance/maintenance";
 import Repair from "@/app/workshop/repair/repair";
 import MaintenanceView from "@/app/workshop/maintenance/maintenance-view";
 import RepairView from "@/app/workshop/repair/repair-view";
+import WorkshopService from "@/app/workshop/workshop-service/workshop-service";
+import WorkshopServiceView from "@/app/workshop/workshop-service/workshop-service-view";
 
 const WorkshopItems = [
     {name: 'maintenance', title: 'Maintenance', item: <Maintenance/>, itemView: <MaintenanceView/>},
     {name: 'repair', title: 'Repair', item: <Repair/>, itemView: <RepairView/>},
+    {name: 'workshop-request', title: 'Workshop Service Request', item: <WorkshopService/>, itemView: <WorkshopServiceView/>},
 ];
 
 const checkNotIncluded = (item: string) => {

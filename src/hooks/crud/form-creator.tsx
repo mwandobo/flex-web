@@ -149,6 +149,37 @@ export const useCrudFormCreator = ({
         });
     };
 
+    const sideUpdatePayloadWorkshopServiceRequest = (value?: string) => {
+        return formInputs?.map((input) => {
+            if (value === 'internal') {
+                if (input.name === 'from') {
+                    return {...input, isRemoved: false}
+                }
+                if (input.name === 'from_id') {
+                    return {...input, isRemoved: false}
+                }
+                if (input.name === 'item_id') {
+                    return {...input, isRemoved: true}
+                }
+                return input
+            }
+            if (value === 'external') {
+                if (input.name === 'from') {
+                    return {...input, isRemoved: true}
+                }
+                if (input.name === 'from_id') {
+                    return {...input, isRemoved: true}
+                }
+                if (input.name === 'item_id') {
+                    return {...input, isRemoved: false}
+                }
+                return input
+            }
+            return input
+        });
+    };
+
+
     const sideUpdatePayloadMaintenanceType = (value?: string) => {
         console.log('sideUpdatePayloadMaintenanceType', sideUpdatePayloadMaintenanceType)
         return formInputs?.map((input) => {
@@ -297,6 +328,10 @@ export const useCrudFormCreator = ({
 
         if (control_for === 'assignment') {
             newfoundInputs = sideUpdatePayloadAssignment(value); // Update inputs for sponsors
+        }
+
+        if (control_for === 'workshop_service') {
+            newfoundInputs = sideUpdatePayloadWorkshopServiceRequest(value); // Update inputs for sponsors
         }
 
 

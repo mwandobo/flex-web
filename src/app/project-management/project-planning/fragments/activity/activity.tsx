@@ -166,6 +166,7 @@ function Activity({
         callBackFunction: callBackFunction,
         planningCallbackFunction: planningCallbackFunction,
         selectedViewCard: selectedViewCard,
+        isMaintainViewNavigationForV1: true,
         isHideEdit: isHideAdd,
         isHideDelete: isHideAdd,
         isApiV2:true
