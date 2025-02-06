@@ -87,7 +87,7 @@ const ActivityShow = (
             key={'assumption'}
             from={'activity'}
             from_id={activity_id}
-            project_id={project_id}
+            project={project}
         />,
         <Risk
             key={'risk'}

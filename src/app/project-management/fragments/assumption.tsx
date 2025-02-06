@@ -58,6 +58,7 @@ function Assumption({
 
 }: Props) {
 
+
     const url = `assumptions_contsraints/${project?.id}/${from}/${from_id}/assumption`
 
     const {

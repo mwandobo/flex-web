@@ -32,6 +32,7 @@ const GoalShow = (
 ) => {
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
+    console.log('project project project', project)
 
     const token = getValueFromLocalStorage('token')
 
@@ -74,7 +75,7 @@ const GoalShow = (
             key={'assumption'}
             from_id={goal_id}
             from="goal"
-            project_id={project?.id}
+            project={project}
         />,
     ];
 

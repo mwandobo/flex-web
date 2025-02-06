@@ -77,7 +77,7 @@ const OutputShow = (
             key={'assumption'}
             from_id={output_id}
             from="output"
-            project_id={project_id}
+            project={project}
         />,
     ];
 

@@ -9,14 +9,14 @@ import Assumption from './assumption'
 
 interface Props {
     from_id?: any
-    project_id?: any
+    project?: any
     from?: any
     isHideAdd?: boolean
 }
 
 function AssumptionConstraint({
     from_id,
-    project_id,
+    project,
     from,
 }: Props) {
     const nodes: React.ReactNode[] = [
@@ -24,13 +24,13 @@ function AssumptionConstraint({
             key={'assumption'}
             from={from}
             from_id={from_id}
-            project_id={project_id}
+            project={project}
         />,
         <Constraint
             key={'constraint'}
             from={from}
             from_id={from_id}
-            project_id={project_id}
+            project_id={project?.id}
         />,
     ];
 
