@@ -20,6 +20,7 @@ export const STORE_APPROVAL_SLUG = "store_approval"
 export const COST_CENTER_APPROVAL_SLUG = "cost_center_approval"
 export const MAINTENANCE_APPROVAL_SLUG = "maintenance_approval"
 export const REPAIR_APPROVAL_SLUG = "repair_approval"
+export const WORKSHOP_SERVICE_REQUEST_APPROVAL_SLUG = "workshop_service_request_approval"
 export const SERVICES_APPROVAL_SLUG = "service_approval"
 export const WARRANTY_APPROVAL_SLUG = "warranty_approval"
 

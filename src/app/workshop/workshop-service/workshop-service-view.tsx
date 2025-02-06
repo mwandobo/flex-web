@@ -13,7 +13,7 @@ import {ReusableButton} from "@/components/button/reusable-button";
 import {CheckCheck, FileOutput, NotebookPen} from "lucide-react";
 import moneyFormater from "@/components/moneyFormater";
 import {
- REPAIR_APPROVAL_SLUG
+    REPAIR_APPROVAL_SLUG, WORKSHOP_SERVICE_REQUEST_APPROVAL_SLUG
 } from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
 import SlideOver from "@/components/slide-over/slide-over.component";
@@ -31,7 +31,6 @@ const WorkshopServiceView = () => {
     const [loading, setLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const [maintenance_date, setMaintenanceDate] = useState('')
-    const [notes, setNotes] = useState('')
     const [type, setType] = useState('')
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
@@ -40,27 +39,16 @@ const WorkshopServiceView = () => {
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
 
-    const [isModalOpen, setIsModalOpen] = useState(false)
     const toggleModal = (type?: string) => {
         if (type === 'submit') {
             handleSubmit('submit-draft')
-        } else {
-            setIsModalOpen(!isModalOpen)
-            setType(type)
         }
 
     }
-    const handleInputChange = (e: any, from?: any) => {
-        if (from === 'maintenance_date') {
-            setMaintenanceDate(e.target.value)
-        }
-        if (from === 'notes') {
-            setNotes(e.target.value)
-        }
-    }
 
-    const url = `maintenance/${id}`
-    const approval_url = `approval/approved-items/by-item?from=${REPAIR_APPROVAL_SLUG}&&from_id=${id}`
+
+    const url = `workshop-service/${id}`
+    const approval_url = `approval/approved-items/by-item?from=${WORKSHOP_SERVICE_REQUEST_APPROVAL_SLUG}&&from_id=${id}`
 
     const navigateToLogin = () => {
         return router.push('/login')
@@ -71,8 +59,8 @@ const WorkshopServiceView = () => {
         latestApproveStatus,
         approvalButtonsWrapper,
     } = useApprovalHook({
-        approval_slug: REPAIR_APPROVAL_SLUG,
-        from: REPAIR_APPROVAL_SLUG,
+        approval_slug: WORKSHOP_SERVICE_REQUEST_APPROVAL_SLUG,
+        from: WORKSHOP_SERVICE_REQUEST_APPROVAL_SLUG,
         from_id: id
     })
 
@@ -80,12 +68,11 @@ const WorkshopServiceView = () => {
 
     const onSave = async (url: string) => {
         try {
-                const final_url =  `maintenance/${id}/${url}?type=${type}`
-                const res = await post(final_url, {notes, date: maintenance_date ? maintenance_date: dayjs().format('YYYY-MM-DD')} ,token);
+                const final_url =  `workshop-service/submit/${id}`
+                const res = await get(final_url ,token);
                 if (data && res.status === 200) {
                     setRefresh(!refresh);
                 }
-
 
         } catch (error: any) {
             console.log(error);
@@ -111,8 +98,6 @@ const WorkshopServiceView = () => {
                 if (data && res.status === 200) {
                     setData(res.data.data)
                     setLoading(false)
-                    setIsModalOpen(false)
-                    setNotes('')
                     setMaintenanceDate('')
                 }
 
@@ -133,23 +118,22 @@ const WorkshopServiceView = () => {
                     :
                     <>
                         <PageHeader
-                            title={'Repair'}
+                            title={'Workshop Service Request'}
                             isShowBackButton={true}
                         />
                         <MuiCardComponent>
                             <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
-                                        {label: 'Repair Code', value: data?.formatted_code},
-                                        {label: 'Repair Item', value: data?.maintenance_item_name},
+                                        {label: 'Workshop Service Code', value: data?.formatted_code},
+                                        {label: 'Service Type', value: data?.service_request_type},
+                                        {label: 'Item Name', value: data?.item_name},
                                         {label: 'Description', value: data?.description},
-                                        {label: 'Repair Cost', value: moneyFormater({amount: data?.amount})},
-                                        {label: 'Repair Type', value: data?.maintenance_type},
-                                        {label: 'Repaired By', value: data?.maintained_by_name},
+                                        {label: 'Amount', value: moneyFormater({amount: data?.amount})},
                                         {label: 'Warranty Status', value: data?.warranty_status},
                                         {label: 'Status', value: data?.status},
                                     ]}
-                                    titleA={`Repair`}
+                                    titleA={`Workshop Service Request`}
                                     titleB={` ${data?.formatted_code} `}
                                 />
                                 <div className={'flex justify-between mt-2'}>
@@ -170,71 +154,14 @@ const WorkshopServiceView = () => {
                             {approveStatus() && data?.status === 'pending' &&
                                 <div className={'flex justify-end gap-2 mt-2'}>
                                     <ReusableButton
-                                        name={'Start Repair'}
-                                        onClick={() => toggleModal('start_maintenance')}
+                                        name={'Submit Request'}
+                                        onClick={() => toggleModal('submit')}
                                     >
                                         <FileOutput size={12}/>
                                     </ReusableButton>
                                 </div>
                             }
-
-                            {approveStatus() && data?.status === 'in-progress' &&
-                                <div className={'flex justify-end gap-2 my-2'}>
-                                    <ReusableButton
-                                        name={'Add Notes'}
-                                        onClick={() => toggleModal('add_note')}
-                                    >
-                                        <NotebookPen size={12}/>
-                                    </ReusableButton>
-                                    <ReusableButton
-                                        name={'Close Repair'}
-                                        onClick={() => toggleModal('close_maintenance')}
-                                    >
-                                        <CheckCheck size={12}/>
-                                    </ReusableButton>
-                                </div>
-                            }
-                            <hr className="bg-gray-100"/>
-
-                            <MaintenanceHistory maintenance={data}/>
-
                         </MuiCardComponent>
-
-                        <PopupModal
-                            isOpen={isModalOpen}
-                            onSaveButtonName={'Save'}
-                            onClose={toggleModal}
-                            isDisabled={false}
-                            title={"Start Maintenance"}
-                        >
-                            <form onSubmit={(event) => handleSubmit('manipulate-maintenance', event)}>
-                                <MuiDate
-                                    handleDateChange={handleInputChange}
-                                    from={'maintenance_date'}
-                                    label={"Repair Date"}
-                                    value={maintenance_date  ? maintenance_date : dayjs().format()}
-                                    // value={maintenance_date }
-                                    // minDate={item.minDate}
-                                    // maxDate={item.maxDate}
-                                    defaultValue={dayjs().format()}
-                                    isDisabled={false}
-                                />
-                                <TextArea
-                                    placeholder={"Notes"}
-                                    from={"notes"}
-                                    label={"Notes"}
-                                    value={notes}
-                                    onChange={handleInputChange}
-                                />
-
-                                <div className={'flex gap-2 justify-end'}>
-                                    <ReusableButton
-                                        name={'Submit'}
-                                        type='submit'
-                                    />
-                                </div>
-                            </form>
-                        </PopupModal>
                     </>
             }
         </ProtectedRoute>

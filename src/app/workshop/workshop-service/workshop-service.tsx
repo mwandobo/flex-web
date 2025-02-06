@@ -6,7 +6,7 @@ import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
 import {
-    REPAIR_APPROVAL_SLUG
+    REPAIR_APPROVAL_SLUG, WORKSHOP_SERVICE_REQUEST_APPROVAL_SLUG
 } from "@/utils/constant";
 
 const formInputs = [
@@ -70,18 +70,6 @@ const formInputs = [
         errorMessage: ''
     },
     {
-        name: 'maintained_by_id',
-        type: 'select',
-        label: 'Select Name of Technician',
-        value: '',
-        optionsUrlData: 'employee',
-        optionDataKey: 'users',
-        required: true,
-        isError: false,
-        isRemoved: true,
-        errorMessage: '',
-    },
-    {
         name: 'amount',
         type: 'text',
         label: 'Amount',
@@ -97,10 +85,10 @@ const columns = [
         id: 'formatted_code',
         numeric: false,
         disablePadding: false,
-        label: 'Repair Code',
+        label: 'Workshop Request Code',
     },
     {
-        id: 'service_type_name',
+        id: 'service_request_type',
         numeric: false,
         disablePadding: false,
         label: 'Service Type',
@@ -115,7 +103,7 @@ const columns = [
         id: 'amount',
         numeric: false,
         disablePadding: false,
-        label: 'Repair Cost ',
+        label: 'Cost ',
     },
     {
         id: 'warranty_status',
@@ -152,7 +140,7 @@ function WorkshopService() {
         from: 'workshop-service',
         isHideDelete: false,
         isHideEdit: false,
-        approval_slug: REPAIR_APPROVAL_SLUG
+        approval_slug: WORKSHOP_SERVICE_REQUEST_APPROVAL_SLUG
     })
 
     return (
