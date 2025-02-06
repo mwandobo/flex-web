@@ -89,7 +89,7 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
 
     const handleSubmitCollectedData = async () => {
         if (formPayload) {
-            const response = await post<any>('collected_data/store', formPayload, token)
+            const response = await post<any>('collected_data', formPayload, token)
             if (response?.status === 200) {
                 setIsSubmitted(!isSubmitted)
                 setFormPayload(null)
