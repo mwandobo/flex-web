@@ -9,6 +9,19 @@ import {COST_CENTER_APPROVAL_SLUG, INVOICE_APPROVAL_SLUG, MAINTENANCE_APPROVAL_S
 
 const formInputs = [
     {
+        name: 'maintenance_type',
+        type: 'select-local',
+        label: 'Maintenance Type',
+        value: '',
+        optionsUrlData: [{label: 'Internal', value: 'internal'},{label: 'External', value: 'external'}],
+        optionDataKey: 'departments',
+        required: true,
+        isError: false,
+        errorMessage: '',
+        control_for: 'maintenance_items'
+    },
+
+    {
         name: 'from',
         type: 'select-local',
         label: 'Maintenance For',
@@ -17,6 +30,7 @@ const formInputs = [
         optionDataKey: 'departments',
         required: true,
         isError: false,
+        isRemoved: true,
         errorMessage: '',
         control_for: 'from_id'
     },
@@ -29,20 +43,34 @@ const formInputs = [
         optionDataKey: 'departments',
         required: true,
         isError: false,
+        isRemoved: true,
         errorMessage: '',
         control: 'from_id'
     },
     {
-        name: 'maintenance_type',
+        name: 'workshop_service_id',
+        type: 'select',
+        label: 'Workshop Service Request',
+        value: '',
+        optionsUrlData: 'workshop-service',
+        optionDataKey: 'workshop-service-v1',
+        required: true,
+        isError: false,
+        isRemoved: true,
+        errorMessage: '',
+        control: 'from_id'
+    },
+    {
+        name: 'technician_type',
         type: 'select-local',
-        label: 'Maintenance Type',
+        label: 'Technician Type',
         value: '',
         optionsUrlData: [{label: 'Internal', value: 'internal'},{label: 'External', value: 'external'}],
         optionDataKey: 'departments',
         required: true,
         isError: false,
         errorMessage: '',
-        control_for: 'maintenance_items'
+        control_for: 'technician_items'
     },
     {
         name: 'name',
@@ -94,7 +122,13 @@ const columns = [
         label: 'Maintenance Code',
     },
     {
-        id: 'from',
+        id: 'maintenance_type',
+        numeric: false,
+        disablePadding: false,
+        label: 'Maintenance Type',
+    },
+    {
+        id: 'formatted_item_type',
         numeric: false,
         disablePadding: false,
         label: 'Item Type',
@@ -103,7 +137,7 @@ const columns = [
         id: 'maintenance_item_name',
         numeric: false,
         disablePadding: false,
-        label: 'Maintenance Item ',
+        label: 'Item Name',
     },
     {
         id: 'amount',
@@ -111,18 +145,7 @@ const columns = [
         disablePadding: false,
         label: 'Maintenance Cost ',
     },
-    {
-        id: 'maintenance_type',
-        numeric: false,
-        disablePadding: false,
-        label: 'Maintenance Type',
-    },
-    {
-        id: 'maintained_by_name',
-        numeric: false,
-        disablePadding: false,
-        label: 'Maintained by',
-    },
+
     {
         id: 'warranty_status',
         numeric: false,

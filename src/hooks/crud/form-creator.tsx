@@ -180,8 +180,7 @@ export const useCrudFormCreator = ({
     };
 
 
-    const sideUpdatePayloadMaintenanceType = (value?: string) => {
-        console.log('sideUpdatePayloadMaintenanceType', sideUpdatePayloadMaintenanceType)
+    const sideUpdatePayloadTechnicianType = (value?: string) => {
         return formInputs?.map((input) => {
             if (value === 'internal') {
                 if (input.name === 'name') {
@@ -199,6 +198,37 @@ export const useCrudFormCreator = ({
                 }
                 if (input.name === 'maintained_by_id') {
                     return {...input, isRemoved: true}
+                }
+                return input
+            }
+            return input
+        });
+    };
+
+    const sideUpdatePayloadMaintenanceType = (value?: string) => {
+        return formInputs?.map((input) => {
+            if (value === 'internal') {
+                if (input.name === 'from') {
+                    return {...input, isRemoved: false}
+                }
+                if (input.name === 'from_id') {
+                    return {...input, isRemoved: false}
+                }
+                if (input.name === 'workshop_service_id') {
+                    return {...input, isRemoved: true}
+                }
+
+                return input
+            }
+            if (value === 'external') {
+                if (input.name === 'from') {
+                    return {...input, isRemoved: true}
+                }
+                if (input.name === 'from_id') {
+                    return {...input, isRemoved: true}
+                }
+                if (input.name === 'workshop_service_id') {
+                    return {...input, isRemoved: false}
                 }
                 return input
             }
@@ -335,9 +365,16 @@ export const useCrudFormCreator = ({
         }
 
 
+        if (control_for === 'technician_items') {
+            newfoundInputs = sideUpdatePayloadTechnicianType(value); // Update inputs for sponsors
+        }
+
         if (control_for === 'maintenance_items') {
             newfoundInputs = sideUpdatePayloadMaintenanceType(value); // Update inputs for sponsors
         }
+
+
+
 
         if (control_for === 'resource') {
             newfoundInputs = sideUpdatePayloadResource(value); // Update inputs for sponsors

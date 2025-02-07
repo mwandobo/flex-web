@@ -28,6 +28,15 @@ const CreateOptionsForselectHelper = (payload?: any[], from?: string, id?: strin
         })
     }
 
+    if (payload && payload.length && from === 'workshop-service-v1') {
+        payload.map(user => {
+            const data = { label: `${user.formatted_code} -${user.item_name}  `, value: user.id }
+            output.push(data)
+        })
+    }
+
+
+
     if (payload && payload.length && from === 'approvals') {
         payload.map(approval => {
             const data = { label: `${approval.slug} `, value: approval.id }
