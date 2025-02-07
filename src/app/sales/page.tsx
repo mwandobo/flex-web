@@ -14,6 +14,8 @@ import SalesRfq from "@/app/sales/sales-rfq/sales-rfq";
 import SalesRfqView from "@/app/sales/sales-rfq/sales-rfq-view";
 import PricingView from "@/app/sales/pricing/pricing-view";
 import Pricing from "@/app/sales/pricing/pricing";
+import SoldItems from "@/app/sales/sold-items/sold-items";
+import SoldItemsView from "@/app/sales/sold-items/sold-items-view";
 
 const SalesItems = [
     {name: 'rfq', title: 'Rfq', item: <SalesRfq/>, itemView: <SalesRfqView/>},
@@ -21,6 +23,7 @@ const SalesItems = [
     {name: 'quotation', title: 'Quotations', item: <SalesQuotation/>, itemView: <SalesQuotationView/>},
     {name: 'Orders', title: 'Orders', item: <Order/>, itemView: <OrderView/>},
     {name: 'Pricing', title: 'Pricing', item: <Pricing/>, itemView: <PricingView/>},
+    {name: 'Sold Items', title: 'Sold Items', item: <SoldItems/>, itemView: <SoldItemsView/>},
 ];
 
 function SalesPage() {
