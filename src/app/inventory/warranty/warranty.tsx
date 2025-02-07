@@ -98,6 +98,12 @@ function Warranty({
             label: 'Warranty Code',
         },
         {
+            id: 'from',
+            numeric: false,
+            disablePadding: false,
+            label: 'Warranty For',
+        },
+        {
             id: 'service_item_name',
             numeric: false,
             disablePadding: false,

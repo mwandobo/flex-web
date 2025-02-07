@@ -115,6 +115,7 @@ const SoldItemsView = () => {
                                         {label: 'Item Category', value: data?.category_name},
                                         {label: 'Quantity', value: data?.rfq_quantity},
                                         {label: 'Price', value: data?.price},
+                                        {label: 'Warranty Status', value: data?.warrant_status},
                                     ]}
                                     titleA={`Item`}
                                     titleB={` ${data?.name} `}

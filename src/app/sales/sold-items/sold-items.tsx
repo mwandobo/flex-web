@@ -42,7 +42,7 @@ const columns = [
         label: 'Item Quantity',
     },
     {
-        id: 'warranty_status',
+        id: 'warrant_status',
         numeric: false,
         disablePadding: false,
         label: 'Warranty Status',

@@ -54,7 +54,7 @@ const formInputs = [
         label: 'Items',
         value: '',
         optionsUrlData: 'workshop-service/items',
-        optionDataKey: 'departments',
+        optionDataKey: 'workshop-service',
         required: true,
         isError: false,
         errorMessage: '',
