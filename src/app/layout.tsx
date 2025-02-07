@@ -37,10 +37,10 @@ export default function RootLayout({
         <div className="flex h-[100vh] w-full bg-gray-200 ">
             <HydrationZustand>
                 <GlobalContextProvider>
-                    <div className={''}>
+                    <div className={'w-full h-full flex'}>
                         <Sidebar/>
-                        {/*<div className={'flex flex-col w-full min-h-screen'}>*/}
-                            {/*    <Header/>*/}
+                        <div className={'w-full'}>
+                            <Header/>
                             {/*    /!*body*!/*/}
                             {/*    <div className="flex w-full h-full">*/}
                             {/*        < Sidebar/>*/}
@@ -54,10 +54,10 @@ export default function RootLayout({
                             {/*                <Footer/>*/}
                             {/*            </div>*/}
                             {/*        </div>*/}
-                            {/*    </div>*/}
-                            {/*    <WebSocketComponent/>*/}
-                            {/*    <ToastContainer position="top-right" autoClose={5000}/>*/}
                         </div>
+                        <WebSocketComponent/>
+                        <ToastContainer position="top-right" autoClose={5000}/>
+                    </div>
                 </GlobalContextProvider>
             </HydrationZustand>
         </div>

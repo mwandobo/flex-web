@@ -24,7 +24,8 @@ import {
     UserRoundCog,
     Users,
     UserCheck,
-    Bell
+    Bell,
+    Menu
 } from 'lucide-react'
 import React from 'react'
 import SidebarItem from './item'
@@ -252,22 +253,42 @@ const items: ISidebarItem[] = [
 
 function Sidebar() {
     return (
-        <div className='w-72 bg-white p-4  h-full overflow-y-auto'>
-            <img className='h-10 w-fit mb-6' src="/logo.png" alt="logo"/>
-            <hr/>
-
-            <div className='flex flex-col'>
-                {
-                    items.map(item =>
-                        <>
-                            {
-                                checkPermissions(item?.permission) &&
-                                <SidebarItem key={item.path} item={item}/>
-                            }
-                        </>
-                    )
-                }
+        <div className={'w-72 h-full'}>
+            <div className='hidden md:block bg-white p-4  h-full overflow-y-auto'>
+                <img className='h-10 w-fit mb-6' src="/logo.png" alt="logo"/>
+                <hr/>
+                <div className='flex flex-col'>
+                    {
+                        items.map(item =>
+                            <>
+                                {
+                                    checkPermissions(item?.permission) &&
+                                    <SidebarItem key={item.path} item={item}/>
+                                }
+                            </>
+                        )
+                    }
+                </div>
             </div>
+            {/*<div className='md:hidden bg-white p-4 w-full flex justify-between'>*/}
+            {/*    <button><Menu /></button>*/}
+
+            {/*    <img className='h-10 w-fit ' src="/logo.png" alt="logo"/>*/}
+
+            {/*    /!*<hr/>*!/*/}
+            {/*    /!*<div className='flex flex-col'>*!/*/}
+            {/*    /!*    {*!/*/}
+            {/*    /!*        items.map(item =>*!/*/}
+            {/*    /!*            <>*!/*/}
+            {/*    /!*                {*!/*/}
+            {/*    /!*                    checkPermissions(item?.permission) &&*!/*/}
+            {/*    /!*                    <SidebarItem key={item.path} item={item}/>*!/*/}
+            {/*    /!*                }*!/*/}
+            {/*    /!*            </>*!/*/}
+            {/*    /!*        )*!/*/}
+            {/*    /!*    }*!/*/}
+            {/*    /!*</div>*!/*/}
+            {/*</div>*/}
         </div>
     )
 }

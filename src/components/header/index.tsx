@@ -33,7 +33,7 @@ function Header() {
     }
 
     return (
-        <nav className="w-full flex justify-between p-2 py-4 bg-white  sticky top-0 z-20">
+        <nav className="w-full flex justify-end p-2 py-4 bg-white">
             {/*border-b border-gray-200*/}
             <div className="flex items-center justify-end me-8 gap-2">
                 <NotificationComponent />
