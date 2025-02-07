@@ -35,7 +35,6 @@ function Header() {
     return (
         <nav className="w-full flex justify-between p-2 py-4 bg-white  sticky top-0 z-20">
             {/*border-b border-gray-200*/}
-            <img className='h-10 w-fit ms-4' src="/logo.png" alt="logo"/>
             <div className="flex items-center justify-end me-8 gap-2">
                 <NotificationComponent />
                 <ProfileDropdown name={currentUser?.email} handleLogout={handleLogout}/>

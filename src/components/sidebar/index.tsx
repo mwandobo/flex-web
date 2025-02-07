@@ -137,7 +137,7 @@ const items: ISidebarItem[] = [
         ]
     },
     {
-        name: 'Procurement and Management',
+        name: 'Procurement',
         path: '/procurement',
         permission: 'procurement-list',
         icon: Book,
@@ -146,12 +146,6 @@ const items: ISidebarItem[] = [
                 name: 'Finance',
                 path: '/finance',
                 permission: 'finance-list',
-                icon: Book,
-            },
-            {
-                name: 'Inventory',
-                path: '/inventory',
-                permission: 'inventory-list',
                 icon: Book,
             },
             {
@@ -166,6 +160,20 @@ const items: ISidebarItem[] = [
                 permission: 'sales-list',
                 icon: Book,
             },
+        ]
+    },
+    {
+        name: 'Management',
+        path: '/procurement',
+        permission: 'procurement-list',
+        icon: Book,
+        items: [
+            {
+                name: 'Inventory',
+                path: '/inventory',
+                permission: 'inventory-list',
+                icon: Book,
+            },
             {
                 name: 'Workshop',
                 path: '/workshop',
@@ -174,6 +182,7 @@ const items: ISidebarItem[] = [
             },
         ]
     },
+
     {
         name: 'Administration',
         path: '/administration',
@@ -233,7 +242,6 @@ const items: ISidebarItem[] = [
             },
         ]
     },
-
     {
         name: 'Settings',
         path: '/settings',
@@ -244,22 +252,21 @@ const items: ISidebarItem[] = [
 
 function Sidebar() {
     return (
-        <div className='w-64 bg-white z-60 p-4 sticky top-16 min-h-full  overflow-y-auto z-10'>
-            <div className="flex flex-col  mt-6">
-                <div
-                    className='flex flex-col'
-                >
-                    {
-                        items.map(item =>
-                            <>
-                                {
-                                    checkPermissions(item?.permission) &&
-                                    <SidebarItem key={item.path} item={item}/>
-                                }
-                            </>
-                        )
-                    }
-                </div>
+        <div className='w-72 bg-white p-4  h-full overflow-y-auto'>
+            <img className='h-10 w-fit mb-6' src="/logo.png" alt="logo"/>
+            <hr/>
+
+            <div className='flex flex-col'>
+                {
+                    items.map(item =>
+                        <>
+                            {
+                                checkPermissions(item?.permission) &&
+                                <SidebarItem key={item.path} item={item}/>
+                            }
+                        </>
+                    )
+                }
             </div>
         </div>
     )

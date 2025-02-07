@@ -59,19 +59,21 @@ function SidebarItem({ item }: { item: ISidebarItem }) {
 
     return (
         <div className={'text-gray-700 font-medium'} style={{fontSize:'13px'}}>
-            {/*<div className={`flex items-center justify-between p-2 hover:bg-sidebar-background hover:text-sidebar-active rounded-lg cursor-pointer text-sidebar-iconColor ${isActive && "text-indigo-700 bg-sidebar-background"}`}*/}
             <div className={`flex items-center mb-1 justify-between p-2 rounded cursor-pointer hover:bg-gray-200 ${isActive && "bg-gray-200"}`}
                 onClick={onclick}
             >
-                <div className='flex items-center gap-1'>
-                    <Icon size={13} />
+                <div className='flex items-center gap-2'>
+                    <Icon size={13}/>
+                    {/*<p className="hidden md:block"> {name} </p>*/}
                     <p className=""> {name} </p>
+
                 </div>
-                {items && items.length > 0 && <ChevronDown size={14} className={expanded ? 'rotate-180 duration-200' : ''} />}
+                {items && items.length > 0 &&
+                    <ChevronDown strokeWidth={3}  size={14} className={expanded ? 'rotate-180 duration-200' : ''} />}
 
             </div>
             {expanded && items && items.length &&
-                <div className="flex flex-col ml-8">
+                <div className="flex flex-col ml-4">
                     {items.map(item =>
                         checkPermissions(item?.permission) && <> <SubMenuItem key={item.path} item={item} /></>
                     )}

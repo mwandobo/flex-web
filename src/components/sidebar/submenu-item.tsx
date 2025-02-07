@@ -38,8 +38,9 @@ function SubMenuItem({ item }: { item: ISubItem }) {
                 onClick={onclick}
             >
                 <div className='flex items-center space-x-2'>
-                    <Icon size={13} />
-                    <p className=''> {name} </p>
+                    <Icon size={13}/>
+                    <p className=""> {name} </p>
+                    {/*<p className="hidden md:block"> {name} </p>*/}
                 </div>
             </div>
 
