@@ -109,3 +109,40 @@ children: React.ReactNode;
         </html>
     );
 }
+
+
+
+
+
+        <html lang="en">
+        <body className={`${inter.className} `}>
+        <div className="flex h-[100vh]  bg-gray-200 ">
+            <HydrationZustand>
+                <GlobalContextProvider>
+                    <div className={'h-full bg-blue-200 '}>
+                        <Sidebar/>
+                        <div className={''}>
+                            {/*<Header/>*/}
+                            {/*    /!*body*!/*/}
+                            {/*    <div className="flex w-full h-full">*/}
+                            {/*        < Sidebar/>*/}
+                            {/*        <div className={'w-full h-full'}>*/}
+                            {/*            <div className="flex flex-col w-full h-full justify-between ">*/}
+                            {/*                <div className={'px-4 pt-4 pb-1 w-full h-full'}>*/}
+                            {/*                    <div className="bg-white p-6">*/}
+                            {/*                        {children}*/}
+                            {/*                    </div>*/}
+                            {/*                </div>*/}
+                            {/*                <Footer/>*/}
+                            {/*            </div>*/}
+                            {/*        </div>*/}
+                        </div>
+                        <WebSocketComponent/>
+                        <ToastContainer position="top-right" autoClose={5000}/>
+                    </div>
+                </GlobalContextProvider>
+            </HydrationZustand>
+        </div>
+        {/* </div> */}
+        </body>
+        </html>

@@ -112,7 +112,6 @@ export const updateContextReducer = (state: State, action: Action): State => {
                 inEvaluation:  action.payload
             };
         case 'UPDATE_HIDE_SIDEBAR':
-            setValueLocalStorage('hideSideBar', action.payload)
             return {
                 ...state,
                 hideSideBar:  action.payload

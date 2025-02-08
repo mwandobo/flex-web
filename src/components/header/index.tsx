@@ -38,7 +38,14 @@ function Header() {
     }
 
     return (
-        <nav className="w-full flex justify-end p-2 py-3 bg-white">
+        <nav className={`w-full flex ${hideSideBar ? 'justify-between': 'justify-end'} md:justify-end p-2 py-3 border-b border-gray-200 bg-white`}>
+
+            <div className={`flex md:hidden ${!hideSideBar && 'hidden'}  items-center`}>
+                <button className={'me-3'} onClick={toggleSideBar}>   <Menu size={40} strokeWidth={2}/>
+                </button>
+                <img className={`h-10 w-fit`} src="/logo.png" alt="logo"/>
+            </div>
+
             <div className="flex items-center justify-end me-8 gap-2">
                 <NotificationComponent/>
                 <ProfileDropdown name={currentUser?.email} handleLogout={handleLogout}/>

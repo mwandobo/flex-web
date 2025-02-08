@@ -33,30 +33,41 @@ export default function RootLayout({
 
     return (
         <html lang="en">
-        <body className={`${inter.className}`}>
-        <div className="flex h-[100vh] w-full bg-gray-200 ">
+        <body className={`${inter.className} `}>
+        <div className="bg-gray-200 ">
             <HydrationZustand>
                 <GlobalContextProvider>
-                    <div className={'w-full h-full flex'}>
-                        <Sidebar/>
-                        <div className={'w-full'}>
-                            <Header/>
-                            {/*    /!*body*!/*/}
-                            {/*    <div className="flex w-full h-full">*/}
-                            {/*        < Sidebar/>*/}
-                            {/*        <div className={'w-full h-full'}>*/}
-                            {/*            <div className="flex flex-col w-full h-full justify-between ">*/}
-                            {/*                <div className={'px-4 pt-4 pb-1 w-full h-full'}>*/}
-                            {/*                    <div className="bg-white p-6">*/}
-                            {/*                        {children}*/}
-                            {/*                    </div>*/}
-                            {/*                </div>*/}
-                            {/*                <Footer/>*/}
-                            {/*            </div>*/}
-                            {/*        </div>*/}
+                    <div className={'flex flex-col'}>
+                        <div className={'flex'}>
+                            <Sidebar/>
+                            <div className={'flex w-full flex-col'}>
+                                <Header/>
+
+                                <div className="bg-gray-200 pt-6 px-4 ">
+                                    <div className="bg-white p-3 h-[82vh] overflow-auto rounded-md">
+                                        {children}
+                                    </div>
+                                </div>
+
+
+                                {/*    /!*body*!/*/}
+                                {/*    <div className="flex w-full h-full">*/}
+                                {/*        < Sidebar/>*/}
+                                {/*        <div className={'w-full h-full'}>*/}
+                                {/*            <div className="flex flex-col w-full h-full justify-between ">*/}
+                                {/*                <div className={'px-4 pt-4 pb-1 w-full h-full'}>*/}
+                                {/*                    <div className="bg-white p-6">*/}
+                                {/*                        {children}*/}
+                                {/*                    </div>*/}
+                                {/*                </div>*/}
+                                {/*                <Footer/>*/}
+                                {/*            </div>*/}
+                                {/*        </div>*/}
+                            </div>
+                            <WebSocketComponent/>
+                            <ToastContainer position="top-right" autoClose={5000}/>
                         </div>
-                        <WebSocketComponent/>
-                        <ToastContainer position="top-right" autoClose={5000}/>
+                        <Footer/>
                     </div>
                 </GlobalContextProvider>
             </HydrationZustand>

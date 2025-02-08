@@ -25,7 +25,7 @@ import {
     Users,
     UserCheck,
     Bell,
-    Menu
+    Menu, X
 } from 'lucide-react'
 import React from 'react'
 import SidebarItem from './item'
@@ -261,17 +261,16 @@ function Sidebar() {
     }
 
     return (
-        <div className={` w-80 h-full`}>
-            <div className=' h-full'>
-                <div className={'flex  py-4 ps-4  items-center bg-white h-[4.6rem]'}>
-                    <button className={'md:hidden me-3'} onClick={toggleSideBar}><Menu size={40} strokeWidth={2}/>
+        <div className={`${hideSideBar && 'hidden'} md:block md:border-e border-gray-200 w-80 h-full`}>
+            <div className='h-full'>
+                <div className={'flex py-4 ps-4 items-center bg-white h-[4.6rem]'}>
+                    <button className={'md:hidden me-3'} onClick={toggleSideBar}>   <X size={40} strokeWidth={2}/>
                     </button>
-
                     <img className={`h-10 w-fit`} src="/logo.png" alt="logo"/>
                 </div>
-                <div className={`${hideSideBar && 'hidden'} md:block bg-white px-2 `}>
-                    <hr className={'bg-gray-200 '}/>
-                    <div className=" flex-col h-[92vh] py-4 pe-4 overflow-auto scrollbar-thin">
+                <div className={`bg-white px-2 `}>
+                    <hr className={'bg-gray-200'}/>
+                    <div className=" flex-col h-[87vh] pt-10 pb-4 pe-4 overflow-auto scrollbar-thin">
                         {
                             items.map(item =>
                                 <>
