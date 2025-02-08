@@ -253,16 +253,16 @@ const items: ISidebarItem[] = [
 
 function Sidebar() {
     return (
-        <div className={'w-72 h-full'}>
-            <div className='hidden md:block bg-white p-4  h-full overflow-y-auto'>
+        <div className={'hidden md:block w-80 h-full'}>
+            <div className=' bg-white py-4 ps-4 h-full'>
                 <img className='h-10 w-fit mb-6' src="/logo.png" alt="logo"/>
                 <hr/>
-                <div className='flex flex-col'>
+                <div className="flex flex-col h-[90vh] py-4 pe-4 overflow-y-auto scrollbar-thin">
                     {
                         items.map(item =>
                             <>
                                 {
-                                    checkPermissions(item?.permission) &&
+                                checkPermissions(item?.permission) &&
                                     <SidebarItem key={item.path} item={item}/>
                                 }
                             </>

@@ -16,4 +16,17 @@
   }
 }
 
+.scrollbar-thin::-webkit-scrollbar {
+  width: 1px !important; /* Adjust the width as needed */
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: #9ca3af; /* Equivalent to gray-400 */
+  border-radius: 2px !important;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
 

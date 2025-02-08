@@ -1,5 +1,5 @@
 import { CircleUserRound} from 'lucide-react';
-import {useState, useRef, useEffect} from 'react';
+import {useState, useRef, useEffect, useMemo} from 'react';
 
 interface Props {
     name: string,
@@ -23,6 +23,9 @@ const ProfileDropdown = ({
         }
     };
 
+    const iconSize = useMemo(() => window.innerWidth >= 768 ? 15 : 30, []);
+
+
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
@@ -38,8 +41,9 @@ const ProfileDropdown = ({
                 className="flex items-center space-x-2 focus:outline-none"
             >
                 <div className={'flex flex-col items-center'}>
-                    <CircleUserRound size={15} className={'text-gray-500'}/>
-                    <span className="text-xs font-medium text-gray-500">{name}</span>
+                    <CircleUserRound size={15} className="text-gray-500 hidden md:block" />
+                    <CircleUserRound size={30} className="text-gray-500 md:hidden" />
+                    <span className="text-xs hidden md:block font-medium text-gray-500">{name}</span>
                 </div>
 
             </button>

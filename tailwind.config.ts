@@ -17,6 +17,8 @@ const config: Config = {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'), // Add the scrollbar plugin
+  ],
 };
 export default config;
