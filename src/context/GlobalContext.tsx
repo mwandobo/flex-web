@@ -28,6 +28,7 @@ type State = {
     evaluationForm
     selectedSubSidebarItem: string
     inEvaluation: boolean
+    hideSideBar: boolean
     viewItemRefreshAfterApproval: boolean
     viewedItem
     notificationBody
@@ -61,7 +62,8 @@ const initialState: State = {
     viewItemRefreshAfterApproval: false,
     viewedItem: initialViewedItem,
     notificationBody: initialNotificationBody,
-    inEvaluation: false
+    inEvaluation: false,
+    hideSideBar: true
 };
 
 export const GlobalContext = createContext<{ state: State; dispatch: Dispatch }>({
@@ -108,6 +110,12 @@ export const updateContextReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 inEvaluation:  action.payload
+            };
+        case 'UPDATE_HIDE_SIDEBAR':
+            setValueLocalStorage('hideSideBar', action.payload)
+            return {
+                ...state,
+                hideSideBar:  action.payload
             };
         case 'UPDATE_NOTIFICATION_BODY':
             return {

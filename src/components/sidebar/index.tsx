@@ -30,6 +30,7 @@ import {
 import React from 'react'
 import SidebarItem from './item'
 import {checkPermissions} from '@/utils/actions/check-permissions'
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 
 interface ISidebarItem {
     name: string
@@ -252,22 +253,37 @@ const items: ISidebarItem[] = [
 ]
 
 function Sidebar() {
+    const {state, dispatch} = useGlobalContextHook()
+    const {hideSideBar} = state;
+
+    const toggleSideBar = () => {
+        dispatch({type: "UPDATE_HIDE_SIDEBAR", payload: !hideSideBar})
+    }
+
     return (
-        <div className={'hidden md:block w-80 h-full'}>
-            <div className=' bg-white py-4 ps-4 h-full'>
-                <img className='h-10 w-fit mb-6' src="/logo.png" alt="logo"/>
-                <hr/>
-                <div className="flex flex-col h-[90vh] py-4 pe-4 overflow-y-auto scrollbar-thin">
-                    {
-                        items.map(item =>
-                            <>
-                                {
-                                checkPermissions(item?.permission) &&
-                                    <SidebarItem key={item.path} item={item}/>
-                                }
-                            </>
-                        )
-                    }
+        <div className={` w-80 h-full`}>
+            <div className=' h-full'>
+                <div className={'flex  py-4 ps-4  items-center bg-white h-[4.6rem]'}>
+                    <button className={'md:hidden me-3'} onClick={toggleSideBar}><Menu size={40} strokeWidth={2}/>
+                    </button>
+
+                    <img className={`h-10 w-fit`} src="/logo.png" alt="logo"/>
+                </div>
+                {/*<img className='h-10 w-fit mb-6' src="/logo.png" alt="logo"/>*/}
+                <div className={`${hideSideBar && 'hidden'} md:block bg-white px-2 `}>
+                    <hr className={'bg-gray-200 '}/>
+                    <div className=" flex-col h-[90vh] py-4 pe-4 overflow-auto scrollbar-thin">
+                        {
+                            items.map(item =>
+                                <>
+                                    {
+                                        checkPermissions(item?.permission) &&
+                                        <SidebarItem key={item.path} item={item}/>
+                                    }
+                                </>
+                            )
+                        }
+                    </div>
                 </div>
             </div>
             {/*<div className='md:hidden bg-white p-4 w-full flex justify-between'>*/}

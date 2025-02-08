@@ -11,7 +11,7 @@ function Header() {
     const router = useRouter();
     const token = getValueFromLocalStorage('token') || '';
     const {state, dispatch} = useGlobalContextHook()
-    const {currentUser} = state;
+    const {currentUser, hideSideBar} = state;
 
     useEffect(() => {
         const getUserInfo = () => {
@@ -33,15 +33,12 @@ function Header() {
         }
     }
 
+    const toggleSideBar = () => {
+            dispatch({type: "UPDATE_HIDE_SIDEBAR", payload: !hideSideBar})
+    }
+
     return (
-        <nav className="w-full flex justify-between md:justify-end p-2 py-4 bg-white">
-            {/*border-b border-gray-200*/}
-            <div className={'md:hidden flex items-center gap-2'}>
-                <button><Menu size={40} strokeWidth={2}/></button>
-
-                <img className='h-10 w-fit ' src="/logo.png" alt="logo"/>
-            </div>
-
+        <nav className="w-full flex justify-end p-2 py-3 bg-white">
             <div className="flex items-center justify-end me-8 gap-2">
                 <NotificationComponent/>
                 <ProfileDropdown name={currentUser?.email} handleLogout={handleLogout}/>
