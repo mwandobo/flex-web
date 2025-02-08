@@ -269,10 +269,9 @@ function Sidebar() {
 
                     <img className={`h-10 w-fit`} src="/logo.png" alt="logo"/>
                 </div>
-                {/*<img className='h-10 w-fit mb-6' src="/logo.png" alt="logo"/>*/}
                 <div className={`${hideSideBar && 'hidden'} md:block bg-white px-2 `}>
                     <hr className={'bg-gray-200 '}/>
-                    <div className=" flex-col h-[90vh] py-4 pe-4 overflow-auto scrollbar-thin">
+                    <div className=" flex-col h-[92vh] py-4 pe-4 overflow-auto scrollbar-thin">
                         {
                             items.map(item =>
                                 <>
