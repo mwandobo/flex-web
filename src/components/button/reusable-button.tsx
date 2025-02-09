@@ -20,6 +20,7 @@ interface Props {
     border?: string
     shadow?: string
     isSmallButton?: boolean
+
 }
 
 export function ReusableButton({
@@ -37,7 +38,7 @@ export function ReusableButton({
                                    isEndIcon,
                                    width,
                                    rounded,
-    shadow,
+                                   shadow,
                                    padding,
                                    border,
                                    isSmallButton,
@@ -54,8 +55,18 @@ export function ReusableButton({
         >
             {isDisabled ? <CircularProgress size={20}/> :
                 <div className={`flex gap-1 ${text_color} ${hover_text} px-1 h-5 items-center`}>
-                    {children}
-                    {name}
+                    {isEndIcon ?
+                        <>
+                            {name}
+                            {children}
+
+                        </> :
+                        <>
+                            {children}
+                            {name}
+                        </>
+                    }
+
                 </div>
             }
         </button>

@@ -8,6 +8,8 @@ import TextFieldComponent from '@/components/inputs/text-field'
 import Swal from "sweetalert2"
 import BackButton from "@/components/button/back-button";
 import AuthSkeletonComponent from '@/components/page-components/auth-skeleton-component'
+import {ReusableButton} from "@/components/button/reusable-button";
+import {ArrowLeftSquare, ArrowRightSquare} from "lucide-react";
 
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState('')
@@ -57,6 +59,7 @@ export default function ForgotPasswordPage() {
     return (
         <AuthSkeletonComponent
             loading={loading}
+            subtitle={'Enter your Email to get Recovery Email'}
         >
                         <>
                             <TextFieldComponent
@@ -71,10 +74,22 @@ export default function ForgotPasswordPage() {
 
                             <div className="flex justify-between">
                                 <BackButton/>
-                                <Button
-                                    text='Send'
+                                <ReusableButton
+                                    name="Send"
                                     onClick={handleSubmit}
-                                />
+                                    rounded={'md'}
+                                    padding={'p-1'}
+                                    shadow={'shadow-md'}
+                                    bg_color={'bg-gray-50'}
+                                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                                    border={'border border-gray-300'}
+                                    text_color={'text-gray-700'}
+                                    isEndIcon={true}
+                                >
+                                    <ArrowRightSquare size={18} />
+                                </ReusableButton>
+
                             </div>
                         </>
         </AuthSkeletonComponent>

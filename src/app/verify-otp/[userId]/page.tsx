@@ -7,6 +7,8 @@ import Button from '@/components/button'
 import TextFieldComponent from '@/components/inputs/text-field'
 import BackButton from "@/components/button/back-button";
 import AuthSkeletonComponent from "@/components/page-components/auth-skeleton-component";
+import {ReusableButton} from "@/components/button/reusable-button";
+import {ArrowRightSquare} from "lucide-react";
 
 const VerifyOtp = ({params}: { params: { userId: string } }) => {
     const [otp, setNewOtp] = useState('')
@@ -61,10 +63,21 @@ const VerifyOtp = ({params}: { params: { userId: string } }) => {
 
                 <div className="flex justify-between">
                     <BackButton/>
-                    <Button
-                        text='Send'
+                    <ReusableButton
+                        name="Send"
                         onClick={handleSubmit}
-                    />
+                        rounded={'md'}
+                        padding={'p-1'}
+                        shadow={'shadow-md'}
+                        bg_color={'bg-gray-50'}
+                        hover={'hover:bg-gray-200 hover:border-gray-400'}
+                        hover_text={'hover:text-gray-900 hover:font-semibold'}
+                        border={'border border-gray-300'}
+                        text_color={'text-gray-700'}
+                        isEndIcon={true}
+                    >
+                        <ArrowRightSquare size={18} />
+                    </ReusableButton>
                 </div>
             </>
         </AuthSkeletonComponent>
