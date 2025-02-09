@@ -1,6 +1,6 @@
 "use client"
 
-import {useState} from 'react'
+import React, {useState} from 'react'
 import {useRouter} from 'next/navigation'
 import {post} from '@/utils/api'
 import Button from '@/components/button'
@@ -9,6 +9,8 @@ import {setValueLocalStorage} from '@/utils/actions/local-starage'
 import {useGlobalContextHook} from '@/hooks/useGlobalContextHook'
 import Swal from "sweetalert2"
 import AuthSkeletonComponent from "@/components/page-components/auth-skeleton-component";
+import {ReusableButton} from "@/components/button/reusable-button";
+import {Ellipsis, LogIn} from "lucide-react";
 
 export default function LoginPage() {
     const [email, setEmail] = useState('')
@@ -121,6 +123,7 @@ export default function LoginPage() {
     return (
         <AuthSkeletonComponent
             loading={loading}
+            subtitle={'Welcome Back ...'}
         >
                 <>
                     <TextFieldComponent
@@ -142,9 +145,15 @@ export default function LoginPage() {
                         type='password'
                         errorMessage={''}
                     />
-                    <div className="flex justify-between">
-                        <Button text='Forgot Password' onClick={handleForgotPassword}/>
-                        <Button text='Login' onClick={handleSubmit}/>
+                    <div className="flex flex-col items-end gap-2 mb-6">
+                        <button className={'text-xs hover:text-blue-500'}  onClick={handleForgotPassword}>Forgot Password?</button>
+                        <div className={'w-full flex justify-center'}>
+                            <button
+                                onClick={handleSubmit}
+                                className={'flex w-[100%] border border-gray-200 p-2 rounded-2xl shadow-lg justify-center bg-gray-200 hover:bg-gray-300  gap-3'}>Login <LogIn/>
+                            </button>
+
+                        </div>
                     </div>
                 </>
 
