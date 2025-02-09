@@ -168,6 +168,7 @@ const ItemDeliverableView = () => {
                                         {label: 'Activity Name', value: data?.activity_name},
                                         {label: 'Status', value: data?.status},
                                         {label: 'Description', value: data?.description},
+                                        {label: 'Activity Progress', value: `${data?.activity_progress}%`},
                                     ]}
                                     titleA={`Deliverable`}
                                     titleB={` ${data?.name} `}
@@ -175,7 +176,7 @@ const ItemDeliverableView = () => {
                                 {
                                     approveStatus() && <div className="flex gap-2 justify-end">
 
-                                        {data.status === 'submitted' &&
+                                        {data.status === 'submitted' && Number(data.activity_progress) >= 80 ?
                                             <>
                                                 <ReusableButton
                                                     name={'Move to Services'}
@@ -189,7 +190,8 @@ const ItemDeliverableView = () => {
                                                 >
                                                     <ShoppingCart size={12}/>
                                                 </ReusableButton>
-                                            </>
+                                            </> :
+                                            <p className={'text-xs text-gray-500'}>Waiting For Activity to Reach 80% to be moved to Sale Items</p>
                                         }
                                         {data.status === 'pending' &&
                                             <>
