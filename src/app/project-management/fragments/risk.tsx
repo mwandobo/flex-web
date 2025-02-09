@@ -73,7 +73,7 @@ function Risk({
 
 }: Props) {
 
-    const url = `project_risk/${project_id}/activity/${activity_id}`
+    const url = `project_risk?project_id=${project_id}&for=activity&for_id=${activity_id}`
 
     const {
         loading,
@@ -90,7 +90,8 @@ function Risk({
         state_properties: [],
         isHideShow: true,
         isHideDelete:isHideAdd,
-        isHideEdit: isHideAdd
+        isHideEdit: isHideAdd,
+        isApiV2: true
     })
 
     return (
