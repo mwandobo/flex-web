@@ -25,12 +25,23 @@ import {
     Users,
     UserCheck,
     Bell,
-    Menu, X
+    Menu,
+    X,
+    Calculator,
+    FileIcon,
+    FileSliders,
+    FileSpreadsheet,
+    FilePenLine,
+    FileDiff,
+    FileBox,
+    FileClock,
+    ReceiptPoundSterling, ShoppingCart, BadgeDollarSign, SquareDashedKanban, Store, BookKey, ShieldEllipsis
 } from 'lucide-react'
 import React from 'react'
 import SidebarItem from './item'
 import {checkPermissions} from '@/utils/actions/check-permissions'
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
+import {RiFileChartFill} from "react-icons/ri";
 
 interface ISidebarItem {
     name: string
@@ -59,14 +70,14 @@ const items: ISidebarItem[] = [
     {
         name: 'Project Management',
         path: '/projects',
-        icon: FolderKanban,
+        icon: FolderOpenDot,
         permission: 'project_management-list',
         items: [
             {
                 name: 'Projects',
                 path: '/project-management/project-registration',
                 permission: 'projects-list',
-                icon: FolderOpenDot
+                icon: FileIcon
             },
             {
                 name: 'Project Planning Management',
@@ -84,7 +95,7 @@ const items: ISidebarItem[] = [
                 name: 'Project Evaluation',
                 path: '/project-management/project-evaluation',
                 permission: 'project_monitoring-list',
-                icon: Activity
+                icon: Calculator
             },
             {
                 name: 'Indicators Management',
@@ -104,37 +115,38 @@ const items: ISidebarItem[] = [
                 name: 'Evaluation Reports',
                 path: '/report/evaluation-report',
                 permission: 'projects-list',
-                icon: FolderOpenDot
+                icon: FileSliders
+
             },
             {
                 name: 'Learning Reports',
                 path: '/report/learning-report',
                 permission: 'projects-list',
-                icon: FolderOpenDot
+                icon: FileClock
             },
             {
                 name: 'Gantt Chart',
                 path: '/report/gantt-chart',
                 permission: 'projects-list',
-                icon: FolderOpenDot
+                icon: FileSpreadsheet
             },
             {
                 name: 'Project Charter',
                 path: '/report/project-charter',
                 permission: 'projects-list',
-                icon: FolderOpenDot
+                icon: FilePenLine
             },
             {
                 name: 'ME Plan',
                 path: '/report/me-plan',
                 permission: 'projects-list',
-                icon: FolderOpenDot
+                icon: FileBox
             },
             {
                 name: 'Procurement Reports',
                 path: '/report/procurement-report',
                 permission: 'projects-list',
-                icon: FolderOpenDot
+                icon: FileDiff
             },
         ]
     },
@@ -148,19 +160,19 @@ const items: ISidebarItem[] = [
                 name: 'Finance',
                 path: '/finance',
                 permission: 'finance-list',
-                icon: Book,
+                icon: ReceiptPoundSterling ,
             },
             {
                 name: 'Purchase',
                 path: '/procurement',
                 permission: 'purchase-list',
-                icon: Book,
+                icon: ShoppingCart ,
             },
             {
                 name: 'Sales',
                 path: '/sales',
                 permission: 'sales-list',
-                icon: Book,
+                icon: BadgeDollarSign ,
             },
         ]
     },
@@ -168,19 +180,19 @@ const items: ISidebarItem[] = [
         name: 'Management',
         path: '/procurement',
         permission: 'procurement-list',
-        icon: Book,
+        icon: SquareDashedKanban ,
         items: [
             {
                 name: 'Inventory',
                 path: '/inventory',
                 permission: 'inventory-list',
-                icon: Book,
+                icon: Store,
             },
             {
                 name: 'Workshop',
                 path: '/workshop',
                 permission: 'workshop-list',
-                icon: Book,
+                icon: BookKey,
             },
         ]
     },
@@ -189,7 +201,7 @@ const items: ISidebarItem[] = [
         name: 'Administration',
         path: '/administration',
         permission: 'administration-list',
-        icon: Book,
+        icon: ShieldEllipsis ,
         items: [
             {
                 name: 'Deparments',
@@ -227,7 +239,7 @@ const items: ISidebarItem[] = [
                 name: 'Representatives',
                 path: '/admnistration/external?group=representative',
                 permission: 'representatives-list',
-                icon: Armchair,
+                icon: Users,
                 group: 'representative'
             },
             {
@@ -248,7 +260,7 @@ const items: ISidebarItem[] = [
         name: 'Settings',
         path: '/settings',
         permission: 'settings-list',
-        icon: Book,
+        icon: Settings ,
     },
 ]
 
