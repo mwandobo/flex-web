@@ -37,7 +37,6 @@ function Cost(
             name: 'amount',
             type: 'text',
             label: 'Amount (Tzs)',
-            textType: 'number',
             value: '',
             required: true,
             isError: false,

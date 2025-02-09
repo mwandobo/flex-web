@@ -93,6 +93,8 @@ export const useCrudOperator = (
     }
 
     const populateFormForEdit = (payload: any) => {
+
+        console.log('form for edit', payload )
         const newModalBodyArray = modalBodyArray.map((item: any) => {
             let objKeyValue;
 
