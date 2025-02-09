@@ -41,7 +41,6 @@ import React from 'react'
 import SidebarItem from './item'
 import {checkPermissions} from '@/utils/actions/check-permissions'
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
-import {RiFileChartFill} from "react-icons/ri";
 
 interface ISidebarItem {
     name: string
