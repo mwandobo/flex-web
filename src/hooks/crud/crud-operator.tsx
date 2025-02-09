@@ -124,6 +124,15 @@ export const useCrudOperator = (
             if (item.name === 'service_id' && Number(payload['resource_type_id']) === 30) {
                 return {...item, isRemoved: false, value: objKeyValue};
             }
+            if (item.name === 'amount') {
+
+                const value = objKeyValue?.props?.amount
+
+                console.log('amount', objKeyValue  )
+
+
+                return {...item, value};
+            }
 
             // Return the new item with updated value
             return {...item, value: objKeyValue};
