@@ -127,10 +127,7 @@ export const useCrudOperator = (
             if (item.name === 'amount') {
 
                 const value = objKeyValue?.props?.amount
-
-                console.log('amount', objKeyValue  )
-
-
+                
                 return {...item, value};
             }
 
