@@ -12,10 +12,6 @@ export const checkPermissions = (permission: string) => {
     if (!permission) {
         allowAccess = true;
     } else {
-
-        console.log('permissions', permissions)
-
-
         const foundIndex = permissions && permissions.findIndex((perm => perm.mapped_name === permission));
         allowAccess = foundIndex >= 0;
     }

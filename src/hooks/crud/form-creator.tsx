@@ -327,8 +327,11 @@ export const useCrudFormCreator = ({
             const foundInput = newfoundInputs.find(item => item.control === 'quotation-item'); // Update formInputs copy
             const selectUrl = foundInput.optionsUrlData;
             const split = selectUrl.split('/');
+
             split[1] = value;
-            foundInput.optionsUrlData = split.join('/');
+            console.log('selectUrl', selectUrl)
+
+            foundInput.optionsUrlData = `rfq/${value}/items-for-select`;
         }
 
         if (control_for === 'invoice') {
