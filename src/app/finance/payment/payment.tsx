@@ -129,7 +129,7 @@ function Payment({invoice}: Props) {
                             <PageHeader
                                 title={"Payments"}
                                 handleClick={handleClick}
-                                isShowAddButton={true}
+                                isShowAddButton={invoice?.status !== 'paid' && true}
                                />
                             {tabular()}
                             {createdForm()}

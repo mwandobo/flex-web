@@ -142,7 +142,7 @@ const InvoiceView = () => {
                             </div>
                             <hr className="bg-gray-100"/>
                             {
-                                approveStatus() && data?.status === 'payment' &&
+                                approveStatus() && ['payment', 'paid'].includes(data?.status) &&
 
                                 <div className={'mt-2'}>
                                     <Payment

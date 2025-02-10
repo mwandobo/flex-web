@@ -6,7 +6,6 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 function ProjectEvaluation() {
-
     const permission = 'project_monitoring'
 
     const _columns = [
