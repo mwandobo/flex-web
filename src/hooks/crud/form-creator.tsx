@@ -310,18 +310,13 @@ export const useCrudFormCreator = ({
                 selectUrl.searchParams.set('type', value);
 
                 foundInput.optionsUrlData = selectUrl.toString();
-
             }
-
-
         }
 
         if (control_for === 'sponsors') {
             const foundInput = formInputs.find(item => item.control === 'sponsor_type');
             newfoundInputs = sideUpdatePayload(foundInput, value); // Update inputs for sponsors
         }
-
-
 
         if (control_for === 'quotation-item') {
             const foundInput = newfoundInputs.find(item => item.control === 'quotation-item'); // Update formInputs copy
@@ -367,7 +362,6 @@ export const useCrudFormCreator = ({
             newfoundInputs = sideUpdatePayloadWorkshopServiceRequest(value); // Update inputs for sponsors
         }
 
-
         if (control_for === 'technician_items') {
             newfoundInputs = sideUpdatePayloadTechnicianType(value); // Update inputs for sponsors
         }
@@ -375,9 +369,6 @@ export const useCrudFormCreator = ({
         if (control_for === 'maintenance_items') {
             newfoundInputs = sideUpdatePayloadMaintenanceType(value); // Update inputs for sponsors
         }
-
-
-
 
         if (control_for === 'resource') {
             newfoundInputs = sideUpdatePayloadResource(value); // Update inputs for sponsors
