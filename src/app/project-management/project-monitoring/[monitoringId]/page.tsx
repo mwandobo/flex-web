@@ -112,8 +112,6 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
         return check
     }
 
-    console.log('monitoring item', monitoredItemState)
-
     useEffect(() => {
         const fetchData = async () => {
             try {
