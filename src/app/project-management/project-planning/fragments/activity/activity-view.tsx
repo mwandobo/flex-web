@@ -118,8 +118,10 @@ const ActivityShow = (
                         <MuiCardComponent>
                             <ViewCardComponent
                                 data={[
-                                    { label: 'Code', value: data.formatted_code },
-                                    { label: 'Activity Name', value: data?.name },
+                                    { label: 'Activity Name', value: data?.formatted_name },
+                                    { label: 'Output Name', value: data?.output_name },
+                                    { label: 'Outcome Name', value: data?.outcome_name },
+                                    { label: 'Goal Name', value: data?.goal_name },
                                     { label: 'Project ', value: data?.project },
                                     { label: 'Start Date', value: data.formatted_start_date },
                                     { label: 'End Date', value: data.formatted_end_date },

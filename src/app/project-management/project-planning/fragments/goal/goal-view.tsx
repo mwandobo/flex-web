@@ -97,8 +97,7 @@ const GoalShow = (
                         <MuiCardComponent>
                             <ViewCardComponent
                                 data={[
-                                    { label: 'Code', value: data.formatted_code },
-                                    { label: 'Goal Name', value: data?.name },
+                                    { label: 'Goal Name', value: data?.formatted_name },
                                     { label: 'Project ', value: data?.project },
                                     { label: 'Start Date', value: data.start_date },
                                     { label: 'End Date', value: data.end_date },
