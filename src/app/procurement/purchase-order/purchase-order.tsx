@@ -85,7 +85,7 @@ function PurchaseOrder() {
                             <PageHeader
                                 title={"Purchase Order"}
                                 handleClick={handleClick}
-                                isShowAddButton={true}
+                                isShowAddButton={false}
                                />
                             {tabular()}
                             {createdForm()}
