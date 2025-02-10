@@ -16,7 +16,7 @@ const CreateOptionsForselectHelper = (payload?: any[], from?: string, id?: strin
 
     if (payload && payload.length && from === 'users') {
         payload.map(user => {
-            const data = { label: `${user.full_name} `, value: user.id }
+            const data = { label: `${user.full_name} - ${user.position}`, value: user.id }
             output.push(data)
         })
     }
