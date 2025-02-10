@@ -326,11 +326,16 @@ function Dashboard() {
                                                                 <span className={'w-4 '}
                                                                       style={{backgroundColor: item.color}}></span>
                                                                         <p
-                                                                            className="flex items-center ">{item.name} - {item.percentage}%
-                                                                            ({moneyFormater({
-                                                                                amount: item.grandTotal,
-                                                                                isShowCurrency: true
-                                                                            })})</p>
+                                                                            className="flex items-center ">{item.name} -
+                                                                            <div className={'ml-1'}>
+                                                                                {
+                                                                                    moneyFormater({
+                                                                                        amount: item.grandTotal,
+                                                                                        isShowCurrency: true
+                                                                                    })
+                                                                                }
+                                                                            </div>
+                                                                        </p>
 
                                                                     </div>
                                                                 ))}
