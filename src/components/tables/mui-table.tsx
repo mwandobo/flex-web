@@ -86,7 +86,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                 <TableCell
                     padding="checkbox"
                     style={{
-                        fontSize: "10px"
+                        fontSize: "10px",
+                        fontWeight: 700
                     }}
                 >
                     {'S/N'}
@@ -100,7 +101,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         style={{
                             borderLeft: '1px solid #a8a6a6',
                             width: headCell.width,
-                            fontSize: "12px"
+                            fontSize: "12px",
+                            fontWeight: 700
+
                         }}
                     >
                         <TableSortLabel
