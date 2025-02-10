@@ -190,19 +190,29 @@ const ItemDeliverableView = () => {
                                                 >
                                                     <ShoppingCart size={12}/>
                                                 </ReusableButton>
-                                            </> :
-                                            <p className={'text-xs text-gray-500'}>Waiting For Activity to Reach 80% to be moved to Sale Items</p>
-                                        }
-                                        {data.status === 'pending' &&
-                                            <>
-                                                <ReusableButton
-                                                    name={'Submit Deliverable'}
-                                                    onClick={() => toggleModal('submit')}
-                                                >
-                                                    <ShoppingCart size={12}/>
-                                                </ReusableButton>
+                                            </> : <>
+                                                {data.status === 'pending' ?
+                                                    <>
+                                                        <ReusableButton
+                                                            name={'Submit Deliverable'}
+                                                            onClick={() => toggleModal('submit')}
+                                                        >
+                                                            <ShoppingCart size={12}/>
+                                                        </ReusableButton>
+                                                    </> :
+
+                                                    <>
+                                                        {(data.status !== 'moved to service' && data.status !== 'moved to item') && (
+                                                            <p className={'text-xs text-gray-500'}>
+                                                                Waiting For Activity to Reach 80% to be moved to Sale Items
+                                                            </p>
+                                                        )}
+                                                    </>
+
+                                                }
                                             </>
                                         }
+
                                     </div>
                                 }
                             </div>
