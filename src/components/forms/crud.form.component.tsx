@@ -55,6 +55,7 @@ const CrudFormComponent = ({
         return 1
     }
 
+
     return <PopupModal
         isOpen={isModalOpen}
         onSaveButtonName={'Save'}
@@ -68,8 +69,8 @@ const CrudFormComponent = ({
                 {
                     isForm
                         ?
-                        <div className={`grid grid-cols-${Boolean(sizeGrid())} w-full gap-2`}
-                             style={{gridTemplateColumns: `repeat(${sizeGrid()}, 1fr)`, gap: "10px"}}>
+                      <div className={`grid grid-cols-${sizeGrid()} w-full gap-2`}
+                           style={{ gridTemplateColumns: `repeat(${sizeGrid()}, 1fr)`, gap: "10px" }}>
                             {
                                 itHasCustomForm && !add_price ? (
                                     customForm

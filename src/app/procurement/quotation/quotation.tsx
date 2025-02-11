@@ -195,7 +195,7 @@ function Quotation() {
                                 isShowAddButton={true}
                                />
                             {tabular()}
-                            {createdForm()}
+                            {createdForm('md')}
                         </>
                     }
                 </>

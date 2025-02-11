@@ -173,7 +173,7 @@ function SalesRfq() {
                                 isShowAddButton={true}
                                />
                             {tabular()}
-                            {createdForm()}
+                            {createdForm('md')}
                         </>
                     }
                 </>

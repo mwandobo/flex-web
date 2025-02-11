@@ -61,18 +61,19 @@ export default function MuiMultiSelectSelect({
 
     useEffect(() => {
         const fetchData = async () => {
-            const res = await get(optionsUrlData, token);
-            console.log(res);
-
-            if (res && res.status === 200) {
-                const payload = CreateOptionsForselectHelper(res.data.data, optionDataKey);
-                setOptions(payload);
+            try {
+                const res = await get(optionsUrlData, token);
+                if (res && res.status === 200) {
+                    const payload = CreateOptionsForselectHelper(res.data.data, optionDataKey);
+                    setOptions(payload);
+                }
+            } catch (error) {
+                console.error("API Error:", error);
             }
         };
 
         fetchData();
     }, [optionDataKey, optionsUrlData, token]);
-
 
     const onChange = (event: SelectChangeEvent<typeof selected>) => {
         const {

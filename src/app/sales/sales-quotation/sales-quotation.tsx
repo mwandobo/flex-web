@@ -167,7 +167,7 @@ function SalesQuotation() {
                                 isShowAddButton={true}
                                />
                             {tabular()}
-                            {createdForm()}
+                            {createdForm('md')}
                         </>
                     }
                 </>
