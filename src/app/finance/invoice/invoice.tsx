@@ -26,7 +26,7 @@ const formInputs = [
         type: 'select',
         label: 'Purchase Order',
         value: '',
-        optionsUrlData: `/purchase-orders?approved=approved&status=invoice`,
+        optionsUrlData: `purchase-orders?approved=approved&status=invoice`,
         optionDataKey: 'rfq',
         control: 'invoice',
         required: true,
