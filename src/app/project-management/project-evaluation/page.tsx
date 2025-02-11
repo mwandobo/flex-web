@@ -7,7 +7,6 @@ import { checkPermissions } from '@/utils/actions/check-permissions'
 import React from 'react'
 function ProjectEvaluation() {
     const permission = 'project_monitoring'
-
     const _columns = [
         {
             id: 'code',
@@ -56,7 +55,6 @@ function ProjectEvaluation() {
             numeric: false,
             disablePadding: false,
             label: 'Owner',
-
         },
         {
             id: 'prepared_by',
@@ -65,7 +63,6 @@ function ProjectEvaluation() {
             label: 'Prepared By',
         },
     ]
-
 
     const {
         loading,
