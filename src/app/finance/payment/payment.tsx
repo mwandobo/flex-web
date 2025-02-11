@@ -116,7 +116,10 @@ function Payment({invoice}: Props) {
         isApiV2:true,
         from: 'payment',
         approval_slug: PAYMENT_APPROVAL_SLUG,
-        isFormData: true
+        isFormData: true,
+        isHideDelete: invoice && true,
+        isHideEdit: invoice && true,
+        isHideShow: invoice && true
     })
 
     return (
