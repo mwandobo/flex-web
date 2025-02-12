@@ -208,26 +208,28 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
         return <div className="flex w-full">
             <div className="border border-gray-300 flex w-full flex-col">
                 <h5 className={'text-sm p-2'}>Indicators List</h5>
-                <div className="w-full grid grid-cols-7 text-xs border-b border-t border-gray-300 font-semibold">
+                <div className="w-full grid grid-cols-8 text-xs border-b border-t border-gray-300 font-semibold">
                     <p className="border-r border-gray-300 ps-2 py-2">#</p>
                     <p className="border-r border-gray-300 ps-2 py-2 ">Code</p>
                     <p className="border-r border-gray-300 ps-2 py-2">Indicator Name</p>
                     <p className="border-r border-gray-300 ps-2 py-2">Verify By</p>
                     <p className="border-r border-gray-300 ps-2 py-2">Baseline Data</p>
                     <p className="border-r border-gray-300 ps-2 py-2">Target Data</p>
+                    <p className="border-r border-gray-300 ps-2 py-2">Collected Data</p>
                     <p className="ps-2 py-2">Evaluation Data</p>
                 </div>
                 <div>
                     {
                         payload.map((item: any, index: any) =>
                             <div key={index} className="flex ">
-                                <div className="grid grid-cols-7 w-full text-xs">
+                                <div className="grid grid-cols-8 w-full text-xs">
                                     <p className="border-r border-gray-300 ps-3  py-1">{index + 1}</p>
                                     <p className="border-r border-gray-300 ps-3 py-1">{item.formatted_code}</p>
                                     <p className="border-r border-gray-300 ps-3 py-1">{item.name}</p>
                                     <p className="border-r border-gray-300 ps-3 py-1">{item.mov}</p>
                                     <p className="text-end border-r pe-3 border-gray-300 ps-2 py-1">{item.baseline_data}</p>
                                     <p className="text-end pe-3 border-r border-gray-300 ps-2 py-1 ">{item.target_data}</p>
+                                    <p className="text-end pe-3 border-r border-gray-300 ps-2 py-1 ">{item.collected_data}</p>
                                     {
                                         !inEvaluation ?
                                             <p className={'w-full text-center'}>waiting...</p> :
