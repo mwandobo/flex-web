@@ -164,6 +164,13 @@ function Page({
             disablePadding: false,
             label: 'Collected Data',
         },
+
+        {
+            id: 'progress',
+            numeric: false,
+            disablePadding: false,
+            label: 'Progress',
+        },
     ]
 
 
