@@ -81,7 +81,7 @@ function SoldItems() {
                             <PageHeader
                                 title={"Sold Items"}
                                 handleClick={handleClick}
-                                isShowAddButton={true}
+                                isShowAddButton={false}
                                />
                             {tabular()}
                             {createdForm()}
