@@ -138,6 +138,15 @@ export const useCrudOperator = (
         setModalBodyArray(newModalBodyArray);
     };
 
+    const clearFormForCreate = () => {
+        const newModalBodyArray = modalBodyArray.map((item: any) => {
+            return {...item, value: ''};
+        });
+
+        setModalBodyArray(newModalBodyArray);
+    };
+
+
     useEffect(() => {
         setModalBodyArray(formInputData)
 
@@ -163,6 +172,7 @@ export const useCrudOperator = (
             setOnSaveButtonName('Save');
             setUrl(!isApiV2 ? `${incomingUrl}/store` : incomingUrl);
             setHttpMethod('post');
+            clearFormForCreate()
             handleNotificationPayload('create');
         }
 
