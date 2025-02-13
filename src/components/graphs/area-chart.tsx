@@ -6,38 +6,29 @@ import {
     Tooltip,
     AreaChart,
     Area,
-    ResponsiveContainer, // Import ResponsiveContainer
+    ResponsiveContainer,
 } from 'recharts';
 
 interface Props {
     name: string;
-    sales: string;
-    purchase: string;
+    sales: number;
+    purchase: number;
 }
-
-const datan: Props[] = [
-    {name: 'Jan', sales: '1200', purchase: '24000'},
-    {name: 'Feb', sales: '1000', purchase: '1398'},
-    {name: 'Mar', sales: '7000', purchase: '9800'},
-    {name: 'Apr', sales: '6800', purchase: '9800'},
-    {name: 'May', sales: '8000', purchase: '9800'},
-    {name: 'Jun', sales: "2000", purchase: '3908'},
-    {name: 'Jul', sales: '3500', purchase: '4800'},
-    {name: 'Aug', sales: '3200', purchase: '3800'},
-    {name: 'Sep', sales: '2500', purchase: '3800'},
-    {name: 'Oct', sales: '1500', purchase: '3800'},
-    {name: 'Nov', sales: '2000', purchase: '3800'},
-    {name: 'Dec', sales: '17000', purchase: '3800'},
-];
 
 interface AreaChartProps {
-    data: Props[]
+    data: Props[];
 }
 
-const AreaChartComponent = ({ data = datan }: AreaChartProps) => (
-    <div style={{ width: '100%', height: 300 }}> {/* Adjust parent container */}
-        {/*<ResponsiveContainer width="100%" height="100%"> {*/}
-            <React.Fragment>
+const AreaChartComponent = ({ data }: AreaChartProps) => {
+    console.log('Chart Data:', data);
+
+    if (!data || data.length === 0) {
+        return <div>No data available</div>;
+    }
+
+    return (
+        <div style={{ width: '100%', height: 300 }}>
+            <ResponsiveContainer width="100%" height="100%">
                 <AreaChart
                     data={data}
                     margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
@@ -59,10 +50,9 @@ const AreaChartComponent = ({ data = datan }: AreaChartProps) => (
                     <Area type="monotone" dataKey="sales" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" />
                     <Area type="monotone" dataKey="purchase" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
                 </AreaChart>
-            </React.Fragment>
-            {/*}*/}
-        {/*</ResponsiveContainer>*/}
-    </div>
-);
+            </ResponsiveContainer>
+        </div>
+    );
+};
 
 export default AreaChartComponent;

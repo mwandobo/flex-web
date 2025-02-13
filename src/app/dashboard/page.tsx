@@ -147,13 +147,13 @@ function Dashboard() {
     const salesStats = [
         {name: "Total Sales", quantity: salesPurchaseStats?.total_sales},
         {name: "Total Purchase", quantity: salesPurchaseStats?.total_purchases},
-        {name: "Total IN Payment", quantity: salesPurchaseStats?.total_in_payments},
-        {name: "Total OUT Payment", quantity: salesPurchaseStats?.total_out_payments},
-        {name: "Total Pending IN Payment", quantity: salesPurchaseStats?.total_pending_in_payments},
-        {name: "Total Pending OUT Payment", quantity: salesPurchaseStats?.total_pending_out_payments},
+        {name: "Total Complete Purchase", quantity: salesPurchaseStats?.total_in_payments},
+        {name: "Total Complete Sale", quantity: salesPurchaseStats?.total_out_payments},
+        {name: "Total Pending Purchase", quantity: salesPurchaseStats?.total_pending_in_payments},
+        {name: "Total Pending  Sale", quantity: salesPurchaseStats?.total_pending_out_payments},
     ]
 
-    const years = [2020, 2021, 2022, 2023, 2024]
+    const years = [2021, 2022, 2023, 2024, 2025]
     return (
         <ProtectedRoute>
             {
@@ -188,7 +188,6 @@ function Dashboard() {
                                                 </div>
                                             }
                                         </div>
-
                                         <button
                                             className={' flex justify-center items-center p-2 border border-gray-200 shadow-sm rounded-md hover:bg-gray-50 mb-2 gap-1'}
                                             onClick={handleOpenFilters}
@@ -250,7 +249,6 @@ function Dashboard() {
                                                                 <p className="ml-4">{task.status}</p>
                                                             </div>
                                                         ))}
-
                                                     </div>
                                                 </div>
                                             }
@@ -265,7 +263,6 @@ function Dashboard() {
                                         <div
                                             className={'flex bg-white flex-col mt-2 p-2 border border-gray-200 shadow-md rounded-md  '}>
                                             <h3 className={'mb-2 font-semibold'}>Sales Dashboard</h3>
-
                                             {checkPermissions('dashboard-sales-stats') &&
                                                 <div className={'bg-white p-2'}>
                                                     <div className={'grid grid-cols-6 gap-2 '}>
@@ -288,7 +285,8 @@ function Dashboard() {
                                                         <h3 className={'mb-2 mt-2 font-semibold'}>Sales Vs Purchase</h3>
                                                         <div
                                                             className={'flex justify-center items-center w-full h-full'}>
-                                                            <AreaChartComponent data={data?.salesVsPurchase}/>
+                                                            {/*<AreaChartComponent data={data?.salesVsPurchase}/>*/}
+                                                            <AreaChartComponent  data={data?.salesVsPurchase}/>
 
                                                         </div>
                                                     </div>
