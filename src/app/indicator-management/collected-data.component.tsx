@@ -15,17 +15,6 @@ function CollectedData({indicator_id}: Props ) {
 
     const _deptFormInputs = [
         {
-            name: 'indicator_id',
-            type: 'select',
-            label: `Select Indicator`,
-            value: '',
-            optionsUrlData: `indicator`,
-            optionDataKey: 'indicators',
-            required: true,
-            isError: false,
-            errorMessage: '',
-        },
-        {
             name: 'name',
             type: 'text',
             label: 'Name',

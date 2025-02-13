@@ -124,13 +124,6 @@ const CollectedDataShow = ({params}: { params: { indicatorId: string } }) => {
                                    <CheckCircle2 size={13}/>
                                </ReusableButton>
                            </div>
-
-
-
-
-
-
-
                         </MuiCardComponent>
                         <MuiCardComponent>
                             <MuiTab
