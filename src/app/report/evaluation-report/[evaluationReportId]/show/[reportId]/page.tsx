@@ -315,8 +315,7 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                         </p>
                     </div>
                     <div className={`flex flex-col ${styler(item1.evaluation_time)}  justify-center items-center border-r p-1`}>
-                        <p className="text-xs ">
-                        </p>
+                        <p className="text-xs ">{item1.evaluation_time === 'pending' && "Pending"} </p>
                     </div>
                 </div>
                 <div className="border-l border-gray-500" >
@@ -374,8 +373,8 @@ const EvaluationReportShow = ({ params }: { params: { reportId: string } }) => {
                                             {item2.evaluation_target}
                                         </p>
                                     </div>
-                                    <div className={`flex flex-col justify-center items-center p-1 ${styler(item2.evaluation_time)} ${!isLast ? 'border-b' : ''}`}>
-                                        <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>
+                                    <div className={`flex flex-col justify-center items-center border-gray-500  p-1 ${styler(item2.evaluation_time)} ${!isLast ? 'border-b' : ''}`}>
+                                        <p style={{ fontSize: '0.625rem', fontWeight: 600 }}>{item2.evaluation_time === 'pending' && "Pending"}
                                         </p>
                                     </div>
                                 </div>
