@@ -32,7 +32,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                 const res = await get(url, token)
 
                 if (res.status === 200) {
-                    setData(res.data.data)
+                    setData( res.data.data)
                     setLoading(false)
                 }
 
@@ -76,7 +76,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
         },
         {
             id: 'learning_target',
-            numeric: false,
+            numeric: true,
             disablePadding: false,
             label: 'Progress Against Target (%)',
         },
@@ -300,7 +300,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                 <div
                     className="flex flex-col justify-center border-r border-gray-500 items-end p-1">
                     <p className="text-xs">
-                        {item1.learning_against_target}
+                        {item1.learning_target}
                     </p>
                 </div>
                 <div
