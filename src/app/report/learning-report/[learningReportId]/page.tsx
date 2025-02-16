@@ -493,7 +493,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                                 <div
                                     className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 }`}>
                                     <p className="text-xs">{FormattedMoney({
-                                        amount: Number(item1.occured_cost) + Number(item1.resource_cost),
+                                        amount: Number(item1.occured_cost),
                                         isHideCurrency: true
                                     })}</p>
                                 </div>
