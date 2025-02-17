@@ -14,7 +14,6 @@ import Resource from "../../fragments/resource";
 import Risk from "../../fragments/risk";
 import {useRouter} from "next/navigation";
 import FormattedMoney from "@/components/moneyFormater";
-import Budget from "../../fragments/budget";
 import OutcomeCost from "../../fragments/outcome-cost";
 import LogFrameIndicator from "../../fragments/logframe-indicator";
 import Purpose from "../../fragments/purpose";
@@ -24,6 +23,8 @@ import {PROJECT_APPROVAL_SLUG} from "@/utils/constant";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {ReusableButton} from "@/components/button/reusable-button";
 import {CheckCircle2} from "lucide-react";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
+import Budget from "@/app/project-management/fragments/Budget";
 
 const ProjectShow = ({params}: { params: { projectId: string } }) => {
     const [data, setData] = useState<any>([])
@@ -32,12 +33,23 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
     const token = getValueFromLocalStorage('token')
     const id = params.projectId
     const router = useRouter()
+    // const {
+    //     isNeedApprove,
+    //     isLastLevel,
+    //     latestApproveStatus,
+    //     approvalButtonsWrapper,
+    // } = useApprovalHook({
+    //     approval_slug: PROJECT_APPROVAL_SLUG,
+    //     from: PROJECT_APPROVAL_SLUG,
+    //     from_id: id
+    // })
+
     const {
         isNeedApprove,
         isLastLevel,
         latestApproveStatus,
-        approvalButtonsWrapper,
-    } = useApprovalHook({
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
         approval_slug: PROJECT_APPROVAL_SLUG,
         from: PROJECT_APPROVAL_SLUG,
         from_id: id
@@ -155,6 +167,28 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
 
     const nodeHeaders = []
 
+
+    const buttons = () => {
+        return <>
+            {data?.status === 'pending' &&
+                <ReusableButton
+                    name={'Close Project'}
+                    onClick={() => handleSubmit()}
+                    rounded={'md'}
+                    padding={'p-3'}
+                    shadow={'shadow-md'}
+                    bg_color={'bg-gray-50'}
+                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                    border={'border border-gray-300'}
+                    text_color={'text-gray-700'}
+                >
+                    <CheckCircle2 size={13}/>
+                </ReusableButton>
+            }
+        </>
+    }
+
     return (
         <ProtectedRoute>
             {
@@ -200,28 +234,26 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
                                 ]}
                                 titleA="Project"
                                 titleB={data?.name}
-                                OptionalElement={approvalButtonsWrapper()}
+                                OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttons()})}
                             />
-                            {data?.status === 'pending' &&
-                                <div className={'flex justify-end mt-2'}>
-                                    <ReusableButton
-                                        name={'Close Project'}
-                                        onClick={() => handleSubmit()}
-                                        rounded={'md'}
-                                        padding={'p-3'}
-                                        shadow={'shadow-md'}
-                                        bg_color={'bg-gray-50'}
-                                        hover={'hover:bg-gray-200 hover:border-gray-400'}
-                                        hover_text={'hover:text-gray-900 hover:font-semibold'}
-                                        border={'border border-gray-300'}
-                                        text_color={'text-gray-700'}
-                                    >
-                                        <CheckCircle2 size={13}/>
-                                    </ReusableButton>
-
-                                </div>
-
-                            }
+                            {/*{data?.status === 'pending' &&*/}
+                            {/*    <div className={'flex justify-end mt-2'}>*/}
+                            {/*        <ReusableButton*/}
+                            {/*            name={'Close Project'}*/}
+                            {/*            onClick={() => handleSubmit()}*/}
+                            {/*            rounded={'md'}*/}
+                            {/*            padding={'p-3'}*/}
+                            {/*            shadow={'shadow-md'}*/}
+                            {/*            bg_color={'bg-gray-50'}*/}
+                            {/*            hover={'hover:bg-gray-200 hover:border-gray-400'}*/}
+                            {/*            hover_text={'hover:text-gray-900 hover:font-semibold'}*/}
+                            {/*            border={'border border-gray-300'}*/}
+                            {/*            text_color={'text-gray-700'}*/}
+                            {/*        >*/}
+                            {/*            <CheckCircle2 size={13}/>*/}
+                            {/*        </ReusableButton>*/}
+                            {/*    </div>*/}
+                            {/*}*/}
                         </MuiCardComponent>
                         <MuiCardComponent>
                             <MuiTab

@@ -163,10 +163,10 @@ function Project() {
             label: 'Owner',
         },
         {
-            id: 'prepared_by',
+            id: 'status',
             numeric: false,
             disablePadding: false,
-            label: 'Prepared By',
+            label: 'Status',
         },
         {
             id: 'progress_status',
