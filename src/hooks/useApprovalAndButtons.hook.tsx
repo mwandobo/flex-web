@@ -141,9 +141,6 @@ export const useApprovalsAndButtonsHook = ({
         type?: string;
     }
 
-    console.log('can approve', canApprove)
-    console.log('is my level approved', isMyLevelApproved)
-
     const approve = async (body: ApproveProps) => {
         const approveUrl = 'approval/approve';
         const {current_level} = getApprovalLevel();

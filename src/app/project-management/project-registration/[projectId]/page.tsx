@@ -18,7 +18,6 @@ import OutcomeCost from "../../fragments/outcome-cost";
 import LogFrameIndicator from "../../fragments/logframe-indicator";
 import Purpose from "../../fragments/purpose";
 import ApprovalComponent from "@/components/page-components/approval-component";
-import {useApprovalHook} from "@/hooks/useApprove";
 import {PROJECT_APPROVAL_SLUG} from "@/utils/constant";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {ReusableButton} from "@/components/button/reusable-button";
@@ -33,16 +32,6 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
     const token = getValueFromLocalStorage('token')
     const id = params.projectId
     const router = useRouter()
-    // const {
-    //     isNeedApprove,
-    //     isLastLevel,
-    //     latestApproveStatus,
-    //     approvalButtonsWrapper,
-    // } = useApprovalHook({
-    //     approval_slug: PROJECT_APPROVAL_SLUG,
-    //     from: PROJECT_APPROVAL_SLUG,
-    //     from_id: id
-    // })
 
     const {
         isNeedApprove,
@@ -55,7 +44,10 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
         from_id: id
     })
 
-    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
+    const approveStatus = () => {
+       if (data.status !== 'pending') return true;
+       return (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
+    }
 
     const url = `project/show/${id}`
     const navigateToLogin = () => {
@@ -168,7 +160,7 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
     const nodeHeaders = []
 
 
-    const buttons = () => {
+    const buttonsBody = () => {
         return <>
             {data?.status === 'pending' &&
                 <ReusableButton
@@ -234,26 +226,8 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
                                 ]}
                                 titleA="Project"
                                 titleB={data?.name}
-                                OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttons()})}
+                                OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                             />
-                            {/*{data?.status === 'pending' &&*/}
-                            {/*    <div className={'flex justify-end mt-2'}>*/}
-                            {/*        <ReusableButton*/}
-                            {/*            name={'Close Project'}*/}
-                            {/*            onClick={() => handleSubmit()}*/}
-                            {/*            rounded={'md'}*/}
-                            {/*            padding={'p-3'}*/}
-                            {/*            shadow={'shadow-md'}*/}
-                            {/*            bg_color={'bg-gray-50'}*/}
-                            {/*            hover={'hover:bg-gray-200 hover:border-gray-400'}*/}
-                            {/*            hover_text={'hover:text-gray-900 hover:font-semibold'}*/}
-                            {/*            border={'border border-gray-300'}*/}
-                            {/*            text_color={'text-gray-700'}*/}
-                            {/*        >*/}
-                            {/*            <CheckCircle2 size={13}/>*/}
-                            {/*        </ReusableButton>*/}
-                            {/*    </div>*/}
-                            {/*}*/}
                         </MuiCardComponent>
                         <MuiCardComponent>
                             <MuiTab
