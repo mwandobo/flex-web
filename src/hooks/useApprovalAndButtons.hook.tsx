@@ -1,7 +1,7 @@
 "use client"
 
 import {getValueFromLocalStorage, setValueLocalStorage} from '@/utils/actions/local-starage';
-import {post} from '@/utils/api';
+import {get, post} from '@/utils/api';
 import {useState, useEffect, ReactNode} from 'react';
 import {ReusableButton} from "@/components/button/reusable-button";
 import CrudFormComponent from "@/components/forms/crud.form.component";
@@ -49,15 +49,19 @@ export const useApprovalsAndButtonsHook = ({
         return null;
     };
 
-    const getApprovedItemByLevelId = (level_id: number) => {
-        const approvedItem = allApprovedItems?.find(
-            (item: any) =>
-                Number(item.approval_level_id) === Number(level_id) &&
-                item.from === from &&
-                Number(item.from_id) === Number(from_id)
-        );
+    const getApprovedItemByLevelId = async (level_id: number) => {
+        const response = await get('approval/approved-items');
 
-        return approvedItem;
+        if(response.status === 200){
+            return response.data.data?.find(
+                (item: any) =>
+                    Number(item.approval_level_id) === Number(level_id) &&
+                    item.from === from &&
+                    Number(item.from_id) === Number(from_id)
+            );
+        }
+
+        return [];
     }
 
     const getApprovalLevel = () => {
@@ -81,55 +85,64 @@ export const useApprovalsAndButtonsHook = ({
     };
 
     useEffect(() => {
-        const {current_level, latestLevel, levels, previousLevel} = getApprovalLevel();
+        const fetchApprovalData = async () => {
+            const { current_level, latestLevel, levels, previousLevel } = getApprovalLevel();
+            const mappedApproval = getMappedApproval();
 
-        const mappedApproval = getMappedApproval();
+            if (mappedApproval && levels.length > 0) {
+                setIsNeedApprove(true);
+            }
 
-        if (mappedApproval && levels.length > 0) {
-            setIsNeedApprove(true);
-        }
+            if (current_level) {
+                try {
+                    const approvedItemForCurrentLevel = await getApprovedItemByLevelId(current_level?.id);
 
-        if (current_level) {
-            const approvedItemForCurrentLevel = getApprovedItemByLevelId(current_level?.id)
-
-            if (approvedItemForCurrentLevel) {
-                setIsApproved(true)
-                setIsMyLevelApproved(true);
-                setApproveStatus(approvedItemForCurrentLevel.type);
-
-            } else {
-                if (previousLevel) {
-                    const approvedItemForPreviousLevel = getApprovedItemByLevelId(previousLevel?.id)
-                    if (approvedItemForPreviousLevel && approvedItemForPreviousLevel.type === "approve") {
-                        setCanApprove(true)
+                    if (approvedItemForCurrentLevel) {
+                        setIsApproved(true);
+                        setIsMyLevelApproved(true);
+                        setApproveStatus(approvedItemForCurrentLevel.type);
+                    } else {
+                        if (previousLevel) {
+                            const approvedItemForPreviousLevel = await getApprovedItemByLevelId(previousLevel?.id);
+                            if (approvedItemForPreviousLevel && approvedItemForPreviousLevel.type === "approve") {
+                                setCanApprove(true);
+                            }
+                        } else {
+                            setCanApprove(true);
+                        }
                     }
-                } else {
-                    setCanApprove(true)
+                } catch (error) {
+                    console.error("Error fetching approved item for current level:", error);
                 }
             }
-        }
 
-        if (latestLevel) {
-            const approvedItemForLatestLevel = getApprovedItemByLevelId(latestLevel?.id)
-            if (approvedItemForLatestLevel) {
-                setIsLastLevel(true);
+            if (latestLevel) {
+                try {
+                    const approvedItemForLatestLevel = await getApprovedItemByLevelId(latestLevel?.id);
+                    if (approvedItemForLatestLevel) {
+                        setIsLastLevel(true);
+                    }
+                } catch (error) {
+                    console.error("Error fetching approved item for latest level:", error);
+                }
             }
-        }
-        const filteredItems = allApprovedItems.filter(
-            item => item.from === from && Number(item.from_id) === Number(from_id)
-        );
 
+            const filteredItems = allApprovedItems.filter(
+                (item) => item.from === from && Number(item.from_id) === Number(from_id)
+            );
 
-        if (filteredItems.length > 0) {
-            const latestItem = filteredItems.reduce((max, item) => {
-                return Number(item.id) > Number(max.id) ? item : max;
-            }, filteredItems[0]);
+            if (filteredItems.length > 0) {
+                const latestItem = filteredItems.reduce((max, item) => {
+                    return Number(item.id) > Number(max.id) ? item : max;
+                }, filteredItems[0]);
 
-            if (latestItem) {
-                setLatestApproveStatus(latestItem.type)
+                if (latestItem) {
+                    setLatestApproveStatus(latestItem.type);
+                }
             }
-        }
+        };
 
+        fetchApprovalData();
     }, [approval_slug, role, isApproved, refresh, getApprovalLevel, getMappedApproval, getApprovedItemByLevelId]);
 
     interface ApproveProps {

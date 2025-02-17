@@ -12,7 +12,9 @@ import MuiTab from "@/components/tabs/mui-tab";
 import CollectedData from "@/app/indicator-management/collected-data.component";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {CheckCircle2, FileOutput} from "lucide-react";
+import {CheckCircle2} from "lucide-react";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
+import {INDICATOR_APPROVAL_SLUG} from "@/utils/constant";
 
 const CollectedDataShow = ({params}: { params: { indicatorId: string } }) => {
     const router = useRouter()
@@ -21,6 +23,22 @@ const CollectedDataShow = ({params}: { params: { indicatorId: string } }) => {
     const [refresh, setRefresh] = useState(false)
     const token = getValueFromLocalStorage('token')
     const id = params.indicatorId
+
+    const {
+        isNeedApprove,
+        isLastLevel,
+        latestApproveStatus,
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
+        approval_slug: INDICATOR_APPROVAL_SLUG,
+        from: INDICATOR_APPROVAL_SLUG,
+        from_id: id
+    })
+
+    const approveStatus = () => {
+        if (data.status !== 'pending') return true;
+        return (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
+    }
 
     const url = `indicator/${id}`
     const navigateToLogin = () => {
@@ -65,7 +83,7 @@ const CollectedDataShow = ({params}: { params: { indicatorId: string } }) => {
         }
     };
 
-    const handleSubmit = (data: any) => {
+    const handleSubmit = () => {
         showConfirmationModal({
             title: 'Are You Sure?',
             text: `Are You Sure You Want To ${data?.status === 'pending'?'Disable': 'Enable'}  Indicator: ${data.formatted_code}?`,
@@ -73,6 +91,26 @@ const CollectedDataShow = ({params}: { params: { indicatorId: string } }) => {
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
     };
+
+    const buttonsBody = () => {
+        return <>
+                <ReusableButton
+                    name={data?.status ==='pending'?'Disable Indicator': 'Enable Indicator'}
+                    onClick={() => handleSubmit()}
+                    rounded={'md'}
+                    padding={'p-3'}
+                    shadow={'shadow-md'}
+                    bg_color={'bg-gray-50'}
+                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                    border={'border border-gray-300'}
+                    text_color={'text-gray-700'}
+                >
+                    <CheckCircle2 size={13}/>
+                </ReusableButton>
+
+        </>
+    }
 
     return (
 
@@ -107,23 +145,9 @@ const CollectedDataShow = ({params}: { params: { indicatorId: string } }) => {
                                 ]}
                                 titleA="Indicator"
                                 titleB={`${data?.formatted_code} : ${data?.name}`}
+                                OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                             />
-                           <div className={'flex justify-end'}>
-                               <ReusableButton
-                                   name={data?.status ==='pending'?'Disable Indicator': 'Enable Indicator'}
-                                   onClick={() => handleSubmit(data)}
-                                   rounded={'md'}
-                                   padding={'p-3'}
-                                   shadow={'shadow-md'}
-                                   bg_color={'bg-gray-50'}
-                                   hover={'hover:bg-gray-200 hover:border-gray-400'}
-                                   hover_text={'hover:text-gray-900 hover:font-semibold'}
-                                   border={'border border-gray-300'}
-                                   text_color={'text-gray-700'}
-                               >
-                                   <CheckCircle2 size={13}/>
-                               </ReusableButton>
-                           </div>
+
                         </MuiCardComponent>
                         <MuiCardComponent>
                             <MuiTab
