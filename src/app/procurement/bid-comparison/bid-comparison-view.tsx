@@ -10,11 +10,12 @@ import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 import CircleCheckbox from "@/components/inputs/check-circle.component";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {CheckCircle} from "lucide-react";
+import {CheckCircle, CheckCircle2, FileOutput} from "lucide-react";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
-import {BID_COMPARISON_APPROVAL_SLUG, ITEM_APPROVAL_SLUG} from "@/utils/constant";
+import {BID_COMPARISON_APPROVAL_SLUG, FINANCE_APPROVAL_SLUG, ITEM_APPROVAL_SLUG} from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 
 const BidComparisonView = () => {
 
@@ -34,20 +35,14 @@ const BidComparisonView = () => {
     const navigateToLogin = () => {
         return router.push('/login')
     }
-    const approval_url = `approval/approved-items/by-item?from=${BID_COMPARISON_APPROVAL_SLUG}&&from_id=${id}`
 
     const {
-        isNeedApprove,
-        isLastLevel,
-        latestApproveStatus,
-        approvalButtonsWrapper,
-    } = useApprovalHook({
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
         approval_slug: BID_COMPARISON_APPROVAL_SLUG,
         from: BID_COMPARISON_APPROVAL_SLUG,
         from_id: id
     })
-
-    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
     const [selectedCards, setSelectedCards] = useState<any[]>([]);
 
@@ -118,12 +113,6 @@ const BidComparisonView = () => {
 
                 const bufBody = result.map(item => ({
                     item_id: item.id,
-                    // winner: {
-                    //     supplier_id: result[0]?.supplier?.supplier_id ?? null,   // First item's supplier_id
-                    //     quotation_id: result[0]?.supplier?.quotation_id ?? null, // First item's quotation_id
-                    //     price: result[0]?.supplier?.price ?? null,               // First item's price
-                    //     quantity: result[0]?.supplier.quantity ?? null,         // First item's quantity
-                    // },
                     winner: {
                         supplier_id: item?.suppliers[0]?.id ?? null,   // First item's supplier_id
                         quotation_id: item?.suppliers[0]?.quotation_id ?? null, // First item's quotation_id
@@ -148,6 +137,62 @@ const BidComparisonView = () => {
         fetchData()
     }, [refresh])
 
+    const buttonsBody = () => {
+        return <>
+            {data?.status === 'bid_comparison' &&
+                <ReusableButton
+                    name={'Submit Winner'}
+                    onClick={() => handleSubmit()}
+                    rounded={'md'}
+                    padding={'p-3'}
+                    shadow={'shadow-md'}
+                    bg_color={'bg-gray-50'}
+                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                    border={'border border-gray-300'}
+                    text_color={'text-gray-700'}
+                >
+                    <CheckCircle2 size={13}/>
+                </ReusableButton>
+            }
+            {data?.status === 'purchase_order' &&
+
+                <ReusableButton
+                    name={'Re Choose Winner'}
+                    onClick={() => handleRefreshWinner()}
+                    rounded={'md'}
+                    padding={'p-3'}
+                    shadow={'shadow-md'}
+                    bg_color={'bg-gray-50'}
+                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                    border={'border border-gray-300'}
+                    text_color={'text-gray-700'}
+                >
+                    <FileOutput size={13}/>
+                </ReusableButton>
+
+            }
+            {data?.status === 'purchase_order' &&
+                <ReusableButton
+                    name={'Create Purchase Order'}
+                    onClick={() => handleCreatePurchaseOrder()}
+                    rounded={'md'}
+                    padding={'p-3'}
+                    shadow={'shadow-md'}
+                    bg_color={'bg-gray-50'}
+                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                    border={'border border-gray-300'}
+                    text_color={'text-gray-700'}
+                >
+                    <FileOutput size={13}/>
+                </ReusableButton>
+            }
+        </>
+    }
+
+
     return (
 
         <ProtectedRoute>
@@ -160,6 +205,7 @@ const BidComparisonView = () => {
                             isShowBackButton={true}
                         />
                         <MuiCardComponent>
+                            {data.length <= 0 && 'No quotation Submitted'}
                             {data.map((payloadItem, index) => (
                                 <div key={index} className={'grid grid-cols-7 border-t border-gray-300'}>
                                     <div className={'col-span-2 text-xs flex flex-col justify-center'}>
@@ -220,29 +266,21 @@ const BidComparisonView = () => {
                                 </div>
                             ))}
                             <div className={'flex justify-end gap-1'}>
-                                {rfq?.status === "bid_comparison" &&
-                                    <ReusableButton name={'Submit'} onClick={handleSubmit}> <CheckCircle size={10}/>
-                                    </ReusableButton>}
-                                {rfq?.status === "purchase_order" &&
-                                    <ReusableButton name={'Re Choose Winner'} onClick={handleRefreshWinner}>
-                                        <CheckCircle size={10}/> </ReusableButton>}
-                                {rfq?.status === "purchase_order" && <ReusableButton name={'Create Purchase Order'}
-                                                                                     onClick={handleCreatePurchaseOrder}>
-                                    <CheckCircle size={10}/> </ReusableButton>}
+                                {data.length > 0 && approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                             </div>
 
-                            <div className={'flex justify-between mt-2'}>
-                                <>
-                                    {approvalButtonsWrapper()}
-                                </>
-                                <SlideOver
-                                    showButton={isNeedApprove}
-                                    title="Approval Trail">
-                                    <TreeList
-                                        url={approval_url}
-                                    />
-                                </SlideOver>
-                            </div>
+                            {/*<div className={'flex justify-between mt-2'}>*/}
+                            {/*    <>*/}
+                            {/*        {approvalButtonsWrapper()}*/}
+                            {/*    </>*/}
+                            {/*    <SlideOver*/}
+                            {/*        showButton={isNeedApprove}*/}
+                            {/*        title="Approval Trail">*/}
+                            {/*        <TreeList*/}
+                            {/*            url={approval_url}*/}
+                            {/*        />*/}
+                            {/*    </SlideOver>*/}
+                            {/*</div>*/}
                         </MuiCardComponent>
                     </>
             }
