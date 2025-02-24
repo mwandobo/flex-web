@@ -9,16 +9,14 @@ import React, {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
-import SlideOver from "@/components/slide-over/slide-over.component";
-import TreeList from "@/components/list/tree-list.component";
-import {CUSTOMER_APPROVAL_SLUG } from "@/utils/constant";
-import {useApprovalHook} from "@/hooks/useApprove";
+import {CUSTOMER_APPROVAL_SLUG} from "@/utils/constant";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 
 const CustomerView = () => {
 
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
-    const [refresh, setRefresh] = useState(false)
+    const [refresh,] = useState(false)
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
 
@@ -31,20 +29,13 @@ const CustomerView = () => {
         return router.push('/login')
     }
 
-    const approval_url = `approval/approved-items/by-item?from=${CUSTOMER_APPROVAL_SLUG}&&from_id=${id}`
-
     const {
-        isNeedApprove,
-        isLastLevel,
-        latestApproveStatus,
-        approvalButtonsWrapper,
-    } = useApprovalHook({
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
         approval_slug: CUSTOMER_APPROVAL_SLUG,
         from: CUSTOMER_APPROVAL_SLUG,
         from_id: id
     })
-
-    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
     useEffect(() => {
         const fetchData = async () => {
@@ -89,19 +80,8 @@ const CustomerView = () => {
                                     ]}
                                     titleA={`Customer`}
                                     titleB={` ${data?.name} `}
+                                    OptionalElement={approvalsAndButtonsWrapper({})}
                                 />
-                                <div className={'flex justify-between mt-2'}>
-                                    <>
-                                        {approvalButtonsWrapper()}
-                                    </>
-                                    <SlideOver
-                                        showButton={isNeedApprove}
-                                        title="Approval Trail">
-                                        <TreeList
-                                            url={approval_url}
-                                        />
-                                    </SlideOver>
-                                </div>
                             </div>
                         </MuiCardComponent>
                     </>

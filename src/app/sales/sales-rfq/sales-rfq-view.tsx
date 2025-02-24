@@ -9,18 +9,14 @@ import React, {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
-import RequisitionRequestItem from "@/app/procurement/requisition-requests/requisition-request-items";
-import {useCrudOperator} from "@/hooks/crud/crud-operator";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {FileOutput} from "lucide-react";
-import RfqItems from "@/app/procurement/rfq/rfq-items";
-import SlideOver from "@/components/slide-over/slide-over.component";
-import TreeList from "@/components/list/tree-list.component";
-import {ITEM_APPROVAL_SLUG, REQUEST_FOR_QUOTATION_APPROVAL_SLUG, SALE_RFQ_APPROVAL_SLUG} from "@/utils/constant";
-import {useApprovalHook} from "@/hooks/useApprove";
-import Swal from "sweetalert2";
+import {CheckCircle2} from "lucide-react";
+import {
+    SALE_RFQ_APPROVAL_SLUG
+} from "@/utils/constant";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import SalesRfqItems from "@/app/sales/sales-rfq/sales-rfq-items";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 
 const SalesRfqView = () => {
 
@@ -39,14 +35,9 @@ const SalesRfqView = () => {
         return router.push('/login')
     }
 
-    const approval_url = `approval/approved-items/by-item?from=${SALE_RFQ_APPROVAL_SLUG}&&from_id=${id}`
-
     const {
-        isNeedApprove,
-        isLastLevel,
-        latestApproveStatus,
-        approvalButtonsWrapper,
-    } = useApprovalHook({
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
         approval_slug: SALE_RFQ_APPROVAL_SLUG,
         from: SALE_RFQ_APPROVAL_SLUG,
         from_id: id
@@ -64,7 +55,7 @@ const SalesRfqView = () => {
     };
 
 
-    const handleSubmit = (data: any) => {
+    const handleSubmit = () => {
         showConfirmationModal({
             title: 'Are You Sure?',
             text: `Are You Sure You Want To Submit RFQ Code: ${data.formatted_code}?`,
@@ -73,7 +64,27 @@ const SalesRfqView = () => {
         });
     };
 
-    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
+    const buttonsBody = () => {
+        return <>
+            {data?.status === 'pending' &&
+                <ReusableButton
+                    name={'Submit RFQ'}
+                    onClick={() => handleSubmit()}
+                    rounded={'md'}
+                    padding={'p-3'}
+                    shadow={'shadow-md'}
+                    bg_color={'bg-gray-50'}
+                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                    border={'border border-gray-300'}
+                    text_color={'text-gray-700'}
+                >
+                    <CheckCircle2 size={13}/>
+                </ReusableButton>
+            }
+        </>
+    }
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -96,7 +107,6 @@ const SalesRfqView = () => {
     }, [refresh])
 
     return (
-
         <ProtectedRoute>
             {
                 loading ? <p>Loading...</p>
@@ -123,19 +133,8 @@ const SalesRfqView = () => {
                                     ]}
                                     titleA={`RFQ`}
                                     titleB={` ${data?.formatted_code} `}
+                                    OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                                 />
-                                <div className={'flex justify-between mt-2'}>
-                                    <>
-                                        {approvalButtonsWrapper()}
-                                    </>
-                                    <SlideOver
-                                        showButton={isNeedApprove}
-                                        title="Approval Trail">
-                                        <TreeList
-                                            url={approval_url}
-                                        />
-                                    </SlideOver>
-                                </div>
                             </div>
                             <hr className="bg-gray-100"/>
                             <div className={'mt-2'}>
@@ -144,17 +143,6 @@ const SalesRfqView = () => {
                                     status={data?.status}
                                 />
                             </div>
-                            {approveStatus() && data?.status ==='pending' &&
-                                <div className={'flex justify-end'}>
-                                    <ReusableButton
-                                        name={'Submit RFQ'}
-                                        onClick={() => handleSubmit(data)}
-                                    >
-                                        <FileOutput size={12}/>
-                                    </ReusableButton>
-                                </div>
-                            }
-
                         </MuiCardComponent>
                     </>
             }
