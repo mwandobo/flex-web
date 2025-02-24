@@ -9,15 +9,13 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
-import {ITEM_APPROVAL_SLUG, PAYMENT_APPROVAL_SLUG} from "@/utils/constant";
-import {useApprovalHook} from "@/hooks/useApprove";
-import SlideOver from "@/components/slide-over/slide-over.component";
-import TreeList from "@/components/list/tree-list.component";
+import {INVOICE_APPROVAL_SLUG,} from "@/utils/constant";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {FileOutput} from "lucide-react";
+import {CheckCircle2,} from "lucide-react";
 import DocumentViewer from "@/components/page-components/document-viewer";
 import {toast} from "react-toastify";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 
 const PaymentView = () => {
     const [data, setData] = useState<any>([])
@@ -26,29 +24,23 @@ const PaymentView = () => {
     const token = getValueFromLocalStorage('token')
     const [refresh, setRefresh] = useState(false)
 
-    const {state, dispatch} = useGlobalContextHook()
+    const {state,} = useGlobalContextHook()
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
 
     const url = `payments/${id}`
-    const approval_url = `approval/approved-items/by-item?from=${PAYMENT_APPROVAL_SLUG}&&from_id=${id}`
 
     const navigateToLogin = () => {
         return router.push('/login')
     }
 
     const {
-        isNeedApprove,
-        isLastLevel,
-        latestApproveStatus,
-        approvalButtonsWrapper,
-    } = useApprovalHook({
-        approval_slug: PAYMENT_APPROVAL_SLUG,
-        from: PAYMENT_APPROVAL_SLUG,
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
+        approval_slug: INVOICE_APPROVAL_SLUG,
+        from: INVOICE_APPROVAL_SLUG,
         from_id: id
     })
-
-    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
     const onSave = async () => {
         try {
@@ -70,7 +62,7 @@ const PaymentView = () => {
         }
     };
 
-    const handleSubmit = (data: any) => {
+    const handleSubmit = () => {
         showConfirmationModal({
             title: 'Are You Sure?',
             text: `Are You Sure You Want To Submit Payment Code: ${data.formatted_code}?`,
@@ -78,6 +70,29 @@ const PaymentView = () => {
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
     };
+
+    const buttonsBody = () => {
+        return <>
+
+            {data?.status === 'pending' &&
+                <ReusableButton
+                    name={'Submit Payment'}
+                    onClick={() => handleSubmit()}
+                    rounded={'md'}
+                    padding={'p-3'}
+                    shadow={'shadow-md'}
+                    bg_color={'bg-gray-50'}
+                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                    border={'border border-gray-300'}
+                    text_color={'text-gray-700'}
+                >
+                    <CheckCircle2 size={13}/>
+                </ReusableButton>
+            }
+
+        </>
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -120,37 +135,16 @@ const PaymentView = () => {
                                         {label: 'Supplier', value: data?.supplier_name},
                                         {label: 'Amount', value: data?.amount},
                                         {label: 'Description', value: data?.description},
+                                        {label: 'Status', value: data?.status},
 
                                     ]}
                                     titleA={`Payment`}
                                     titleB={` ${data?.formatted_code} `}
+                                    OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                                 />
                                 <DocumentViewer data={{ file_url: data.file_url}} />
                                 <hr className="bg-gray-100"/>
-                                <div className={'flex justify-between mt-2'}>
-                                    <>
-                                        {approvalButtonsWrapper()}
-                                    </>
-                                    <SlideOver
-                                        showButton={isNeedApprove}
-                                        title="Approval Trail">
-                                        <TreeList
-                                            url={approval_url}
-                                        />
-                                    </SlideOver>
-                                </div>
                             </div>
-                            <hr className="bg-gray-100"/>
-                            {approveStatus() && data?.status === 'pending' &&
-                                <div className={'flex justify-end gap-2'}>
-                                    <ReusableButton
-                                        name={'Submit Payment'}
-                                        onClick={() => handleSubmit(data)}
-                                    >
-                                        <FileOutput size={12}/>
-                                    </ReusableButton>
-                                </div>
-                            }
                         </MuiCardComponent>
                     </>
             }
