@@ -12,11 +12,9 @@ import PageHeader from "@/components/header/page-header-v1";
 import RequisitionRequestItem from "@/app/procurement/requisition-requests/requisition-request-items";
 import {useCrudOperator} from "@/hooks/crud/crud-operator";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {FileOutput} from "lucide-react";
-import {ITEM_APPROVAL_SLUG, REQUISITION_REQUEST_APPROVAL_SLUG} from "@/utils/constant";
-import {useApprovalHook} from "@/hooks/useApprove";
-import SlideOver from "@/components/slide-over/slide-over.component";
-import TreeList from "@/components/list/tree-list.component";
+import {CheckCircle2} from "lucide-react";
+import { REQUISITION_REQUEST_APPROVAL_SLUG} from "@/utils/constant";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 
 const RequisitionRequestView = () => {
 
@@ -34,20 +32,14 @@ const RequisitionRequestView = () => {
         return router.push('/login')
     }
 
-    const approval_url = `approval/approved-items/by-item?from=${REQUISITION_REQUEST_APPROVAL_SLUG}&&from_id=${id}`
-
     const {
-        isNeedApprove,
-        isLastLevel,
-        latestApproveStatus,
-        approvalButtonsWrapper,
-    } = useApprovalHook({
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
         approval_slug: REQUISITION_REQUEST_APPROVAL_SLUG,
         from: REQUISITION_REQUEST_APPROVAL_SLUG,
         from_id: id
     })
 
-    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
     const formInputs = [
         {
@@ -140,6 +132,29 @@ const RequisitionRequestView = () => {
         fetchData()
     }, [isStateChanged])
 
+    const buttonsBody = () => {
+        return <>
+
+            {data?.status === 'pending' &&
+                <ReusableButton
+                    name={'Request for Quotation'}
+                    onClick={() => handleClick('create')}
+                    rounded={'md'}
+                    padding={'p-3'}
+                    shadow={'shadow-md'}
+                    bg_color={'bg-gray-50'}
+                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                    border={'border border-gray-300'}
+                    text_color={'text-gray-700'}
+                >
+                    <CheckCircle2 size={13}/>
+                </ReusableButton>
+            }
+
+        </>
+    }
+
     return (
 
         <ProtectedRoute>
@@ -163,19 +178,8 @@ const RequisitionRequestView = () => {
                                     ]}
                                     titleA={`Requisition Request`}
                                     titleB={` ${data?.formatted_code} `}
+                                    OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                                 />
-                                <div className={'flex justify-between mt-2'}>
-                                    <>
-                                        {approvalButtonsWrapper()}
-                                    </>
-                                    <SlideOver
-                                        showButton={isNeedApprove}
-                                        title="Approval Trail">
-                                        <TreeList
-                                            url={approval_url}
-                                        />
-                                    </SlideOver>
-                                </div>
                             </div>
                             <hr className="bg-gray-100"/>
                             <div className={'mt-2'}>
@@ -184,17 +188,6 @@ const RequisitionRequestView = () => {
                                     status={data.status}
                                 />
                             </div>
-                            {
-                                approveStatus() && data.status ==='pending' &&
-                                <div className="flex flex-col items-end">
-                                    <ReusableButton
-                                        name={'Request for Quotation'}
-                                        onClick={() => handleClick('create')}
-                                    >
-                                        <FileOutput size={12}/>
-                                    </ReusableButton>
-                                </div>
-                            }
                         </MuiCardComponent>
                         {createdForm()}
                     </>
