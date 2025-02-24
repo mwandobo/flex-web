@@ -9,20 +9,13 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
-import RequisitionRequestItem from "@/app/procurement/requisition-requests/requisition-request-items";
-import {useCrudOperator} from "@/hooks/crud/crud-operator";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {FileOutput, RotateCcw} from "lucide-react";
-import RfqItems from "@/app/procurement/rfq/rfq-items";
-import QuotationItems from "@/app/procurement/quotation/quotation-items";
-import PurchaseOrderItems from "@/app/procurement/purchase-order/purchase-order-items";
+import {CheckCircle2, RotateCcw} from "lucide-react";
 import moneyFormater from "@/components/moneyFormater";
-import {ITEM_APPROVAL_SLUG, PURCHASE_ORDER_APPROVAL_SLUG} from "@/utils/constant";
-import {useApprovalHook} from "@/hooks/useApprove";
-import SlideOver from "@/components/slide-over/slide-over.component";
-import TreeList from "@/components/list/tree-list.component";
+import { PURCHASE_ORDER_APPROVAL_SLUG} from "@/utils/constant";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import OrderItems from "@/app/sales/order/order-items";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 
 const OrderView = () => {
 
@@ -32,29 +25,22 @@ const OrderView = () => {
     const token = getValueFromLocalStorage('token')
     const [refresh, setRefresh] = useState(false)
 
-    const {state, dispatch} = useGlobalContextHook()
-    const {selectedSubSidebarItem: selected, viewedItem} = state;
-    const {id, from: viewFrom} = viewedItem;
+    const {state, } = useGlobalContextHook()
+    const {viewedItem} = state;
+    const {id,} = viewedItem;
 
     const url = `purchase-orders/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
 
-    const approval_url = `approval/approved-items/by-item?from=${PURCHASE_ORDER_APPROVAL_SLUG}&&from_id=${id}`
-
     const {
-        isNeedApprove,
-        isLastLevel,
-        latestApproveStatus,
-        approvalButtonsWrapper,
-    } = useApprovalHook({
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
         approval_slug: PURCHASE_ORDER_APPROVAL_SLUG,
         from: PURCHASE_ORDER_APPROVAL_SLUG,
         from_id: id
     })
-
-    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
     const onSave = async (url:string) => {
         try {
@@ -67,7 +53,7 @@ const OrderView = () => {
         }
     };
 
-    const handleSubmit = (data: any) => {
+    const handleSubmit = () => {
         showConfirmationModal({
             title: 'Are You Sure?',
             text: `Are You Sure You Want To Submit Purchase Order Code: ${data.formatted_code}?`,
@@ -76,7 +62,7 @@ const OrderView = () => {
         });
     };
 
-    const handleRefresh = (data: any) => {
+    const handleRefresh = () => {
         showConfirmationModal({
             title: 'Are you sure?',
             text: `Are you sure you want to Refresh Saved Changes for Quotation code: ${data.formatted_code}?`,
@@ -84,6 +70,44 @@ const OrderView = () => {
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
     };
+
+    const buttonsBody = () => {
+        return <>
+            {data?.status === 'pending' &&
+                <div className={'flex justify-end gap-2'}>
+                    <ReusableButton
+                        name={'Refresh'}
+                        onClick={() => handleRefresh()}
+                        rounded={'md'}
+                        padding={'p-3'}
+                        shadow={'shadow-md'}
+                        bg_color={'bg-gray-50'}
+                        hover={'hover:bg-gray-200 hover:border-gray-400'}
+                        hover_text={'hover:text-gray-900 hover:font-semibold'}
+                        border={'border border-gray-300'}
+                        text_color={'text-gray-700'}
+                    >
+                        <RotateCcw size={13}/>
+                    </ReusableButton>
+                    <ReusableButton
+                        name={'Submit Purchase Order'}
+                        onClick={() => handleSubmit()}
+                        rounded={'md'}
+                        padding={'p-3'}
+                        shadow={'shadow-md'}
+                        bg_color={'bg-gray-50'}
+                        hover={'hover:bg-gray-200 hover:border-gray-400'}
+                        hover_text={'hover:text-gray-900 hover:font-semibold'}
+                        border={'border border-gray-300'}
+                        text_color={'text-gray-700'}
+                    >
+                        <CheckCircle2 size={13}/>
+                    </ReusableButton>
+                </div>
+            }
+        </>
+    }
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -139,40 +163,14 @@ const OrderView = () => {
                                     ]}
                                     titleA={`Purchase Request`}
                                     titleB={` ${data?.formatted_code} `}
+                                    OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                                 />
-                                <div className={'flex justify-between mt-2'}>
-                                    <>
-                                        {approvalButtonsWrapper()}
-                                    </>
-                                    <SlideOver
-                                        showButton={isNeedApprove}
-                                        title="Approval Trail">
-                                        <TreeList
-                                            url={approval_url}
-                                        />
-                                    </SlideOver>
-                                </div>
+
                             </div>
                             <hr className="bg-gray-100"/>
                             <div className={'mt-2'}>
                                 <OrderItems purchase_order={data}/>
                             </div>
-                            {approveStatus() && data?.status === 'pending' &&
-                                <div className={'flex justify-end gap-2'}>
-                                    <ReusableButton
-                                        name={'Refresh'}
-                                        onClick={() => handleRefresh(data)}
-                                    >
-                                        <RotateCcw size={12}/>
-                                    </ReusableButton>
-                                    <ReusableButton
-                                        name={'Submit Purchase Order'}
-                                        onClick={() => handleSubmit(data)}
-                                    >
-                                        <FileOutput size={12}/>
-                                    </ReusableButton>
-                                </div>
-                            }
                         </MuiCardComponent>
                     </>
             }
