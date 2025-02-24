@@ -9,18 +9,13 @@ import React, {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
-import SlideOver from "@/components/slide-over/slide-over.component";
-import TreeList from "@/components/list/tree-list.component";
-import {CUSTOMER_APPROVAL_SLUG } from "@/utils/constant";
-import {useApprovalHook} from "@/hooks/useApprove";
-import QuotationItems from "@/app/procurement/quotation/quotation-items";
-import PricingModes from "@/app/sales/pricing/pricing-modes";
+import { PRICING_APPROVAL_SLUG,} from "@/utils/constant";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 
 const PricingView = () => {
 
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
-    const [refresh, setRefresh] = useState(false)
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
 
@@ -33,20 +28,13 @@ const PricingView = () => {
         return router.push('/login')
     }
 
-    const approval_url = `approval/approved-items/by-item?from=${CUSTOMER_APPROVAL_SLUG}&&from_id=${id}`
-
     const {
-        isNeedApprove,
-        isLastLevel,
-        latestApproveStatus,
-        approvalButtonsWrapper,
-    } = useApprovalHook({
-        approval_slug: CUSTOMER_APPROVAL_SLUG,
-        from: CUSTOMER_APPROVAL_SLUG,
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
+        approval_slug: PRICING_APPROVAL_SLUG,
+        from: PRICING_APPROVAL_SLUG,
         from_id: id
     })
-
-    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
     useEffect(() => {
         const fetchData = async () => {
@@ -66,7 +54,7 @@ const PricingView = () => {
             }
         };
         fetchData()
-    }, [refresh])
+    }, [])
 
     return (
 
@@ -88,23 +76,8 @@ const PricingView = () => {
                                     ]}
                                     titleA={`Pricing`}
                                     titleB={` ${data?.name} `}
+                                    OptionalElement={approvalsAndButtonsWrapper({})}
                                 />
-                                <div className={'flex justify-between mt-2'}>
-                                    <>
-                                        {approvalButtonsWrapper()}
-                                    </>
-                                    <SlideOver
-                                        showButton={isNeedApprove}
-                                        title="Approval Trail">
-                                        <TreeList
-                                            url={approval_url}
-                                        />
-                                    </SlideOver>
-                                </div>
-                                <hr className="bg-gray-100"/>
-                                {/*<div className={'mt-2'}>*/}
-                                {/*    <PricingModes quotation={data}/>*/}
-                                {/*</div>*/}
                             </div>
                         </MuiCardComponent>
                     </>
