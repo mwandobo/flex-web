@@ -226,8 +226,6 @@ export const useApprovalsAndButtonsHook = ({
     }
 
     const approvalsAndButtonsWrapper = ({buttonBody}: ApprovalsAndButtonsProps ) => {
-        console.log('approval_url',approval_url )
-
         return (
             <>
                 {isNeedApprove ? (
@@ -306,21 +304,23 @@ export const useApprovalsAndButtonsHook = ({
                                 }
                             </>
                         )}
+                        <div className={'flex justify-between ml-2 w-36'}>
+                            <SlideOver
+                                showButton={isNeedApprove}
+                                title="Approval Trail">
+                                <TreeList
+                                    url={approval_url}
+                                />
+                            </SlideOver>
+                        </div>
                     </>
+
+
                 ) : buttonBody
 
                 }
 
 
-                <div className={'flex justify-between ml-2 w-36'}>
-                    <SlideOver
-                        showButton={isNeedApprove}
-                        title="Approval Trail">
-                        <TreeList
-                            url={approval_url}
-                        />
-                    </SlideOver>
-                </div>
             </>
         );
     }

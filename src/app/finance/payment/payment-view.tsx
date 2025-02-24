@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
-import {INVOICE_APPROVAL_SLUG,} from "@/utils/constant";
+import {INVOICE_APPROVAL_SLUG, PAYMENT_APPROVAL_SLUG,} from "@/utils/constant";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {ReusableButton} from "@/components/button/reusable-button";
 import {CheckCircle2,} from "lucide-react";
@@ -37,8 +37,8 @@ const PaymentView = () => {
     const {
         approvalsAndButtonsWrapper,
     } = useApprovalsAndButtonsHook({
-        approval_slug: INVOICE_APPROVAL_SLUG,
-        from: INVOICE_APPROVAL_SLUG,
+        approval_slug: PAYMENT_APPROVAL_SLUG,
+        from: PAYMENT_APPROVAL_SLUG,
         from_id: id
     })
 

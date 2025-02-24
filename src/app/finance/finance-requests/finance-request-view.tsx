@@ -9,14 +9,12 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
-import {FINANCE_APPROVAL_SLUG, SERVICE_REQUESTS_APPROVAL_SLUG} from "@/utils/constant";
-import {useApprovalHook} from "@/hooks/useApprove";
-import SlideOver from "@/components/slide-over/slide-over.component";
-import TreeList from "@/components/list/tree-list.component";
+import { FINANCE_APPROVAL_SLUG,} from "@/utils/constant";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {FileOutput} from "lucide-react";
+import {CheckCircle2, FileOutput} from "lucide-react";
 import moneyFormater from "@/components/moneyFormater";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 
 const FinanceRequestView = () => {
     const [data, setData] = useState<any>([])
@@ -34,20 +32,14 @@ const FinanceRequestView = () => {
         return router.push('/login')
     }
 
-    const approval_url = `approval/approved-items/by-item?from=${FINANCE_APPROVAL_SLUG}&&from_id=${id}`
-
     const {
-        isNeedApprove,
-        isLastLevel,
-        latestApproveStatus,
-        approvalButtonsWrapper,
-    } = useApprovalHook({
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
         approval_slug: FINANCE_APPROVAL_SLUG,
         from: FINANCE_APPROVAL_SLUG,
         from_id: id
     })
 
-    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
     const onSave = async (url) => {
         try {
@@ -61,7 +53,7 @@ const FinanceRequestView = () => {
     };
 
 
-    const handleSubmit = (data: any) => {
+    const handleSubmit = () => {
         showConfirmationModal({
             title: 'Are You Sure?',
             text: `Are You Sure You Want To Submit Finance Request: ${data.name}?`,
@@ -70,7 +62,7 @@ const FinanceRequestView = () => {
         });
     };
 
-    const handleItemDispatch = (data: any) => {
+    const handleItemDispatch = () => {
         showConfirmationModal({
             title: 'Are You Sure?',
             text: `Are You Sure You Want To Dispatch Finance Request ${data.name} ?`,
@@ -79,7 +71,7 @@ const FinanceRequestView = () => {
         });
     };
 
-    const handleCompleteDispatch = (data: any) => {
+    const handleCompleteDispatch = () => {
         showConfirmationModal({
             title: 'Are You Sure?',
             text: `Are You Sure You Want To Complete Dispatch for Item ${data.name}?`,
@@ -108,6 +100,65 @@ const FinanceRequestView = () => {
         fetchData()
     }, [refresh])
 
+
+    const buttonsBody = () => {
+        return <>
+
+
+                {data?.status === 'pending' &&
+                    <ReusableButton
+                        name={'Submit Fund Request'}
+                        onClick={() => handleSubmit()}
+                        rounded={'md'}
+                        padding={'p-3'}
+                        shadow={'shadow-md'}
+                        bg_color={'bg-gray-50'}
+                        hover={'hover:bg-gray-200 hover:border-gray-400'}
+                        hover_text={'hover:text-gray-900 hover:font-semibold'}
+                        border={'border border-gray-300'}
+                        text_color={'text-gray-700'}
+                    >
+                        <CheckCircle2 size={13}/>
+                    </ReusableButton>
+                }
+                {data?.status === 'submitted' &&
+
+                    <ReusableButton
+                        name={'Dispatch Fund'}
+                        onClick={() => handleItemDispatch()}
+                        rounded={'md'}
+                        padding={'p-3'}
+                        shadow={'shadow-md'}
+                        bg_color={'bg-gray-50'}
+                        hover={'hover:bg-gray-200 hover:border-gray-400'}
+                        hover_text={'hover:text-gray-900 hover:font-semibold'}
+                        border={'border border-gray-300'}
+                        text_color={'text-gray-700'}
+                    >
+                        <FileOutput size={13}/>
+                    </ReusableButton>
+
+                }
+                {data?.status === 'partial_dispatched' &&
+                    <ReusableButton
+                        name={'Complete Fund Dispatch'}
+                        onClick={() => handleCompleteDispatch()}
+                        rounded={'md'}
+                        padding={'p-3'}
+                        shadow={'shadow-md'}
+                        bg_color={'bg-gray-50'}
+                        hover={'hover:bg-gray-200 hover:border-gray-400'}
+                        hover_text={'hover:text-gray-900 hover:font-semibold'}
+                        border={'border border-gray-300'}
+                        text_color={'text-gray-700'}
+                    >
+                        <FileOutput size={13}/>
+                    </ReusableButton>
+                }
+        </>
+    }
+
+
     return (
 
         <ProtectedRoute>
@@ -125,7 +176,10 @@ const FinanceRequestView = () => {
                                     data={[
                                         {label: 'Fund', value: data?.name},
                                         {label: 'Requested Amount', value: moneyFormater({amount: data?.amount})},
-                                        {label: 'Dispatched Amount', value: moneyFormater({amount: data?.dispatched_amount})},
+                                        {
+                                            label: 'Dispatched Amount',
+                                            value: moneyFormater({amount: data?.dispatched_amount})
+                                        },
                                         {label: 'Requester Name', value: data?.requester_name},
                                         {label: 'Requested Date', value: data?.formatted_requested_date},
                                         {label: 'Submitted Date', value: data?.formatted_submitted_date},
@@ -134,49 +188,10 @@ const FinanceRequestView = () => {
                                     ]}
                                     titleA={`Service Store Request`}
                                     titleB={` ${data?.resource_name} `}
+                                    OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                                 />
-                                <div className={'flex justify-between mt-2'}>
-                                    <>
-                                        {approvalButtonsWrapper()}
-                                    </>
-                                    <SlideOver
-                                        showButton={isNeedApprove}
-                                        title="Approval Trail">
-                                        <TreeList
-                                            url={approval_url}
-                                        />
-                                    </SlideOver>
-                                </div>
                             </div>
                             <hr className="bg-gray-100"/>
-                            {approveStatus() &&
-                                <div className={'flex justify-end gap-2 mt-2'}>
-                                    {data?.status === 'pending' &&
-                                        <ReusableButton
-                                            name={'Submit Fund Request'}
-                                            onClick={() => handleSubmit(data)}
-                                        >
-                                            <FileOutput size={12}/>
-                                        </ReusableButton>
-                                    }
-                                    {data?.status === 'submitted' &&
-                                        <ReusableButton
-                                            name={'Dispatch Fund'}
-                                            onClick={() => handleItemDispatch(data)}
-                                        >
-                                            <FileOutput size={12}/>
-                                        </ReusableButton>
-                                    }
-                                    {data?.status === 'partial_dispatched' &&
-                                        <ReusableButton
-                                            name={'Complete Fund Dispatch'}
-                                            onClick={() => handleCompleteDispatch(data)}
-                                        >
-                                            <FileOutput size={12}/>
-                                        </ReusableButton>
-                                    }
-                                </div>
-                            }
                         </MuiCardComponent>
                     </>
             }
