@@ -10,17 +10,15 @@ import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {ShoppingCart} from "lucide-react";
-import {useApprovalHook} from "@/hooks/useApprove";
-import {DELIVERY_APPROVAL_SLUG} from "@/utils/constant";
-import SlideOver from "@/components/slide-over/slide-over.component";
-import TreeList from "@/components/list/tree-list.component";
+import {CheckCircle, CheckCircle2, ShoppingCart} from "lucide-react";
+import {DELIVERABLE_APPROVAL_SLUG,} from "@/utils/constant";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import PopupModal from "@/components/modal/popup-modal";
 import TextFieldComponent from "@/components/inputs/text-field";
 import TextArea from "@/components/inputs/text-area";
 import MuiSelect from "@/components/inputs/mui-select";
 import MuiDate from "@/components/inputs/mui-date";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 
 const ItemDeliverableView = () => {
     const [refresh, setRefresh] = useState(false)
@@ -40,7 +38,7 @@ const ItemDeliverableView = () => {
     const [pricing, setPricing] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const toggleModal = (type?: string) => {
-        if(type === 'submit'){
+        if (type === 'submit') {
             handleSubmit('submit-draft')
         } else {
             setIsModalOpen(!isModalOpen)
@@ -81,20 +79,16 @@ const ItemDeliverableView = () => {
     const navigateToLogin = () => {
         return router.push('/login')
     }
-    const approval_url = `approval/approved-items/by-item?from=${DELIVERY_APPROVAL_SLUG}&from_id=${id}`
 
     const {
-        isNeedApprove,
-        isLastLevel,
-        latestApproveStatus,
-        approvalButtonsWrapper,
-    } = useApprovalHook({
-        approval_slug: DELIVERY_APPROVAL_SLUG,
-        from: DELIVERY_APPROVAL_SLUG,
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
+        approval_slug: DELIVERABLE_APPROVAL_SLUG,
+        from: DELIVERABLE_APPROVAL_SLUG,
         from_id: id
     })
 
-    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
+    // const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
     const onSave = async (path: string) => {
         try {
@@ -103,10 +97,10 @@ const ItemDeliverableView = () => {
             }
 
             let res = null;
-            if (path === 'submit-draft'){
-                 res = await get(`${url}/${path}`, token);
+            if (path === 'submit-draft') {
+                res = await get(`${url}/${path}`, token);
             } else {
-                 res = await post(`${url}/${path}`, payload, token);
+                res = await post(`${url}/${path}`, payload, token);
             }
 
             if (data && res.status === 200) {
@@ -118,7 +112,7 @@ const ItemDeliverableView = () => {
         }
     };
 
-    const handleSubmit = ( path?: string, event?: any) => {
+    const handleSubmit = (path?: string, event?: any) => {
         event?.preventDefault();  // Prevents page reload
         showConfirmationModal({
             title: 'Are You Sure?',
@@ -127,6 +121,78 @@ const ItemDeliverableView = () => {
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
     };
+
+
+    const buttonsBody = () => {
+        return <>
+            <div className="flex gap-2 justify-end">
+
+                {data.status === 'submitted' && Number(data.activity_progress) >= 80 ?
+                    <>
+                        <ReusableButton
+                            name={'Move to Services'}
+                            onClick={() => toggleModal('service')}
+                            rounded={'md'}
+                            padding={'p-3'}
+                            shadow={'shadow-md'}
+                            bg_color={'bg-gray-50'}
+                            hover={'hover:bg-gray-200 hover:border-gray-400'}
+                            hover_text={'hover:text-gray-900 hover:font-semibold'}
+                            border={'border border-gray-300'}
+                            text_color={'text-gray-700'}
+                        >
+                            <ShoppingCart size={13}/>
+                        </ReusableButton>
+                        <ReusableButton
+                            name={'Move to Items'}
+                            onClick={() => toggleModal('item')}
+                            rounded={'md'}
+                            padding={'p-3'}
+                            shadow={'shadow-md'}
+                            bg_color={'bg-gray-50'}
+                            hover={'hover:bg-gray-200 hover:border-gray-400'}
+                            hover_text={'hover:text-gray-900 hover:font-semibold'}
+                            border={'border border-gray-300'}
+                            text_color={'text-gray-700'}
+                        >
+                            <ShoppingCart size={13}/>
+                        </ReusableButton>
+                    </> : <>
+                        {data.status === 'pending' ?
+                            <>
+                                <ReusableButton
+                                    name={'Submit Deliverable'}
+                                    onClick={() => toggleModal('submit')}
+                                    rounded={'md'}
+                                    padding={'p-3'}
+                                    shadow={'shadow-md'}
+                                    bg_color={'bg-gray-50'}
+                                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                                    border={'border border-gray-300'}
+                                    text_color={'text-gray-700'}
+                                >
+                                    <CheckCircle size={13}/>
+                                </ReusableButton>
+                            </> :
+
+                            <>
+                                {(data.status !== 'moved to service' && data.status !== 'moved to item') && (
+                                    <p className={'text-xs text-gray-500'}>
+                                        Waiting For Activity to Reach 80% to be moved to Sale Items
+                                    </p>
+                                )}
+                            </>
+
+                        }
+                    </>
+                }
+
+            </div>
+
+        </>
+    }
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -172,63 +238,12 @@ const ItemDeliverableView = () => {
                                     ]}
                                     titleA={`Deliverable`}
                                     titleB={` ${data?.name} `}
+                                    OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
+
                                 />
-                                {
-                                    approveStatus() && <div className="flex gap-2 justify-end">
 
-                                        {data.status === 'submitted' && Number(data.activity_progress) >= 80 ?
-                                            <>
-                                                <ReusableButton
-                                                    name={'Move to Services'}
-                                                    onClick={() => toggleModal('service')}
-                                                >
-                                                    <ShoppingCart size={12}/>
-                                                </ReusableButton>
-                                                <ReusableButton
-                                                    name={'Move to Items'}
-                                                    onClick={() => toggleModal('item')}
-                                                >
-                                                    <ShoppingCart size={12}/>
-                                                </ReusableButton>
-                                            </> : <>
-                                                {data.status === 'pending' ?
-                                                    <>
-                                                        <ReusableButton
-                                                            name={'Submit Deliverable'}
-                                                            onClick={() => toggleModal('submit')}
-                                                        >
-                                                            <ShoppingCart size={12}/>
-                                                        </ReusableButton>
-                                                    </> :
-
-                                                    <>
-                                                        {(data.status !== 'moved to service' && data.status !== 'moved to item') && (
-                                                            <p className={'text-xs text-gray-500'}>
-                                                                Waiting For Activity to Reach 80% to be moved to Sale Items
-                                                            </p>
-                                                        )}
-                                                    </>
-
-                                                }
-                                            </>
-                                        }
-
-                                    </div>
-                                }
                             </div>
                             <hr className="bg-gray-100"/>
-                            <div className={'flex justify-between mt-2'}>
-                                <>
-                                    {approvalButtonsWrapper()}
-                                </>
-                                <SlideOver
-                                    showButton={isNeedApprove}
-                                    title="Approval Trail">
-                                    <TreeList
-                                        url={approval_url}
-                                    />
-                                </SlideOver>
-                            </div>
                         </MuiCardComponent>
                         <PopupModal
                             isOpen={isModalOpen}
@@ -237,7 +252,7 @@ const ItemDeliverableView = () => {
                             isDisabled={false}
                             title={"Deliverable"}
                         >
-                            <form onSubmit={(event) =>handleSubmit('move', event)}>
+                            <form onSubmit={(event) => handleSubmit('move', event)}>
                                 {
                                     <>
                                         {type === 'item' && <MuiSelect
@@ -320,13 +335,21 @@ const ItemDeliverableView = () => {
 
                                 <div className={'flex gap-2 justify-end'}>
                                     <ReusableButton
-                                        name={'Submit'}
+                                        name={'Submit '}
                                         type='submit'
-                                    />
+                                        rounded={'md'}
+                                        padding={'p-3'}
+                                        shadow={'shadow-md'}
+                                        bg_color={'bg-gray-50'}
+                                        hover={'hover:bg-gray-200 hover:border-gray-400'}
+                                        hover_text={'hover:text-gray-900 hover:font-semibold'}
+                                        border={'border border-gray-300'}
+                                        text_color={'text-gray-700'}
+                                    >
+                                        <CheckCircle2 size={13}/>
+                                    </ReusableButton>
                                 </div>
 
-
-                                {/* <button type="submit">Upload</button> */}
                             </form>
                         </PopupModal>
                     </>
