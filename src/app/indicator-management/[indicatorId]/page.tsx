@@ -25,20 +25,12 @@ const CollectedDataShow = ({params}: { params: { indicatorId: string } }) => {
     const id = params.indicatorId
 
     const {
-        isNeedApprove,
-        isLastLevel,
-        latestApproveStatus,
         approvalsAndButtonsWrapper,
     } = useApprovalsAndButtonsHook({
         approval_slug: INDICATOR_APPROVAL_SLUG,
         from: INDICATOR_APPROVAL_SLUG,
         from_id: id
     })
-
-    const approveStatus = () => {
-        if (data.status !== 'pending') return true;
-        return (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
-    }
 
     const url = `indicator/${id}`
     const navigateToLogin = () => {
@@ -108,7 +100,6 @@ const CollectedDataShow = ({params}: { params: { indicatorId: string } }) => {
                 >
                     <CheckCircle2 size={13}/>
                 </ReusableButton>
-
         </>
     }
 

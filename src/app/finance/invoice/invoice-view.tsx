@@ -10,13 +10,10 @@ import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {CheckCircle2, FileOutput} from "lucide-react";
+import {CheckCircle2} from "lucide-react";
 import moneyFormater from "@/components/moneyFormater";
 import Payment from "@/app/finance/payment/payment";
-import {INDICATOR_APPROVAL_SLUG, INVOICE_APPROVAL_SLUG} from "@/utils/constant";
-import {useApprovalHook} from "@/hooks/useApprove";
-import SlideOver from "@/components/slide-over/slide-over.component";
-import TreeList from "@/components/list/tree-list.component";
+import { INVOICE_APPROVAL_SLUG} from "@/utils/constant";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {capitalizeFirstWord} from "@/utils/actions/string-manipulations";
 import DocumentViewer from "@/components/page-components/document-viewer";
@@ -40,17 +37,12 @@ const InvoiceView = () => {
     }
 
     const {
-        isNeedApprove,
-        isLastLevel,
-        latestApproveStatus,
         approvalsAndButtonsWrapper,
     } = useApprovalsAndButtonsHook({
         approval_slug: INVOICE_APPROVAL_SLUG,
         from: INVOICE_APPROVAL_SLUG,
         from_id: id
     })
-
-    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
     const onSave = async () => {
         try {
@@ -153,7 +145,7 @@ const InvoiceView = () => {
                             </div>
                             <hr className="bg-gray-100"/>
                             {
-                                approveStatus() && ['payment', 'paid'].includes(data?.status) &&
+                                ['payment', 'paid'].includes(data?.status) &&
                                 <div className={'mt-2'}>
                                     <Payment
                                         invoice={data}

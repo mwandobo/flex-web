@@ -312,7 +312,7 @@ export const useApprovalsAndButtonsHook = ({
                 }
 
 
-                <div className={'flex justify-between mt-2'}>
+                <div className={'flex justify-between ml-2 w-36'}>
                     <SlideOver
                         showButton={isNeedApprove}
                         title="Approval Trail">

@@ -157,9 +157,6 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
         />,
     ];
 
-    const nodeHeaders = []
-
-
     const buttonsBody = () => {
         return <>
             {data?.status === 'pending' &&
