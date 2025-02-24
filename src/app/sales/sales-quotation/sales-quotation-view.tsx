@@ -9,18 +9,13 @@ import React, {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
-import RequisitionRequestItem from "@/app/procurement/requisition-requests/requisition-request-items";
-import {useCrudOperator} from "@/hooks/crud/crud-operator";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {FileOutput, RotateCcw} from "lucide-react";
-import RfqItems from "@/app/procurement/rfq/rfq-items";
+import {CheckCircle2, RotateCcw} from "lucide-react";
 import QuotationItems from "@/app/procurement/quotation/quotation-items";
-import SlideOver from "@/components/slide-over/slide-over.component";
-import TreeList from "@/components/list/tree-list.component";
-import {ITEM_APPROVAL_SLUG, QUOTATION_APPROVAL_SLUG, SALE_QUOTATION_APPROVAL_SLUG} from "@/utils/constant";
-import {useApprovalHook} from "@/hooks/useApprove";
+import { SALE_QUOTATION_APPROVAL_SLUG} from "@/utils/constant";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import DocumentViewer from "@/components/page-components/document-viewer";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 
 const SalesQuotationView = () => {
 
@@ -29,23 +24,18 @@ const SalesQuotationView = () => {
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
     const [refresh, setRefresh] = useState(false)
-    const {state, dispatch} = useGlobalContextHook()
-    const {selectedSubSidebarItem: selected, viewedItem} = state;
-    const {id, from: viewFrom} = viewedItem;
+    const {state} = useGlobalContextHook()
+    const { viewedItem} = state;
+    const {id} = viewedItem;
 
     const url = `quotations/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
 
-    const approval_url = `approval/approved-items/by-item?from=${SALE_QUOTATION_APPROVAL_SLUG}&&from_id=${id}`
-
     const {
-        isNeedApprove,
-        isLastLevel,
-        latestApproveStatus,
-        approvalButtonsWrapper,
-    } = useApprovalHook({
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
         approval_slug: SALE_QUOTATION_APPROVAL_SLUG,
         from: SALE_QUOTATION_APPROVAL_SLUG,
         from_id: id
@@ -62,7 +52,7 @@ const SalesQuotationView = () => {
         }
     };
 
-    const handleSubmit = (data: any) => {
+    const handleSubmit = () => {
         showConfirmationModal({
             title: 'Are you sure?',
             text: `Are you sure you want to submit Quotation code: ${data.formatted_code}?`,
@@ -82,7 +72,7 @@ const SalesQuotationView = () => {
         }
     };
 
-    const handleRefresh = (data: any) => {
+    const handleRefresh = () => {
         showConfirmationModal({
             title: 'Are you sure?',
             text: `Are you sure you want to Refresh Saved Changes for Quotation code: ${data.formatted_code}?`,
@@ -91,15 +81,45 @@ const SalesQuotationView = () => {
         });
     };
 
-    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
-    const [dataFromChild, setDataFromChild] = useState(null);
+    const buttonsBody = () => {
+        return <>
+            {data?.status === 'pending' &&
+                <div className={'flex justify-end gap-2'}>
+                    <ReusableButton
+                        name={'Refresh'}
+                        onClick={() => handleRefresh()}
+                        rounded={'md'}
+                        padding={'p-3'}
+                        shadow={'shadow-md'}
+                        bg_color={'bg-gray-50'}
+                        hover={'hover:bg-gray-200 hover:border-gray-400'}
+                        hover_text={'hover:text-gray-900 hover:font-semibold'}
+                        border={'border border-gray-300'}
+                        text_color={'text-gray-700'}
+                    >
+                        <RotateCcw size={13}/>
+                    </ReusableButton>
 
-    // This function will be passed to the child to receive data
-    const sendRefresh = () => {
-        console.log('sendRefresh', 'refreshed')
-        setRefresh(!refresh);
-    };
+                    <ReusableButton
+                        name={'Submit Quotation'}
+                        onClick={() => handleSubmit()}
+                        rounded={'md'}
+                        padding={'p-3'}
+                        shadow={'shadow-md'}
+                        bg_color={'bg-gray-50'}
+                        hover={'hover:bg-gray-200 hover:border-gray-400'}
+                        hover_text={'hover:text-gray-900 hover:font-semibold'}
+                        border={'border border-gray-300'}
+                        text_color={'text-gray-700'}
+                    >
+                        <CheckCircle2 size={13}/>
+                    </ReusableButton>
+                </div>
+            }
+        </>
+    }
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -149,41 +169,14 @@ const SalesQuotationView = () => {
                                     ]}
                                     titleA={`Quotation`}
                                     titleB={` ${data?.formatted_code} `}
+                                    OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                                 />
                                 <DocumentViewer data={{ file_url: data.file_url}} />
-                                <div className={'flex justify-between mt-2'}>
-                                    <>
-                                        {approvalButtonsWrapper()}
-                                    </>
-                                    <SlideOver
-                                        showButton={isNeedApprove}
-                                        title="Approval Trail">
-                                        <TreeList
-                                            url={approval_url}
-                                        />
-                                    </SlideOver>
-                                </div>
                             </div>
                             <hr className="bg-gray-100"/>
                             <div className={'mt-2'}>
                                 <QuotationItems quotation={data}/>
                             </div>
-                            {approveStatus() && data?.status === 'pending' &&
-                                <div className={'flex justify-end gap-2'}>
-                                    <ReusableButton
-                                        name={'Refresh Quotation'}
-                                        onClick={() => handleRefresh(data)}
-                                    >
-                                        <RotateCcw size={12}/>
-                                    </ReusableButton>
-                                    <ReusableButton
-                                        name={'Submit Quotation'}
-                                        onClick={() => handleSubmit(data)}
-                                    >
-                                        <FileOutput size={12}/>
-                                    </ReusableButton>
-                                </div>
-                            }
                         </MuiCardComponent>
                     </>
             }
