@@ -9,10 +9,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
-import {useApprovalHook} from "@/hooks/useApprove";
 import {ITEM_CATEGORY_APPROVAL_SLUG} from "@/utils/constant";
-import SlideOver from "@/components/slide-over/slide-over.component";
-import TreeList from "@/components/list/tree-list.component";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 
 const ItemsCategoryView = () => {
 
@@ -21,25 +19,20 @@ const ItemsCategoryView = () => {
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
 
-    const {state, dispatch} = useGlobalContextHook()
-    const {selectedSubSidebarItem: selected, viewedItem} = state;
-    const {id, from: viewFrom} = viewedItem;
+    const {state,} = useGlobalContextHook()
+    const { viewedItem} = state;
+    const {id} = viewedItem;
+
 
     const {
-        isNeedApprove,
-        isLastLevel,
-        latestApproveStatus,
-        approvalButtonsWrapper,
-    } = useApprovalHook({
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
         approval_slug: ITEM_CATEGORY_APPROVAL_SLUG,
         from: ITEM_CATEGORY_APPROVAL_SLUG,
         from_id: id
     })
 
-    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
-
     const url = `items-categories/${id}`
-    const approval_url = `approval/approved-items/by-item?from=${ITEM_CATEGORY_APPROVAL_SLUG}&&from_id=${id}`
 
     const navigateToLogin = () => {
         return router.push('/login')
@@ -86,21 +79,8 @@ const ItemsCategoryView = () => {
                                     ]}
                                     titleA={`Approval`}
                                     titleB={` ${data?.name} `}
+                                    OptionalElement={approvalsAndButtonsWrapper({})}
                                 />
-                            </div>
-
-                            <hr className="bg-gray-100" />
-                            <div className={'flex justify-between mt-2'}>
-                                <>
-                                    {approvalButtonsWrapper()}
-                                </>
-                                <SlideOver
-                                    showButton={isNeedApprove}
-                                    title="Approval Trail">
-                                    <TreeList
-                                        url={approval_url}
-                                    />
-                                </SlideOver>
                             </div>
                         </MuiCardComponent>
                     </>
