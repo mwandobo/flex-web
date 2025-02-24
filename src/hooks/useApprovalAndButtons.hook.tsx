@@ -2,12 +2,15 @@
 
 import {getValueFromLocalStorage, setValueLocalStorage} from '@/utils/actions/local-starage';
 import {get, post} from '@/utils/api';
-import {useState, useEffect, ReactNode} from 'react';
+import React, {useState, useEffect, ReactNode} from 'react';
 import {ReusableButton} from "@/components/button/reusable-button";
 import CrudFormComponent from "@/components/forms/crud.form.component";
 import {capitalizeFirstWord} from "@/utils/actions/string-manipulations";
 import Swal from "sweetalert2";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
+import SlideOver from "@/components/slide-over/slide-over.component";
+import TreeList from "@/components/list/tree-list.component";
+import {INVOICE_APPROVAL_SLUG} from "@/utils/constant";
 
 interface Props {
     approval_slug?: string;
@@ -63,6 +66,9 @@ export const useApprovalsAndButtonsHook = ({
 
         return [];
     }
+
+    const approval_url = `approval/approved-items/by-item?from=${from}&&from_id=${from_id}`
+
 
     const getApprovalLevel = () => {
         const mappedApproval = getMappedApproval();
@@ -216,10 +222,12 @@ export const useApprovalsAndButtonsHook = ({
     }
 
     interface ApprovalsAndButtonsProps{
-        buttonBody?: ReactNode
+        buttonBody?: ReactNode,
     }
 
     const approvalsAndButtonsWrapper = ({buttonBody}: ApprovalsAndButtonsProps ) => {
+        console.log('approval_url',approval_url )
+
         return (
             <>
                 {isNeedApprove ? (
@@ -289,7 +297,7 @@ export const useApprovalsAndButtonsHook = ({
                                 ) : <>
                                     {/*{ isApproved ? <>{buttonBody}</> :*/}
 
-                                        <p className='text-xs p-1 bg-gray-200'>Waiting For Approval</p>
+                                    <p className='text-xs p-1 bg-gray-200'>Waiting For Approval</p>
                                     {/*}*/}
 
                                 </>
@@ -302,6 +310,17 @@ export const useApprovalsAndButtonsHook = ({
                 ) : buttonBody
 
                 }
+
+
+                <div className={'flex justify-between mt-2'}>
+                    <SlideOver
+                        showButton={isNeedApprove}
+                        title="Approval Trail">
+                        <TreeList
+                            url={approval_url}
+                        />
+                    </SlideOver>
+                </div>
             </>
         );
     }

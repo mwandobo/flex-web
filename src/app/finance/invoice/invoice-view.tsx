@@ -10,16 +10,17 @@ import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {FileOutput} from "lucide-react";
+import {CheckCircle2, FileOutput} from "lucide-react";
 import moneyFormater from "@/components/moneyFormater";
 import Payment from "@/app/finance/payment/payment";
-import {INVOICE_APPROVAL_SLUG} from "@/utils/constant";
+import {INDICATOR_APPROVAL_SLUG, INVOICE_APPROVAL_SLUG} from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {capitalizeFirstWord} from "@/utils/actions/string-manipulations";
 import DocumentViewer from "@/components/page-components/document-viewer";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 
 const InvoiceView = () => {
 
@@ -32,19 +33,18 @@ const InvoiceView = () => {
     const {state} = useGlobalContextHook()
     const {viewedItem} = state;
     const {id} = viewedItem;
-
     const url = `invoices/${id}`
-    const approval_url = `approval/approved-items/by-item?from=${INVOICE_APPROVAL_SLUG}&&from_id=${id}`
 
     const navigateToLogin = () => {
         return router.push('/login')
     }
+
     const {
         isNeedApprove,
         isLastLevel,
         latestApproveStatus,
-        approvalButtonsWrapper,
-    } = useApprovalHook({
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
         approval_slug: INVOICE_APPROVAL_SLUG,
         from: INVOICE_APPROVAL_SLUG,
         from_id: id
@@ -63,7 +63,7 @@ const InvoiceView = () => {
         }
     };
 
-    const handleSubmit = (data: any) => {
+    const handleSubmit = () => {
         showConfirmationModal({
             title: 'Are You Sure?',
             text: `Are You Sure You Want To Submit Invoice Code: ${data.formatted_code}?`,
@@ -71,6 +71,29 @@ const InvoiceView = () => {
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
     };
+
+    const buttonsBody = () => {
+        return <>
+
+            {data?.status === 'pending' &&
+                <ReusableButton
+                    name={'Submit Invoice'}
+                    onClick={() => handleSubmit()}
+                    rounded={'md'}
+                    padding={'p-3'}
+                    shadow={'shadow-md'}
+                    bg_color={'bg-gray-50'}
+                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                    border={'border border-gray-300'}
+                    text_color={'text-gray-700'}
+                >
+                    <CheckCircle2 size={13}/>
+                </ReusableButton>
+            }
+
+        </>
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -124,41 +147,17 @@ const InvoiceView = () => {
                                     ]}
                                     titleA={`Invoice`}
                                     titleB={` ${data?.formatted_code} `}
+                                    OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                                 />
                                 <DocumentViewer data={{ file_url: data.file_url}} />
-
-                                <div className={'flex justify-between mt-2'}>
-                                    <>
-                                        {approvalButtonsWrapper()}
-                                    </>
-                                    <SlideOver
-                                        showButton={isNeedApprove}
-                                        title="Approval Trail">
-                                        <TreeList
-                                            url={approval_url}
-                                        />
-                                    </SlideOver>
-                                </div>
                             </div>
                             <hr className="bg-gray-100"/>
                             {
                                 approveStatus() && ['payment', 'paid'].includes(data?.status) &&
-
                                 <div className={'mt-2'}>
                                     <Payment
                                         invoice={data}
                                     />
-                                </div>
-                            }
-                            <hr className="bg-gray-100"/>
-                            {approveStatus() && data?.status === 'pending' &&
-                                <div className={'flex justify-end gap-2 mt-2'}>
-                                    <ReusableButton
-                                        name={'Submit Invoice'}
-                                        onClick={() => handleSubmit(data)}
-                                    >
-                                        <FileOutput size={12}/>
-                                    </ReusableButton>
                                 </div>
                             }
                         </MuiCardComponent>
