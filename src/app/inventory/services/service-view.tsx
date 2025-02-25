@@ -109,7 +109,6 @@ const ServiceView = () => {
         </>
     }
 
-
     return (
 
         <ProtectedRoute>

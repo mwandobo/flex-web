@@ -10,10 +10,10 @@ import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {CheckCheck, FileOutput, NotebookPen} from "lucide-react";
+import {CheckCheck, CheckCircle2, FileOutput, NotebookPen} from "lucide-react";
 import moneyFormater from "@/components/moneyFormater";
 import {
- REPAIR_APPROVAL_SLUG
+    REPAIR_APPROVAL_SLUG, SERVICES_APPROVAL_SLUG
 } from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
 import SlideOver from "@/components/slide-over/slide-over.component";
@@ -24,6 +24,7 @@ import MuiDate from "@/components/inputs/mui-date";
 import TextArea from "@/components/inputs/text-area";
 import dayjs from "dayjs";
 import MaintenanceHistory from "@/app/workshop/maintenance-notes";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 
 const RepairView = () => {
 
@@ -60,23 +61,17 @@ const RepairView = () => {
     }
 
     const url = `maintenance/${id}`
-    const approval_url = `approval/approved-items/by-item?from=${REPAIR_APPROVAL_SLUG}&&from_id=${id}`
-
     const navigateToLogin = () => {
         return router.push('/login')
     }
+
     const {
-        isNeedApprove,
-        isLastLevel,
-        latestApproveStatus,
-        approvalButtonsWrapper,
-    } = useApprovalHook({
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
         approval_slug: REPAIR_APPROVAL_SLUG,
         from: REPAIR_APPROVAL_SLUG,
         from_id: id
     })
-
-    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
     const onSave = async (url: string) => {
         try {
@@ -101,6 +96,64 @@ const RepairView = () => {
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
     };
+
+
+    const buttonsBody = () => {
+        return <>
+            { data?.status === 'pending' &&
+                <div className={'flex justify-end gap-2 mt-2'}>
+                    <ReusableButton
+                        name={'Start Repair'}
+                        onClick={() => toggleModal('start_maintenance')}
+                        rounded={'md'}
+                        padding={'p-3'}
+                        shadow={'shadow-md'}
+                        bg_color={'bg-gray-50'}
+                        hover={'hover:bg-gray-200 hover:border-gray-400'}
+                        hover_text={'hover:text-gray-900 hover:font-semibold'}
+                        border={'border border-gray-300'}
+                        text_color={'text-gray-700'}
+                    >
+                        <CheckCircle2 size={13}/>
+                    </ReusableButton>
+                </div>
+            }
+
+            { data?.status === 'in-progress' &&
+                <div className={'flex justify-end gap-2 my-2'}>
+                    <ReusableButton
+                        name={'Add Notes'}
+                        onClick={() => toggleModal('add_note')}
+                        rounded={'md'}
+                        padding={'p-3'}
+                        shadow={'shadow-md'}
+                        bg_color={'bg-gray-50'}
+                        hover={'hover:bg-gray-200 hover:border-gray-400'}
+                        hover_text={'hover:text-gray-900 hover:font-semibold'}
+                        border={'border border-gray-300'}
+                        text_color={'text-gray-700'}
+                    >
+                        <NotebookPen size={13}/>
+                    </ReusableButton>
+                    <ReusableButton
+                        name={'Close Repair'}
+                        onClick={() => toggleModal('close_maintenance')}
+                        rounded={'md'}
+                        padding={'p-3'}
+                        shadow={'shadow-md'}
+                        bg_color={'bg-gray-50'}
+                        hover={'hover:bg-gray-200 hover:border-gray-400'}
+                        hover_text={'hover:text-gray-900 hover:font-semibold'}
+                        border={'border border-gray-300'}
+                        text_color={'text-gray-700'}
+                    >
+                        <CheckCheck size={13}/>
+                    </ReusableButton>
+                </div>
+            }
+        </>
+    }
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -151,55 +204,12 @@ const RepairView = () => {
                                     ]}
                                     titleA={`Repair`}
                                     titleB={` ${data?.formatted_code} `}
+                                    OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                                 />
-                                <div className={'flex justify-between mt-2'}>
-                                    <>
-                                        {approvalButtonsWrapper()}
-                                    </>
-                                    <SlideOver
-                                        showButton={isNeedApprove}
-                                        title="Approval Trail">
-                                        <TreeList
-                                            url={approval_url}
-                                        />
-                                    </SlideOver>
-                                </div>
                             </div>
                             <hr className="bg-gray-100"/>
-                            <hr className="bg-gray-100"/>
-                            {approveStatus() && data?.status === 'pending' &&
-                                <div className={'flex justify-end gap-2 mt-2'}>
-                                    <ReusableButton
-                                        name={'Start Repair'}
-                                        onClick={() => toggleModal('start_maintenance')}
-                                    >
-                                        <FileOutput size={12}/>
-                                    </ReusableButton>
-                                </div>
-                            }
-
-                            {approveStatus() && data?.status === 'in-progress' &&
-                                <div className={'flex justify-end gap-2 my-2'}>
-                                    <ReusableButton
-                                        name={'Add Notes'}
-                                        onClick={() => toggleModal('add_note')}
-                                    >
-                                        <NotebookPen size={12}/>
-                                    </ReusableButton>
-                                    <ReusableButton
-                                        name={'Close Repair'}
-                                        onClick={() => toggleModal('close_maintenance')}
-                                    >
-                                        <CheckCheck size={12}/>
-                                    </ReusableButton>
-                                </div>
-                            }
-                            <hr className="bg-gray-100"/>
-
                             <MaintenanceHistory maintenance={data}/>
-
                         </MuiCardComponent>
-
                         <PopupModal
                             isOpen={isModalOpen}
                             onSaveButtonName={'Save'}

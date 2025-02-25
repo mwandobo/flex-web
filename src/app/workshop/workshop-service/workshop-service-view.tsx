@@ -10,20 +10,13 @@ import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {CheckCheck, FileOutput, NotebookPen} from "lucide-react";
+import { CheckCircle2} from "lucide-react";
 import moneyFormater from "@/components/moneyFormater";
 import {
-    REPAIR_APPROVAL_SLUG, WORKSHOP_SERVICE_REQUEST_APPROVAL_SLUG
+    WORKSHOP_SERVICE_REQUEST_APPROVAL_SLUG
 } from "@/utils/constant";
-import {useApprovalHook} from "@/hooks/useApprove";
-import SlideOver from "@/components/slide-over/slide-over.component";
-import TreeList from "@/components/list/tree-list.component";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
-import PopupModal from "@/components/modal/popup-modal";
-import MuiDate from "@/components/inputs/mui-date";
-import TextArea from "@/components/inputs/text-area";
-import dayjs from "dayjs";
-import MaintenanceHistory from "@/app/workshop/maintenance-notes";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 
 const WorkshopServiceView = () => {
 
@@ -43,28 +36,21 @@ const WorkshopServiceView = () => {
         if (type === 'submit') {
             handleSubmit('submit-draft')
         }
-
     }
 
-
     const url = `workshop-service/${id}`
-    const approval_url = `approval/approved-items/by-item?from=${WORKSHOP_SERVICE_REQUEST_APPROVAL_SLUG}&&from_id=${id}`
 
     const navigateToLogin = () => {
         return router.push('/login')
     }
+
     const {
-        isNeedApprove,
-        isLastLevel,
-        latestApproveStatus,
-        approvalButtonsWrapper,
-    } = useApprovalHook({
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
         approval_slug: WORKSHOP_SERVICE_REQUEST_APPROVAL_SLUG,
         from: WORKSHOP_SERVICE_REQUEST_APPROVAL_SLUG,
         from_id: id
     })
-
-    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
     const onSave = async (url: string) => {
         try {
@@ -88,6 +74,27 @@ const WorkshopServiceView = () => {
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
     };
+
+    const buttonsBody = () => {
+        return <>
+            {data?.status === 'pending' &&
+                <ReusableButton
+                    name={'Submit Request'}
+                    onClick={() => toggleModal('submit')}
+                    rounded={'md'}
+                    padding={'p-3'}
+                    shadow={'shadow-md'}
+                    bg_color={'bg-gray-50'}
+                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                    border={'border border-gray-300'}
+                    text_color={'text-gray-700'}
+                >
+                    <CheckCircle2 size={13}/>
+                </ReusableButton>
+            }
+        </>
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -135,32 +142,9 @@ const WorkshopServiceView = () => {
                                     ]}
                                     titleA={`Workshop Service Request`}
                                     titleB={` ${data?.formatted_code} `}
+                                    OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                                 />
-                                <div className={'flex justify-between mt-2'}>
-                                    <>
-                                        {approvalButtonsWrapper()}
-                                    </>
-                                    <SlideOver
-                                        showButton={isNeedApprove}
-                                        title="Approval Trail">
-                                        <TreeList
-                                            url={approval_url}
-                                        />
-                                    </SlideOver>
-                                </div>
                             </div>
-                            <hr className="bg-gray-100"/>
-                            <hr className="bg-gray-100"/>
-                            {approveStatus() && data?.status === 'pending' &&
-                                <div className={'flex justify-end gap-2 mt-2'}>
-                                    <ReusableButton
-                                        name={'Submit Request'}
-                                        onClick={() => toggleModal('submit')}
-                                    >
-                                        <FileOutput size={12}/>
-                                    </ReusableButton>
-                                </div>
-                            }
                         </MuiCardComponent>
                     </>
             }
