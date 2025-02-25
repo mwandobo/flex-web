@@ -108,7 +108,7 @@ export const getApprovals = (approval_slug: string, from: string, from_id: strin
         }
     }
 
-    const filteredItems = allApprovedItems.filter(
+    const filteredItems = allApprovedItems?.filter(
         item => item.from === from && Number(item.from_id) === Number(from_id)
     );
 
