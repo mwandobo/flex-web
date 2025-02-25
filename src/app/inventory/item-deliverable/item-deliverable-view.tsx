@@ -88,7 +88,6 @@ const ItemDeliverableView = () => {
         from_id: id
     })
 
-    // const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
     const onSave = async (path: string) => {
         try {
