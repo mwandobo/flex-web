@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { PermTableComponent } from "../fragments/perm.table.component";
 import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
 import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
-import {, ROLE_APPROVAL_SLUG} from "@/utils/constant";
+import {ROLE_APPROVAL_SLUG} from "@/utils/constant";
 
 const RolesShow = ({ params }: { params: { roleId: string } }) => {
     const [data, setData] = useState<any>([])
