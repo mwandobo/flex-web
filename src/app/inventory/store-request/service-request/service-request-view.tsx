@@ -10,12 +10,10 @@ import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 import { SERVICE_REQUESTS_APPROVAL_SLUG} from "@/utils/constant";
-import {useApprovalHook} from "@/hooks/useApprove";
-import SlideOver from "@/components/slide-over/slide-over.component";
-import TreeList from "@/components/list/tree-list.component";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {ReusableButton} from "@/components/button/reusable-button";
 import {FileOutput} from "lucide-react";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 
 const ServiceRequestView = () => {
     const [data, setData] = useState<any>([])
@@ -33,20 +31,13 @@ const ServiceRequestView = () => {
         return router.push('/login')
     }
 
-    const approval_url = `approval/approved-items/by-item?from=${SERVICE_REQUESTS_APPROVAL_SLUG}&&from_id=${id}`
-
     const {
-        isNeedApprove,
-        isLastLevel,
-        latestApproveStatus,
-        approvalButtonsWrapper,
-    } = useApprovalHook({
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
         approval_slug: SERVICE_REQUESTS_APPROVAL_SLUG,
         from: SERVICE_REQUESTS_APPROVAL_SLUG,
         from_id: id
     })
-
-    const approveStatus = () => (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
 
     const onSave = async (url) => {
         try {
@@ -60,7 +51,7 @@ const ServiceRequestView = () => {
     };
 
 
-    const handleSubmit = (data: any) => {
+    const handleSubmit = () => {
         showConfirmationModal({
             title: 'Are You Sure?',
             text: `Are You Sure You Want To Submit Service Store Request: ${data.name}?`,
@@ -69,7 +60,7 @@ const ServiceRequestView = () => {
         });
     };
 
-    const handleItemDispatch = (data: any) => {
+    const handleItemDispatch = () => {
         showConfirmationModal({
             title: 'Are You Sure?',
             text: `Are You Sure You Want To Dispatch Service ${data.name} for this Service Request?`,
@@ -77,6 +68,44 @@ const ServiceRequestView = () => {
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
     };
+
+    const buttonsBody = () => {
+        return <>
+            {data?.status === 'pending' &&
+                <ReusableButton
+                    name={'Submit Service'}
+                    onClick={() => handleSubmit()}
+                    rounded={'md'}
+                    padding={'p-3'}
+                    shadow={'shadow-md'}
+                    bg_color={'bg-gray-50'}
+                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                    border={'border border-gray-300'}
+                    text_color={'text-gray-700'}
+                >
+                    <FileOutput size={13}/>
+                </ReusableButton>
+            }
+            {data?.status === 'submitted' &&
+                <ReusableButton
+                    name={'Dispatch Service'}
+                    onClick={() => handleItemDispatch()}
+                    rounded={'md'}
+                    padding={'p-3'}
+                    shadow={'shadow-md'}
+                    bg_color={'bg-gray-50'}
+                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                    border={'border border-gray-300'}
+                    text_color={'text-gray-700'}
+                >
+                    <FileOutput size={13}/>
+                </ReusableButton>
+            }
+        </>
+    }
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -122,41 +151,9 @@ const ServiceRequestView = () => {
                                     ]}
                                     titleA={`Service Store Request`}
                                     titleB={` ${data?.resource_name} `}
+                                    OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                                 />
-                                <div className={'flex justify-between mt-2'}>
-                                    <>
-                                        {approvalButtonsWrapper()}
-                                    </>
-                                    <SlideOver
-                                        showButton={isNeedApprove}
-                                        title="Approval Trail">
-                                        <TreeList
-                                            url={approval_url}
-                                        />
-                                    </SlideOver>
-                                </div>
                             </div>
-                            <hr className="bg-gray-100"/>
-                            {approveStatus() &&
-                                <div className={'flex justify-end gap-2 mt-2'}>
-                                    {data?.status === 'pending' &&
-                                        <ReusableButton
-                                            name={'Submit Service Request'}
-                                            onClick={() => handleSubmit(data)}
-                                        >
-                                            <FileOutput size={12}/>
-                                        </ReusableButton>
-                                    }
-                                    {data?.status === 'submitted' &&
-                                        <ReusableButton
-                                            name={'Dispatch Service'}
-                                            onClick={() => handleItemDispatch(data)}
-                                        >
-                                            <FileOutput size={12}/>
-                                        </ReusableButton>
-                                    }
-                                </div>
-                            }
                         </MuiCardComponent>
                     </>
             }
