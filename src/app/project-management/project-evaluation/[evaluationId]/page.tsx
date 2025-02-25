@@ -114,7 +114,7 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
             } else {
                 swal.fire({
                     title: 'Error Occured!',
-                    text: "You Have Not Filled All The Evaluations Data. Please Try Again",
+                    text: "You Have Not Filled All The Inputs, Or Data is Not Clean Please Try Again",
                     icon: 'error',
                 });
             }
@@ -133,7 +133,10 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
         return isActive
     }
 
-    const validator = () => evaluationForm.data.every((item: any) => item.value && item.value > 0)
+    const validator = () =>
+        evaluationForm.data.every(
+            (item: any) =>  !isNaN(item.value) && item.value > 0
+        );
 
     const url = `project_evaluation/show/${id}`
     useEffect(() => {

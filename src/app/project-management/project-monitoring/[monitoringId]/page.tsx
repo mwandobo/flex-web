@@ -8,8 +8,8 @@ import LinearWithValueLabel from "@/components/bars/progressBar";
 import CircularWithValueLabel from "@/components/bars/circularBar";
 import {getValueFromLocalStorage, setValueLocalStorage} from "@/utils/actions/local-starage";
 import {BetweenHorizontalStart, ChevronDown, ChevronUp, CircleCheckBig, ClipboardCheck, OctagonX} from "lucide-react";
-import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import FormattedMoney from "@/components/moneyFormater";
+import swal from "sweetalert2";
 
 const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) => {
     const router = useRouter()
@@ -69,6 +69,13 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
     };
 
     const handleFormInputChange = (e: any, indicator: any, from: string) => {
+        if(isNaN(e.target.value)){
+            swal.fire({
+                title: 'Error Occured!',
+                text: "Provide Numbers Only",
+                icon: 'error',
+            });
+        }
         switch (from) {
             case 'progress':
                 setFormPayload({...formPayload, indicator_id: indicator.id, quantity: e.target.value});
@@ -89,16 +96,31 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
 
     const handleSubmitCollectedData = async () => {
         if (formPayload) {
-            const response = await post<any>('collected_data', formPayload, token)
+            // Ensure either cost or quantity exists and is a valid number
+            const { cost, quantity } = formPayload;
+            const isValid =
+                (cost !== undefined  && !isNaN(cost)) ||
+                (quantity !== undefined  && !isNaN(quantity));
+
+            if (!isValid) {
+                swal.fire({
+                    title: 'Error Occured!',
+                    text: "Invalid input: Either cost or quantity must be a valid number.",
+                    icon: 'error',
+                });
+                return;
+            }
+
+            const response = await post<any>('collected_data', formPayload, token);
             if (response?.status === 200) {
-                setIsSubmitted(!isSubmitted)
-                setFormPayload(null)
-                setMonitoredItemState(null)
+                setIsSubmitted(!isSubmitted);
+                setFormPayload(null);
+                setMonitoredItemState(null);
             } else {
-                console.log('errorHappened')
+                console.log('errorHappened');
             }
         }
-    }
+    };
 
     const handleSetMonitoredItemState = (from: string, id: string) => {
         setMonitoredItemState({from, id})
