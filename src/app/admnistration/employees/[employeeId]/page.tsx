@@ -10,6 +10,8 @@ import { dateFormatterHelper } from "@/utils/mapper/date-format";
 import { StatusCreatorHelperActive } from "@/utils/statusHelper/active";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
+import {EMPLOYEE_APPROVAL_SLUG, PRICING_APPROVAL_SLUG} from "@/utils/constant";
 
 const EmployeeShow = ({ params }: { params: { employeeId: string } }) => {
     const router = useRouter()
@@ -24,6 +26,14 @@ const EmployeeShow = ({ params }: { params: { employeeId: string } }) => {
     const navigateToLogin = () => {
         return router.push('/login')
     }
+
+    const {
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
+        approval_slug: EMPLOYEE_APPROVAL_SLUG,
+        from: EMPLOYEE_APPROVAL_SLUG,
+        from_id: id
+    })
 
     useEffect(() => {
         const fetchData = async () => {
@@ -77,6 +87,7 @@ const EmployeeShow = ({ params }: { params: { employeeId: string } }) => {
                                 ]}
                                 titleA="Employee"
                                 titleB={data.full_name}
+                                OptionalElement={approvalsAndButtonsWrapper({})}
                             />
 
                         </MuiCardComponent>

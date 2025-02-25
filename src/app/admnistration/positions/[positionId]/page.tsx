@@ -6,10 +6,11 @@ import ViewCardComponent from "@/components/card/view.card.component";
 import PageHeader from "@/components/header/page-header";
 import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
 import { get } from "@/utils/api";
-import { StatusCreatorHelperActive } from "@/utils/statusHelper/active";
 import { useEffect, useState } from "react";
 import Employees from "../../employees/page";
 import { useRouter } from "next/navigation";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
+import {POSITION_APPROVAL_SLUG, } from "@/utils/constant";
 
 const PositionView = ({ params }: { params: { positionId: string } }) => {
     const router = useRouter()
@@ -24,6 +25,14 @@ const PositionView = ({ params }: { params: { positionId: string } }) => {
     const navigateToLogin = () => {
         return router.push('/login')
     }
+
+    const {
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
+        approval_slug: POSITION_APPROVAL_SLUG,
+        from: POSITION_APPROVAL_SLUG,
+        from_id: id
+    })
 
     useEffect(() => {
         const fetchData = async () => {
@@ -68,6 +77,8 @@ const PositionView = ({ params }: { params: { positionId: string } }) => {
                                     ]}
                                     titleA={`Position`}
                                     titleB={` ${data?.name} `}
+                                    OptionalElement={approvalsAndButtonsWrapper({})}
+
                                 />
                             </div>
                             <hr className="bg-gray-100" />

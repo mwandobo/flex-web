@@ -9,6 +9,8 @@ import { StatusCreatorHelperActive } from "@/utils/statusHelper/active";
 import { useEffect, useState } from "react";
 import { PermTableComponent } from "../fragments/perm.table.component";
 import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
+import {, ROLE_APPROVAL_SLUG} from "@/utils/constant";
 
 const RolesShow = ({ params }: { params: { roleId: string } }) => {
     const [data, setData] = useState<any>([])
@@ -20,6 +22,15 @@ const RolesShow = ({ params }: { params: { roleId: string } }) => {
         const status = StatusCreatorHelperActive(data?.status)
         return <span className={`${status.color}`}>{status.label}</span>
     }
+
+    const {
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
+        approval_slug: ROLE_APPROVAL_SLUG,
+        from: ROLE_APPROVAL_SLUG,
+        from_id: id
+    })
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,6 +68,7 @@ const RolesShow = ({ params }: { params: { roleId: string } }) => {
                                     ]}
                                     titleA={`Role`}
                                     titleB={` ${data?.name} `}
+                                    OptionalElement={approvalsAndButtonsWrapper({})}
                                 />
                             </div>
                             <hr className="bg-gray-100" />

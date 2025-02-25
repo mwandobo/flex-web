@@ -11,7 +11,8 @@ import { useEffect, useState } from "react";
 import Positions from "../../positions/page";
 import { useRouter } from "next/navigation";
 import {useApprovalHook} from "@/hooks/useApprove";
-import {DEPARTMENT_APPROVAL_SLUG, PROJECT_APPROVAL_SLUG} from "@/utils/constant";
+import {DEPARTMENT_APPROVAL_SLUG, PRICING_APPROVAL_SLUG, PROJECT_APPROVAL_SLUG} from "@/utils/constant";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 
 const DepartmentShow = ({ params }: { params: { departmentId: string } }) => {
 
@@ -28,11 +29,8 @@ const DepartmentShow = ({ params }: { params: { departmentId: string } }) => {
     }
 
     const {
-        isNeedApprove,
-        isLastLevel,
-        latestApproveStatus,
-        approvalButtonsWrapper,
-    } = useApprovalHook({
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
         approval_slug: DEPARTMENT_APPROVAL_SLUG,
         from: DEPARTMENT_APPROVAL_SLUG,
         from_id: id
@@ -80,8 +78,7 @@ const DepartmentShow = ({ params }: { params: { departmentId: string } }) => {
                                     ]}
                                     titleA={`Department`}
                                     titleB={` ${data?.name} `}
-                                    OptionalElement={approvalButtonsWrapper()}
-
+                                    OptionalElement={approvalsAndButtonsWrapper({})}
                                 />
                             </div>
                             <hr className="bg-gray-100" />
@@ -94,9 +91,6 @@ const DepartmentShow = ({ params }: { params: { departmentId: string } }) => {
                                 </div>
                             </div>
                         </MuiCardComponent>
-
-
-
                     </>
             }
         </ProtectedRoute>

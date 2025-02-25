@@ -38,5 +38,9 @@ export const SALE_QUOTATION_APPROVAL_SLUG = "sale_quotation_approval"
 export const DELIVERABLE_APPROVAL_SLUG = "deliverable_approval"
 
 export const DEPARTMENT_APPROVAL_SLUG = "department_approval"
+export const POSITION_APPROVAL_SLUG = "position_approval"
+export const EMPLOYEE_APPROVAL_SLUG = "employee_approval"
+export const EXTERNAL_USER_APPROVAL_SLUG = "external_user_approval"
+export const ROLE_APPROVAL_SLUG = "role_approval"
 
 // permissions

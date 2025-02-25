@@ -9,6 +9,8 @@ import { capitalizeFirstWord } from "@/utils/actions/string-manipulations";
 import { get } from "@/utils/api";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
+import {EXTERNAL_USER_APPROVAL_SLUG, PRICING_APPROVAL_SLUG} from "@/utils/constant";
 
 const ExternalUserShow = ({ params }: { params: { externalId: string } }) => {
     const router = useRouter()
@@ -24,6 +26,15 @@ const ExternalUserShow = ({ params }: { params: { externalId: string } }) => {
     const navigateToLogin = () => {
         return router.push('/login')
     }
+
+
+    const {
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
+        approval_slug: EXTERNAL_USER_APPROVAL_SLUG,
+        from: EXTERNAL_USER_APPROVAL_SLUG,
+        from_id: id
+    })
 
     useEffect(() => {
         const fetchData = async () => {
@@ -70,6 +81,7 @@ const ExternalUserShow = ({ params }: { params: { externalId: string } }) => {
                                 ]}
                                 titleA={capitalizeFirstWord(group)}
                                 titleB={` ${data?.name} `}
+                                OptionalElement={approvalsAndButtonsWrapper({})}
                             />
 
                         </MuiCardComponent>
