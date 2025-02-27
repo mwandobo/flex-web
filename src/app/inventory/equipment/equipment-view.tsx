@@ -33,7 +33,7 @@ const EquipmentView = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
 
     const toggleModal = (type?: string) => {
-        setIsModalOpen(true)
+        setIsModalOpen(!isModalOpen)
         setType(type)
     }
 
