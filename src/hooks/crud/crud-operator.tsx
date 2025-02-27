@@ -195,7 +195,7 @@ export const useCrudOperator = (
             setIsModalOpen(true);
             setModalTitle(`Edit ${incomingModalTitle}`);
             setIsForm(true);
-            setOnSaveButtonName('Save');
+            setOnSaveButtonName('Update');
             setSelected(payload);
             const newUrl = !isApiV2
                 ? insertIdBeforeQueryParams(`${incomingUrl}/update`, payload?.id)
