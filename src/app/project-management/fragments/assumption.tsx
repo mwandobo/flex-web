@@ -3,7 +3,8 @@
 import ProtectedRoute from '@/components/authentication/protected-route'
 import PageHeader from '@/components/header/page-header'
 import { usePageData } from '@/hooks/use-page/use-page-data'
-import React from 'react'
+import React, {ReactNode} from 'react'
+import AssumptionView from "@/app/project-management/fragments/assumption-view";
 
 const formInputs = [
     {
@@ -69,13 +70,14 @@ function Assumption({
     } = usePageData({
         columns: columns,
         url: url,
-        isHideShow: true,
+        // isHideShow: true,
         state_properties: [],
         formInputs: formInputs,
         modalTitle: "Assumption",
         isHideDelete:isHideAdd,
         isHideEdit: isHideAdd,
-        isApiV2:true
+        isApiV2:true,
+        sliderComponent: AssumptionView
     })
 
     return (

@@ -58,8 +58,6 @@ function Constraint({
     from,
     isHideAdd
 
-
-
 }: Props) {
 
     const url = `assumptions_constraints?project_id=${project_id}&for=${from}&for_id=${from_id}&type=constraint`

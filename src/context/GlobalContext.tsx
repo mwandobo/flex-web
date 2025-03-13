@@ -1,7 +1,8 @@
 "use client"
 
-import { createContext, useReducer, ReactNode } from 'react';
+import {createContext, useReducer, ReactNode} from 'react';
 import {setValueLocalStorage} from "@/utils/actions/local-starage";
+import SlideOverComponent from "@/components/slide-over/slide-over.component";
 
 interface CurrentUserProps {
     first_name: string,
@@ -23,6 +24,13 @@ interface notificationBody {
     notifications: any
 }
 
+interface slideOverContent {
+    isOpen: boolean,
+    sliderOverTitle: string
+    sliderOverComponent: any
+    from_id: string
+}
+
 type State = {
     currentUser: CurrentUserProps | null;
     evaluationForm
@@ -32,6 +40,7 @@ type State = {
     viewItemRefreshAfterApproval: boolean
     viewedItem
     notificationBody
+    slideOverContent
 };
 
 type Action = {
@@ -48,8 +57,16 @@ const initialViewedItem: viewedItem = {
 
 const initialNotificationBody: notificationBody = {
     count: '0',
-    notifications: [ ]
+    notifications: []
 }
+
+const initialSlideOverContent: slideOverContent = {
+    isOpen: false,
+    sliderOverTitle: '',
+    from_id: '',
+    sliderOverComponent: () => ''
+}
+
 
 const initialEvaluationForm: evaluationForm = {
     data: [],
@@ -63,12 +80,14 @@ const initialState: State = {
     viewedItem: initialViewedItem,
     notificationBody: initialNotificationBody,
     inEvaluation: false,
-    hideSideBar: true
+    hideSideBar: true,
+    slideOverContent: initialSlideOverContent
 };
 
 export const GlobalContext = createContext<{ state: State; dispatch: Dispatch }>({
     state: initialState,
-    dispatch: () => { }
+    dispatch: () => {
+    }
 });
 
 export const updateContextReducer = (state: State, action: Action): State => {
@@ -109,17 +128,22 @@ export const updateContextReducer = (state: State, action: Action): State => {
 
             return {
                 ...state,
-                inEvaluation:  action.payload
+                inEvaluation: action.payload
             };
         case 'UPDATE_HIDE_SIDEBAR':
             return {
                 ...state,
-                hideSideBar:  action.payload
+                hideSideBar: action.payload
             };
         case 'UPDATE_NOTIFICATION_BODY':
             return {
                 ...state,
                 notificationBody: action.payload
+            };
+        case 'UPDATE_SLIDE_OVER_CONTENT':
+            return {
+                ...state,
+                slideOverContent: action.payload
             };
         default:
             return state;
@@ -130,10 +154,10 @@ type Props = {
     children: ReactNode;
 };
 
-export const GlobalContextProvider = ({ children }: Props) => {
+export const GlobalContextProvider = ({children}: Props) => {
     const [state, dispatch] = useReducer(updateContextReducer, initialState);
     return (
-        <GlobalContext.Provider value={{ state, dispatch }}>
+        <GlobalContext.Provider value={{state, dispatch}}>
             {children}
         </GlobalContext.Provider>
     );

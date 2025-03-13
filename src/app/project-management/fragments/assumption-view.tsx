@@ -9,7 +9,7 @@ import { get } from "@/utils/api";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-const AssumptionConstraintsShow = ({ params }: { params: { departmentId: string } }) => {
+const AssumptionView = () => {
 
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
@@ -17,8 +17,7 @@ const AssumptionConstraintsShow = ({ params }: { params: { departmentId: string 
 
     const token = getValueFromLocalStorage('token')
 
-    const id = params.departmentId
-    const url = `department/show/${id}`
+    const url = `department/show/1`
     const navigateToLogin = () => {
         return router.push('/login')
     }
@@ -77,4 +76,4 @@ const AssumptionConstraintsShow = ({ params }: { params: { departmentId: string 
     );
 };
 
-export default AssumptionConstraintsShow;
+export default AssumptionView;

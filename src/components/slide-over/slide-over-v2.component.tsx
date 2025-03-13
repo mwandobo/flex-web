@@ -2,26 +2,16 @@ interface SlideOverProps {
     title?: string;
     width?: string;
     isShowSlideOver?: boolean;
-    isSubmitDisabled?: boolean;
-    isClearDisabled?: boolean;
-    hideFooter?:boolean
     children: React.ReactNode;
     onClose: () => void;
-    onSubmit?: () => void;
-    onClear?: () => void;
 }
 
-const SlideOverV1: React.FC<SlideOverProps> = ({
+const SlideOverV2: React.FC<SlideOverProps> = ({
                                                    title = "Approval Trail",
                                                    width = "25%",
                                                    children,
                                                    isShowSlideOver,
                                                    onClose,
-                                                   onSubmit,
-                                                   onClear,
-                                                   isSubmitDisabled,
-                                                   isClearDisabled,
-    hideFooter
                                                }) => {
     const toggleSlideOver = () => {
         onClose();
@@ -62,29 +52,10 @@ const SlideOverV1: React.FC<SlideOverProps> = ({
                         {children}
                     </div>
 
-                    {/* Footer */}
-
-                    {!hideFooter && <div className="flex gap-2">
-                        <button
-                            disabled={isClearDisabled}
-                            onClick={onClear}
-                            className="w-full py-2 rounded-md hover:bg-gray-50 shadow-md border border-gray-20 text-black"
-                        >
-                            Clear Filters
-                        </button>
-                        <button
-                            disabled={isSubmitDisabled}
-                            onClick={onSubmit}
-                            className="w-full bg-gray-500 text-white py-2 rounded-md hover:bg-gray-600"
-                        >
-                            Submit Filters
-                        </button>
-                    </div>}
-
                 </div>
             </div>
         </>
     );
 };
 
-export default SlideOverV1;
+export default SlideOverV2;

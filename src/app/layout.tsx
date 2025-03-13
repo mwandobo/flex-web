@@ -8,6 +8,7 @@ import HydrationZustand from "./Hydrated";
 import {GlobalContextProvider} from "@/context/GlobalContext";
 import WebSocketComponent from "@/components/web-socket.component";
 import {ToastContainer} from "react-toastify";
+import SlideOverRender from "@/components/slide-over/slide-over-render.component";
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -65,6 +66,7 @@ export default function RootLayout({
                                 {/*        </div>*/}
                             </div>
                             <WebSocketComponent/>
+                            <SlideOverRender/>
                             <ToastContainer position="top-right" autoClose={5000}/>
                         </div>
                         <Footer/>

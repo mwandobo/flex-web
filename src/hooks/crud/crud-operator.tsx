@@ -1,10 +1,13 @@
 "use client"
 
 import {useRouter} from "next/navigation"
-import {ReactNode, useEffect, useState} from "react"
+import React, {ReactNode, useEffect, useState} from "react"
 import {useCrudFormCreator} from "./form-creator"
 import {setValueLocalStorage} from "@/utils/actions/local-starage"
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
+import SlideOver from "@/components/slide-over/slide-over.component";
+import TreeList from "@/components/list/tree-list.component";
+import SlideOverV1 from "@/components/slide-over/slide-over-v1.component";
 
 interface Props {
     formInputData: any[],
@@ -17,7 +20,7 @@ interface Props {
     emailNotificationBody?: any
     from?: string
     isApiV2?: boolean
-    isShowSlider?: boolean
+    sliderComponent?: any
     isMaintainViewNavigationForV1?: boolean
     itHasCustomForm?: boolean
     customForm?: ReactNode;
@@ -37,7 +40,7 @@ export const useCrudOperator = (
         selectedViewCard,
         from,
         itHasCustomForm,
-        isShowSlider,
+        sliderComponent,
         customForm,
         isShowAddPriceButton,
         emailNotificationBody: incomingEmailNotificationBody,
@@ -59,6 +62,8 @@ export const useCrudOperator = (
     const [isForm, setIsForm] = useState(true)
     const {state, dispatch} = useGlobalContextHook()
     const onCloseModal = () => setIsModalOpen(false)
+    const [isSideOverOpened, setIsSideOverOpen] = useState(false)
+
 
     const formPayload: any = {
         isModalOpen: isModalOpen,
@@ -75,8 +80,8 @@ export const useCrudOperator = (
         payloadForEdit: selected,
         state_properties: state_properties,
         emailNotificationBody: emailNotificationBody,
-        itHasCustomForm:itHasCustomForm,
-        customForm:customForm,
+        itHasCustomForm: itHasCustomForm,
+        customForm: customForm,
         isShowAddPriceButton,
         isFormData
     }
@@ -96,7 +101,7 @@ export const useCrudOperator = (
 
     const populateFormForEdit = (payload: any) => {
 
-        console.log('form for edit', payload )
+        console.log('form for edit', payload)
         const newModalBodyArray = modalBodyArray.map((item: any) => {
             let objKeyValue;
 
@@ -129,7 +134,7 @@ export const useCrudOperator = (
             if (item.name === 'amount') {
 
                 const value = objKeyValue?.props?.amount
-                
+
                 return {...item, value};
             }
 
@@ -160,6 +165,11 @@ export const useCrudOperator = (
             setEmailNotificationBody(newEmailNotificationBody)
         }
     }
+
+    const handleCloseSlideOver = () => {
+        setIsSideOverOpen(!isSideOverOpened)
+    }
+
 
     const handleClick = (type: string, payload?: any) => {
         const insertIdBeforeQueryParams = (url: string, id: string | number) => {
@@ -224,14 +234,26 @@ export const useCrudOperator = (
         if (type.toLowerCase() === 'show') {
             handleNotificationPayload('show');
 
-            if(isShowSlider){
 
+            if (sliderComponent) {
+                dispatch({
+                    type: 'UPDATE_SLIDE_OVER_CONTENT',
+                    payload: {
+                        isOpen: true,
+                        from_id: payload?.id,
+                        sliderOverComponent: sliderComponent,
+                    }
+                })
+
+                console.log('in sliderComponent')
+
+                return
             }
 
 
             if (isApiV2 && !isMaintainViewNavigationForV1) {
-                dispatch({ type: 'SET_SUB_VIEW_ITEM', payload: { id: payload?.id, from } });
-                setValueLocalStorage('sub_view_item', JSON.stringify({ id: payload?.id, from }));
+                dispatch({type: 'SET_SUB_VIEW_ITEM', payload: {id: payload?.id, from}});
+                setValueLocalStorage('sub_view_item', JSON.stringify({id: payload?.id, from}));
                 return;
             }
 

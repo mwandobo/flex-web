@@ -36,7 +36,8 @@ interface Props {
     isMaintainViewNavigationForV1?: boolean
     itHasCustomForm?: boolean
     customForm?: ReactNode;
-    isFormData?: boolean
+    isFormData?: boolean,
+    sliderComponent?: any
 }
 
 export const usePageData = ({
@@ -65,7 +66,8 @@ export const usePageData = ({
                                 from,
                                 isApiV2,
                                 isMaintainViewNavigationForV1,
-                                approval_slug
+                                approval_slug,
+    sliderComponent
                             }: Props
 ) => {
     const [loading, setLoading] = useState(false)
@@ -96,7 +98,8 @@ export const usePageData = ({
         isMaintainViewNavigationForV1,
         itHasCustomForm: itHasCustomForm,
         customForm: customForm,
-        isFormData
+        isFormData,
+        sliderComponent
     })
 
     const {tabular} = usePopulateTable({
