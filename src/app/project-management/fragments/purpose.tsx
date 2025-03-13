@@ -4,6 +4,7 @@ import ProtectedRoute from '@/components/authentication/protected-route'
 import PageHeader from '@/components/header/page-header'
 import { usePageData } from '@/hooks/use-page/use-page-data'
 import React from 'react'
+import PurposeView from "@/app/project-management/fragments/purpose-view";
 
 const formInputs = [
     {
@@ -57,7 +58,9 @@ function Purpose(
     }: Props
 ) {
 
-    const url = `${project.id}/project_purpose`
+    const url = `project_purpose?project_id=${project.id}`
+
+    console.log(isHideAdd)
 
     const {
         loading,
@@ -72,9 +75,11 @@ function Purpose(
         modalTitle: 'Project Purpose',
         viewUrl: '',
         state_properties: [],
-        isHideShow: true,
+        isHideShow: false,
         isHideDelete:isHideAdd,
-        isHideEdit: isHideAdd
+        isHideEdit: isHideAdd,
+        isApiV2:true,
+        sliderComponent: PurposeView
     })
 
     return (

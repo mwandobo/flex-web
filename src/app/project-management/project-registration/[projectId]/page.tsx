@@ -102,7 +102,7 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
         <Purpose
             key={'purpose'}
             project={data}
-            isHideAdd={true}
+            isHideAdd={data?.status === 'closed'}
         />,
         <ExternalUsers
             key={'sponsor'}
@@ -147,14 +147,14 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
         <Resource
             key={'resource'}
             project_id={id}
-            isHideAdd={true}
+            isHideAdd={data?.status === 'closed'}
         />,
         <ApprovalComponent
             key={'approved'}
             project_id={id}
             from={PROJECT_APPROVAL_SLUG}
             from_id={id}
-            isHideAdd={true}
+            isHideAdd={data?.status === 'closed'}
         />,
     ];
 
