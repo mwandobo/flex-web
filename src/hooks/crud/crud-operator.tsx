@@ -17,6 +17,7 @@ interface Props {
     emailNotificationBody?: any
     from?: string
     isApiV2?: boolean
+    isShowSlider?: boolean
     isMaintainViewNavigationForV1?: boolean
     itHasCustomForm?: boolean
     customForm?: ReactNode;
@@ -36,6 +37,7 @@ export const useCrudOperator = (
         selectedViewCard,
         from,
         itHasCustomForm,
+        isShowSlider,
         customForm,
         isShowAddPriceButton,
         emailNotificationBody: incomingEmailNotificationBody,
@@ -221,6 +223,11 @@ export const useCrudOperator = (
 
         if (type.toLowerCase() === 'show') {
             handleNotificationPayload('show');
+
+            if(isShowSlider){
+
+            }
+
 
             if (isApiV2 && !isMaintainViewNavigationForV1) {
                 dispatch({ type: 'SET_SUB_VIEW_ITEM', payload: { id: payload?.id, from } });

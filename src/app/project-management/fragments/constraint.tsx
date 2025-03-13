@@ -62,7 +62,7 @@ function Constraint({
 
 }: Props) {
 
-    const url = `assumptions_contsraints/${project_id}/${from}/${from_id}/constraint`
+    const url = `assumptions_constraints?project_id=${project_id}&for=${from}&for_id=${from_id}&type=constraint`
 
     const {
         loading,
@@ -76,7 +76,8 @@ function Constraint({
         isHideShow: true,
         state_properties: [],
         formInputs: formInputs,
-        modalTitle: "Constraint"
+        modalTitle: "Constraint",
+        isApiV2:true
     })
 
     return (

@@ -59,7 +59,7 @@ function Assumption({
 }: Props) {
 
 
-    const url = `assumptions_contsraints/${project?.id}/${from}/${from_id}/assumption`
+    const url = `assumptions_constraints?project_id=${project?.id}&for=${from}&for_id=${from_id}&type=assumption`
 
     const {
         loading,
@@ -74,7 +74,8 @@ function Assumption({
         formInputs: formInputs,
         modalTitle: "Assumption",
         isHideDelete:isHideAdd,
-        isHideEdit: isHideAdd
+        isHideEdit: isHideAdd,
+        isApiV2:true
     })
 
     return (

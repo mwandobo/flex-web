@@ -24,6 +24,7 @@ import {ReusableButton} from "@/components/button/reusable-button";
 import {CheckCircle2} from "lucide-react";
 import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 import Budget from "@/app/project-management/fragments/Budget";
+import AssumptionConstraint from "@/app/project-management/fragments/assumption_constraint";
 
 const ProjectShow = ({params}: { params: { projectId: string } }) => {
     const [data, setData] = useState<any>([])
@@ -136,7 +137,7 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
             project_id={id}
             isHideAdd={true}
         />,
-        <Assumption
+        <AssumptionConstraint
             key={'assumption'}
             from={'project'}
             from_id={id}
