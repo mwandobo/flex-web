@@ -13,6 +13,7 @@ const SlideOverRender = () => {
             type: 'UPDATE_SLIDE_OVER_CONTENT',
             payload: {
                 isOpen: false,
+                sliderOverComponent: () => ''
             }
         })
     }
@@ -21,10 +22,10 @@ const SlideOverRender = () => {
         isShowSlideOver={slideOverContent?.isOpen}
         title="Apply Filters"
         onClose={handleCloseSlideOver}
-        width={'15rem'}
+        width={'25rem'}
     >
 
-        {slideOverContent?.sliderOverComponent() ?? ''}
+        {slideOverContent?.sliderOverComponent(slideOverContent.from_id) ?? ''}
     </SlideOverV2>
 };
 

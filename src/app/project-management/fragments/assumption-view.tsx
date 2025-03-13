@@ -1,34 +1,26 @@
 "use client"
 
 import ProtectedRoute from "@/components/authentication/protected-route";
-import MuiCardComponent from "@/components/card/mui-card.component";
-import ViewCardComponent from "@/components/card/view.card.component";
-import PageHeader from "@/components/header/page-header";
-import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
 import { get } from "@/utils/api";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import ViewCardItemApartComponent from "@/components/card/view.card-item-apart.component";
 
-const AssumptionView = () => {
+const AssumptionView = (id: string) => {
 
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
     const router = useRouter()
-
-    const token = getValueFromLocalStorage('token')
-
-    const url = `department/show/1`
+    const url = `assumptions_constraints/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
-
-
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true)
-                const res = await get(url, token)
+                const res = await get(url)
 
                 if (data && res.status === 200) {
                     setData(res.data.data)
@@ -41,8 +33,10 @@ const AssumptionView = () => {
                 }
             }
         };
-        fetchData()
-    }, [])
+        if(id){
+            fetchData()
+        }
+    }, [id])
 
     return (
 
@@ -51,25 +45,17 @@ const AssumptionView = () => {
                 loading ? <p>Loading...</p>
                     :
                     <>
-                        <PageHeader
-                            links={[
-                                { name: 'Department', linkTo: '/admnistration/departments', permission: 'departments', isClickable: true },
-                                { name: 'Show', linkTo: '', permission: '' }
-                            ]}
-                            isShowPage={true}
-                        />
-                        <MuiCardComponent>
-                            <div className="mb-3">
-                                <ViewCardComponent
+                            <div className="mb-3 w-full ">
+                                <ViewCardItemApartComponent
                                     data={[
-                                        { label: 'Department Name', value: data?.name },
+                                        { label: 'Assumption Name', value: data?.name },
+                                        { label: 'Description', value: data?.details },
                                     ]}
-                                    titleA={`Department`}
+                                    titleA={`Assumption`}
                                     titleB={` ${data?.name} `}
                                 />
                             </div>
 
-                        </MuiCardComponent>
                     </>
             }
         </ProtectedRoute>

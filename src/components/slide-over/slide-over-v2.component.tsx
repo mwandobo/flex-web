@@ -20,7 +20,7 @@ const SlideOverV2: React.FC<SlideOverProps> = ({
     return (
         <>
             <div
-                className={`fixed inset-0 z-50 overflow-hidden transition-all ease-in-out duration-500 text-xs ${
+                className={`fixed inset-0 z-50 overflow-hidden transition-all ease-in-out duration-500 text-xs flex flex-col justify-center items-center ${
                     isShowSlideOver ? 'visible opacity-100' : 'invisible opacity-0'
                 }`}
             >
@@ -33,14 +33,13 @@ const SlideOverV2: React.FC<SlideOverProps> = ({
 
                 {/* Slide Over */}
                 <div
-                    className={`fixed right-8 p-4 rounded-md top-40 min-h-96 bg-white shadow-xl transform transition-transform duration-500 ease-in-out flex flex-col ${
+                    className={`fixed right-8 p-4 rounded-md   bg-white shadow-xl transform transition-transform duration-500 ease-in-out flex flex-col ${
                         isShowSlideOver ? 'translate-x-0' : 'translate-x-full'
                     }`}
                     style={{ width }}
                 >
                     {/* Header */}
-                    <div className="flex justify-between items-center mb-2">
-                        <h2 className="font-semibold">{title}</h2>
+                    <div className="flex justify-end  items-center mb-2">
                         <button onClick={toggleSlideOver} className="text-gray-500 hover:text-gray-800">
                             ✕
                         </button>
