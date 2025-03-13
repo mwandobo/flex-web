@@ -18,11 +18,10 @@ const EmployeeShow = ({ params }: { params: { employeeId: string } }) => {
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
     const token = getValueFromLocalStorage('token')
-    const positionId = getValueFromLocalStorage('parent_id')
 
     const id = params.employeeId
 
-    const url = `employee/show/${id}`
+    const url = `employee/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }

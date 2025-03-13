@@ -22,7 +22,7 @@ const ExternalUserShow = ({ params }: { params: { externalId: string } }) => {
     const id = params.externalId
     const group = getValueFromLocalStorage('group')
 
-    const url = `undefined/external_users/${group}/show/${id}`
+    const url = `external-users/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }

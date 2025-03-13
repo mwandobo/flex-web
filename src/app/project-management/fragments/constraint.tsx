@@ -4,6 +4,7 @@ import ProtectedRoute from '@/components/authentication/protected-route'
 import PageHeader from '@/components/header/page-header'
 import { usePageData } from '@/hooks/use-page/use-page-data'
 import React from 'react'
+import ConstraintView from "@/app/project-management/fragments/constraint-view";
 
 const formInputs = [
     {
@@ -71,11 +72,12 @@ function Constraint({
     } = usePageData({
         columns: columns,
         url: url,
-        isHideShow: true,
+        isHideShow: false,
         state_properties: [],
         formInputs: formInputs,
         modalTitle: "Constraint",
-        isApiV2:true
+        isApiV2:true,
+        sliderComponent: ConstraintView
     })
 
     return (

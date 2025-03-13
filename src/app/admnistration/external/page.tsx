@@ -284,7 +284,7 @@ function ExternalUsers({
         }
     ]
 
-    const url = groupProp ? `project/${project_id}/external_users/${groupProp}` : `undefined/external_users/${groupRoute}`
+    const url = groupProp ? `project/${project_id}/external_users/${groupProp}` : `external-users?group=${groupRoute}`
 
     const {
         loading,
@@ -301,7 +301,9 @@ function ExternalUsers({
         permission: permission,
         isHideShow: isHideShow,
         isHideDelete:isHideAdd,
-        isHideEdit: isHideAdd
+        isHideEdit: isHideAdd,
+        isApiV2:  true,
+        isMaintainViewNavigationForV1: true
     })
 
     return (
