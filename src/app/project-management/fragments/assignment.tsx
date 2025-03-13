@@ -4,6 +4,7 @@ import ProtectedRoute from '@/components/authentication/protected-route'
 import PageHeader from '@/components/header/page-header'
 import { usePageData } from '@/hooks/use-page/use-page-data'
 import React from 'react'
+import AssignmentView from "@/app/project-management/fragments/assignment-view";
 
 interface Props {
     from_id?: any
@@ -120,7 +121,7 @@ function Assignment({
         },
     ]
 
-    const url = `assignment/${project?.id}/${from}/${from_id}`
+    const url = `assignment?project_id=${project?.id}&for=${from}&for_id=${from_id}`
 
     const {
         loading,
@@ -135,7 +136,9 @@ function Assignment({
         modalTitle: 'Assignment',
         viewUrl: '',
         state_properties: [],
-        isHideShow: true
+        isHideShow: false,
+        isApiV2: true,
+        sliderComponent:AssignmentView
     })
 
     return (
