@@ -32,7 +32,7 @@ const ViewCardItemApartComponent = ({
         <div className="flex flex-col ">
             <div className='flex justify-between mb-2'>
                 <h3 className='p-2 text-left text-lg text-gray-600'>
-                    <span className='mr-1 text-sm'>{titleA} :</span>
+                    {titleA && <span className='mr-1 text-sm'>{titleA} :</span>}
                     <span className='font-semibold text-gray-700 mr-1 text-sm'>{titleB}</span>
                 </h3>
                 <div className=''>

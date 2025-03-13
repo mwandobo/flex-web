@@ -7,6 +7,7 @@ import { checkPermissions } from '@/utils/actions/check-permissions'
 import { getValueFromLocalStorage } from '@/utils/actions/local-starage'
 import { capitalizeFirstWord } from '@/utils/actions/string-manipulations'
 import React, { useEffect, useState } from 'react'
+import ExternalUserView from "@/app/admnistration/external/external-view";
 
 interface Props {
     groupProp?: string;
@@ -61,7 +62,7 @@ function ExternalUsers({
             type: 'select',
             label: `Select ${group} `,
             value: '',
-            optionsUrlData: `/undefined/external_users/${group}`,
+            optionsUrlData: `external-users?group=${group}`,
             optionDataKey: 'departments',
             required: true,
             isError: false,
@@ -94,7 +95,7 @@ function ExternalUsers({
             errorMessage: '',
             control: 'sponsorship_type',
             control_id: '',
-            isRemoved: typeof (groupProp) === 'undefined' && false,
+            isRemoved: groupProp && true,
         },
 
         {
@@ -244,19 +245,19 @@ function ExternalUsers({
             disablePadding: false,
             label: `${capitalizeFirstWord(group)} Name`,
         },
-        {
-            id: 'position',
-            numeric: false,
-            disablePadding: false,
-            label: 'Position',
-        },
-        {
-            id: 'email',
-            numeric: false,
-            disablePadding: false,
-            label: 'Email',
-        },
-
+        // {
+        //     id: 'position',
+        //     numeric: false,
+        //     disablePadding: false,
+        //     label: 'Position',
+        // },
+        // {
+        //     id: 'email',
+        //     numeric: false,
+        //     disablePadding: false,
+        //     label: 'Email',
+        // },
+        //
         {
             id: 'phone',
             numeric: false,
@@ -284,7 +285,7 @@ function ExternalUsers({
         }
     ]
 
-    const url = groupProp ? `project/${project_id}/external_users/${groupProp}` : `external-users?group=${groupRoute}`
+    const url = groupProp ? `project-external-users?project_id=${project_id}&group=${groupProp}` : `external-users?group=${groupRoute}`
 
     const {
         loading,
@@ -299,11 +300,12 @@ function ExternalUsers({
         viewUrl: `/admnistration/external/`,
         state_properties: [group],
         permission: permission,
-        isHideShow: isHideShow,
+        isHideShow: false,
         isHideDelete:isHideAdd,
         isHideEdit: isHideAdd,
         isApiV2:  true,
-        isMaintainViewNavigationForV1: true
+        isMaintainViewNavigationForV1: true,
+        sliderComponent: groupProp && ExternalUserView
     })
 
     return (

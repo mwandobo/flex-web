@@ -6,12 +6,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ViewCardItemApartComponent from "@/components/card/view.card-item-apart.component";
 
-const ConstraintView = (id: string) => {
+const ExternalUserView = (id: string) => {
 
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
     const router = useRouter()
-    const url = `assumptions_constraints/${id}`
+    const url = `project-external-users/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
@@ -48,10 +48,16 @@ const ConstraintView = (id: string) => {
                             <div className="mb-3 w-full ">
                                 <ViewCardItemApartComponent
                                     data={[
-                                        { label: 'Constraint Name', value: data?.name },
-                                        { label: 'Description', value: data?.details },
+                                        { label:  'Name', value: data?.name },
+                                        { label:  'Type', value: data?.type },
+                                        { label:  'Email', value: data?.email },
+                                        { label:  'Phone', value: data?.phone },
+                                        { label:  'Position', value: data?.position },
+                                        { label:  'Sponsorship', value: data?.sponsorship },
+                                        { label:  'Start Date', value: data?.formatted_start_date },
+                                        { label:  'End Date', value: data?.formatted_end_date },
                                     ]}
-                                    titleA={`Constraint`}
+                                    titleA={``}
                                     titleB={` ${data?.name} `}
                                 />
                             </div>
@@ -62,4 +68,4 @@ const ConstraintView = (id: string) => {
     );
 };
 
-export default ConstraintView;
+export default ExternalUserView;

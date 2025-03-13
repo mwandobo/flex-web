@@ -90,15 +90,30 @@ export const useCrudFormCreator = ({
     const sideUpdatePayload = (payload?: any, value?: string) => {
         return formInputs?.map((input) => {
             if (input.name === payload.name) {
-                const split = payload.optionsUrlData.split('/');
-                split[1] = value
-                const joined = split.join('/')
+                try {
+                    // Check if optionsUrlData is a full URL
+                    let url;
+                    if (payload.optionsUrlData.startsWith("http")) {
+                        url = new URL(payload.optionsUrlData);
+                    } else {
+                        url = new URL(`api/${payload.optionsUrlData}`, baseURL);
+                    }
 
-                return {...payload, optionsUrlData: joined}
+                    // Add or update 'type' query parameter
+                    url.searchParams.set("type", value || "");
+
+                    console.log("Updated URL:", url.toString());
+
+                    return { ...payload, optionsUrlData: url.toString() };
+                } catch (error) {
+                    console.error("Invalid URL:", payload.optionsUrlData);
+                    return input;
+                }
             }
-            return input
+            return input;
         });
     };
+
 
     const sideUpdatePayloadSponsorship = (value?: string) => {
         return formInputs?.map((input) => {
