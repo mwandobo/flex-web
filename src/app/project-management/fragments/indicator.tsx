@@ -4,6 +4,7 @@ import ProtectedRoute from '@/components/authentication/protected-route'
 import PageHeader from '@/components/header/page-header'
 import { usePageData } from '@/hooks/use-page/use-page-data'
 import React from 'react'
+import IndicatorView from "@/app/project-management/fragments/indicator-view";
 
 
 interface Props {
@@ -36,17 +37,6 @@ function Indicator({
             errorMessage: ''
         },
 
-        {
-            name: 'measurement_type_id',
-            type: 'select',
-            label: `Means of Verification`,
-            value: means_of_verification,
-            optionsUrlData: `settings?group=measurement`,
-            optionDataKey: 'departments',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
         ['goal', 'outcome'].includes(from) &&
         {
             name: 'baseline_data',
@@ -67,50 +57,14 @@ function Indicator({
             errorMessage: ''
         },
         {
-            name: 'collection_method',
+            name: 'collected_date',
             type: 'text',
-            label: 'Collection Method',
+            label: 'Collected Data',
             value: '',
             required: true,
             isError: false,
             errorMessage: ''
         },
-        {
-            name: 'frequency',
-            type: 'text',
-            label: 'Frequency and Schedule',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
-            name: 'responsibilities',
-            type: 'text',
-            label: 'Responsibilities',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
-            name: 'audience',
-            type: 'text',
-            label: 'Information Use / Audience',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
-            name: 'description',
-            type: 'textArea',
-            label: 'Description',
-            value: '',
-            required: false,
-            isError: false,
-            errorMessage: ''
-        }
     ]
 
     const columns = [
@@ -171,7 +125,7 @@ function Indicator({
     ]
 
 
-    const url = `indicator?project_id=${project_id}&from=${from}&from_id=${from_id}`
+    const url = `indicator?project_id=${project_id}&from=${from}&from_id=${from_id}&measurement_type_id=${means_of_verification}`
 
     const {
         loading,
@@ -186,11 +140,12 @@ function Indicator({
         modalTitle: 'Indicator',
         viewUrl: '',
         state_properties: [],
-        isHideShow: true,
+        isHideShow: false,
         isApiV2: true,
         isMaintainViewNavigationForV1: true,
         isHideDelete:isHideAdd,
-        isHideEdit: isHideAdd
+        isHideEdit: isHideAdd,
+        sliderComponent: IndicatorView
     })
 
 

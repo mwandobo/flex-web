@@ -26,91 +26,7 @@ function Page({
 
 
     const formInputs = [
-        {
-            name: 'name',
-            type: 'text',
-            label: 'Name',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
 
-        {
-            name: 'measurement_type_id',
-            type: 'select',
-            label: `Means of Verification`,
-            value: means_of_verification,
-            optionsUrlData: `settings?group=measurement`,
-            optionDataKey: 'departments',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        ['goal', 'outcome'].includes(from) &&
-        {
-            name: 'baseline_data',
-            type: 'text',
-            label: 'Baseline Data',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
-            name: 'target_data',
-            type: 'text',
-            label: 'Target Data',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
-            name: 'collection_method',
-            type: 'text',
-            label: 'Collection Method',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
-            name: 'frequency',
-            type: 'text',
-            label: 'Frequency and Schedule',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
-            name: 'responsibilities',
-            type: 'text',
-            label: 'Responsibilities',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
-            name: 'audience',
-            type: 'text',
-            label: 'Information Use / Audience',
-            value: '',
-            required: true,
-            isError: false,
-            errorMessage: ''
-        },
-        {
-            name: 'description',
-            type: 'textArea',
-            label: 'Description',
-            value: '',
-            required: false,
-            isError: false,
-            errorMessage: ''
-        }
     ]
 
     const columns = [
@@ -190,7 +106,8 @@ function Page({
         viewUrl: '/indicator-management/',
         state_properties: [],
         isApiV2: true,
-        isMaintainViewNavigationForV1: true
+        isMaintainViewNavigationForV1: true,
+        isHideEdit: true
     })
 
 
