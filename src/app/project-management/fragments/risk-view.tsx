@@ -6,12 +6,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ViewCardItemApartComponent from "@/components/card/view.card-item-apart.component";
 
-const PurposeView = (id: string) => {
+const RiskView = (id: string) => {
 
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
     const router = useRouter()
-    const url = `project_purpose/${id}`
+    const url = `project_risk/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
@@ -48,11 +48,12 @@ const PurposeView = (id: string) => {
                             <div className="mb-3 w-full ">
                                 <ViewCardItemApartComponent
                                     data={[
-                                        { label: 'Strategic Plan Element', value: data?.element },
-                                        { label: 'Project Business Objective', value: data?.objective },
+                                        { label: 'Name', value: data?.name },
+                                        { label: 'Description', value: data?.purpose },
+                                        { label: 'Control_measure', value: data?.control_measure },
                                     ]}
-                                    titleA={``}
-                                    titleB={``}
+                                    titleA={`Deliverable`}
+                                    titleB={`${data?.name}`}
                                 />
                             </div>
 
@@ -62,4 +63,4 @@ const PurposeView = (id: string) => {
     );
 };
 
-export default PurposeView;
+export default RiskView;

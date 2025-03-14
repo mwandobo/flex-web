@@ -4,6 +4,7 @@ import ProtectedRoute from '@/components/authentication/protected-route'
 import PageHeader from '@/components/header/page-header'
 import { usePageData } from '@/hooks/use-page/use-page-data'
 import React from 'react'
+import DeliverableView from "@/app/project-management/fragments/deliverable-view";
 
 const formInputs = [
     {
@@ -78,8 +79,9 @@ function Deliverable(
         modalTitle: 'Deliverable',
         viewUrl: '',
         state_properties: [],
-        isHideShow: true,
-        isApiV2: true
+        isHideShow: false,
+        isApiV2: true,
+        sliderComponent:DeliverableView
     })
 
     return (

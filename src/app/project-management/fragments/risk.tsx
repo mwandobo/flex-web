@@ -4,6 +4,7 @@ import ProtectedRoute from '@/components/authentication/protected-route'
 import PageHeader from '@/components/header/page-header'
 import { usePageData } from '@/hooks/use-page/use-page-data'
 import React from 'react'
+import RiskView from "@/app/project-management/fragments/risk-view";
 
 const formInputs = [
     {
@@ -88,10 +89,11 @@ function Risk({
         modalTitle: 'Risk',
         viewUrl: '',
         state_properties: [],
-        isHideShow: true,
+        isHideShow: false,
         isHideDelete:isHideAdd,
         isHideEdit: isHideAdd,
-        isApiV2: true
+        isApiV2: true,
+        sliderComponent:RiskView
     })
 
     return (
