@@ -4,6 +4,7 @@ import ProtectedRoute from '@/components/authentication/protected-route'
 import PageHeader from '@/components/header/page-header'
 import { usePageData } from '@/hooks/use-page/use-page-data'
 import React from 'react'
+import ResourceView from "@/app/project-management/fragments/resource-view";
 
 const formInputs = [
     {
@@ -140,10 +141,11 @@ function Resource({
         modalTitle: 'Resource',
         viewUrl: '',
         state_properties: [],
-        isHideShow: true,
+        isHideShow: false,
         isApiV2:true,
         isHideDelete:isHideAdd,
-        isHideEdit: isHideAdd
+        isHideEdit: isHideAdd,
+        sliderComponent: ResourceView
     })
 
     return (
