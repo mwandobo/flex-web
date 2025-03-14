@@ -4,6 +4,7 @@ import ProtectedRoute from '@/components/authentication/protected-route'
 import PageHeader from '@/components/header/page-header'
 import { usePageData } from '@/hooks/use-page/use-page-data'
 import React from 'react'
+import CostView from "@/app/project-management/fragments/cost-view";
 
 
 
@@ -108,9 +109,10 @@ function Cost(
         modalTitle: 'Cost',
         viewUrl: '',
         state_properties: [],
-        isHideShow: true,
+        isHideShow: false,
         isApiV2: true,
-        isMaintainViewNavigationForV1: true
+        isMaintainViewNavigationForV1: true,
+        sliderComponent:CostView
     })
 
     return (

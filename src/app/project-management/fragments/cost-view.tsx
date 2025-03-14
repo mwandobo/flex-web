@@ -6,12 +6,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ViewCardItemApartComponent from "@/components/card/view.card-item-apart.component";
 
-const ResourceView = (id: string) => {
+const CostView = (id: string) => {
 
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
     const router = useRouter()
-    const url = `resource/${id}`
+    const url = `cost/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
@@ -48,19 +48,18 @@ const ResourceView = (id: string) => {
                             <div className="mb-3 w-full ">
                                 <ViewCardItemApartComponent
                                     data={[
-                                        { label: 'Resource Type', value: data?.resource_type_name },
-                                        { label: 'Resource Name', value: data?.resource_name },
-                                        { label: 'Quantity', value: data?.quantity },
-                                        { label: 'Dispatched Quantity', value: data?.dispatched_quantity },
-                                        { label: 'Amount', value: data?.amount },
+                                        { label: 'Cost Name', value: data?.name },
+                                        { label: 'Purpose', value: data?.purpose },
+                                        { label: 'Amount', value: data?.formatted_amount },
+                                        { label: 'Dispatched Amount', value: data?.dispatched_amount },
+                                        { label: 'Expense', value: data?.occured_cost },
                                         { label: 'Requested Date', value: data?.formatted_requested_date },
                                         { label: 'Submitted Date', value: data?.formatted_submitted_date },
                                         { label: 'Dispatched Date', value: data?.formatted_dispatched_date },
                                         { label: 'Status', value: data?.status },
-                                        { label: 'Description', value: data?.details },
                                     ]}
-                                    titleA={`Resource`}
-                                    titleB={` ${data?.resource_name} `}
+                                    titleA={`Cost`}
+                                    titleB={` ${data?.name} `}
                                 />
                             </div>
 
@@ -70,4 +69,4 @@ const ResourceView = (id: string) => {
     );
 };
 
-export default ResourceView;
+export default CostView;
