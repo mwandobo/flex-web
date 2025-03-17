@@ -102,6 +102,12 @@ const items: ISidebarItem[] = [
                 permission: 'data-list',
                 icon: HardDrive
             },
+            {
+                name: 'Timesheet Management',
+                path: '/project-management/timesheet-management',
+                permission: 'timesheet-list',
+                icon: HardDrive
+            },
         ]
     },
     {
@@ -295,25 +301,6 @@ function Sidebar() {
                     </div>
                 </div>
             </div>
-            {/*<div className='md:hidden bg-white p-4 w-full flex justify-between'>*/}
-            {/*    <button><Menu /></button>*/}
-
-            {/*    <img className='h-10 w-fit ' src="/logo.png" alt="logo"/>*/}
-
-            {/*    /!*<hr/>*!/*/}
-            {/*    /!*<div className='flex flex-col'>*!/*/}
-            {/*    /!*    {*!/*/}
-            {/*    /!*        items.map(item =>*!/*/}
-            {/*    /!*            <>*!/*/}
-            {/*    /!*                {*!/*/}
-            {/*    /!*                    checkPermissions(item?.permission) &&*!/*/}
-            {/*    /!*                    <SidebarItem key={item.path} item={item}/>*!/*/}
-            {/*    /!*                }*!/*/}
-            {/*    /!*            </>*!/*/}
-            {/*    /!*        )*!/*/}
-            {/*    /!*    }*!/*/}
-            {/*    /!*</div>*!/*/}
-            {/*</div>*/}
         </div>
     )
 }
