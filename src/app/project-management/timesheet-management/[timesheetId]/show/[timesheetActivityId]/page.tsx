@@ -13,6 +13,15 @@ import MuiCardComponent from "@/components/card/mui-card.component";
 import ViewCardComponent from "@/components/card/view.card.component";
 import {statusFormatter} from "@/utils/actions/status-formatter";
 import MuiTab from "@/components/tabs/mui-tab";
+import Indicator from "@/app/project-management/fragments/indicator";
+import Assignment from "@/app/project-management/fragments/assignment";
+import Resource from "@/app/project-management/fragments/resource";
+import Cost from "@/app/project-management/fragments/costs";
+import Deliverable from "@/app/project-management/fragments/deliverable";
+import AssumptionConstraint from "@/app/project-management/fragments/assumption_constraint";
+import Risk from "@/app/project-management/fragments/risk";
+import FileUploadForm from "@/app/project-management/fragments/document";
+import Task from "@/app/project-management/timesheet-management/fragments/task";
 
 const EvaluationReportShow = ({ params }: { params: { timesheetActivityId: string } }) => {
     const router = useRouter()
@@ -24,6 +33,14 @@ const EvaluationReportShow = ({ params }: { params: { timesheetActivityId: strin
     const navigateToLogin = () => {
         return router.push('/login')
     }
+
+    const nodes: React.ReactNode[] = [
+        <Task
+            key={'task'}
+            activity={data}
+        />,
+    ];
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -55,11 +72,9 @@ const EvaluationReportShow = ({ params }: { params: { timesheetActivityId: strin
                     :
                     <>
                         <PageHeader
-                            subHeader={``}
+                            subHeader={`Activity`}
                             links={[]}
                             isShowPage={true}
-                            isHideBack={true}
-
                         />
                         <MuiCardComponent>
                             <ViewCardComponent
@@ -79,6 +94,15 @@ const EvaluationReportShow = ({ params }: { params: { timesheetActivityId: strin
                                 titleA="Project Activity"
                                 titleB={data?.name}
                             />
+                        </MuiCardComponent>
+                        <MuiCardComponent>
+                            <MuiTab
+                                columns={[
+                                    "Tasks",
+                                ]}
+                                nodes={nodes}
+                            >
+                            </MuiTab>
                         </MuiCardComponent>
                     </>
             }
