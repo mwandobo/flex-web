@@ -1,3 +1,5 @@
+
+
 "use client"
 
 import ProtectedRoute from '@/components/authentication/protected-route'
@@ -5,34 +7,30 @@ import React, {useEffect, useState} from 'react'
 import PageHeader from "@/components/header/page-header";
 import GeneratePdf from "@/components/pdf/generate-pdf";
 import {get} from "@/utils/api";
-import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import CustomTable from "@/components/tables/flexible-normal-table";
 
 const columns = [
-    {header: 'Customer Name', accessor: 'name'},
-    {header: 'Customer Email', accessor: 'email'},
-    {header: 'Customer Phone', accessor: 'phone'},
-    {header: 'Customer Address', accessor: 'address'},
+    {header: 'Activity Name', accessor: 'activity_name'},
+    {header: 'Task Name', accessor: 'task_name'},
+    {header: 'Start Date', accessor: 'formatted_start_date'},
+    {header: 'End Date', accessor: 'formatted_end_date'},
     {header: 'Status', accessor: 'status'},
 ];
 
-function CustomerReport() {
+const TimesheetShow = ({ params }: { params: { timesheetId: string } }) => {
     const [data, setData] = useState<any>([])
-    const [total, setTotal] = useState(0)
     const [loading, setLoading] = useState(false)
-    const [refresh, setRefresh] = useState(false)
-    const token = getValueFromLocalStorage('token')
-    const url = 'report/procurement/customer'
+    const id = params.timesheetId
+    const url = `report/timesheet/${id}`
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true)
-                const res = await get(url, token)
+                const res = await get(url)
 
                 if ( res.status === 200) {
                     setData(res.data.data.data)
-                    setTotal(res.data.data.total)
                     setLoading(false)
                 }
 
@@ -43,7 +41,7 @@ function CustomerReport() {
             }
         };
         fetchData()
-    }, [refresh])
+    }, [])
 
     const pageRender = () =>{
         return <div className={'mt-2'}>
@@ -61,7 +59,7 @@ function CustomerReport() {
                     :
                     <>
                         <PageHeader
-                            subHeader={'Customer Report'}
+                            subHeader={`Timesheet Report for Employee ${data?.employee_name}`}
                             isShowPage={true}
                             isDownload={true}
                             ButtonDownloadComponent={
@@ -80,4 +78,4 @@ function CustomerReport() {
     )
 }
 
-export default CustomerReport
+export default TimesheetShow

@@ -35,7 +35,14 @@ import {
     FileDiff,
     FileBox,
     FileClock,
-    ReceiptPoundSterling, ShoppingCart, BadgeDollarSign, SquareDashedKanban, Store, BookKey, ShieldEllipsis
+    ReceiptPoundSterling,
+    ShoppingCart,
+    BadgeDollarSign,
+    SquareDashedKanban,
+    Store,
+    BookKey,
+    ShieldEllipsis,
+    CalendarDays, Calendar
 } from 'lucide-react'
 import React from 'react'
 import SidebarItem from './item'
@@ -106,7 +113,7 @@ const items: ISidebarItem[] = [
                 name: 'Timesheet Management',
                 path: '/project-management/timesheet-management',
                 permission: 'timesheet-list',
-                icon: HardDrive
+                icon: CalendarDays
             },
         ]
     },
@@ -152,6 +159,12 @@ const items: ISidebarItem[] = [
                 path: '/report/procurement-report',
                 permission: 'projects-list',
                 icon: FileDiff
+            },
+            {
+                name: 'Timesheet Reports',
+                path: '/report/timesheet',
+                permission: 'projects-list',
+                icon: Calendar
             },
         ]
     },
