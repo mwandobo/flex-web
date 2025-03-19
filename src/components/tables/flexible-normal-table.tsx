@@ -103,7 +103,7 @@ const ReusableTable: React.FC<TableProps> = ({
                     </tr>
                     </thead>
                     <tbody>
-                    {data.map((row, rowIndex) => (
+                    {data?.map((row, rowIndex) => (
                         <tr key={rowIndex} className="text-gray-700">
                             <td
                                 className="px-2 py-2 text-xs border border-gray-200 text-center"

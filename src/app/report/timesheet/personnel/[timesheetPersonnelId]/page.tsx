@@ -11,17 +11,17 @@ import CustomTable from "@/components/tables/flexible-normal-table";
 
 const columns = [
     {header: 'Activity Name', accessor: 'activity_name'},
-    {header: 'Task Name', accessor: 'task_name'},
+    {header: 'Task Name', accessor: 'name'},
     {header: 'Start Date', accessor: 'formatted_start_date'},
     {header: 'End Date', accessor: 'formatted_end_date'},
     {header: 'Status', accessor: 'status'},
 ];
 
-const TimesheetShow = ({ params }: { params: { timesheetId: string } }) => {
+const TimesheetPersonnelShow = ({ params }: { params: { timesheetPersonnelId: string } }) => {
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
-    const id = params.timesheetId
-    const url = `report/timesheet/${id}`
+    const id = params.timesheetPersonnelId
+    const url = `report/timesheet/personnel/${id}`
 
     useEffect(() => {
         const fetchData = async () => {
@@ -30,6 +30,7 @@ const TimesheetShow = ({ params }: { params: { timesheetId: string } }) => {
                 const res = await get(url)
 
                 if ( res.status === 200) {
+                    console.log('response data' , res.data.data.data)
                     setData(res.data.data.data)
                     setLoading(false)
                 }
@@ -78,4 +79,4 @@ const TimesheetShow = ({ params }: { params: { timesheetId: string } }) => {
     )
 }
 
-export default TimesheetShow
+export default TimesheetPersonnelShow

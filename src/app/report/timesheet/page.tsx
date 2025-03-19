@@ -1,72 +1,36 @@
 "use client"
 
 import ProtectedRoute from '@/components/authentication/protected-route'
-import PageHeader from '@/components/header/page-header'
-import { usePageData } from '@/hooks/use-page/use-page-data'
-import { checkPermissions } from '@/utils/actions/check-permissions'
+import MuiCardComponent from '@/components/card/mui-card.component'
+import MuiTab from '@/components/tabs/mui-tab'
 import React from 'react'
+import TimesheetDepartment from "@/app/report/timesheet/timesheet-department";
+import TimesheetPersonnel from "@/app/report/timesheet/timesheet-personnel";
 
-const columns = [
-    {
-        id: 'full_name',
-        numeric: false,
-        disablePadding: false,
-        label: 'Employee Name',
-    },
-    {
-        id: 'position',
-        numeric: false,
-        disablePadding: false,
-        label: 'Position',
-    },
-    {
-        id: 'department',
-        numeric: false,
-        disablePadding: false,
-        label: 'Department',
-    },
-]
 
 function Timesheet() {
-    const permission = 'roles'
-    const {
-        loading,
-        createdForm,
-        handleClick,
-        tabular
-    } = usePageData({
-        columns: columns,
-        formInputs: [],
-        url: 'report/timesheet',
-        modalTitle: 'Role',
-        viewUrl: '/report/timesheet/',
-        state_properties: [],
-        permission: permission,
-        isHideDelete: true,
-        isHideEdit: true
-    })
+    const nodes: React.ReactNode[] = [
+        <TimesheetPersonnel
+        />,
+        <TimesheetDepartment
+        />,
+    ];
 
     return (
         <ProtectedRoute>
-            <>{
-                !checkPermissions(`${permission}-list`) ? <p>You are not authorized</p> : <>
-                    {
-                        loading ? <p>Loading...</p>
-                            :
-                            <>
-                                <PageHeader
-                                    handleClick={handleClick}
-                                    links={[{ name: 'Reports / Timesheet / List', linkTo: '/report/timesheet', permission: '' }]}
-                                    isHideAdd={true}
-                                />
-                                {tabular()}
-                                {createdForm()}
-                            </>
-                    }
-                </>
+            {
+                <MuiCardComponent>
+                    <MuiTab
+                        columns={[
+                            "Personnel",
+                            "Departments",
+                        ]}
+                        nodes={nodes}
+                    >
+                    </MuiTab>
+                </MuiCardComponent>
             }
-            </>
-        </ProtectedRoute>
+        </ProtectedRoute >
     )
 }
 

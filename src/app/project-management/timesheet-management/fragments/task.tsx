@@ -24,6 +24,42 @@ function Task({
             errorMessage: ''
         },
         {
+            name: 'assignment_type_id',
+            type: 'select',
+            label: `Select Type of Assignment`,
+            value: '',
+            optionsUrlData: `settings?group=assignment`,
+            optionDataKey: 'departments',
+            required: true,
+            isError: false,
+            errorMessage: '',
+            control_for: 'assignment'
+        },
+        {
+            name: 'personnel_id',
+            type: 'select',
+            label: `Select Personnel`,
+            value: '',
+            optionsUrlData: `/employee`,
+            optionDataKey: 'users',
+            required: true,
+            isError: false,
+            isRemoved: true,
+            errorMessage: ''
+        },
+        {
+            name: 'dept_id',
+            type: 'select',
+            label: `Select Department`,
+            value: '',
+            optionsUrlData: `department`,
+            optionDataKey: 'departments',
+            required: true,
+            isError: false,
+            isRemoved: true,
+            errorMessage: ''
+        },
+        {
             name: 'start_date',
             type: 'date',
             label: 'Start Date',
@@ -61,7 +97,13 @@ function Task({
             id: 'name',
             numeric: false,
             disablePadding: false,
-            label: 'Name',
+            label: 'Task Name',
+        },
+        {
+            id: 'personnel_department',
+            numeric: false,
+            disablePadding: false,
+            label: 'Personnel/Department',
         },
         {
             id: 'formatted_start_date',
@@ -69,6 +111,7 @@ function Task({
             disablePadding: false,
             label: 'Start Date',
         },
+
         {
             id: 'formatted_end_date',
             numeric: false,
