@@ -19,6 +19,7 @@ const columns = [
 
 const TimesheetDepartmentShow = ({ params }: { params: { timesheetDepartmentId: string } }) => {
     const [data, setData] = useState<any>([])
+    const [department, setDepartment] = useState<any>([])
     const [loading, setLoading] = useState(false)
     const id = params.timesheetDepartmentId
     const url = `report/timesheet/department/${id}`
@@ -32,6 +33,7 @@ const TimesheetDepartmentShow = ({ params }: { params: { timesheetDepartmentId: 
                 if ( res.status === 200) {
                     console.log('response data' , res.data.data.data)
                     setData(res.data.data.data)
+                    setDepartment(res.data.data.department)
                     setLoading(false)
                 }
 
@@ -60,7 +62,7 @@ const TimesheetDepartmentShow = ({ params }: { params: { timesheetDepartmentId: 
                     :
                     <>
                         <PageHeader
-                            subHeader={`Timesheet Report for Department ${data?.department_name}`}
+                            subHeader={`Timesheet Report for Department ${department?.name}`}
                             isShowPage={true}
                             isDownload={true}
                             ButtonDownloadComponent={

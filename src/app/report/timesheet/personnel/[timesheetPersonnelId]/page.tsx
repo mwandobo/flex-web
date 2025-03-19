@@ -19,6 +19,7 @@ const columns = [
 
 const TimesheetPersonnelShow = ({ params }: { params: { timesheetPersonnelId: string } }) => {
     const [data, setData] = useState<any>([])
+    const [personnel, setPersonnel] = useState<any>([])
     const [loading, setLoading] = useState(false)
     const id = params.timesheetPersonnelId
     const url = `report/timesheet/personnel/${id}`
@@ -32,6 +33,7 @@ const TimesheetPersonnelShow = ({ params }: { params: { timesheetPersonnelId: st
                 if ( res.status === 200) {
                     console.log('response data' , res.data.data.data)
                     setData(res.data.data.data)
+                    setPersonnel(res.data.data.personnel)
                     setLoading(false)
                 }
 
@@ -60,7 +62,7 @@ const TimesheetPersonnelShow = ({ params }: { params: { timesheetPersonnelId: st
                     :
                     <>
                         <PageHeader
-                            subHeader={`Timesheet Report for Employee ${data?.employee_name}`}
+                            subHeader={`Timesheet Report for Employee ${personnel?.full_name}`}
                             isShowPage={true}
                             isDownload={true}
                             ButtonDownloadComponent={

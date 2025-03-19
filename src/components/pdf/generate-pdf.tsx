@@ -103,6 +103,14 @@ const GeneratePdf = ({ content, fileName = 'document.pdf', buttonLabel = 'Downlo
                                         <ReusableButton
                                             name={'Download'}
                                             onClick={() => handleGeneratePdf()}
+                                            rounded={'md'}
+                                            padding={'p-1'}
+                                            shadow={'shadow-md'}
+                                            bg_color={'bg-gray-50'}
+                                            hover={'hover:bg-gray-200 hover:border-gray-400'}
+                                            hover_text={'hover:text-gray-900 hover:font-semibold'}
+                                            border={'border border-gray-300'}
+                                            text_color={'text-gray-700'}
                                         >
                                             <FileDown size={15} />
                                         </ReusableButton>
