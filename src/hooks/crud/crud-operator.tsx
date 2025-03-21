@@ -5,9 +5,6 @@ import React, {ReactNode, useEffect, useState} from "react"
 import {useCrudFormCreator} from "./form-creator"
 import {setValueLocalStorage} from "@/utils/actions/local-starage"
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
-import SlideOver from "@/components/slide-over/slide-over.component";
-import TreeList from "@/components/list/tree-list.component";
-import SlideOverV1 from "@/components/slide-over/slide-over-v1.component";
 
 interface Props {
     formInputData: any[],

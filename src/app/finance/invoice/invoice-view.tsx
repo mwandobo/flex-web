@@ -41,7 +41,8 @@ const InvoiceView = () => {
     } = useApprovalsAndButtonsHook({
         approval_slug: INVOICE_APPROVAL_SLUG,
         from: INVOICE_APPROVAL_SLUG,
-        from_id: id
+        from_id: id,
+        parent: 'invoice'
     })
 
     const onSave = async () => {

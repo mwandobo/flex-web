@@ -16,12 +16,14 @@ interface Props {
     approval_slug?: string;
     from: string;
     from_id: string;
+    parent?: string;
 }
 
 export const useApprovalsAndButtonsHook = ({
                                     approval_slug,
                                     from,
-                                    from_id
+                                               from_id,
+                                               parent
                                 }: Props) => {
     const [isNeedApprove, setIsNeedApprove] = useState(false);
     const [isApproved, setIsApproved] = useState(false);
@@ -31,8 +33,8 @@ export const useApprovalsAndButtonsHook = ({
     const [refresh, setIsrefresh] = useState(false);
     const [approveStatus, setApproveStatus] = useState('');
     const [latestApproveStatus, setLatestApproveStatus] = useState('');
-    const { dispatch } = useGlobalContextHook()
-
+    const { dispatch, state } = useGlobalContextHook()
+    const viewedItem = state.viewedItem
 
     const allSysApprovals = JSON.parse(getValueFromLocalStorage('sys_approvals'));
     const allRegisteredApprovals = JSON.parse(getValueFromLocalStorage('approvals'));
@@ -99,7 +101,9 @@ export const useApprovalsAndButtonsHook = ({
                 setIsNeedApprove(true);
             }
 
-            if (current_level) {
+            if (!parent || parent === viewedItem.from) {
+                if (!current_level) return;
+
                 try {
                     const approvedItemForCurrentLevel = await getApprovedItemByLevelId(current_level?.id);
 
@@ -107,18 +111,19 @@ export const useApprovalsAndButtonsHook = ({
                         setIsApproved(true);
                         setIsMyLevelApproved(true);
                         setApproveStatus(approvedItemForCurrentLevel.type);
-                    } else {
-                        if (previousLevel) {
-                            const approvedItemForPreviousLevel = await getApprovedItemByLevelId(previousLevel?.id);
-                            if (approvedItemForPreviousLevel && approvedItemForPreviousLevel.type === "approve") {
-                                setCanApprove(true);
-                            }
-                        } else {
+                        return;
+                    }
+
+                    if (previousLevel) {
+                        const approvedItemForPreviousLevel = await getApprovedItemByLevelId(previousLevel?.id);
+                        if (approvedItemForPreviousLevel?.type === "approve") {
                             setCanApprove(true);
                         }
+                    } else {
+                        setCanApprove(true);
                     }
                 } catch (error) {
-                    console.error("Error fetching approved item for current level:", error);
+                    console.error("Error fetching approval status:", error);
                 }
             }
 
@@ -149,7 +154,8 @@ export const useApprovalsAndButtonsHook = ({
         };
 
         fetchApprovalData();
-    }, [approval_slug, role, isApproved, refresh, getApprovalLevel, getMappedApproval, getApprovedItemByLevelId]);
+    // }, [approval_slug]);
+}, [approval_slug, role, isApproved, refresh, getApprovalLevel, getMappedApproval, getApprovedItemByLevelId]);
 
     interface ApproveProps {
         approval_name?: string;

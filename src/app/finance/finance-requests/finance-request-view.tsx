@@ -37,7 +37,8 @@ const FinanceRequestView = () => {
     } = useApprovalsAndButtonsHook({
         approval_slug: FINANCE_APPROVAL_SLUG,
         from: FINANCE_APPROVAL_SLUG,
-        from_id: id
+        from_id: id,
+        parent: 'finance-request'
     })
 
 

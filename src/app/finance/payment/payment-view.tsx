@@ -39,7 +39,9 @@ const PaymentView = () => {
     } = useApprovalsAndButtonsHook({
         approval_slug: PAYMENT_APPROVAL_SLUG,
         from: PAYMENT_APPROVAL_SLUG,
-        from_id: id
+        from_id: id,
+        parent: 'payment'
+
     })
 
     const onSave = async () => {
