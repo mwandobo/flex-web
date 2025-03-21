@@ -335,15 +335,15 @@ export const useCrudFormCreator = ({
             newfoundInputs = sideUpdatePayload(foundInput, value); // Update inputs for sponsors
         }
 
+        if (control_for === 'sale-quotation-item') {
+            const foundInput = newfoundInputs.find(item => item.control === 'sale-quotation-item'); // Update formInputs copy
+            foundInput.optionsUrlData = `sale-rfq/${value}/items-for-select`;
+        }
+
+
         if (control_for === 'quotation-item') {
             const foundInput = newfoundInputs.find(item => item.control === 'quotation-item'); // Update formInputs copy
-            const selectUrl = foundInput.optionsUrlData;
-            const split = selectUrl.split('/');
-
-            split[1] = value;
-            console.log('selectUrl', selectUrl)
-
-            foundInput.optionsUrlData = `rfq/${value}/items-for-select`;
+            foundInput.optionsUrlData = `purchase-rfq/${value}/items-for-select`;
         }
 
         if (control_for === 'invoice') {

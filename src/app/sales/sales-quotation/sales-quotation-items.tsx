@@ -79,7 +79,7 @@ function SalesQuotationItems({quotation}: Props) {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: `quotations/${quotation?.id}/items`,
+        url: `sale-quotations/${quotation?.id}/items`,
         modalTitle: 'Quotation Item',
         viewUrl: '/inventory/items-categories/',
         state_properties: [],

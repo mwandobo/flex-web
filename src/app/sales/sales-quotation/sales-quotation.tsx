@@ -10,13 +10,13 @@ import {ITEM_APPROVAL_SLUG, QUOTATION_APPROVAL_SLUG, SALE_QUOTATION_APPROVAL_SLU
 
 const formInputs = [
     {
-        name: 'request_for_quotation_id',
+        name: 'sale_rfq_id',
         type: 'select',
         label: 'Request For Quotation',
         value: '',
-        optionsUrlData: `/rfq?approved=approved&status=quotation&type=external`,
+        optionsUrlData: `/sale-rfq?status=quotation`,
         optionDataKey: 'rfq',
-        control_for: "quotation-item",
+        control_for: "sale-quotation-item",
         required: true,
         isError: false,
         errorMessage: ''
@@ -26,9 +26,9 @@ const formInputs = [
         type: 'multi-select',
         label: 'Quotation Items',
         value: '',
-        optionsUrlData: 'rfq/undefined/items-for-select',
+        optionsUrlData: 'sale-rfq/undefined/items-for-select',
         optionDataKey: 'quotation-item',
-        control: "quotation-item",
+        control: "sale-quotation-item",
         required: true,
         isError: false,
     },
@@ -142,7 +142,7 @@ function SalesQuotation() {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'quotations?type=external',
+        url: 'sale-quotations',
         modalTitle: 'Quotation',
         viewUrl: '/procurement/rfq/',
         state_properties: [],

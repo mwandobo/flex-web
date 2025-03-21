@@ -28,7 +28,7 @@ const SalesQuotationView = () => {
     const { viewedItem} = state;
     const {id} = viewedItem;
 
-    const url = `quotations/${id}`
+    const url = `sale-quotations/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
