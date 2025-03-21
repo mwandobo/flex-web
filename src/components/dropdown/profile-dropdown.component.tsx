@@ -1,5 +1,6 @@
 import { CircleUserRound} from 'lucide-react';
 import {useState, useRef, useEffect, useMemo} from 'react';
+import {useRouter} from "next/navigation";
 
 interface Props {
     name: string,
@@ -12,6 +13,8 @@ const ProfileDropdown = ({
                          }: Props) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const router = useRouter()
+
 
     // Toggle dropdown open/close
     const toggleDropdown = () => setIsOpen(!isOpen);
@@ -22,6 +25,10 @@ const ProfileDropdown = ({
             setIsOpen(false);
         }
     };
+
+    const onclick = (path) => {
+            router.push(path)
+    }
 
     const iconSize = useMemo(() => window.innerWidth >= 768 ? 15 : 30, []);
 
@@ -51,19 +58,18 @@ const ProfileDropdown = ({
             {/* Dropdown Menu */}
             {isOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-20">
-                    <a
-                        // href="/profile"
-                        href="#"
+                    <button
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => onclick('profile')}
                     >
                         Profile
-                    </a>
-                    <a
-                        href="#"
+                    </button>
+                    <button
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => onclick('settings')}
                     >
                         Settings
-                    </a>
+                    </button>
                     <button
                         onClick={handleLogout} // Handle Logout Logic
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
