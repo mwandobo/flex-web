@@ -150,7 +150,7 @@ function SalesRfq() {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'rfq?type=external',
+        url: 'sale-rfq',
         modalTitle: 'Rfq',
         viewUrl: '/procurement/rfq/',
         state_properties: [],

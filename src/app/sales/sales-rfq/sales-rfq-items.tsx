@@ -33,12 +33,6 @@ const columns = [
         label: 'Price',
     },
     {
-        id: 'requisition_quantity',
-        numeric: false,
-        disablePadding: false,
-        label: 'Requested Quantity',
-    },
-    {
         id: 'quantity',
         numeric: false,
         disablePadding: false,
@@ -62,7 +56,7 @@ function SalesRfqItems({rfq_id, status}: Props) {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: `rfq/${rfq_id}/items`,
+        url: `sale-rfq/${rfq_id}/items`,
         modalTitle: 'Rfq Item',
         viewUrl: '/inventory/items-categories/',
         state_properties: [],

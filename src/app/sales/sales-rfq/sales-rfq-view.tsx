@@ -31,7 +31,7 @@ const SalesRfqView = () => {
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
 
-    const url = `rfq/${id}`
+    const url = `sale-rfq/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
@@ -57,13 +57,6 @@ const SalesRfqView = () => {
 
 
     const handleSubmit = () => {
-        // showConfirmationModal({
-        //     title: 'Are You Sure?',
-        //     text: `Are You Sure You Want To Submit RFQ Code: ${data.formatted_code}?`,
-        //     onConfirm: () => onSave(`${url}/submit-draft`),  // Action to perform on confirmation
-        //     onCancel: () => console.log('User canceled the action'), // Optional cancel action
-        // });
-
         Swal.fire({
                 title: 'Are You Sure?',
                 text: `Are You Sure You Want To Submit RFQ Code: ${data.formatted_code}?`,
