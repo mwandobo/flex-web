@@ -33,7 +33,7 @@ const SlideOverV2: React.FC<SlideOverProps> = ({
 
                 {/* Slide Over */}
                 <div
-                    className={`fixed right-8 p-4 rounded-md   bg-white shadow-xl transform transition-transform duration-500 ease-in-out flex flex-col ${
+                    className={`fixed right-0 top-0 bottom-0 p-4 rounded-md   bg-white shadow-xl transform transition-transform duration-500 ease-in-out flex flex-col ${
                         isShowSlideOver ? 'translate-x-0' : 'translate-x-full'
                     }`}
                     style={{ width }}
