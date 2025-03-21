@@ -42,7 +42,7 @@ import {
     Store,
     BookKey,
     ShieldEllipsis,
-    CalendarDays, Calendar
+    CalendarDays, Calendar, Proportions
 } from 'lucide-react'
 import React from 'react'
 import SidebarItem from './item'
@@ -153,6 +153,12 @@ const items: ISidebarItem[] = [
                 path: '/report/me-plan',
                 permission: 'projects-list',
                 icon: FileBox
+            },
+            {
+                name: 'Profit/Loss Report',
+                path: '/report/profit-loss-report',
+                permission: 'projects-list',
+                icon: Proportions
             },
             {
                 name: 'Procurement Reports',
