@@ -55,11 +55,10 @@ function ApprovalComponent({
   } = usePageData({
     columns: columns,
     url: url,
-    isHideShow: true,
     state_properties: [],
     formInputs: formInputs,
     modalTitle: "Approve",
-    isHideDelete: true,
+    isHideActions: true,
   })
 
   return (
@@ -72,7 +71,7 @@ function ApprovalComponent({
               handleClick={handleClick}
               subHeader='Approved Item / List'
               links={[{ name: 'Approvals', linkTo: `/admnistration/external/` }]}
-              isHideAdd={isHideAdd}
+              isHideAdd={true}
 
             />
             {tabular()}

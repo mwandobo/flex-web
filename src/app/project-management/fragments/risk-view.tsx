@@ -52,7 +52,7 @@ const RiskView = (id: string) => {
                                         { label: 'Description', value: data?.purpose },
                                         { label: 'Control_measure', value: data?.control_measure },
                                     ]}
-                                    titleA={`Deliverable`}
+                                    titleA={`Risk`}
                                     titleB={`${data?.name}`}
                                 />
                             </div>
