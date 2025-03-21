@@ -13,7 +13,7 @@ const formInputs = [
         type: 'select',
         label: 'Customer',
         value: '',
-        optionsUrlData: `/customers?approved=approved&status=quotation`,
+        optionsUrlData: `/customers?status=quotation`,
         optionDataKey: 'quotation-item',
         required: true,
         isError: false,

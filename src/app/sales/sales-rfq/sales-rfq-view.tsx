@@ -17,6 +17,7 @@ import {
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import SalesRfqItems from "@/app/sales/sales-rfq/sales-rfq-items";
 import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
+import Swal from "sweetalert2";
 
 const SalesRfqView = () => {
 
@@ -56,11 +57,35 @@ const SalesRfqView = () => {
 
 
     const handleSubmit = () => {
-        showConfirmationModal({
-            title: 'Are You Sure?',
-            text: `Are You Sure You Want To Submit RFQ Code: ${data.formatted_code}?`,
-            onConfirm: () => onSave(`${url}/submit-draft`),  // Action to perform on confirmation
-            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        // showConfirmationModal({
+        //     title: 'Are You Sure?',
+        //     text: `Are You Sure You Want To Submit RFQ Code: ${data.formatted_code}?`,
+        //     onConfirm: () => onSave(`${url}/submit-draft`),  // Action to perform on confirmation
+        //     onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        // });
+
+        Swal.fire({
+                title: 'Are You Sure?',
+                text: `Are You Sure You Want To Submit RFQ Code: ${data.formatted_code}?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true,
+            customClass: {
+                actions: 'flex justify-between w-full', // Custom class for action buttons
+                confirmButton: 'mx-4 px-4 py-2 bg-green-500 text-white rounded',
+                cancelButton: 'mx-4 px-4 py-2 bg-red-500 text-white rounded',
+            },
+            buttonsStyling: false, // Optional: swaps the order of the buttons
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Handle the "Yes" action
+                onSave(`${url}/submit-draft`)
+            } else if (result.dismiss === Swal.DismissReason.cancel ) {
+                // Handle the "No" action if provided
+                console.log('User canceled the action')
+            }
         });
     };
 
