@@ -94,7 +94,7 @@ function Order() {
                         :
                         <>
                             <PageHeader
-                                title={"Purchase Order"}
+                                title={"Sale Orders"}
                                 handleClick={handleClick}
                                 isShowAddButton={true}
                                />
