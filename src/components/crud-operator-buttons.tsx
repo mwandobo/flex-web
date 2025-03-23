@@ -27,11 +27,6 @@ const CrudButtonsComponent = ({
                                   show_assign,
                                   isShowAddPriceButton
                               }: Props) => {
-
-    console.log('we reach herer')
-
-
-    const color = 'white';
     return <div className='p-0 m-0 inline-flex w-full gap-1'>
         {show_assign && checkPermissions(`${permission ? `${permission}-assign` : ""}`) &&
             <ReusableButton
