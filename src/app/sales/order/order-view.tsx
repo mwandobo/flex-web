@@ -29,7 +29,7 @@ const OrderView = () => {
     const {viewedItem} = state;
     const {id,} = viewedItem;
 
-    const url = `purchase-orders/${id}`
+    const url = `sale-orders/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
@@ -90,7 +90,7 @@ const OrderView = () => {
                         <RotateCcw size={13}/>
                     </ReusableButton>
                     <ReusableButton
-                        name={'Submit Purchase Order'}
+                        name={'Submit Order'}
                         onClick={() => handleSubmit()}
                         rounded={'md'}
                         padding={'p-3'}
@@ -161,7 +161,7 @@ const OrderView = () => {
                                         {label: 'Terms and Conditions', value: data?.quotation?.terms_and_conditions},
 
                                     ]}
-                                    titleA={`Purchase Request`}
+                                    titleA={`Sale Order`}
                                     titleB={` ${data?.formatted_code} `}
                                     OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                                 />

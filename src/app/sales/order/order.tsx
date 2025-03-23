@@ -10,11 +10,11 @@ import {ITEM_APPROVAL_SLUG, PURCHASE_ORDER_APPROVAL_SLUG} from "@/utils/constant
 
 const formInputs = [
     {
-        name: 'quotation_id',
+        name: 'sale_quotation_id',
         type: 'select',
         label: 'Quotation',
         value: '',
-        optionsUrlData: `/quotations?approved=approved&status=bid_comparison&type=external`,
+        optionsUrlData: `/sale-quotations?status=submitted`,
         optionDataKey: 'rfq',
         control_for: "rfq",
         required: true,
@@ -28,13 +28,13 @@ const columns = [
         id: 'formatted_code',
         numeric: false,
         disablePadding: false,
-        label: 'Purchase Order ',
+        label: 'Sale Order ',
     },
     {
-        id: 'supplier_name',
+        id: 'customer_name',
         numeric: false,
         disablePadding: false,
-        label: 'Supplier Name',
+        label: 'Customer Name',
     },
     {
         id: 'quotation_name',
@@ -74,13 +74,13 @@ function Order() {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: `purchase-orders?type=external`,
-        modalTitle: 'Purchase Order',
+        url: `sale-orders`,
+        modalTitle: 'Sale Order',
         viewUrl: '/procurement/rfq/',
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'bid-comparison',
+        from: 'order',
         isHideDelete: false,
         isHideEdit: true,
         approval_slug: PURCHASE_ORDER_APPROVAL_SLUG

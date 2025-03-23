@@ -77,7 +77,7 @@ function OrderItems({purchase_order}: Props) {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: `purchase-orders/${purchase_order?.id}/items?type=external`,
+        url: `sale-orders/${purchase_order?.id}/items`,
         modalTitle: 'Quotation Item',
         viewUrl: '/inventory/items-categories/',
         state_properties: [],
@@ -97,7 +97,7 @@ function OrderItems({purchase_order}: Props) {
                         :
                         <>
                             <PageHeader
-                                title={"Purchase Order Items"}
+                                title={"Sale Order Items"}
                                 handleClick={handleClick}
                                 isShowAddButton={false}
 
