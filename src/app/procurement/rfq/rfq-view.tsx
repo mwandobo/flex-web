@@ -28,7 +28,7 @@ const RfqView = () => {
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
 
-    const url = `rfq/${id}`
+    const url = `purchase-rfq/${id}`
     const navigateToLogin = () => {
         return router.push('/login')
     }
@@ -44,7 +44,7 @@ const RfqView = () => {
     const handleSubmit = () => {
         showConfirmationModal({
             title: 'Are You Sure?',
-            text: `Are You Sure You Want To Submit Finance Request: ${data.name}?`,
+            text: `Are You Sure You Want To Submit RFQ with code: ${data.formatted_code}?`,
             onConfirm: () => onSave(),  // Action to perform on confirmation
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });

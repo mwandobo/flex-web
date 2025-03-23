@@ -104,7 +104,7 @@ const RequisitionRequestView = () => {
         isStateChanged
     } = useCrudOperator({
         formInputData: formInputs,
-        incomingUrl: `rfq/${id}/create-rfq`,
+        incomingUrl: `purchase-rfq/${id}/create-rfq`,
         incomingModalTitle: "Request For  Quotation",
         viewUrl: "",
         state_properties: [],

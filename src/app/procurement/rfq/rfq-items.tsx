@@ -62,7 +62,7 @@ function RfqItems({rfq_id, status}: Props) {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: `rfq/${rfq_id}/items`,
+        url: `purchase-rfq/${rfq_id}/items`,
         modalTitle: 'Rfq Item',
         viewUrl: '/inventory/items-categories/',
         state_properties: [],

@@ -128,7 +128,7 @@ function Rfq() {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'rfq?type=internal',
+        url: 'purchase-rfq',
         modalTitle: 'Rfq',
         viewUrl: '/procurement/rfq/',
         state_properties: [],
@@ -146,7 +146,7 @@ function Rfq() {
                         :
                         <>
                             <PageHeader
-                                title={"Requisition Requests"}
+                                title={"Request For Quotation"}
                                 handleClick={handleClick}
                                 isShowAddButton={false}
                                />
