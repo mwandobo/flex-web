@@ -82,7 +82,6 @@ export const useCrudFormCreator = ({
             updateFormDataPayload(body)
             setFormData(formData)
         } catch (error: any) {
-            console.log(formData)
             console.log(error)
         }
     };
@@ -101,9 +100,6 @@ export const useCrudFormCreator = ({
 
                     // Add or update 'type' query parameter
                     url.searchParams.set("type", value || "");
-
-                    console.log("Updated URL:", url.toString());
-
                     return { ...payload, optionsUrlData: url.toString() };
                 } catch (error) {
                     console.error("Invalid URL:", payload.optionsUrlData);
@@ -456,9 +452,10 @@ export const useCrudFormCreator = ({
 
         } catch (error) {
             setIsDisabled(false)
+            const text = error?.response?.data?.error ?? error?.response?.data?.message
             Swal.fire({
                 title: 'Error Occured!',
-                text: JSON.stringify(error?.response?.data?.error),
+                text,
                 icon: 'error',
             });
 

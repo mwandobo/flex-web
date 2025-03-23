@@ -97,8 +97,6 @@ export const useCrudOperator = (
     }
 
     const populateFormForEdit = (payload: any) => {
-
-        console.log('form for edit', payload)
         const newModalBodyArray = modalBodyArray.map((item: any) => {
             let objKeyValue;
 
@@ -129,10 +127,13 @@ export const useCrudOperator = (
                 return {...item, isRemoved: false, value: objKeyValue};
             }
             if (item.name === 'amount') {
-
                 const value = objKeyValue?.props?.amount
-
                 return {...item, value};
+            }
+
+            // If 'from' is 'sale-quotation', set 'isRemoved: false' for 'sale_rfq_id' and 'item_ids'
+            if (from === 'sale-quotation' && (item.name === 'sale_rfq_id' || item.name === 'item_ids')) {
+                return {...item, isRemoved: true};
             }
 
             // Return the new item with updated value
@@ -241,12 +242,8 @@ export const useCrudOperator = (
                         sliderOverComponent: sliderComponent,
                     }
                 })
-
-                console.log('in sliderComponent')
-
                 return
             }
-
 
             if (isApiV2 && !isMaintainViewNavigationForV1) {
                 dispatch({type: 'SET_SUB_VIEW_ITEM', payload: {id: payload?.id, from}});

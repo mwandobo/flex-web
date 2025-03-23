@@ -191,7 +191,6 @@ function Project() {
         permission: permission,
         from: "project",
         approval_slug:PROJECT_APPROVAL_SLUG
-
     })
     return (
         <ProtectedRoute>

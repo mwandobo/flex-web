@@ -14,7 +14,7 @@ const formInputs = [
         type: 'select',
         label: 'Request For Quotation',
         value: '',
-        optionsUrlData: `/sale-rfq?status=quotation`,
+        optionsUrlData: `/sale-rfq?status[]=quotation`,
         optionDataKey: 'rfq',
         control_for: "sale-quotation-item",
         required: true,
@@ -29,7 +29,7 @@ const formInputs = [
         optionsUrlData: 'sale-rfq/undefined/items-for-select',
         optionDataKey: 'quotation-item',
         control: "sale-quotation-item",
-        required: true,
+        required: false,
         isError: false,
     },
     {
@@ -123,10 +123,10 @@ const columns = [
         label: 'Payment Method',
     },
     {
-        id: 'delivery_time',
+        id: 'status',
         numeric: false,
         disablePadding: false,
-        label: 'Deliver Time',
+        label: 'Status',
     }
 
 ]
@@ -148,9 +148,8 @@ function SalesQuotation() {
         state_properties: [],
         permission: permission,
         isApiV2:true,
-        from: 'quotation',
+        from: 'sale-quotation',
         approval_slug: SALE_QUOTATION_APPROVAL_SLUG,
-        isHideEdit:true,
         isFormData:true
     })
 
