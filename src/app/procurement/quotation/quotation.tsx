@@ -102,7 +102,7 @@ const formInputs = [
         type: 'file',
         label: 'Attachment',
         value: '',
-        required: true,
+        required: false,
         isError: false,
         errorMessage: ''
     },
@@ -134,28 +134,16 @@ const columns = [
         label: 'Payment Method',
     },
     {
-        id: 'evaluation_method',
-        numeric: false,
-        disablePadding: false,
-        label: 'Evaluation Method',
-    },
-    {
-        id: 'decision_timeline',
-        numeric: false,
-        disablePadding: false,
-        label: 'Decision Timeline',
-    },
-    {
-        id: 'submission_requirement',
-        numeric: false,
-        disablePadding: false,
-        label: 'Submission Requirement',
-    },
-    {
         id: 'delivery_time',
         numeric: false,
         disablePadding: false,
         label: 'Deliver Time',
+    },
+    {
+        id: 'status',
+        numeric: false,
+        disablePadding: false,
+        label: 'Status',
     }
 ]
 
@@ -170,7 +158,7 @@ function Quotation() {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'quotations?type=internal',
+        url: 'quotations',
         modalTitle: 'Quotation',
         viewUrl: '/procurement/rfq/',
         state_properties: [],
@@ -178,7 +166,6 @@ function Quotation() {
         isApiV2:true,
         from: 'quotation',
         approval_slug: QUOTATION_APPROVAL_SLUG,
-        isHideEdit:true,
         isFormData: true
     })
 
