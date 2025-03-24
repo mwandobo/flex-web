@@ -120,6 +120,8 @@ interface Props {
 function InspectionItems({inspection}: Props) {
     const permission = 'inspection_item'
 
+    console.log('inspection', inspection)
+
     const {
         loading,
         createdForm,

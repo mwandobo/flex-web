@@ -75,19 +75,7 @@ const columns = [
         id: 'purchase_order_name',
         numeric: false,
         disablePadding: false,
-        label: 'Purchase Order ',
-    },
-    {
-        id: 'supplier_name',
-        numeric: false,
-        disablePadding: false,
-        label: 'Supplier',
-    },
-    {
-        id: 'quotation_name',
-        numeric: false,
-        disablePadding: false,
-        label: 'Quotation',
+        label: 'Order ',
     },
     {
         id: 'inspection_cost',

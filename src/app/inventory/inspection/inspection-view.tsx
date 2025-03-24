@@ -47,7 +47,7 @@ const InspectionView = () => {
     const onSave = async () => {
         try {
             const res = await get(`${url}/submit-draft`, token);
-            if (data && res.status === 200) {
+            if ( res.status === 200) {
                 setRefresh(!refresh);
             }
         } catch (error: any) {
@@ -92,7 +92,7 @@ const InspectionView = () => {
                 setLoading(true)
                 const res = await get(url, token)
 
-                if (data && res.status === 200) {
+                if (res.status === 200) {
                     setData(res.data.data)
                     setLoading(false)
                 }
@@ -123,9 +123,9 @@ const InspectionView = () => {
                                     data={[
                                         {label: 'Inspection Code', value: data?.formatted_code},
                                         {label: 'Delivery Code', value: data?.formatted_code},
-                                        {label: 'Purchase Order', value: data?.purchase_order_name},
+                                        {label:  data?.type === 'internal' ? 'Sale Order' : 'Purchase Order', value: data?.purchase_order_name},
                                         {label: 'Request For Quotation', value: data?.rfq_name},
-                                        {label: 'Supplier', value: data?.supplier_name},
+                                        {label: data?.supplier_name ? 'Supplier' : 'Customer', value: data?.supplier_name || data?.customer_name},
                                         {label: 'Quotation', value: data?.quotation_name},
                                         {label: 'Inspection By', value: data?.inspected_by},
                                         {
