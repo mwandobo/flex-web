@@ -107,10 +107,6 @@ const BidComparisonView = () => {
                 const result = res.data.data
                 setData(result)
                 setRfq(res.data.rfq)
-
-                console.log(result)
-
-
                 const bufBody = result.map(item => ({
                     item_id: item.id,
                     winner: {
@@ -139,7 +135,7 @@ const BidComparisonView = () => {
 
     const buttonsBody = () => {
         return <>
-            {data?.status === 'bid_comparison' &&
+            {rfq?.status === 'quotation' &&
                 <ReusableButton
                     name={'Submit Winner'}
                     onClick={() => handleSubmit()}
@@ -155,7 +151,7 @@ const BidComparisonView = () => {
                     <CheckCircle2 size={13}/>
                 </ReusableButton>
             }
-            {data?.status === 'purchase_order' &&
+            {rfq?.status === 'purchase_order' &&
 
                 <ReusableButton
                     name={'Re Choose Winner'}
@@ -173,7 +169,7 @@ const BidComparisonView = () => {
                 </ReusableButton>
 
             }
-            {data?.status === 'purchase_order' &&
+            {rfq?.status === 'purchase_order' &&
                 <ReusableButton
                     name={'Create Purchase Order'}
                     onClick={() => handleCreatePurchaseOrder()}
@@ -224,17 +220,21 @@ const BidComparisonView = () => {
                                             <div
                                                 key={index}
                                                 onClick={() => handleCheckboxChange(payloadItem.id, supplier)}
+                                                // className={`p-4 mb-1 mt-1 mr-1 border border-gray-200 shadow-md text-xs hover:cursor-pointer
+                                                //               transform transition-all duration-300 ease-in-out
+                                                //               ${supplier?.winner === "winned" ? 'bg-gray-200  hover:bg-gray-300' :
+                                                //     isSelected(payloadItem.id, supplier) ?
+                                                //         'bg-gray-200 shadow-lg scale-105 hover:bg-gray-300' :
+                                                //         `bg-white  ${rfq?.status === "pending" && 'hover:scale-105 hover:bg-gray-200'}   `}
+                                                //               hover:shadow-lg `}
                                                 className={`p-4 mb-1 mt-1 mr-1 border border-gray-200 shadow-md text-xs hover:cursor-pointer 
                                                               transform transition-all duration-300 ease-in-out 
-                                                              ${supplier?.winner === "winned" ? 'bg-gray-200  hover:bg-gray-300' :
-                                                    isSelected(payloadItem.id, supplier) ?
-                                                        'bg-gray-200 shadow-lg scale-105 hover:bg-gray-300' :
-                                                        `bg-white  ${rfq?.status === "pending" && 'hover:scale-105 hover:bg-gray-200'}   `} 
+                                                              ${supplier?.winner === "winned" ? 'bg-gray-200  hover:bg-gray-300' : 'bg-white'} 
                                                               hover:shadow-lg `}
                                             >
                                                 <div>
                                                     {
-                                                        rfq?.status === "bid_comparison" && <CircleCheckbox
+                                                        rfq?.status === "quotation" && <CircleCheckbox
                                                             checked={isSelected(payloadItem.id, supplier)}
                                                         />
                                                     }
@@ -268,19 +268,6 @@ const BidComparisonView = () => {
                             <div className={'flex justify-end gap-1'}>
                                 {data.length > 0 && approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                             </div>
-
-                            {/*<div className={'flex justify-between mt-2'}>*/}
-                            {/*    <>*/}
-                            {/*        {approvalButtonsWrapper()}*/}
-                            {/*    </>*/}
-                            {/*    <SlideOver*/}
-                            {/*        showButton={isNeedApprove}*/}
-                            {/*        title="Approval Trail">*/}
-                            {/*        <TreeList*/}
-                            {/*            url={approval_url}*/}
-                            {/*        />*/}
-                            {/*    </SlideOver>*/}
-                            {/*</div>*/}
                         </MuiCardComponent>
                     </>
             }
