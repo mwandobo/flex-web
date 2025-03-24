@@ -78,29 +78,23 @@ const columns = [
         disablePadding: false,
         label: 'RFQ Name',
     },
-    // {
-    //     id: 'supplier_name',
-    //     numeric: false,
-    //     disablePadding: false,
-    //     label: 'Supplier',
-    // },
     {
-        id: 'quotation_name',
+        id: 'supplier_name',
         numeric: false,
         disablePadding: false,
-        label: 'Quotation',
+        label: 'Supplier',
+    },
+    {
+        id: 'customer_name',
+        numeric: false,
+        disablePadding: false,
+        label: 'Customer',
     },
     {
         id: 'paid_amount',
         numeric: false,
         disablePadding: false,
         label: 'Paid Amount',
-    },
-    {
-        id: 'remaining_amount',
-        numeric: false,
-        disablePadding: false,
-        label: 'Remaining Amount',
     },
     {
         id: 'amount',

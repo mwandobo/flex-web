@@ -127,7 +127,7 @@ const InvoiceView = () => {
                                         {label: 'Invoice Type', value: capitalizeFirstWord(data?.type)},
                                         {label: 'Purchase Order Code', value: data?.formatted_code},
                                         {label: 'RFQ Code', value: data?.rfq_name},
-                                        {label: data?.supplier_name ? 'Supplier' : 'Customer', value: data?.supplier_name || data?.customer_name},
+                                        {label: data?.type === 'external' ? 'Supplier' : 'Customer', value: data?.type === 'external' ? data?.supplier_name : data?.customer_name},
                                         {label: 'Quotation Code', value: data?.quotation_name},
                                         {label: 'Payment Method', value: data?.quotation?.payment_method},
                                         {label: 'Paid Amount', value: moneyFormater({amount: data?.paid_amount})},
