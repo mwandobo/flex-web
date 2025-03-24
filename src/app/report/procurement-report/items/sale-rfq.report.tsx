@@ -12,7 +12,6 @@ import moneyFormater from "@/components/moneyFormater";
 
 const columns = [
     {header: 'Rfq Code', accessor: 'formatted_code'},
-    {header: 'Requisition Code', accessor: 'requisition_request_name'},
     {header: 'Payment Method', accessor: 'payment_method'},
     {header: 'Evaluation Method', accessor: 'evaluation_method'},
     {header: 'Decision Timeline', accessor: 'decision_timeline', },
@@ -29,13 +28,13 @@ const subTableColumns: TableColumn[] = [
 ];
 
 
-function RfqReport() {
+function SaleRfqReport() {
     const [data, setData] = useState<any>([])
     const [total, setTotal] = useState(0)
     const [loading, setLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const token = getValueFromLocalStorage('token')
-    const url = 'report/procurement/rfq'
+    const url = 'report/procurement/sale-rfq'
 
     useEffect(() => {
         const fetchData = async () => {
@@ -68,7 +67,7 @@ function RfqReport() {
                 subTableColumns={subTableColumns}
                 subTableAccessor="items"
             />
-            <div className={'w-full flex justify-end mt-2'}>
+            <div className={'w-full flex justify-end mt-2 mb-2'}>
                 <div>
                     <h3 className={'text-xs font-medium'}>Summary</h3>
                     <div className={'grid grid-cols-2 gap-2 text-xs font-medium'}>
@@ -110,4 +109,4 @@ function RfqReport() {
     )
 }
 
-export default RfqReport
+export default SaleRfqReport

@@ -5,7 +5,6 @@ import React, {useEffect} from "react";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import RequisitionRequestReport from "@/app/report/procurement-report/items/requisition-request.report";
-import RfqReport from "@/app/report/procurement-report/items/rfq.report";
 import PurchaseOrderReport from "@/app/report/procurement-report/items/purchase-order.report";
 import InternalInvoiceReport from "@/app/report/procurement-report/items/internal-invoice.report";
 import ExternalInvoiceReport from "@/app/report/procurement-report/items/external-invoice.report";
@@ -22,6 +21,8 @@ import InspectionReport from "@/app/report/procurement-report/items/inspection.r
 import ResourceRequestReport from "@/app/report/procurement-report/items/resource-request.report";
 import FundRequestReport from "@/app/report/procurement-report/items/fund-request.report";
 import EquipmentReport from "@/app/report/procurement-report/items/equipment.report";
+import PurchaseRfqReport from "@/app/report/procurement-report/items/purchase-rfq.report";
+import SaleRfqReport from "@/app/report/procurement-report/items/sale-rfq.report";
 
 const ProcurementItems = [
     {
@@ -30,9 +31,14 @@ const ProcurementItems = [
         item: <RequisitionRequestReport/>,
     },
     {
-        name: 'rfq',
-        title: 'Request For Quotation',
-        item: <RfqReport/>,
+        name: 'purchase-rfq',
+        title: 'Purchase Request For Quotation',
+        item: <PurchaseRfqReport/>,
+    },
+    {
+        name: 'purchase-quotation',
+        title: 'Purchase Quotation',
+        item: <PurchaseRfqReport/>,
     },
     {
         name: 'purchase-order',
@@ -40,24 +46,34 @@ const ProcurementItems = [
         item: <PurchaseOrderReport/>,
     },
     {
-        name: 'internal-invoice',
-        title: 'Internal Invoice (purchase)',
-        item: <InternalInvoiceReport/>,
+        name: 'external-invoice',
+        title: 'Purchase Invoice (External)',
+        item: <ExternalInvoiceReport/>,
     },
     {
-        name: 'external-invoice',
-        title: 'External Invoice (sale)',
-        item: <ExternalInvoiceReport/>,
+        name: 'purchase-order',
+        title: 'Purchase Order',
+        item: <PurchaseOrderReport/>,
+    },
+    {
+        name: 'sale-rfq',
+        title: 'Sale Request For Quotation',
+        item: <SaleRfqReport/>,
+    },
+    {
+        name: 'sale-order',
+        title: 'Sale Order',
+        item: <OrderReport/>,
+    },
+    {
+        name: 'internal-invoice',
+        title: 'Sale Invoice (internal)',
+        item: <InternalInvoiceReport/>,
     },
     {
         name: 'payment',
         title: 'Payments',
         item: <PaymentReport/>,
-    },
-    {
-        name: 'order',
-        title: 'Orders',
-        item: <OrderReport/>,
     },
     {
         name: 'item',
