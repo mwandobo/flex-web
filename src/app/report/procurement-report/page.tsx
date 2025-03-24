@@ -23,6 +23,7 @@ import FundRequestReport from "@/app/report/procurement-report/items/fund-reques
 import EquipmentReport from "@/app/report/procurement-report/items/equipment.report";
 import PurchaseRfqReport from "@/app/report/procurement-report/items/purchase-rfq.report";
 import SaleRfqReport from "@/app/report/procurement-report/items/sale-rfq.report";
+import PurchaseQuotationReport from "@/app/report/procurement-report/items/purchase-quotation.report";
 
 const ProcurementItems = [
     {
@@ -38,7 +39,7 @@ const ProcurementItems = [
     {
         name: 'purchase-quotation',
         title: 'Purchase Quotation',
-        item: <PurchaseRfqReport/>,
+        item: <PurchaseQuotationReport/>,
     },
     {
         name: 'purchase-order',
@@ -49,11 +50,6 @@ const ProcurementItems = [
         name: 'external-invoice',
         title: 'Purchase Invoice (External)',
         item: <ExternalInvoiceReport/>,
-    },
-    {
-        name: 'purchase-order',
-        title: 'Purchase Order',
-        item: <PurchaseOrderReport/>,
     },
     {
         name: 'sale-rfq',
