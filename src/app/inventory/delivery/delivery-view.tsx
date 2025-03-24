@@ -123,7 +123,8 @@ const DeliveryView = () => {
                                 <ViewCardComponent
                                     data={[
                                         {label: 'Delivery Code', value: data?.formatted_code},
-                                        {label: 'Purchase Order', value: data?.purchase_order_name},
+                                        {label: 'Delivery Type', value: data?.type === 'internal' ? 'Sale' : 'Purchase'},
+                                        {label:  data?.type === 'internal' ? 'Sale Order' : 'Purchase Order', value: data?.purchase_order_name},
                                         {label: 'Request For Quotation', value: data?.rfq_name},
                                         {label: data?.supplier_name ? 'Supplier' : 'Customer', value: data?.supplier_name || data?.customer_name},
                                         {label: 'Quotation', value: data?.quotation_name},

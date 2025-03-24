@@ -9,12 +9,25 @@ import {DELIVERY_APPROVAL_SLUG} from "@/utils/constant";
 
 const formInputs = [
     {
+        name: 'type',
+        type: 'select',
+        label: 'Order Type',
+        value: '',
+        optionsUrlData: `/invoices/types`,
+        optionDataKey: 'invoice-type',
+        control_for: 'invoice',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    },
+    {
         name: 'purchase_order_id',
         type: 'select',
-        label: 'Purchase Orders',
+        label: 'Purchase Order',
         value: '',
-        optionsUrlData: `/purchase-orders?approved=approved&status=invoice`,
+        optionsUrlData: `invoices/purchase-orders`,
         optionDataKey: 'rfq',
+        control: 'invoice',
         required: true,
         isError: false,
         errorMessage: ''
@@ -77,13 +90,6 @@ const columns = [
         label: 'Purchase Order ',
     },
     {
-        id: 'rfq_name',
-        numeric: false,
-        disablePadding: false,
-        label: 'Request For Quotation',
-    },
-
-    {
         id: 'quotation_name',
         numeric: false,
         disablePadding: false,
@@ -100,12 +106,6 @@ const columns = [
         numeric: false,
         disablePadding: false,
         label: 'Delivery Date',
-    },
-    {
-        id: 'delivery_address',
-        numeric: false,
-        disablePadding: false,
-        label: 'Delivery Address',
     },
     {
         id: 'status',
