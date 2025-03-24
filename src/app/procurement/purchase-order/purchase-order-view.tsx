@@ -16,7 +16,6 @@ import moneyFormater from "@/components/moneyFormater";
 import { PURCHASE_ORDER_APPROVAL_SLUG} from "@/utils/constant";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
-
 const PurchaseOrderView = () => {
 
     const [data, setData] = useState<any>([])
@@ -45,7 +44,9 @@ const PurchaseOrderView = () => {
     const onSave = async () => {
         try {
             const res = await get(`${url}/submit-draft`, token);
-            if (data && res.status === 200) {
+
+            console.log('await get(`${url}/submit-draft`, token);', res)
+            if (res.status === 200) {
                 setRefresh(!refresh);
             }
         } catch (error: any) {
