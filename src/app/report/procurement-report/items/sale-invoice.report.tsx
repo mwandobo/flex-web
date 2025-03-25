@@ -15,7 +15,7 @@ const columns = [
     {header: 'PO Code', accessor: 'purchase_order_name'},
     {header: 'Rfq Code', accessor: 'rfq_name'},
     {header: 'Quotation Code', accessor: 'quotation_name'},
-    {header: 'Supplier Name', accessor: 'supplier_name'},
+    {header: 'Customer Name', accessor: 'customer_name'},
     {header: 'Payments', accessor: 'payments', width: '20%'},
     {header: 'Paid Amount (Tzs)', accessor: 'paid_amount',  isAlignRight: true, isMoney: true},
     {header: 'Pending Amount (Tzs)', accessor: 'remaining_amount',  isAlignRight: true, isMoney: true},
@@ -29,15 +29,13 @@ const subTableColumns: TableColumn[] = [
     { header: 'Status', accessor: 'status'},
 ];
 
-
-
-function InternalInvoiceReport() {
+function SaleInvoiceReport() {
     const [data, setData] = useState<any>([])
     const [other, setOther] = useState<any>()
     const [loading, setLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const token = getValueFromLocalStorage('token')
-    const url = 'report/procurement/internal-invoice'
+    const url = 'report/procurement/external-invoice'
 
     useEffect(() => {
         const fetchData = async () => {
@@ -114,4 +112,4 @@ function InternalInvoiceReport() {
     )
 }
 
-export default InternalInvoiceReport
+export default SaleInvoiceReport

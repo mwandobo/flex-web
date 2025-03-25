@@ -129,8 +129,6 @@ function Invoice() {
         permission: permission,
         isApiV2:true,
         from: 'invoices',
-        isHideDelete: true,
-        isHideEdit: true,
         approval_slug: INVOICE_APPROVAL_SLUG,
         isFormData:true
     })

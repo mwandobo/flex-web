@@ -6,8 +6,8 @@ import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import RequisitionRequestReport from "@/app/report/procurement-report/items/requisition-request.report";
 import PurchaseOrderReport from "@/app/report/procurement-report/items/purchase-order.report";
-import InternalInvoiceReport from "@/app/report/procurement-report/items/internal-invoice.report";
-import ExternalInvoiceReport from "@/app/report/procurement-report/items/external-invoice.report";
+import PurchaseInvoiceReport from "@/app/report/procurement-report/items/purchase-invoice.report";
+import SaleInvoiceReport from "@/app/report/procurement-report/items/sale-invoice.report";
 import PaymentReport from "@/app/report/procurement-report/items/payment.report";
 import OrderReport from "@/app/report/procurement-report/items/order.report";
 import ServiceReport from "@/app/report/procurement-report/items/service.report";
@@ -49,7 +49,7 @@ const ProcurementItems = [
     {
         name: 'external-invoice',
         title: 'Purchase Invoice (External)',
-        item: <ExternalInvoiceReport/>,
+        item: <PurchaseInvoiceReport/>,
     },
     {
         name: 'sale-rfq',
@@ -64,7 +64,7 @@ const ProcurementItems = [
     {
         name: 'internal-invoice',
         title: 'Sale Invoice (internal)',
-        item: <InternalInvoiceReport/>,
+        item: <SaleInvoiceReport/>,
     },
     {
         name: 'payment',

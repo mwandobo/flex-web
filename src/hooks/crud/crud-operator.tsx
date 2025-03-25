@@ -132,13 +132,28 @@ export const useCrudOperator = (
             }
 
             // If 'from' is 'sale-quotation', set 'isRemoved: false' for 'sale_rfq_id' and 'item_ids'
-            if ((from === 'sale-quotation' || from === 'quotation') && (
-                item.name === 'sale_rfq_id' ||
-                item.name === 'item_ids' ||
-                item.name === 'request_for_quotation_id' ||
-                item.name === 'supplier_id'
-            )) {
+            if (  from === 'quotation' &&
+                (
+                    item.name === 'request_for_quotation_id' ||
+                    item.name === 'supplier_id'
+                )) {
                 return {...item, isRemoved: true};
+            }
+
+            if (  from === 'sale-quotation'    &&
+                (
+                    item.name === 'sale_rfq_id' ||
+                    item.name === 'item_ids'
+                )) {
+                return {...item, isRemoved: true};
+            }
+
+            if ( from === 'invoices' &&
+                (
+                    item.name === 'type' ||
+                    item.name === 'purchase_order_id'
+                )) {
+                return {...item, isRemoved: true,};
             }
 
             // Return the new item with updated value
@@ -150,6 +165,32 @@ export const useCrudOperator = (
 
     const clearFormForCreate = () => {
         const newModalBodyArray = modalBodyArray.map((item: any) => {
+
+            if (  from === 'quotation' &&
+                (
+                    item.name === 'request_for_quotation_id' ||
+                    item.name === 'supplier_id'
+                )) {
+                return {...item, isRemoved: false};
+            }
+
+            if (  from === 'sale-quotation'    &&
+                (
+                    item.name === 'sale_rfq_id' ||
+                    item.name === 'item_ids'
+                )) {
+                return {...item, isRemoved: false};
+            }
+
+            if ( from === 'invoices' &&
+                (
+                    item.name === 'type' ||
+                    item.name === 'purchase_order_id'
+                )) {
+                return {...item, isRemoved: false,};
+            }
+
+
             return {...item, value: ''};
         });
 
