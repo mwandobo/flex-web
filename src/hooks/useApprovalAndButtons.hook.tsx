@@ -88,6 +88,7 @@ export const useApprovalsAndButtonsHook = ({
             }, null);
 
             return {current_level, latestLevel, levels, previousLevel};
+
         }
         return {current_level: null, latestLevel: null, levels: [], previousLevel: null};
     };
@@ -101,17 +102,15 @@ export const useApprovalsAndButtonsHook = ({
                 setIsNeedApprove(true);
             }
 
+
             if (!parent || parent === viewedItem.from) {
                 if (!current_level) return;
-
                 try {
                     const approvedItemForCurrentLevel = await getApprovedItemByLevelId(current_level?.id);
-
                     if (approvedItemForCurrentLevel) {
                         setIsApproved(true);
                         setIsMyLevelApproved(true);
                         setApproveStatus(approvedItemForCurrentLevel.type);
-                        return;
                     }
 
                     if (previousLevel) {
@@ -129,6 +128,10 @@ export const useApprovalsAndButtonsHook = ({
 
             if (latestLevel) {
                 try {
+
+
+                    console.log('mappedApproval', mappedApproval)
+
                     const approvedItemForLatestLevel = await getApprovedItemByLevelId(latestLevel?.id);
                     if (approvedItemForLatestLevel) {
                         setIsLastLevel(true);
