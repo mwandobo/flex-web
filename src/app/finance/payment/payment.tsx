@@ -82,7 +82,7 @@ function Payment({invoice}: Props) {
             id: 'purchase_order_name',
             numeric: false,
             disablePadding: false,
-            label: 'Purchase Order',
+            label: 'PO/SO Order Code',
         },
         {
             id: 'amount',

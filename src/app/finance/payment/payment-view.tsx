@@ -134,7 +134,7 @@ const PaymentView = () => {
                                         {label: 'Invoice Code', value: data?.invoice_name},
                                         {label: 'Purchase Order Code', value: data?.purchase_order_name},
                                         {label: 'Quotation Code', value: data?.quotation_name},
-                                        {label: 'Supplier', value: data?.supplier_name},
+                                        {label: data?.supplier_id ? 'Supplier' : 'Customer', value: data?.supplier_id  ? data?.supplier_name : data?.customer_name},
                                         {label: 'Amount', value: data?.amount},
                                         {label: 'Description', value: data?.description},
                                         {label: 'Status', value: data?.status},

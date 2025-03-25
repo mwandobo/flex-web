@@ -9,7 +9,7 @@ import PurchaseOrderReport from "@/app/report/procurement-report/items/purchase-
 import PurchaseInvoiceReport from "@/app/report/procurement-report/items/purchase-invoice.report";
 import SaleInvoiceReport from "@/app/report/procurement-report/items/sale-invoice.report";
 import PaymentReport from "@/app/report/procurement-report/items/payment.report";
-import OrderReport from "@/app/report/procurement-report/items/order.report";
+import SaleOrderReport from "@/app/report/procurement-report/items/sale-order.report";
 import ServiceReport from "@/app/report/procurement-report/items/service.report";
 import SupplierReport from "@/app/report/procurement-report/items/supplier.report";
 import ItemReport from "@/app/report/procurement-report/items/item.report";
@@ -59,7 +59,7 @@ const ProcurementItems = [
     {
         name: 'sale-order',
         title: 'Sale Order',
-        item: <OrderReport/>,
+        item: <SaleOrderReport/>,
     },
     {
         name: 'internal-invoice',

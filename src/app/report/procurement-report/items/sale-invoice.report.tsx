@@ -12,7 +12,7 @@ import moneyFormater from "@/components/moneyFormater";
 
 const columns = [
     {header: 'Invoice Code', accessor: 'formatted_code'},
-    {header: 'PO Code', accessor: 'purchase_order_name'},
+    {header: 'SO Code', accessor: 'purchase_order_name'},
     {header: 'Rfq Code', accessor: 'rfq_name'},
     {header: 'Quotation Code', accessor: 'quotation_name'},
     {header: 'Customer Name', accessor: 'customer_name'},
@@ -35,7 +35,7 @@ function SaleInvoiceReport() {
     const [loading, setLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const token = getValueFromLocalStorage('token')
-    const url = 'report/procurement/external-invoice'
+    const url = 'report/procurement/sale-invoice'
 
     useEffect(() => {
         const fetchData = async () => {

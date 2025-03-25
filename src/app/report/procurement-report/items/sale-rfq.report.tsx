@@ -79,7 +79,6 @@ function SaleRfqReport() {
         </div>
     }
 
-
     return (
         <ProtectedRoute>
             <>

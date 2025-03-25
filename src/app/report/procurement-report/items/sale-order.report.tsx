@@ -28,14 +28,13 @@ const subTableColumns: TableColumn[] = [
     { header: 'Price (Tzs)', accessor: 'price' , isAlignRight: true, isMoney: true },
 ];
 
-
-function OrderReport() {
+function SaleOrderReport() {
     const [data, setData] = useState<any>([])
     const [total, setTotal] = useState(0)
     const [loading, setLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const token = getValueFromLocalStorage('token')
-    const url = 'report/procurement/order'
+    const url = 'report/procurement/sale-order'
 
     useEffect(() => {
         const fetchData = async () => {
@@ -58,8 +57,6 @@ function OrderReport() {
         fetchData()
     }, [refresh])
 
-
-
     const pageRender = () =>{
         return <div className={'mt-2'}>
             <CustomTable
@@ -79,7 +76,6 @@ function OrderReport() {
             </div>
         </div>
     }
-
 
     return (
         <ProtectedRoute>
@@ -104,10 +100,8 @@ function OrderReport() {
                     </>
                 }
             </>
-
-
         </ProtectedRoute>
     )
 }
 
-export default OrderReport
+export default SaleOrderReport
