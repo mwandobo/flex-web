@@ -167,6 +167,12 @@ const items: ISidebarItem[] = [
                 icon: FileDiff
             },
             {
+                name: 'Workshop Reports',
+                path: '/report/workshop-report',
+                permission: 'projects-list',
+                icon: FileDiff
+            },
+            {
                 name: 'Timesheet Reports',
                 path: '/report/timesheet',
                 permission: 'projects-list',
