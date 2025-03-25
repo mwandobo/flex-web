@@ -12,10 +12,10 @@ const formInputs = [
 
 const columns = [
     {
-        id: 'purchase_order_name',
+        id: 'sale_order_name',
         numeric: false,
         disablePadding: false,
-        label: 'Purchase Order',
+        label: 'Sale Order',
     },
     {
         id: 'name',
@@ -36,7 +36,7 @@ const columns = [
         label: 'Item Price',
     },
     {
-        id: 'rfq_quantity',
+        id: 'quantity',
         numeric: false,
         disablePadding: false,
         label: 'Item Quantity',
