@@ -2,7 +2,7 @@
 
 import {getValueFromLocalStorage, setValueLocalStorage} from '@/utils/actions/local-starage';
 import {get, post} from '@/utils/api';
-import React, {useState, useEffect, ReactNode} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import {ReusableButton} from "@/components/button/reusable-button";
 import CrudFormComponent from "@/components/forms/crud.form.component";
 import {capitalizeFirstWord} from "@/utils/actions/string-manipulations";
@@ -10,7 +10,6 @@ import Swal from "sweetalert2";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import SlideOver from "@/components/slide-over/slide-over.component";
 import TreeList from "@/components/list/tree-list.component";
-import {INVOICE_APPROVAL_SLUG} from "@/utils/constant";
 
 interface Props {
     approval_slug?: string;
@@ -20,11 +19,11 @@ interface Props {
 }
 
 export const useApprovalsAndButtonsHook = ({
-                                    approval_slug,
-                                    from,
+                                               approval_slug,
+                                               from,
                                                from_id,
                                                parent
-                                }: Props) => {
+                                           }: Props) => {
     const [isNeedApprove, setIsNeedApprove] = useState(false);
     const [isApproved, setIsApproved] = useState(false);
     const [isMyLevelApproved, setIsMyLevelApproved] = useState(false);
@@ -33,7 +32,7 @@ export const useApprovalsAndButtonsHook = ({
     const [refresh, setIsrefresh] = useState(false);
     const [approveStatus, setApproveStatus] = useState('');
     const [latestApproveStatus, setLatestApproveStatus] = useState('');
-    const { dispatch, state } = useGlobalContextHook()
+    const {dispatch, state} = useGlobalContextHook()
     const viewedItem = state.viewedItem
 
     const allSysApprovals = JSON.parse(getValueFromLocalStorage('sys_approvals'));
@@ -57,7 +56,7 @@ export const useApprovalsAndButtonsHook = ({
     const getApprovedItemByLevelId = async (level_id: number) => {
         const response = await get('approval/approved-items');
 
-        if(response.status === 200){
+        if (response.status === 200) {
             return response.data.data?.find(
                 (item: any) =>
                     Number(item.approval_level_id) === Number(level_id) &&
@@ -95,13 +94,12 @@ export const useApprovalsAndButtonsHook = ({
 
     useEffect(() => {
         const fetchApprovalData = async () => {
-            const { current_level, latestLevel, levels, previousLevel } = getApprovalLevel();
+            const {current_level, latestLevel, levels, previousLevel} = getApprovalLevel();
             const mappedApproval = getMappedApproval();
 
             if (mappedApproval && levels.length > 0) {
                 setIsNeedApprove(true);
             }
-
 
             if (!parent || parent === viewedItem.from) {
                 if (!current_level) return;
@@ -157,8 +155,8 @@ export const useApprovalsAndButtonsHook = ({
         };
 
         fetchApprovalData();
-    // }, [approval_slug]);
-}, [approval_slug, role, isApproved, refresh, getApprovalLevel, getMappedApproval, getApprovedItemByLevelId]);
+        // }, [approval_slug]);
+    }, [approval_slug, role, isApproved, refresh, getApprovalLevel, getMappedApproval, getApprovedItemByLevelId]);
 
     interface ApproveProps {
         approval_name?: string;
@@ -178,7 +176,7 @@ export const useApprovalsAndButtonsHook = ({
             const response = await post(approveUrl, body, token);
             if (response.status === 200) {
                 setIsrefresh(!refresh); // Trigger a re-render by toggling the refresh state
-                dispatch({ type: "UPDATE_VIEW_ITEM_REFRESH_AFTER_APPROVAL"})
+                dispatch({type: "UPDATE_VIEW_ITEM_REFRESH_AFTER_APPROVAL"})
             }
 
             return response;
@@ -230,11 +228,11 @@ export const useApprovalsAndButtonsHook = ({
         }
     }
 
-    interface ApprovalsAndButtonsProps{
+    interface ApprovalsAndButtonsProps {
         buttonBody?: ReactNode,
     }
 
-    const approvalsAndButtonsWrapper = ({buttonBody}: ApprovalsAndButtonsProps ) => {
+    const approvalsAndButtonsWrapper = ({buttonBody}: ApprovalsAndButtonsProps) => {
         return (
             <>
                 {isNeedApprove ? (
@@ -250,8 +248,6 @@ export const useApprovalsAndButtonsHook = ({
                                 </p>
                                 {buttonBody}
                             </div>
-
-
                         ) : (
                             <>
                                 {canApprove && !isMyLevelApproved ? (
@@ -302,14 +298,8 @@ export const useApprovalsAndButtonsHook = ({
                                         />
                                     </div>
                                 ) : <>
-                                    {/*{ isApproved ? <>{buttonBody}</> :*/}
-
                                     <p className='text-xs p-1 bg-gray-200'>Waiting For Approval</p>
-                                    {/*}*/}
-
                                 </>
-
-
                                 }
                             </>
                         )}
@@ -323,13 +313,8 @@ export const useApprovalsAndButtonsHook = ({
                             </SlideOver>
                         </div>
                     </>
-
-
                 ) : buttonBody
-
                 }
-
-
             </>
         );
     }

@@ -112,7 +112,7 @@ const SoldItemsView = () => {
         return <>
             <div className="flex gap-2 justify-end">
 
-                {data.order_item_status === 'pending' &&
+                {data.status === 'pending' &&
                     <>
                         <ReusableButton
                             name={'Update Cost Center'}
@@ -133,7 +133,6 @@ const SoldItemsView = () => {
             </div>
         </>
     }
-
 
     useEffect(() => {
         const fetchData = async () => {
