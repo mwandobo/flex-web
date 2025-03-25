@@ -6,12 +6,8 @@ import {checkPermissions} from '@/utils/actions/check-permissions'
 import React from 'react'
 import PageHeader from "@/components/header/page-header-v1";
 import {
-    COST_CENTER_APPROVAL_SLUG,
-    INVOICE_APPROVAL_SLUG,
-    SERVICES_APPROVAL_SLUG,
     WARRANTY_APPROVAL_SLUG
 } from "@/utils/constant";
-import {from} from "stylis";
 
 
 interface Props {
@@ -34,6 +30,7 @@ function Warranty({
                       is_warranted
                   }: Props) {
     const permission = 'warranties'
+
     const formInputs = [
         {
             name: 'name',
@@ -151,8 +148,8 @@ function Warranty({
         permission: permission,
         isApiV2: true,
         from: 'warranties',
-        isHideDelete: true,
-        isHideEdit: true,
+        isHideDelete: false,
+        isHideEdit: false,
         isHideShow: !!(from && from_id),
         approval_slug: WARRANTY_APPROVAL_SLUG,
         isFormData: true

@@ -30,6 +30,12 @@ const columns = [
         label: 'Item Category',
     },
     {
+        id: 'project_name',
+        numeric: false,
+        disablePadding: false,
+        label: 'Project Name',
+    },
+    {
         id: 'price',
         numeric: false,
         disablePadding: false,
@@ -67,6 +73,8 @@ function SoldItems() {
         state_properties: [],
         permission: permission,
         isApiV2:true,
+        isHideDelete:true,
+        isHideEdit: true,
         from: 'item',
         // approval_slug: ITEM_APPROVAL_SLUG
     })
@@ -81,7 +89,7 @@ function SoldItems() {
                             <PageHeader
                                 title={"Sold Items"}
                                 handleClick={handleClick}
-                                isShowAddButton={false}
+                                isShowAddButton={true}
                                />
                             {tabular()}
                             {createdForm()}

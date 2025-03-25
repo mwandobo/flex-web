@@ -163,22 +163,23 @@ const SoldItemsView = () => {
                     :
                     <>
                         <PageHeader
-                           title={'Item View'}
+                           title={'Sold Item View'}
                            isShowBackButton={true}
                         />
                         <MuiCardComponent>
                             <div className="mb-3">
                                 <ViewCardComponent
                                     data={[
-                                        {label: 'Purchase Order', value: data?.purchase_order_name},
+                                        {label: 'Sale Order', value: data?.sale_order_name},
                                         {label: 'Item Name', value: data?.name},
                                         {label: 'Item Category', value: data?.category_name},
-                                        {label: 'Quantity', value: data?.rfq_quantity},
+                                        {label: 'Project', value: data?.project_name},
+                                        {label: 'Quantity', value: data?.quantity},
                                         {label: 'Price', value: data?.price},
-                                        {label: 'Status', value: data?.order_item_status},
+                                        {label: 'Status', value: data?.status},
                                         {label: 'Warranty Status', value: data?.warrant_status},
                                     ]}
-                                    titleA={`Item`}
+                                    titleA={`Sold Item`}
                                     titleB={` ${data?.name} `}
                                     OptionalElement={approvalsAndButtonsWrapper({buttonBody:buttonsBody()})}
                                 />
