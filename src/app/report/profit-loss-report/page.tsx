@@ -15,13 +15,15 @@ const columns = [
     {header: 'Total Expenses (Tzs)', accessor: 'total_expense',  isAlignRight: true, isMoney: true},
     {header: 'Total Asset Value (Tzs)', accessor: 'total_asset_value', isAlignRight: true, isMoney: true },
     {header: 'Total Sale (Tzs)', accessor: 'total_sale', isAlignRight: true, isMoney: true},
-    {header: 'Profit/Loss (Budget)', accessor: 'profit_budget',isAlignRight: true, isMoney: true },
-    {header: 'Profit/Loss (Expense)', accessor: 'profit_expense', isAlignRight: true, isMoney: true},
+    {header: 'Profit/Loss (Budget)', accessor: 'profit_loss_budget',isAlignRight: true, isMoney: true },
+    {header: 'Budget Status', accessor: 'profit_loss_budget_status'},
+    {header: 'Profit/Loss (Expense)', accessor: 'profit_loss_expense', isAlignRight: true, isMoney: true},
+    {header: 'Expense Status', accessor: 'profit_loss_expense_status'},
 ];
 
 function ProfitLoss() {
     const [data, setData] = useState<any>([])
-    const [total, setTotal] = useState(0)
+    const [metadata, setMetaData] = useState<any>()
     const [loading, setLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const token = getValueFromLocalStorage('token')
@@ -35,7 +37,7 @@ function ProfitLoss() {
 
                 if ( res.status === 200) {
                     setData(res.data.data.data)
-                    // setTotal(res.data.data.total_amount)
+                    setMetaData(res.data.data.metadata)
                     setLoading(false)
                 }
 
@@ -54,15 +56,21 @@ function ProfitLoss() {
                 columns={columns}
                 data={data}
             />
-            {/*<div className={'w-full flex justify-end mt-2'}>*/}
-            {/*    <div>*/}
-            {/*        <h3 className={'text-xs font-medium'}>Summary</h3>*/}
-            {/*        <div className={'grid grid-cols-2 gap-2 text-xs font-medium'}>*/}
-            {/*            <p className={'border-r border-gray-400 pr-2'}> Total Amount:</p>*/}
-            {/*            <p>{moneyFormater({amount:total, isShowCurrency: true})}</p>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
+            <div className={'w-full flex justify-end mt-2'}>
+                <div>
+                    <h3 className={'text-xs font-medium'}>Summary</h3>
+                    <div className={'grid grid-cols-2 gap-2 text-xs font-medium'}>
+                        <p className={'border-r border-gray-400 pr-2'}> Total Budget:</p>
+                        <p>{moneyFormater({amount: metadata?.total_budget, isShowCurrency: true})}</p>
+                        <p className={'border-r border-gray-400 pr-2'}> Total Expense:</p>
+                        <p>{moneyFormater({amount: metadata?.total_expense, isShowCurrency: true})}</p>
+                        <p className={'border-r border-gray-400 pr-2'}> Total Asset Value:</p>
+                        <p>{moneyFormater({amount: metadata?.total_asset, isShowCurrency: true})}</p>
+                        <p className={'border-r border-gray-400 pr-2'}> Total Sale:</p>
+                        <p>{moneyFormater({amount: metadata?.total_sale, isShowCurrency: true})}</p>
+                    </div>
+                </div>
+            </div>
         </div>
     }
 
@@ -74,7 +82,7 @@ function ProfitLoss() {
                     :
                     <>
                         <PageHeader
-                            subHeader={'Service Report'}
+                            subHeader={'Profit/Loss Report'}
                             isShowPage={true}
                             isDownload={true}
                             ButtonDownloadComponent={
