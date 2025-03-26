@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {CheckCircle2,} from "lucide-react";
+import {Banknote, CheckCircle2,} from "lucide-react";
 import PurchaseOrderItems from "@/app/procurement/purchase-order/purchase-order-items";
 import moneyFormater from "@/components/moneyFormater";
 import { PURCHASE_ORDER_APPROVAL_SLUG} from "@/utils/constant";
@@ -91,7 +91,7 @@ const PurchaseOrderView = () => {
         showConfirmationModal({
             title: 'Are You Sure?',
             text: `Are You Sure You Want To Update Cost Center for Purchase Order Code: ${data.formatted_code}?`,
-            onConfirm: () => onFormSave(`purchase-orders/${data?.order_item_id}/update-cost-center`),  // Action to perform on confirmation
+            onConfirm: () => onFormSave(`purchase-orders/${data?.id}/update-cost-center`),  // Action to perform on confirmation
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
     };
@@ -135,6 +135,25 @@ const PurchaseOrderView = () => {
                         <CheckCircle2 size={13}/>
                     </ReusableButton>
             }
+
+            {data.status === 'paid' && data.is_cost_center_updated === 'pending' &&
+                <>
+                    <ReusableButton
+                        name={'Update Cost Center'}
+                        onClick={() => toggleModal()}
+                        rounded={'md'}
+                        padding={'p-3'}
+                        shadow={'shadow-md'}
+                        bg_color={'bg-gray-50'}
+                        hover={'hover:bg-gray-200 hover:border-gray-400'}
+                        hover_text={'hover:text-gray-900 hover:font-semibold'}
+                        border={'border border-gray-300'}
+                        text_color={'text-gray-700'}
+                    >
+                        <Banknote size={13}/>
+                    </ReusableButton>
+                </>
+            }
         </>
     }
 
@@ -166,6 +185,7 @@ const PurchaseOrderView = () => {
                                         },
                                         {label: 'Delivery Time', value: data?.quotation?.delivery_time},
                                         {label: 'Status', value: data?.status},
+                                        data.is_cost_center_updated === 'cost_center' && {label: 'Cost Center Status', value: 'Updated'}  ,
                                         {label: 'Terms and Conditions', value: data?.quotation?.terms_and_conditions},
 
                                     ]}
