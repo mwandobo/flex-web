@@ -18,6 +18,7 @@ import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
 import PopupModal from "@/components/modal/popup-modal";
 import MuiSelect from "@/components/inputs/mui-select";
+import Swal from "sweetalert2";
 const PurchaseOrderView = () => {
 
     const [data, setData] = useState<any>([])
@@ -61,6 +62,11 @@ const PurchaseOrderView = () => {
                 setRefresh(!refresh);
             }
         } catch (error: any) {
+            Swal.fire({
+                title: 'Error Occurred!',
+                text: error?.response?.data?.message,
+                icon: 'error',
+            }).then(() => setLoading(false))
             console.log(error);
         }
     };
@@ -82,6 +88,12 @@ const PurchaseOrderView = () => {
                 setIsModalOpen(false)
             }
         } catch (error: any) {
+            Swal.fire({
+                title: 'Error Occurred!',
+                text: error?.response?.data?.message,
+                icon: 'error',
+            }).then(() => setLoading(false))
+
             console.log(error);
         }
     };
@@ -136,7 +148,7 @@ const PurchaseOrderView = () => {
                     </ReusableButton>
             }
 
-            {data.status === 'paid' && data.is_cost_center_updated === 'pending' &&
+                {data.status === 'paid' && data.is_cost_center_updated === 'pending' &&
                 <>
                     <ReusableButton
                         name={'Update Cost Center'}
@@ -213,7 +225,7 @@ const PurchaseOrderView = () => {
                                             handleChange={handleInputChange}
                                             from={'cost_center_id'}
                                             label={'Select Cost Center'}
-                                            optionsUrlData={'cost-centers'}
+                                            optionsUrlData={'cost-centers?status=active'}
                                             optionDataKey={'departments'}
                                             value={cost_center_id}
                                             error={''}
