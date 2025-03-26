@@ -4,7 +4,7 @@ import ProtectedRoute from "@/components/authentication/protected-route";
 import MuiCardComponent from "@/components/card/mui-card.component";
 import ViewCardComponent from "@/components/card/view.card.component";
 import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
-import { get } from "@/utils/api";
+import {get, post} from "@/utils/api";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
@@ -16,6 +16,8 @@ import moneyFormater from "@/components/moneyFormater";
 import { PURCHASE_ORDER_APPROVAL_SLUG} from "@/utils/constant";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
+import PopupModal from "@/components/modal/popup-modal";
+import MuiSelect from "@/components/inputs/mui-select";
 const PurchaseOrderView = () => {
 
     const [data, setData] = useState<any>([])
@@ -27,6 +29,17 @@ const PurchaseOrderView = () => {
     const {state, dispatch} = useGlobalContextHook()
     const {selectedSubSidebarItem: selected, viewedItem} = state;
     const {id, from: viewFrom} = viewedItem;
+    const [cost_center_id, setCostCenterId] = useState('')
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const toggleModal = (type?: string) => {
+        setIsModalOpen(!isModalOpen);
+    }
+
+    const handleInputChange = (e: any, from?: any) => {
+        if (from === 'cost_center_id') {
+            setCostCenterId(e.target.value)
+        }
+    }
 
     const url = `purchase-orders/${id}`
     const navigateToLogin = () => {
@@ -41,11 +54,9 @@ const PurchaseOrderView = () => {
         from_id: id
     })
 
-    const onSave = async () => {
+    const onSave = async (url: string) => {
         try {
-            const res = await get(`${url}/submit-draft`, token);
-
-            console.log('await get(`${url}/submit-draft`, token);', res)
+            const res = await get(url, token);
             if (res.status === 200) {
                 setRefresh(!refresh);
             }
@@ -58,7 +69,29 @@ const PurchaseOrderView = () => {
         showConfirmationModal({
             title: 'Are You Sure?',
             text: `Are You Sure You Want To Submit Purchase Order Code: ${data.formatted_code}?`,
-            onConfirm: onSave,  // Action to perform on confirmation
+            onConfirm:() => onSave(`${url}/submit-draft`),  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
+
+    const onFormSave = async (path: string) => {
+        try {
+            const  res = await post(path,{cost_center_id}, token);
+            if ( res.status === 200) {
+                setRefresh(!refresh);
+                setIsModalOpen(false)
+            }
+        } catch (error: any) {
+            console.log(error);
+        }
+    };
+
+    const handleFormSubmit = ( event?: any) => {
+        event?.preventDefault();  // Prevents page reload
+        showConfirmationModal({
+            title: 'Are You Sure?',
+            text: `Are You Sure You Want To Update Cost Center for Purchase Order Code: ${data.formatted_code}?`,
+            onConfirm: () => onFormSave(`purchase-orders/${data?.order_item_id}/update-cost-center`),  // Action to perform on confirmation
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
     };
@@ -87,8 +120,6 @@ const PurchaseOrderView = () => {
     const buttonsBody = () => {
         return <>
             {data?.status === 'pending' &&
-
-
                     <ReusableButton
                         name={'Submit Purchase Order'}
                         onClick={() => handleSubmit()}
@@ -148,6 +179,50 @@ const PurchaseOrderView = () => {
                                 <PurchaseOrderItems purchase_order_id={id}/>
                             </div>
                         </MuiCardComponent>
+                        <PopupModal
+                            isOpen={isModalOpen}
+                            onSaveButtonName={'Save'}
+                            onClose={toggleModal}
+                            isDisabled={false}
+                            title={"Cost Center"}
+                        >
+                            <form onSubmit={(event) => handleFormSubmit( event)}>
+                                {
+                                    <>
+                                        <MuiSelect
+                                            handleChange={handleInputChange}
+                                            from={'cost_center_id'}
+                                            label={'Select Cost Center'}
+                                            optionsUrlData={'cost-centers'}
+                                            optionDataKey={'departments'}
+                                            value={cost_center_id}
+                                            error={''}
+                                            isDisabled={false}
+                                            isRequired={true}
+                                        />
+
+                                    </>
+                                }
+
+                                <div className={'flex gap-2 justify-end'}>
+                                    <ReusableButton
+                                        name={'Submit '}
+                                        type='submit'
+                                        rounded={'md'}
+                                        padding={'p-3'}
+                                        shadow={'shadow-md'}
+                                        bg_color={'bg-gray-50'}
+                                        hover={'hover:bg-gray-200 hover:border-gray-400'}
+                                        hover_text={'hover:text-gray-900 hover:font-semibold'}
+                                        border={'border border-gray-300'}
+                                        text_color={'text-gray-700'}
+                                    >
+                                        <CheckCircle2 size={13}/>
+                                    </ReusableButton>
+                                </div>
+
+                            </form>
+                        </PopupModal>
                     </>
             }
         </ProtectedRoute>

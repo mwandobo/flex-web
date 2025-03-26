@@ -29,7 +29,6 @@ const SoldItemsView = () => {
 
 
     //modal
-
     const [cost_center_id, setCostCenterId] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const toggleModal = (type?: string) => {
@@ -42,12 +41,11 @@ const SoldItemsView = () => {
         }
     }
 
-
     const {state,} = useGlobalContextHook()
     const { viewedItem} = state;
     const {id,} = viewedItem;
 
-    const url = `purchase-orders/sold-items/${id}`
+    const url = `sale-orders/sold-items/${id}`
 
     const navigateToLogin = () => {
         return router.push('/login')
@@ -102,8 +100,8 @@ const SoldItemsView = () => {
         event?.preventDefault();  // Prevents page reload
         showConfirmationModal({
             title: 'Are You Sure?',
-            text: `Are You Sure You Want To Submit Delivery Named: ${data.name}?`,
-            onConfirm: () => onSave(`purchase-orders/sold-items/${data?.order_item_id}/update-cost-center`),  // Action to perform on confirmation
+            text: `Are You Sure You Want To Update Cost Center for Sold Item: ${data.name}?`,
+            onConfirm: () => onSave(`sale-orders/sold-items/${data?.order_item_id}/update-cost-center`),  // Action to perform on confirmation
             onCancel: () => console.log('User canceled the action'), // Optional cancel action
         });
     };
@@ -191,7 +189,7 @@ const SoldItemsView = () => {
                             onSaveButtonName={'Save'}
                             onClose={toggleModal}
                             isDisabled={false}
-                            title={"Deliverable"}
+                            title={"Cost Center"}
                         >
                             <form onSubmit={(event) => handleSubmit( event)}>
                                 {

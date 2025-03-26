@@ -67,7 +67,7 @@ function SoldItems() {
     } = usePageData({
         columns: columns,
         formInputs: formInputs,
-        url: 'purchase-orders/sold-items',
+        url: 'sale-orders/sold-items',
         modalTitle: 'Item',
         viewUrl: '/inventory/items-categories/',
         state_properties: [],
