@@ -18,6 +18,7 @@ import {Banknote, CheckCircle2} from "lucide-react";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import PopupModal from "@/components/modal/popup-modal";
 import MuiSelect from "@/components/inputs/mui-select";
+import Swal from "sweetalert2";
 
 const SoldItemsView = () => {
 
@@ -26,7 +27,6 @@ const SoldItemsView = () => {
     const [refresh, setRefresh] = useState(false)
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
-
 
     //modal
     const [cost_center_id, setCostCenterId] = useState('')
@@ -92,6 +92,11 @@ const SoldItemsView = () => {
                 setIsModalOpen(false)
             }
         } catch (error: any) {
+            Swal.fire({
+                title: 'Error Occurred!',
+                text: error?.response?.data?.message,
+                icon: 'error',
+            }).then(() => setLoading(false))
             console.log(error);
         }
     };
@@ -198,7 +203,7 @@ const SoldItemsView = () => {
                                             handleChange={handleInputChange}
                                             from={'cost_center_id'}
                                             label={'Select Cost Center'}
-                                            optionsUrlData={'cost-centers'}
+                                            optionsUrlData={'cost-centers?status=active'}
                                             optionDataKey={'departments'}
                                             value={cost_center_id}
                                             error={''}
