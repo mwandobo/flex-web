@@ -155,6 +155,12 @@ const items: ISidebarItem[] = [
                 icon: FileBox
             },
             {
+                name: 'Project Report',
+                path: '/report/project-report',
+                permission: 'projects-list',
+                icon: Proportions
+            },
+            {
                 name: 'Profit/Loss Report',
                 path: '/report/profit-loss-report',
                 permission: 'projects-list',
