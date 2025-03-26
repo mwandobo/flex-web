@@ -11,8 +11,8 @@ import moneyFormater from "@/components/moneyFormater";
 import {TableColumn} from "@/components/tables/normal-table";
 
 const columns = [
-    {header: 'Inspection Code', accessor: 'formatted_code'},
-    {header: 'Inspection Type', accessor: 'inspection_type'},
+    {header: 'Repair Code', accessor: 'formatted_code'},
+    {header: 'Repair Type', accessor: 'maintenance_type'},
     {header: 'Item Type', accessor: 'formatted_item_type'},
     {header: 'Item Name', accessor: 'maintenance_item_name'},
     {header: 'Inspection Cost', accessor: 'amount', isAlignRight: true, isMoney: true},
@@ -21,7 +21,7 @@ const columns = [
     {header: 'Status', accessor: 'status'},
 ];
 
-function MaintenanceReport() {
+function RepairReport() {
     const [data, setData] = useState<any>([])
     const [metadata, setMetadata] = useState<any>()
     const [loading, setLoading] = useState(false)
@@ -61,7 +61,7 @@ function MaintenanceReport() {
                 <div>
                     <h3 className={'text-xs font-medium'}>Summary</h3>
                     <div className={'grid grid-cols-2 gap-2 text-xs font-medium'}>
-                        <p className={'border-r border-gray-400 pr-2'}> Total Maintenance Cost:</p>
+                        <p className={'border-r border-gray-400 pr-2'}> Total Repair Cost:</p>
                         <p>{moneyFormater({amount: metadata?.total, isShowCurrency: true})}</p>
                     </div>
                 </div>
@@ -76,7 +76,7 @@ function MaintenanceReport() {
                     :
                     <>
                         <PageHeader
-                            subHeader={'Inspections Report'}
+                            subHeader={'Repair Report'}
                             isShowPage={true}
                             isDownload={true}
                             ButtonDownloadComponent={
@@ -95,4 +95,4 @@ function MaintenanceReport() {
     )
 }
 
-export default MaintenanceReport
+export default RepairReport

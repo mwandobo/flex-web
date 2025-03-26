@@ -76,7 +76,7 @@ function MaintenanceReport() {
                     :
                     <>
                         <PageHeader
-                            subHeader={'Inspections Report'}
+                            subHeader={'Maintenance Report'}
                             isShowPage={true}
                             isDownload={true}
                             ButtonDownloadComponent={

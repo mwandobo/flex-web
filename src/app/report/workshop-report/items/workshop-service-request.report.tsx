@@ -11,14 +11,11 @@ import CustomTable from "@/components/tables/flexible-normal-table";
 import moneyFormater from "@/components/moneyFormater";
 
 const columns = [
-    {header: 'PO Code', accessor: 'formatted_code'},
-    {header: 'Rfq Code', accessor: 'rfq_name'},
-    {header: 'Quotation Code', accessor: 'quotation_name'},
-    {header: 'Supplier Name', accessor: 'supplier_name'},
-    {header: 'Payment Method', accessor: 'payment_method'},
-    {header: 'Delivery Time', accessor: 'delivery_time'},
-    {header: 'Items', accessor: 'bids', width: "23%"},
-    {header: 'Amount (Tzs)', accessor: 'amount',  isAlignRight: true, isMoney: true},
+    {header: 'Workshop Request Code', accessor: 'formatted_code'},
+    {header: 'Service Type', accessor: 'service_request_type'},
+    {header: 'Item Name', accessor: 'item_name'},
+    {header: 'Cost', accessor: 'amount'},
+    {header: 'Warranty Status', accessor: 'warranty_status'},
     {header: 'Status', accessor: 'status'},
 ];
 
@@ -31,11 +28,11 @@ const subTableColumns: TableColumn[] = [
 
 function WorkshopServiceRequestReport() {
     const [data, setData] = useState<any>([])
-    const [total, setTotal] = useState(0)
+    const [metadata, setMetadata] = useState<any>()
     const [loading, setLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const token = getValueFromLocalStorage('token')
-    const url = 'report/procurement/purchase-order'
+    const url = 'report/workshop/workshop-service-request'
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,7 +42,7 @@ function WorkshopServiceRequestReport() {
 
                 if ( res.status === 200) {
                     setData(res.data.data.data)
-                    setTotal(res.data.data.total)
+                    setMetadata(res.data.data.metadata)
                     setLoading(false)
                 }
 
@@ -73,7 +70,7 @@ function WorkshopServiceRequestReport() {
                     <h3 className={'text-xs font-medium'}>Summary</h3>
                     <div className={'grid grid-cols-2 gap-2 text-xs font-medium'}>
                         <p className={'border-r border-gray-400 pr-2'}> Total Amount:</p>
-                        <p>{moneyFormater({amount:total, isShowCurrency: true})}</p>
+                        <p>{moneyFormater({amount:metadata?.total, isShowCurrency: true})}</p>
                     </div>
                 </div>
             </div>
