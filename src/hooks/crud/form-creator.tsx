@@ -216,37 +216,6 @@ export const useCrudFormCreator = ({
         });
     };
 
-    const sideUpdatePayloadMaintenanceType = (value?: string) => {
-        return formInputs?.map((input) => {
-            if (value === 'internal') {
-                if (input.name === 'from') {
-                    return {...input, isRemoved: false}
-                }
-                if (input.name === 'from_id') {
-                    return {...input, isRemoved: false}
-                }
-                if (input.name === 'workshop_service_id') {
-                    return {...input, isRemoved: true}
-                }
-
-                return input
-            }
-            if (value === 'external') {
-                if (input.name === 'from') {
-                    return {...input, isRemoved: true}
-                }
-                if (input.name === 'from_id') {
-                    return {...input, isRemoved: true}
-                }
-                if (input.name === 'workshop_service_id') {
-                    return {...input, isRemoved: false}
-                }
-                return input
-            }
-            return input
-        });
-    };
-
     const sideUpdatePayloadResource = (value?: string) => {
         return formInputs?.map((input) => {
             switch (Number(value)) {
@@ -331,6 +300,11 @@ export const useCrudFormCreator = ({
             newfoundInputs = sideUpdatePayload(foundInput, value); // Update inputs for sponsors
         }
 
+        if (control_for === 'maintenance_items') {
+            const foundInput = formInputs.find(item => item.control === 'maintenance_items');
+            newfoundInputs = sideUpdatePayload(foundInput, value); // Update inputs for sponsors
+        }
+
         if (control_for === 'sale-quotation-item') {
             const foundInput = newfoundInputs.find(item => item.control === 'sale-quotation-item'); // Update formInputs copy
             foundInput.optionsUrlData = `sale-rfq/${value}/items-for-select`;
@@ -379,9 +353,7 @@ export const useCrudFormCreator = ({
             newfoundInputs = sideUpdatePayloadTechnicianType(value); // Update inputs for sponsors
         }
 
-        if (control_for === 'maintenance_items') {
-            newfoundInputs = sideUpdatePayloadMaintenanceType(value); // Update inputs for sponsors
-        }
+
 
         if (control_for === 'resource') {
             newfoundInputs = sideUpdatePayloadResource(value); // Update inputs for sponsors

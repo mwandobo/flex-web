@@ -20,45 +20,18 @@ const formInputs = [
         errorMessage: '',
         control_for: 'maintenance_items'
     },
-
-    {
-        name: 'from',
-        type: 'select-local',
-        label: 'Maintenance For',
-        value: '',
-        optionsUrlData: [{label: 'Item', value: 'item'},{label: 'Equipment', value: 'equipment'}],
-        optionDataKey: 'departments',
-        required: true,
-        isError: false,
-        isRemoved: true,
-        errorMessage: '',
-        control_for: 'from_id'
-    },
-    {
-        name: 'from_id',
-        type: 'select',
-        label: 'Equipment',
-        value: '',
-        optionsUrlData: 'maintenance/items',
-        optionDataKey: 'departments',
-        required: true,
-        isError: false,
-        isRemoved: true,
-        errorMessage: '',
-        control: 'from_id'
-    },
     {
         name: 'workshop_service_id',
         type: 'select',
         label: 'Workshop Service Request',
         value: '',
-        optionsUrlData: 'workshop-service',
+        optionsUrlData: 'workshop-service?fetch_all=no_all',
         optionDataKey: 'workshop-service-v1',
         required: true,
         isError: false,
-        isRemoved: true,
+        isRemoved: false,
         errorMessage: '',
-        control: 'from_id'
+        control: 'maintenance_items'
     },
     {
         name: 'technician_type',
@@ -120,6 +93,12 @@ const columns = [
         numeric: false,
         disablePadding: false,
         label: 'Maintenance Code',
+    },
+    {
+        id: 'workshop_service_request_name',
+        numeric: false,
+        disablePadding: false,
+        label: 'Workshop Service',
     },
     {
         id: 'maintenance_type',

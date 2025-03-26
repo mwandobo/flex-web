@@ -11,30 +11,6 @@ import {
 
 const formInputs = [
     {
-        name: 'from',
-        type: 'select-local',
-        label: 'Repair For',
-        value: '',
-        optionsUrlData: [{label: 'Item', value: 'item'},{label: 'Equipment', value: 'equipment'}],
-        optionDataKey: 'departments',
-        required: true,
-        isError: false,
-        errorMessage: '',
-        control_for: 'from_id'
-    },
-    {
-        name: 'from_id',
-        type: 'select',
-        label: 'Equipment',
-        value: '',
-        optionsUrlData: 'maintenance/items',
-        optionDataKey: 'departments',
-        required: true,
-        isError: false,
-        errorMessage: '',
-        control: 'from_id'
-    },
-    {
         name: 'maintenance_type',
         type: 'select-local',
         label: 'Repair Type',
@@ -45,6 +21,31 @@ const formInputs = [
         isError: false,
         errorMessage: '',
         control_for: 'maintenance_items'
+    },
+    {
+        name: 'workshop_service_id',
+        type: 'select',
+        label: 'Workshop Service Request',
+        value: '',
+        optionsUrlData: 'workshop-service?fetch_all=no_all',
+        optionDataKey: 'workshop-service-v1',
+        required: true,
+        isError: false,
+        isRemoved: false,
+        errorMessage: '',
+        control: 'maintenance_items'
+    },
+    {
+        name: 'technician_type',
+        type: 'select-local',
+        label: 'Technician Type',
+        value: '',
+        optionsUrlData: [{label: 'Internal', value: 'internal'},{label: 'External', value: 'external'}],
+        optionDataKey: 'departments',
+        required: true,
+        isError: false,
+        errorMessage: '',
+        control_for: 'technician_items'
     },
     {
         name: 'name',
@@ -94,6 +95,12 @@ const columns = [
         numeric: false,
         disablePadding: false,
         label: 'Repair Code',
+    },
+    {
+        id: 'workshop_service_request_name',
+        numeric: false,
+        disablePadding: false,
+        label: 'Workshop Service',
     },
     {
         id: 'from',

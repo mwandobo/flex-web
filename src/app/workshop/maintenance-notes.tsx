@@ -8,14 +8,23 @@ import PageHeader from "@/components/header/page-header-v1";
 
 const formInputs = [
     {
-        name: 'delivery_quantity',
-        type: 'text',
-        label: 'Delivery Quantity',
+        name: 'notes',
+        type: 'textArea',
+        label: 'Description',
         value: '',
         required: true,
         isError: false,
         errorMessage: ''
     },
+    {
+        name: 'maintenance_date',
+        type: 'date',
+        label: 'Date',
+        value: '',
+        required: true,
+        isError: false,
+        errorMessage: ''
+    }
 ]
 
 const columns = [
@@ -41,6 +50,10 @@ interface Props {
 function MaintenanceHistory({maintenance}: Props) {
     const permission = 'maintenance'
 
+    const isHideButton = maintenance?.status === 'completed'
+
+    console.log('maintenance,', maintenance)
+
     const {
         loading,
         createdForm,
@@ -58,7 +71,7 @@ function MaintenanceHistory({maintenance}: Props) {
         isApiV2:true,
         from: 'maintenance-history',
         isHideShow: true,
-        isHideDelete: true,
+        isHideDelete:  isHideButton,
         isHideEdit: true
     })
 
@@ -73,7 +86,6 @@ function MaintenanceHistory({maintenance}: Props) {
                                 title={"Maintenance History"}
                                 handleClick={handleClick}
                                 isShowAddButton={false}
-
                                />
                             {tabular()}
                             {createdForm()}
