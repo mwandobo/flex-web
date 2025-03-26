@@ -184,6 +184,12 @@ const items: ISidebarItem[] = [
                 permission: 'projects-list',
                 icon: Calendar
             },
+            {
+                name: 'Notification Reports',
+                path: '/report/notification-report',
+                permission: 'projects-list',
+                icon: Calendar
+            },
         ]
     },
     {
