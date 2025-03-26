@@ -23,7 +23,6 @@ const ViewCardComponent = ({
     titleB,
     buttonName = "progress",
     isExtraButton,
-    isExtraButtonDisabled,
     buttonKey,
     OptionalElement,
     onClick
