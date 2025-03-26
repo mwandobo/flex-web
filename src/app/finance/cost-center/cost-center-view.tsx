@@ -9,26 +9,15 @@ import React, {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
-import RequisitionRequestItem from "@/app/procurement/requisition-requests/requisition-request-items";
-import {useCrudOperator} from "@/hooks/crud/crud-operator";
 import {ReusableButton} from "@/components/button/reusable-button";
 import {CheckCircle2, FileOutput} from "lucide-react";
-import RfqItems from "@/app/procurement/rfq/rfq-items";
-import QuotationItems from "@/app/procurement/quotation/quotation-items";
-import PurchaseOrderItems from "@/app/procurement/purchase-order/purchase-order-items";
 import moneyFormater from "@/components/moneyFormater";
-import Payment from "@/app/finance/payment/payment";
 import {
     COST_CENTER_APPROVAL_SLUG,
-    INVOICE_APPROVAL_SLUG,
-    ITEM_APPROVAL_SLUG,
-    PAYMENT_APPROVAL_SLUG
 } from "@/utils/constant";
-import {useApprovalHook} from "@/hooks/useApprove";
-import SlideOver from "@/components/slide-over/slide-over.component";
-import TreeList from "@/components/list/tree-list.component";
 import {showConfirmationModal} from "@/utils/showAlertDialog";
 import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
+import CostCenterTransactions from "@/app/finance/cost-center/cost-center-transactions";
 
 const CostCenterView = () => {
 
@@ -147,6 +136,8 @@ const CostCenterView = () => {
                                     OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                                 />
                             </div>
+                            <CostCenterTransactions cost_center={data}/>
+
                         </MuiCardComponent>
                     </>
             }
