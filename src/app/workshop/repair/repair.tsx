@@ -103,6 +103,12 @@ const columns = [
         label: 'Workshop Service',
     },
     {
+        id: 'maintenance_type',
+        numeric: false,
+        disablePadding: false,
+        label: 'Repair Type',
+    },
+    {
         id: 'from',
         numeric: false,
         disablePadding: false,
@@ -119,18 +125,6 @@ const columns = [
         numeric: false,
         disablePadding: false,
         label: 'Repair Cost ',
-    },
-    {
-        id: 'maintenance_type',
-        numeric: false,
-        disablePadding: false,
-        label: 'Repair Type',
-    },
-    {
-        id: 'maintained_by_name',
-        numeric: false,
-        disablePadding: false,
-        label: 'Repaired by',
     },
     {
         id: 'warranty_status',
