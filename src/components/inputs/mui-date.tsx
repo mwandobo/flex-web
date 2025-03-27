@@ -1,8 +1,9 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from 'dayjs';
+import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 
 interface Props {
     handleDateChange: (date: any, from: string) => void
@@ -44,6 +45,15 @@ export default function MuiDate({
         }
     }
 
+
+    // useEffect(() => {
+    // }, [value])value
+
+    console.log('value', value )
+
+
+
+
     const body = (passed_label?: string) => {
         return <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
@@ -54,7 +64,7 @@ export default function MuiDate({
                 onChange={onChange}
                 format="DD-MM-YYYY"
                 label={passed_label}
-                value={dayjs(value)}
+                value={value ? dayjs(value) : null}  // ✅ Ensure value is converted to Dayjs or set to null
                 defaultValue={defaultValue && parseDate(defaultValue)}
                 minDate={minDate && parseDate(minDate)}
                 maxDate={maxDate && parseDate(maxDate)}

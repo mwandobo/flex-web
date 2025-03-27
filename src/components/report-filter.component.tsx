@@ -1,11 +1,14 @@
 "use client";
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import MuiDate from "@/components/inputs/mui-date";
 import MuiMultiSelectLocal from "@/components/inputs/mui-multi-select-local";
 import {ReusableButton} from "@/components/button/reusable-button";
 import {CircleCheck, RefreshCcwDot} from "lucide-react";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
+import {createUrlWithFilters} from "@/utils/report-filter.helper";
+import {get} from "@/utils/api";
+import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 
 interface Props {
     from: string,
@@ -24,7 +27,7 @@ export default function ReportFilterComponent({
                                                   isApprovalFilter,
                                                   isHideDateFilter
                                               }: Props) {
-    const {dispatch} = useGlobalContextHook();
+    const {dispatch, state} = useGlobalContextHook();
     const [start_date, setStartDate] = useState<string>('');
     const [end_date, setEndDate] = useState<string>('');
     const [status, setStatus] = useState<string | undefined>();
@@ -49,7 +52,7 @@ export default function ReportFilterComponent({
             from: '',
             items: []// Remove null/undefined values
         };
-        dispatch({type: 'SET_FILTER_BODY', payload: body})
+        dispatch({type: 'SET_FILTER_BODY', payload: ''})
     };
 
     const areAllFieldsEmpty = () => {
@@ -70,6 +73,31 @@ export default function ReportFilterComponent({
             setApprovalStatus(e.target.value)
         }
     }
+
+    const updateValues = () =>{
+        let filtered_data = getValueFromLocalStorage('filters');
+        if (!filtered_data) return;
+        filtered_data = JSON.parse(filtered_data);
+
+        if (filtered_data.from !== from) return ;
+
+        // Ensure t
+        if(filtered_data){
+            const items = filtered_data.items
+            const start_date_object = items.find(item => item.name === 'start_date')
+            if(start_date_object){
+                setStartDate(start_date_object.value)
+            }
+            const end_date_object = items.find(item => item.name === 'end_date')
+            if(end_date_object){
+                setEndDate(end_date_object.value)
+            }
+        }
+    }
+
+    useEffect(() => {
+        updateValues()
+    }, [])
 
     return (
         <div className="w-full mb-2">

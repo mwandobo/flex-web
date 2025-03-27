@@ -10,7 +10,6 @@ export const createUrlWithFilters = (url: string, from: string) => {
 
     // Ensure the baseUrl is included
     const fullUrl = `${baseURL}${url.startsWith('/') ? url : '/' + url}`;
-
     const urlObj = new URL(fullUrl);
 
     filters.items?.forEach(item => {
@@ -23,9 +22,6 @@ export const createUrlWithFilters = (url: string, from: string) => {
 
     // Remove baseUrl from the returned path
     returnUrl = returnUrl.replace(baseURL, '');
-
-    console.log('Final URL:', returnUrl);
-
     return returnUrl;
 };
 
