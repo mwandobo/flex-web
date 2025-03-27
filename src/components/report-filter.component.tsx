@@ -6,8 +6,6 @@ import MuiMultiSelectLocal from "@/components/inputs/mui-multi-select-local";
 import {ReusableButton} from "@/components/button/reusable-button";
 import {CircleCheck, RefreshCcwDot} from "lucide-react";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
-import {createUrlWithFilters} from "@/utils/report-filter.helper";
-import {get} from "@/utils/api";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 
 interface Props {
@@ -16,7 +14,6 @@ interface Props {
     statusBody?: {
         label: string,
         value: number,
-        mappedValue: any,
     }[],
     isApprovalFilter?: boolean
 }
@@ -43,6 +40,8 @@ export default function ReportFilterComponent({
                 approval_status && {name: 'approval_status', value: approval_status}
             ].filter(Boolean) // Remove null/undefined values
         };
+
+        console.log('body', body)
 
         dispatch({type: 'SET_FILTER_BODY', payload: body})
     };
