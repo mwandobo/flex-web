@@ -8,11 +8,23 @@ import {CircleCheck} from "lucide-react";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 
 interface Props {
-    from: string
+    from: string,
+    isHideDateFilter?: boolean,
+    statusBody?: {
+        label: string,
+        value: number,
+        mappedValue: any,
+    }[],
+    isApprovalFilter?: boolean
 }
 
-export default function ReportFilterComponent({from}: Props) {
-    const {dispatch}= useGlobalContextHook();
+export default function ReportFilterComponent({
+                                                  from,
+                                                  statusBody,
+                                                  isApprovalFilter,
+                                                  isHideDateFilter
+                                              }: Props) {
+    const {dispatch} = useGlobalContextHook();
     const [start_date, setStartDate] = useState<string>('');
     const [end_date, setEndDate] = useState<string>('');
     const [status, setStatus] = useState<string | undefined>();
@@ -52,10 +64,9 @@ export default function ReportFilterComponent({from}: Props) {
         }
     }
 
-
     return (
         <div className="w-full mb-2">
-            <div className={'flex w-full mb-1'}>
+            {!isHideDateFilter && <div className={'flex w-full mb-1'}>
                 <MuiDate
                     handleDateChange={handleInputChange}
                     from={'start_date'}
@@ -73,42 +84,46 @@ export default function ReportFilterComponent({from}: Props) {
                     label={"End Date"}
                     value={end_date}
                     labelStyle={"row"}
-
                     // minDate={item.minDate}
                     // maxDate={item.maxDate}
                     // defaultValue={item.defaultDate}
                     isDisabled={false}
                 />
             </div>
-            <div className={'mb-2'}>
-                <MuiMultiSelectLocal
-                    handleChange={handleInputChange}
-                    from={'status'}
-                    label={"Select Status"}
-                    placeholder={'Select Status'}
-                    labelStyle={"row"}
-                    value={''}
-                    options={[
-                        {label: "Pending", value: 1},
-                        {label: "In-progress", value: 2}
-                    ]}
-                />
-            </div>
-
-            <div className={'mb-1'}>
-                <MuiMultiSelectLocal
-                    handleChange={handleInputChange}
-                    from={'status'}
-                    label={"Select Approval Status"}
-                    placeholder={'Select Approval Status'}
-                    labelStyle={"row"}
-                    value={''}
-                    options={[
-                        {label: "Pending", value: 1},
-                        {label: "Approved", value: 2}
-                    ]}
-                />
-            </div>
+            }
+            {statusBody && statusBody.length > 0 &&
+                <div className={'mb-2'}>
+                    <MuiMultiSelectLocal
+                        handleChange={handleInputChange}
+                        from={'status'}
+                        label={"Select Status"}
+                        placeholder={'Select Status'}
+                        labelStyle={"row"}
+                        value={''}
+                        options={
+                            statusBody.map((item, index) => {
+                                return {label: item.label, value: item.value}
+                            })
+                        }
+                    />
+                </div>
+            }
+            {isApprovalFilter &&
+                <div className={'mb-1'}>
+                    <MuiMultiSelectLocal
+                        handleChange={handleInputChange}
+                        from={'status'}
+                        label={"Select Approval Status"}
+                        placeholder={'Select Approval Status'}
+                        labelStyle={"row"}
+                        value={''}
+                        options={[
+                            {label: "Pending", value: 1},
+                            {label: "Approved", value: 2}
+                        ]}
+                    />
+                </div>
+            }
 
             <div className={'flex w-full justify-end'}>
                 <ReusableButton

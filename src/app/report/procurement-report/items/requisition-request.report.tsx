@@ -70,6 +70,11 @@ function RequisitionRequestReport() {
         return <div className={'mt-2'}>
             <ReportFilterComponent
                 from={'requisition-request-report'}
+                statusBody={[
+                    {label: 'Pending', value: 1, mappedValue: 'pending'},
+                    {label: 'Quotation', value: 1, mappedValue: 'quotation'},
+                    {label: 'Request For Quotation', value: 1, mappedValue: 'request_for_quotation'},
+                ]}
             />
             <CustomTable
                 columns={columns}
