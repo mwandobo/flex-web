@@ -37,7 +37,16 @@ export default function MuiMultiSelectLocal({
                                                  label,
                                                  value
                                              }: Props) {
-    const [selected, setSelected] = React.useState<number[]>([]); // Store IDs
+    const [selected, setSelected] = React.useState<number[]>([]); // Default to [1] if value is empty
+
+    console.log('value', value)
+    React.useEffect(() => {
+        if (value?.length) {
+            setSelected(value); // Update state when `value` prop changes
+        } else {
+            setSelected([]); // Default to ID 1
+        }
+    }, [value]);
 
 
 
@@ -104,4 +113,3 @@ export default function MuiMultiSelectLocal({
         </div>
     );
 }
-

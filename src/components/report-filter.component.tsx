@@ -91,6 +91,11 @@ export default function ReportFilterComponent({
             if(end_date_object){
                 setEndDate(end_date_object.value)
             }
+
+            const status = items.find(item => item.name === 'status')
+            if(status){
+                setStatus(status.value)
+            }
         }
     }
 
@@ -133,7 +138,7 @@ export default function ReportFilterComponent({
                         label={"Select Status"}
                         placeholder={'Select Status'}
                         labelStyle={"row"}
-                        value={''}
+                        value={status}
                         options={
                             statusBody.map((item, index) => {
                                 return {label: item.label, value: item.value}
