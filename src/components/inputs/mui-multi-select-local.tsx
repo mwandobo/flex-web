@@ -6,14 +6,6 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
-import {useEffect, useState} from "react";
-import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
-import {get} from "@/utils/api";
-import CreateOptionsForselectHelper from "@/utils/actions/createOptionsForSelect.helper";
-import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {DatePicker} from "@mui/x-date-pickers/DatePicker";
-import dayjs from "dayjs";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -26,11 +18,8 @@ const MenuProps = {
     },
 };
 
-
-
 interface Props {
-    optionsUrlData: string
-    optionDataKey: string
+    options: { label: string, value: number }[]
     from: string
     label?: string
     labelStyle?: string
@@ -39,36 +28,18 @@ interface Props {
     handleChange: (event: any, from?: string, control_for?: string) => void
 }
 
-export default function MuiMultiSelectSelect({
-                                                 optionsUrlData,
-                                                 optionDataKey,
+export default function MuiMultiSelectLocal({
+                                                options,
                                                  handleChange,
                                                  from,
                                                  placeholder,
+                                                labelStyle,
                                                  label,
-                                                 labelStyle,
                                                  value
                                              }: Props) {
     const [selected, setSelected] = React.useState<number[]>([]); // Store IDs
 
-    const [options, setOptions] = useState<any[]>([]);
-    const token = getValueFromLocalStorage('token');
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await get(optionsUrlData, token);
-                if (res && res.status === 200) {
-                    const payload = CreateOptionsForselectHelper(res.data.data, optionDataKey);
-                    setOptions(payload);
-                }
-            } catch (error) {
-                console.error("API Error:", error);
-            }
-        };
-
-        fetchData();
-    }, [optionDataKey, optionsUrlData, token]);
 
     const onChange = (event: SelectChangeEvent<typeof selected>) => {
         const {
@@ -80,6 +51,7 @@ export default function MuiMultiSelectSelect({
 
         return handleChange(event, from)
     };
+
 
     const body = (passed_label?: string) => {
         return <div>

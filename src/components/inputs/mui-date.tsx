@@ -1,13 +1,14 @@
 import React from "react";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from 'dayjs';
 
 interface Props {
     handleDateChange: (date: any, from: string) => void
     from: string
     label?: string
+    labelStyle?: string
     value: string
     isDisabled?: boolean
     minDate?: string
@@ -17,14 +18,15 @@ interface Props {
 
 
 export default function MuiDate({
-    handleDateChange,
-    label,
-    from,
-    value,
-    minDate,
-    maxDate,
-    defaultValue
-}: Props) {
+                                    handleDateChange,
+                                    label,
+                                    labelStyle,
+                                    from,
+                                    value,
+                                    minDate,
+                                    maxDate,
+                                    defaultValue
+                                }: Props) {
     const parseDate = (value) => {
         return dayjs(value)
     }
@@ -42,23 +44,37 @@ export default function MuiDate({
         }
     }
 
+    const body = (passed_label?: string) => {
+        return <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+                sx={{
+                    width: "100%",
+                    marginBottom: "10px",
+                }}
+                onChange={onChange}
+                format="DD-MM-YYYY"
+                label={passed_label}
+                value={dayjs(value)}
+                defaultValue={defaultValue && parseDate(defaultValue)}
+                minDate={minDate && parseDate(minDate)}
+                maxDate={maxDate && parseDate(maxDate)}
+            />
+        </LocalizationProvider>
+    }
+
     return (
         <div>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                    sx={{
-                        width: "100%",
-                        marginBottom: "10px",
-                    }}
-                    onChange={onChange}
-                    format="DD-MM-YYYY"
-                    label={label}
-                    value={dayjs(value)}
-                    defaultValue={defaultValue && parseDate(defaultValue)}
-                    minDate={minDate && parseDate(minDate)}
-                    maxDate={maxDate && parseDate(maxDate)}
-                />
-            </LocalizationProvider>
+            {labelStyle === 'row' ?
+                <div className={'flex w-full items-center'}>
+                    <p className={'w-1/5 text-end pe-2'}>{label}</p>
+                    <div className={'w-full'}>
+                        {body()}
+                    </div>
+                </div> :
+                <div>
+                    {body(label)}
+                </div>
+            }
         </div>
     );
 }

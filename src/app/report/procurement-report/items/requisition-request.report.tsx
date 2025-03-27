@@ -9,6 +9,7 @@ import {get} from "@/utils/api";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import CustomTable from "@/components/tables/flexible-normal-table";
 import moneyFormater from "@/components/moneyFormater";
+import ReportFilterComponent from "@/components/report-filter.component";
 
 const columns = [
     {header: 'Requisition Code', accessor: 'formatted_code'},
@@ -59,6 +60,7 @@ function RequisitionRequestReport() {
 
     const pageRender = () =>{
         return <div className={'mt-2'}>
+            <ReportFilterComponent/>
             <CustomTable
                 columns={columns}
                 data={data}

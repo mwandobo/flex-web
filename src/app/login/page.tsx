@@ -3,13 +3,11 @@
 import React, {useState} from 'react'
 import {useRouter} from 'next/navigation'
 import {post} from '@/utils/api'
-import Button from '@/components/button'
 import TextFieldComponent from '@/components/inputs/text-field'
 import {setValueLocalStorage} from '@/utils/actions/local-starage'
 import {useGlobalContextHook} from '@/hooks/useGlobalContextHook'
 import Swal from "sweetalert2"
 import AuthSkeletonComponent from "@/components/page-components/auth-skeleton-component";
-import {ReusableButton} from "@/components/button/reusable-button";
 import {Ellipsis, LogIn} from "lucide-react";
 
 export default function LoginPage() {
