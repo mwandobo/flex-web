@@ -4,8 +4,6 @@ import requestQueue from "@/utils/rest-queue";
 //
 export const baseURL = 'http://127.0.0.1:8000/api';
 export const nextBaseURL = 'http://localhost:3000';
-// export const baseURL = 'https://flexprojectsapi.int.cits.co.tz/api';
-// export const nextBaseURL = 'https://flexprojects.int.cits.co.tz';
 
 // Axios instance
 const index = axios.create({

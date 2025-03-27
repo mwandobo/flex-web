@@ -130,6 +130,7 @@ export const updateContextReducer = (state: State, action: Action): State => {
                 viewedItem: action.payload
             };
         case 'SET_FILTER_BODY':
+            setValueLocalStorage('filters',JSON.stringify( action.payload))
             return {
                 ...state,
                 filterBody: action.payload

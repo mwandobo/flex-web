@@ -10,9 +10,12 @@ import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import CustomTable from "@/components/tables/flexible-normal-table";
 import moneyFormater from "@/components/moneyFormater";
 import ReportFilterComponent from "@/components/report-filter.component";
+import {createUrlWithFilters} from "@/utils/report-filter.helper";
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 
 const columns = [
     {header: 'Requisition Code', accessor: 'formatted_code'},
+    {header: 'Requisition Date', accessor: 'formatted_created_date'},
     {header: 'Store', accessor: 'store_name'},
     {header: 'Store Keeper', accessor: 'store_keeper'},
     {header: 'Items', accessor: 'items', width: "300px"},
@@ -26,12 +29,13 @@ const subTableColumns: TableColumn[] = [
     { header: 'Price (Tzs)', accessor: 'price' , isAlignRight: true, isMoney: true },
 ];
 
-
 function RequisitionRequestReport() {
     const [data, setData] = useState<any>([])
     const [total, setTotal] = useState(0)
     const [loading, setLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
+    const {state}  = useGlobalContextHook()
+    const filters = state.filterBody;
     const token = getValueFromLocalStorage('token')
     const url = 'report/procurement/requisition-request'
 
@@ -39,7 +43,11 @@ function RequisitionRequestReport() {
         const fetchData = async () => {
             try {
                 setLoading(true)
-                const res = await get(url, token)
+                const final_url = createUrlWithFilters(url, 'requisition-request-report')
+
+                console.log('final_url', final_url)
+
+                const res = await get(final_url, token)
 
                 if ( res.status === 200) {
                     setData(res.data.data.data)
@@ -54,7 +62,7 @@ function RequisitionRequestReport() {
             }
         };
         fetchData()
-    }, [refresh])
+    }, [refresh, filters])
 
 
 

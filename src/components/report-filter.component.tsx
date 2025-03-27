@@ -1,17 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, {useState} from "react";
 import MuiDate from "@/components/inputs/mui-date";
 import MuiMultiSelectLocal from "@/components/inputs/mui-multi-select-local";
 import {ReusableButton} from "@/components/button/reusable-button";
-import { CircleCheck} from "lucide-react";
+import {CircleCheck} from "lucide-react";
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 
-interface Props{
+interface Props {
     from: string
 }
 
-
 export default function ReportFilterComponent({from}: Props) {
+    const {dispatch}= useGlobalContextHook();
     const [start_date, setStartDate] = useState<string>('');
     const [end_date, setEndDate] = useState<string>('');
     const [status, setStatus] = useState<string | undefined>();
@@ -21,16 +22,15 @@ export default function ReportFilterComponent({from}: Props) {
         const body = {
             from,
             items: [
-                start_date && { name: 'start_date', value: start_date },
-                end_date && { name: 'end_date', value: end_date },
-                status && { name: 'status', value: status },
-                approval_status && { name: 'approval_status', value: approval_status }
+                start_date && {name: 'start_date', value: start_date},
+                end_date && {name: 'end_date', value: end_date},
+                status && {name: 'status', value: status},
+                approval_status && {name: 'approval_status', value: approval_status}
             ].filter(Boolean) // Remove null/undefined values
         };
 
-        console.log(body)
+        dispatch({type: 'SET_FILTER_BODY', payload: body})
 
-        // You can handle API requests or parent state updates here
     };
 
     const areAllFieldsEmpty = () => {
@@ -95,22 +95,19 @@ export default function ReportFilterComponent({from}: Props) {
                 />
             </div>
 
-
-
             <div className={'mb-1'}>
-
-            <MuiMultiSelectLocal
-                handleChange={handleInputChange}
-                from={'status'}
-                label={"Select Approval Status"}
-                placeholder={'Select Approval Status'}
-                labelStyle={"row"}
-                value={''}
-                options={[
-                    {label: "Pending", value: 1},
-                    {label: "Approved", value: 2}
-                ]}
-            />
+                <MuiMultiSelectLocal
+                    handleChange={handleInputChange}
+                    from={'status'}
+                    label={"Select Approval Status"}
+                    placeholder={'Select Approval Status'}
+                    labelStyle={"row"}
+                    value={''}
+                    options={[
+                        {label: "Pending", value: 1},
+                        {label: "Approved", value: 2}
+                    ]}
+                />
             </div>
 
             <div className={'flex w-full justify-end'}>
@@ -128,10 +125,9 @@ export default function ReportFilterComponent({from}: Props) {
                     isEndIcon={true}
                     disabled={areAllFieldsEmpty()}
                 >
-                    <CircleCheck size={18} />
+                    <CircleCheck size={18}/>
                 </ReusableButton>
             </div>
-
 
 
         </div>

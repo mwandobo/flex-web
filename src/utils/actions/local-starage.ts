@@ -10,9 +10,7 @@ export function getValueFromLocalStorage(
         return defaultValue; // Return default value or handle accordingly
     }
 
-    const storeData = localStorage.getItem(key)
-
-    return storeData
+    return localStorage.getItem(key)
 }
 
 export function setValueLocalStorage(
