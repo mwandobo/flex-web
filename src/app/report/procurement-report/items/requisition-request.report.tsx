@@ -60,7 +60,9 @@ function RequisitionRequestReport() {
 
     const pageRender = () =>{
         return <div className={'mt-2'}>
-            <ReportFilterComponent/>
+            <ReportFilterComponent
+                from={'requisition-request-report'}
+            />
             <CustomTable
                 columns={columns}
                 data={data}

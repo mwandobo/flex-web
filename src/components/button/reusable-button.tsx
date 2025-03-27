@@ -12,6 +12,7 @@ interface Props {
     type?: "button" | "submit" | "reset"
     variant?: "contained" | "text" | "outlined" | undefined
     isDisabled?: boolean
+    disabled?: boolean
     isClickable?: boolean
     isEndIcon?: boolean
     width?: string
@@ -35,6 +36,7 @@ export function ReusableButton({
                                    isDisabled,
                                    type = 'button',
                                    isClickable = true,
+                                   disabled=false,
                                    isEndIcon,
                                    width,
                                    rounded,
@@ -47,14 +49,15 @@ export function ReusableButton({
     return (
         <button
             type={type}
-            className={`${bg_color} ${text_color} ${border} text-xs ${hover}  ${shadow}  ${padding && padding} ${rounded && `rounded-${rounded}`}`}
+            className={`${bg_color} ${text_color} ${border} text-xs ${!disabled && hover}  ${shadow}  ${padding && padding} ${rounded && `rounded-${rounded}`}`}
             onClick={onClick}
             style={{
                 fontSize: isSmallButton && "8px"
             }}
+            disabled={disabled}
         >
             {isDisabled ? <CircularProgress size={20}/> :
-                <div className={`flex gap-1 ${text_color} ${hover_text} px-1 h-5 items-center`}>
+                <div className={`flex gap-1 ${text_color} ${!disabled && hover_text} px-1 h-5 items-center`}>
                     {isEndIcon ?
                         <>
                             {name}

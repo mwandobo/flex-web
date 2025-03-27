@@ -2,7 +2,6 @@
 
 import {createContext, useReducer, ReactNode} from 'react';
 import {setValueLocalStorage} from "@/utils/actions/local-starage";
-import SlideOverComponent from "@/components/slide-over/slide-over.component";
 
 interface CurrentUserProps {
     first_name: string,
@@ -31,6 +30,11 @@ interface slideOverContent {
     from_id: string
 }
 
+interface filterBody {
+    from: string,
+    items: { name: string, value:string }[]
+}
+
 type State = {
     currentUser: CurrentUserProps | null;
     evaluationForm
@@ -41,6 +45,7 @@ type State = {
     viewedItem
     notificationBody
     slideOverContent
+    filterBody
 };
 
 type Action = {
@@ -72,6 +77,11 @@ const initialEvaluationForm: evaluationForm = {
     data: [],
 }
 
+const initialFilteringBody: filterBody = {
+    from: '',
+    items: []
+}
+
 const initialState: State = {
     currentUser: null,
     evaluationForm: initialEvaluationForm,
@@ -81,7 +91,8 @@ const initialState: State = {
     notificationBody: initialNotificationBody,
     inEvaluation: false,
     hideSideBar: true,
-    slideOverContent: initialSlideOverContent
+    slideOverContent: initialSlideOverContent,
+    filterBody: initialFilteringBody
 };
 
 export const GlobalContext = createContext<{ state: State; dispatch: Dispatch }>({
@@ -117,6 +128,11 @@ export const updateContextReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 viewedItem: action.payload
+            };
+        case 'SET_FILTER_BODY':
+            return {
+                ...state,
+                filterBody: action.payload
             };
         case 'UPDATE_VIEW_ITEM_REFRESH_AFTER_APPROVAL':
             return {

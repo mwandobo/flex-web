@@ -6,15 +6,35 @@ import MuiMultiSelectLocal from "@/components/inputs/mui-multi-select-local";
 import {ReusableButton} from "@/components/button/reusable-button";
 import { CircleCheck} from "lucide-react";
 
-export default function ReportFilterComponent() {
+interface Props{
+    from: string
+}
+
+
+export default function ReportFilterComponent({from}: Props) {
     const [start_date, setStartDate] = useState<string>('');
     const [end_date, setEndDate] = useState<string>('');
     const [status, setStatus] = useState<string | undefined>();
     const [approval_status, setApprovalStatus] = useState<string | undefined>();
 
     const handleFilter = () => {
-        console.log({ start_date, end_date, status, approval_status });
+        const body = {
+            from,
+            items: [
+                start_date && { name: 'start_date', value: start_date },
+                end_date && { name: 'end_date', value: end_date },
+                status && { name: 'status', value: status },
+                approval_status && { name: 'approval_status', value: approval_status }
+            ].filter(Boolean) // Remove null/undefined values
+        };
+
+        console.log(body)
+
         // You can handle API requests or parent state updates here
+    };
+
+    const areAllFieldsEmpty = () => {
+        return !start_date && !end_date && !status && !approval_status;
     };
 
     const handleInputChange = (e: any, from?: any) => {
@@ -96,6 +116,7 @@ export default function ReportFilterComponent() {
                 border={'border border-gray-300'}
                 text_color={'text-gray-700'}
                 isEndIcon={true}
+                disabled={areAllFieldsEmpty()}
             >
                 <CircleCheck size={18} />
             </ReusableButton>
