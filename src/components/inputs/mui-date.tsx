@@ -63,7 +63,7 @@ export default function MuiDate({
     }
 
     return (
-        <div>
+        <div className={'w-full'}>
             {labelStyle === 'row' ?
                 <div className={'flex w-full items-center'}>
                     <p className={'w-1/5 text-end pe-2'}>{label}</p>

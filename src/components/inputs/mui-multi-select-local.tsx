@@ -56,8 +56,11 @@ export default function MuiMultiSelectLocal({
     const body = (passed_label?: string) => {
         return <div>
             <FormControl sx={{width: '100%', marginBottom: "5px"}}>
-                <InputLabel sx={{fontWeight: 500, color: 'black'}}
-                            id="demo-multiple-checkbox-label">{label}</InputLabel>
+                {passed_label &&
+                    <InputLabel sx={{fontWeight: 500, color: 'black'}}
+                                id="demo-multiple-checkbox-label">{passed_label}</InputLabel>
+                }
+
                 <Select
                     className={'w-full'}
                     labelId="demo-multiple-checkbox-label"
