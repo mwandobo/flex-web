@@ -4,7 +4,7 @@ import React, {useState} from "react";
 import MuiDate from "@/components/inputs/mui-date";
 import MuiMultiSelectLocal from "@/components/inputs/mui-multi-select-local";
 import {ReusableButton} from "@/components/button/reusable-button";
-import {CircleCheck} from "lucide-react";
+import {CircleCheck, RefreshCcwDot} from "lucide-react";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 
 interface Props {
@@ -42,7 +42,14 @@ export default function ReportFilterComponent({
         };
 
         dispatch({type: 'SET_FILTER_BODY', payload: body})
+    };
 
+    const handleClear = () => {
+        const body = {
+            from: '',
+            items: []// Remove null/undefined values
+        };
+        dispatch({type: 'SET_FILTER_BODY', payload: body})
     };
 
     const areAllFieldsEmpty = () => {
@@ -125,7 +132,23 @@ export default function ReportFilterComponent({
                 </div>
             }
 
-            <div className={'flex w-full justify-end'}>
+            <div className={'flex w-full justify-end gap-2'}>
+                <ReusableButton
+                    name="Clear Filters"
+                    onClick={handleClear}
+                    rounded={'md'}
+                    padding={'p-3'}
+                    shadow={'shadow-md'}
+                    bg_color={'bg-gray-50'}
+                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                    border={'border border-gray-300'}
+                    text_color={'text-gray-700'}
+                    isEndIcon={false}
+                    disabled={false}
+                >
+                    <RefreshCcwDot size={18}/>
+                </ReusableButton>
                 <ReusableButton
                     name="Submit"
                     onClick={handleFilter}
@@ -137,7 +160,7 @@ export default function ReportFilterComponent({
                     hover_text={'hover:text-gray-900 hover:font-semibold'}
                     border={'border border-gray-300'}
                     text_color={'text-gray-700'}
-                    isEndIcon={true}
+                    isEndIcon={false}
                     disabled={areAllFieldsEmpty()}
                 >
                     <CircleCheck size={18}/>

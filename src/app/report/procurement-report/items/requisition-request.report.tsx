@@ -44,9 +44,6 @@ function RequisitionRequestReport() {
             try {
                 setLoading(true)
                 const final_url = createUrlWithFilters(url, 'requisition-request-report')
-
-                console.log('final_url', final_url)
-
                 const res = await get(final_url, token)
 
                 if ( res.status === 200) {
@@ -63,8 +60,6 @@ function RequisitionRequestReport() {
         };
         fetchData()
     }, [refresh, filters])
-
-
 
     const pageRender = () =>{
         return <div className={'mt-2'}>
@@ -93,7 +88,6 @@ function RequisitionRequestReport() {
             </div>
         </div>
     }
-
 
     return (
         <ProtectedRoute>
