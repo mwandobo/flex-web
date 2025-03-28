@@ -69,10 +69,15 @@ export default function MuiMultiSelectLocal({
                     sx={{
                         width: "100%",
                         marginBottom: "5px",
-                        "& .MuiOutlinedInput-root": isSmall ? { height: "35px", fontSize: "12px", padding: "6px" } : {},
-                        "& .MuiInputLabel-root": isSmall ? { fontSize: "12px" } : {},
-                        "& .MuiSvgIcon-root": isSmall ? { fontSize: "18px" } : {},
-                        "& .MuiListItemText-root": isSmall ? { fontSize: "12px" } : {},
+                        "& .MuiOutlinedInput-root": isSmall
+                            ? { height: "35px", fontSize: "12px", padding: "6px" }
+                            : {},
+                        "& .MuiInputLabel-root": isSmall
+                            ? { fontSize: "12px" }
+                            : {},
+                        "& .MuiSvgIcon-root": isSmall
+                            ? { fontSize: "18px" }
+                            : {},
                     }}
                 >
                     {passed_label && (
@@ -93,18 +98,39 @@ export default function MuiMultiSelectLocal({
                         onChange={onChange}
                         placeholder={placeholder}
                         input={<OutlinedInput label={passed_label} />}
-                        renderValue={(selected) =>
-                            selected
+                        renderValue={(selected) => (
+                            <span style={{ fontSize: isSmall ? "12px" : "16px" }}>
+                            {selected
                                 .map((id) => options.find((option) => option.value === id)?.label) // Convert ID back to name for display
-                                .join(", ")
-                        }
-                        MenuProps={MenuProps}
+                                .join(", ")}
+                        </span>
+                        )}
+                        MenuProps={{
+                            PaperProps: {
+                                sx: {
+                                    "& .MuiMenuItem-root": {
+                                        fontSize: isSmall ? "12px" : "16px", // ✅ Apply styles to dropdown items
+                                        padding: isSmall ? "5px 10px" : "10px 20px",
+                                    },
+                                    maxHeight: isSmall ? 200 : 300, // Adjust dropdown height
+                                },
+                            },
+                        }}
+                        sx={{
+                            "& .MuiSelect-select": { fontSize: isSmall ? "12px" : "16px" },
+                        }}
                     >
                         {options?.length > 0 &&
                             options.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    <Checkbox checked={selected.includes(option.value)} />{" "}
-                                    {/* Compare by value (ID) */}
+                                <MenuItem
+                                    key={option.value}
+                                    value={option.value}
+                                    sx={{
+                                        fontSize: isSmall ? "12px" : "16px", // ✅ Ensures dropdown options are smaller when isSmall
+                                        padding: isSmall ? "5px 10px" : "10px 20px",
+                                    }}
+                                >
+                                    <Checkbox checked={selected.includes(option.value)} />
                                     <ListItemText primary={option.label} />
                                 </MenuItem>
                             ))}
