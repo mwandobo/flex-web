@@ -70,6 +70,7 @@ function RequisitionRequestReport() {
                     {label: 'Request For Quotation', value: 2},
                     {label: 'Quotation', value: 3},
                 ]}
+                isApprovalFilter={true}
             />
             <CustomTable
                 columns={columns}

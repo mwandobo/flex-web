@@ -7,6 +7,7 @@ import {ReusableButton} from "@/components/button/reusable-button";
 import {CircleCheck, RefreshCcwDot} from "lucide-react";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
+import MuiSelectLocal from "@/components/inputs/mui-select-local";
 
 interface Props {
     from: string,
@@ -87,6 +88,7 @@ export default function ReportFilterComponent({
             if(start_date_object){
                 setStartDate(start_date_object.value)
             }
+
             const end_date_object = items.find(item => item.name === 'end_date')
             if(end_date_object){
                 setEndDate(end_date_object.value)
@@ -95,6 +97,11 @@ export default function ReportFilterComponent({
             const status = items.find(item => item.name === 'status')
             if(status){
                 setStatus(status.value)
+            }
+
+            const approvalStatus = items.find(item => item.name === 'approvalStatus')
+            if(approvalStatus){
+                setApprovalStatus(approvalStatus.value)
             }
         }
     }
@@ -149,16 +156,16 @@ export default function ReportFilterComponent({
             }
             {isApprovalFilter &&
                 <div className={'mb-1'}>
-                    <MuiMultiSelectLocal
+                    <MuiSelectLocal
                         handleChange={handleInputChange}
-                        from={'status'}
+                        from={'approvalStatus'}
                         label={"Select Approval Status"}
                         placeholder={'Select Approval Status'}
                         labelStyle={"row"}
-                        value={''}
-                        options={[
-                            {label: "Pending", value: 1},
-                            {label: "Approved", value: 2}
+                        value={approval_status}
+                        optionsUrlData={[
+                            {label: "Approved", value: 1},
+                            {label: "Not Approved", value: 2}
                         ]}
                     />
                 </div>
