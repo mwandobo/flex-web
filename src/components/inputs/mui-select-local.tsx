@@ -9,6 +9,7 @@ interface Props {
     labelStyle?: string;
     from: string;
     isDisabled?: boolean;
+    isSmall?: boolean;
     isRequired?: boolean;
     optionsUrlData?: any;
     optionDataKey?: string;
@@ -24,6 +25,7 @@ const MuiSelectLocal = ({
                             optionsUrlData,
                             labelStyle,
                             optionDataKey,
+                            isSmall,
                             from,
                             isDisabled,
                             isRequired,
@@ -39,135 +41,100 @@ const MuiSelectLocal = ({
         return handleChange(event, from, control_for)
     };
 
-    // return (
-    //     <>
-    //         {error && <p className="text-red-400 mb-2" style={{fontSize: '12px'}}>{error}</p>
-    //         }
-    //         <FormControl fullWidth>
-    //             <InputLabel
-    //                 id={`${label}-select-label`}
-    //                 style={{
-    //                     display: 'flex',
-    //                     fontSize: '16px',
-    //                     justifyContent: 'center',
-    //                     marginTop: "-5px",
-    //                     color: 'black'
-    //                 }}
-    //             >
-    //                 {isRequired ? (
-    //                     <span style={{display: "flex", alignItems: "center"}}>
-    //           {label}{" "}
-    //                         <span
-    //                             style={{
-    //                                 color: "red",
-    //                                 marginLeft: "4px",
-    //                                 fontSize: "16px",
-    //                             }}
-    //                         >
-    //             *
-    //           </span>
-    //         </span>
-    //                 ) : (
-    //                     label
-    //                 )}        </InputLabel>
-    //             <Select
-    //                 labelId={`${label}-select-label`}
-    //                 id={`${label}-select`}
-    //                 value={value}
-    //                 label={label}
-    //                 onChange={onChange}
-    //                 disabled={isDisabled}
-    //                 required={isRequired}
-    //                 size="medium"
-    //                 style={{
-    //                     marginBottom: "20px"
-    //                 }}
-    //             >
-    //                 {optionsUrlData && optionsUrlData.length > 0 &&
-    //                     optionsUrlData.map((option: any) => (
-    //                         < MenuItem
-    //                             key={option.value}
-    //                             value={option.value}
-    //                             style={{
-    //                                 fontSize: '16px'
-    //                             }}
-    //                         >
-    //                             {option.label}
-    //                         </MenuItem>
-    //                     ))}
-    //             </Select>
-    //         </FormControl>
-    //
-    //     </>
-    // )
-
-
     const body = (passed_label?: string) => {
-        return <>
-            {error && <p className="text-red-400 mb-2" style={{fontSize: '12px'}}>{error}</p>
-            }
-            <FormControl fullWidth>
+        return (
+            <>
+                {error && <p className="text-red-400 mb-2" style={{ fontSize: "12px" }}>{error}</p>}
 
-                {labelStyle !== 'row' && <InputLabel
-                    id={`${passed_label}-select-label`}
-                    style={{
-                        display: 'flex',
-                        fontSize: '16px',
-                        justifyContent: 'center',
-                        marginTop: "-5px",
-                        color: 'black'
+                <FormControl
+                    fullWidth
+                    sx={{
+                        "& .MuiOutlinedInput-root": isSmall
+                            ? { height: "35px", fontSize: "12px", padding: "6px" }
+                            : {},
+                        "& .MuiInputLabel-root": isSmall
+                            ? { fontSize: "12px" }
+                            : { fontSize: "16px" },
+                        "& .MuiSvgIcon-root": isSmall
+                            ? { fontSize: "18px" }
+                            : {},
+                        "& .MuiMenuItem-root": isSmall
+                            ? { fontSize: "12px" }
+                            : { fontSize: "16px" },
                     }}
                 >
-                    {isRequired ? (
-                        <span style={{display: "flex", alignItems: "center"}}> {passed_label}{" "}
-                            <span style={{color: "red", marginLeft: "4px", fontSize: "16px",}}> * </span>
-                         </span>
-                    ) : (passed_label)}
-                </InputLabel>}
-                <Select
-                    labelId={`${passed_label}-select-label`}
-                    id={`${passed_label}-select`}
-                    value={value}
-                    label={passed_label && passed_label}
-                    onChange={onChange}
-                    disabled={isDisabled}
-                    required={isRequired}
-                    size="medium"
-                    style={{
-                        marginBottom: "20px"
-                    }}
-                >
-                    {optionsUrlData && optionsUrlData.length > 0 &&
-                        optionsUrlData.map((option: any) => (
-                            < MenuItem
-                                key={option.value}
-                                value={option.value}
-                                style={{
-                                    fontSize: '16px'
-                                }}
-                            >
-                                {option.label}
-                            </MenuItem>
-                        ))}
-                </Select>
-            </FormControl>
+                    {labelStyle !== "row" && (
+                        <InputLabel
+                            id={`${passed_label}-select-label`}
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                marginTop: "-5px",
+                                color: "black",
+                                fontSize: isSmall ? "12px" : "16px",
+                            }}
+                        >
+                            {isRequired ? (
+                                <span style={{ display: "flex", alignItems: "center" }}>
+                                {passed_label}{" "}
+                                    <span style={{ color: "red", marginLeft: "4px", fontSize: isSmall ? "12px" : "16px" }}>
+                                    *
+                                </span>
+                            </span>
+                            ) : (
+                                passed_label
+                            )}
+                        </InputLabel>
+                    )}
 
-        </>
-    }
+                    <Select
+                        labelId={`${passed_label}-select-label`}
+                        id={`${passed_label}-select`}
+                        value={value}
+                        label={passed_label && passed_label}
+                        onChange={onChange}
+                        disabled={isDisabled}
+                        required={isRequired}
+                        size="medium"
+                        sx={{
+                            marginBottom: "20px",
+                            height: isSmall ? "35px" : "auto",
+                            fontSize: isSmall ? "12px" : "16px",
+                        }}
+                    >
+                        {optionsUrlData &&
+                            optionsUrlData.length > 0 &&
+                            optionsUrlData.map((option: any) => (
+                                <MenuItem
+                                    key={option.value}
+                                    value={option.value}
+                                    sx={{ fontSize: isSmall ? "12px" : "16px" }}
+                                >
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                    </Select>
+                </FormControl>
+            </>
+        );
+    };
 
     return (
-        <div className={'h-full'}>
-            {labelStyle === 'row' ?
-                <div className={'flex w-full items-center h-full'}>
-                    <p className={'w-1/5 text-end pe-2 -mt-5 flex items-center'}>{label}</p>
-                    <div className={'w-full bg-green'}>
+        <div className="w-full">
+            {labelStyle === "row" ? (
+                <div className="flex w-full justify-center items-center gap-2">
+                    <p className="min-w-[100px] max-w-[150px] text-right text-xs font-medium text-gray-700 truncate flex flex-col justify-center">
+                        {label}
+                    </p>
+                    <div className="flex-1">
                         {body()}
                     </div>
-                </div> :
+                </div>
+            ) : (
                 <div>
                     {body(label)}
                 </div>
-            }
+            )}
         </div>
     );
 };

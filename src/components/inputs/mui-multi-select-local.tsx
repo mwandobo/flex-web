@@ -23,23 +23,24 @@ interface Props {
     from: string
     label?: string
     labelStyle?: string
+    isSmall?: boolean
     placeholder?: string
     value: any;
     handleChange: (event: any, from?: string, control_for?: string) => void
 }
 
 export default function MuiMultiSelectLocal({
-                                                options,
+                                                 options,
                                                  handleChange,
                                                  from,
                                                  placeholder,
-                                                labelStyle,
+                                                 labelStyle,
                                                  label,
+                                                 isSmall,
                                                  value
                                              }: Props) {
     const [selected, setSelected] = React.useState<number[]>([]); // Default to [1] if value is empty
 
-    console.log('value', value)
     React.useEffect(() => {
         if (value?.length) {
             setSelected(value); // Update state when `value` prop changes
@@ -47,7 +48,6 @@ export default function MuiMultiSelectLocal({
             setSelected([]); // Default to ID 1
         }
     }, [value]);
-
 
 
     const onChange = (event: SelectChangeEvent<typeof selected>) => {
@@ -63,53 +63,73 @@ export default function MuiMultiSelectLocal({
 
 
     const body = (passed_label?: string) => {
-        return <div>
-            <FormControl sx={{width: '100%', marginBottom: "5px"}}>
-                {passed_label &&
-                    <InputLabel sx={{fontWeight: 500, color: 'black'}}
-                                id="demo-multiple-checkbox-label">{passed_label}</InputLabel>
-                }
-
-                <Select
-                    className={'w-full'}
-                    labelId="demo-multiple-checkbox-label"
-                    id="demo-multiple-checkbox"
-                    multiple
-                    value={selected} // This contains IDs (option.value)
-                    onChange={onChange}
-                    placeholder={placeholder}
-                    input={<OutlinedInput label={passed_label}/>}
-                    renderValue={(selected) =>
-                        selected
-                            .map(id => options.find(option => option.value === id)?.label) // Convert ID back to name for display
-                            .join(', ')
-                    }
-                    MenuProps={MenuProps}
+        return (
+            <div>
+                <FormControl
+                    sx={{
+                        width: "100%",
+                        marginBottom: "5px",
+                        "& .MuiOutlinedInput-root": isSmall ? { height: "35px", fontSize: "12px", padding: "6px" } : {},
+                        "& .MuiInputLabel-root": isSmall ? { fontSize: "12px" } : {},
+                        "& .MuiSvgIcon-root": isSmall ? { fontSize: "18px" } : {},
+                        "& .MuiListItemText-root": isSmall ? { fontSize: "12px" } : {},
+                    }}
                 >
-                    {options?.length > 0 && options.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                            <Checkbox checked={selected.includes(option.value)}/> {/* Compare by value (ID) */}
-                            <ListItemText primary={option.label}/> {/* Display the name */}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-        </div>
-    }
+                    {passed_label && (
+                        <InputLabel
+                            sx={{ fontWeight: 500, color: "black", fontSize: isSmall ? "12px" : "inherit" }}
+                            id="demo-multiple-checkbox-label"
+                        >
+                            {passed_label}
+                        </InputLabel>
+                    )}
+
+                    <Select
+                        className="w-full"
+                        labelId="demo-multiple-checkbox-label"
+                        id="demo-multiple-checkbox"
+                        multiple
+                        value={selected} // This contains IDs (option.value)
+                        onChange={onChange}
+                        placeholder={placeholder}
+                        input={<OutlinedInput label={passed_label} />}
+                        renderValue={(selected) =>
+                            selected
+                                .map((id) => options.find((option) => option.value === id)?.label) // Convert ID back to name for display
+                                .join(", ")
+                        }
+                        MenuProps={MenuProps}
+                    >
+                        {options?.length > 0 &&
+                            options.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    <Checkbox checked={selected.includes(option.value)} />{" "}
+                                    {/* Compare by value (ID) */}
+                                    <ListItemText primary={option.label} />
+                                </MenuItem>
+                            ))}
+                    </Select>
+                </FormControl>
+            </div>
+        );
+    };
 
     return (
-        <div>
-            {labelStyle === 'row' ?
-                <div className={'flex w-full items-center'}>
-                    <p className={'w-1/5 text-end pe-2'}>{label}</p>
-                    <div className={'w-full'}>
+        <div className="w-full">
+            {labelStyle === "row" ? (
+                <div className="flex w-full justify-center items-center gap-2">
+                    <p className="min-w-[100px] max-w-[150px] text-right text-xs font-medium text-gray-700 truncate flex flex-col justify-center">
+                        {label}
+                    </p>
+                    <div className="flex-1">
                         {body()}
                     </div>
-                </div> :
+                </div>
+            ) : (
                 <div>
                     {body(label)}
                 </div>
-            }
+            )}
         </div>
     );
 }
