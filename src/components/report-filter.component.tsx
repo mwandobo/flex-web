@@ -44,16 +44,11 @@ export default function ReportFilterComponent({
             ].filter(Boolean) // Remove null/undefined values
         };
 
-        console.log('body', body)
-
         dispatch({type: 'SET_FILTER_BODY', payload: body})
     };
 
     const handleClear = () => {
-        const body = {
-            from: '',
-            items: []// Remove null/undefined values
-        };
+
         dispatch({type: 'SET_FILTER_BODY', payload: ''})
     };
 
@@ -112,16 +107,20 @@ export default function ReportFilterComponent({
                 setStatus(status.value)
             }
 
-            const approvalStatus = items.find(item => item.name === 'approvalStatus')
+            const approvalStatus = items.find(item => item.name === 'approval_status')
+
             if (approvalStatus) {
+
                 setApprovalStatus(approvalStatus.value)
             }
         }
     }
 
+
     useEffect(() => {
+
         updateValues()
-    }, [filter])
+    }, [filter ])
 
     return (<>
             {filter && filter === from &&
@@ -187,8 +186,9 @@ export default function ReportFilterComponent({
                                     isSmall={true}
                                     value={approval_status}
                                     optionsUrlData={[
-                                        {label: "Approved", value: 1},
-                                        {label: "Not Approved", value: 2}
+                                        {label: "Pending", value: '1'},
+                                        {label: "Approved", value:'2'},
+                                        {label: "DisApproved", value: '3'}
                                     ]}
                                 />
                             </div>

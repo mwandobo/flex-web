@@ -3,7 +3,6 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from 'dayjs';
-import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 
 interface Props {
     handleDateChange: (date: any, from: string) => void
@@ -17,7 +16,6 @@ interface Props {
     maxDate?: string
     defaultValue?: string
 }
-
 
 export default function MuiDate({
                                     handleDateChange,
@@ -46,13 +44,6 @@ export default function MuiDate({
             handleDateChange(event, from);
         }
     }
-
-
-    // useEffect(() => {
-    // }, [value])value
-
-    console.log('value', value )
-
 
     const body = (passed_label?: string) => {
         return (

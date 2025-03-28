@@ -1,5 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from '@mui/material';
+import {get} from "@/utils/api";
+import CreateOptionsForselectHelper from "@/utils/actions/createOptionsForSelect.helper";
 
 interface Props {
     handleChange: (event: any, from: string, control_for: string) => void
@@ -13,7 +15,7 @@ interface Props {
     isRequired?: boolean;
     optionsUrlData?: any;
     optionDataKey?: string;
-    value: any;
+    value: string;
     error?: string
     control?: string
     control_id?: string
@@ -30,16 +32,18 @@ const MuiSelectLocal = ({
                             isDisabled,
                             isRequired,
                             placeholder = 'Enter your text here...',
-                            value,
+                            value = '-1',
                             error,
                             label = '',
                             control,
                             control_for
                         }: Props) => {
 
+
     const onChange = (event: SelectChangeEvent) => {
         return handleChange(event, from, control_for)
     };
+
 
     const body = (passed_label?: string) => {
         return (
