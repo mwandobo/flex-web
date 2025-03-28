@@ -38,12 +38,13 @@ function RequisitionRequestReport() {
     const filters = state.filterBody;
     const token = getValueFromLocalStorage('token')
     const url = 'report/procurement/requisition-request'
+    const filter_key = 'requisition-request-report'
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true)
-                const final_url = createUrlWithFilters(url, 'requisition-request-report')
+                const final_url = createUrlWithFilters(url, filter_key)
                 const res = await get(final_url, token)
 
                 if ( res.status === 200) {
@@ -64,7 +65,7 @@ function RequisitionRequestReport() {
     const pageRender = () =>{
         return <div className={'mt-2'}>
             <ReportFilterComponent
-                from={'requisition-request-report'}
+                from={filter_key}
                 statusBody={[
                     {label: 'Pending', value: 1},
                     {label: 'Request For Quotation', value: 2},
@@ -101,6 +102,7 @@ function RequisitionRequestReport() {
                             subHeader={'Requisition Requests Report'}
                             isShowPage={true}
                             isDownload={true}
+                            filter={filter_key}
                             ButtonDownloadComponent={
                                 <GeneratePdf
                                     content={pageRender()}
@@ -113,8 +115,6 @@ function RequisitionRequestReport() {
                     </>
                 }
             </>
-
-
         </ProtectedRoute>
     )
 }

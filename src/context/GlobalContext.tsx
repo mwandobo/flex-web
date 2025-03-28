@@ -46,6 +46,7 @@ type State = {
     notificationBody
     slideOverContent
     filterBody
+    filter: string
 };
 
 type Action = {
@@ -92,7 +93,8 @@ const initialState: State = {
     inEvaluation: false,
     hideSideBar: true,
     slideOverContent: initialSlideOverContent,
-    filterBody: initialFilteringBody
+    filterBody: initialFilteringBody,
+    filter: ''
 };
 
 export const GlobalContext = createContext<{ state: State; dispatch: Dispatch }>({
@@ -134,6 +136,12 @@ export const updateContextReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 filterBody: action.payload
+            };
+        case 'UPDATE_APPLY_FILTERS':
+            setValueLocalStorage('filter',action.payload)
+            return {
+                ...state,
+                filter: action.payload
             };
         case 'UPDATE_VIEW_ITEM_REFRESH_AFTER_APPROVAL':
             return {
