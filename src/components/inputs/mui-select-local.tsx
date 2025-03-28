@@ -15,7 +15,7 @@ interface Props {
     isRequired?: boolean;
     optionsUrlData?: any;
     optionDataKey?: string;
-    value: string;
+    value: any;
     error?: string
     control?: string
     control_id?: string

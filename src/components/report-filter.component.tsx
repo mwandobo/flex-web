@@ -29,7 +29,7 @@ export default function ReportFilterComponent({
     const [start_date, setStartDate] = useState<string>('');
     const [end_date, setEndDate] = useState<string>('');
     const [status, setStatus] = useState<string | undefined>();
-    const [approval_status, setApprovalStatus] = useState<string | undefined>();
+    const [approval_status, setApprovalStatus] = useState<number | undefined>();
 
     const filter = state.filter;
 
