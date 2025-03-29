@@ -6,12 +6,15 @@ import {TableColumn} from "@/components/tables/normal-table";
 import PageHeader from "@/components/header/page-header";
 import GeneratePdf from "@/components/pdf/generate-pdf";
 import {get} from "@/utils/api";
-import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import CustomTable from "@/components/tables/flexible-normal-table";
 import moneyFormater from "@/components/moneyFormater";
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
+import {createUrlWithFilters} from "@/utils/report-filter.helper";
+import ReportFilterComponent from "@/components/report-filter.component";
 
 const columns = [
     {header: 'Rfq Code', accessor: 'formatted_code'},
+    {header: 'Date', accessor: 'formatted_created_date'},
     {header: 'Payment Method', accessor: 'payment_method'},
     {header: 'Evaluation Method', accessor: 'evaluation_method'},
     {header: 'Decision Timeline', accessor: 'decision_timeline', },
@@ -32,15 +35,17 @@ function SaleRfqReport() {
     const [data, setData] = useState<any>([])
     const [total, setTotal] = useState(0)
     const [loading, setLoading] = useState(false)
-    const [refresh, setRefresh] = useState(false)
-    const token = getValueFromLocalStorage('token')
     const url = 'report/procurement/sale-rfq'
+    const filter_key = 'sale-rfq-report'
+    const {state}  = useGlobalContextHook()
+    const filters = state.filterBody;
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true)
-                const res = await get(url, token)
+                const final_url = createUrlWithFilters(url, filter_key)
+                const res = await get(final_url )
 
                 if ( res.status === 200) {
                     setData(res.data.data.data)
@@ -55,12 +60,24 @@ function SaleRfqReport() {
             }
         };
         fetchData()
-    }, [refresh])
+    }, [filters])
 
 
 
     const pageRender = () =>{
         return <div className={'mt-2'}>
+            <ReportFilterComponent
+                from={filter_key}
+                statusBody={[
+                    {label: 'Pending', value: 1},
+                    {label: 'Quotation', value: 2},
+                    {label: 'Purchase Order', value: 3},
+                    {label: 'Invoice', value: 4},
+                    {label: 'Payment', value: 5},
+                    {label: 'Paid', value: 6},
+                ]}
+                isApprovalFilter={true}
+            />
             <CustomTable
                 columns={columns}
                 data={data}
@@ -90,6 +107,7 @@ function SaleRfqReport() {
                             subHeader={'Request For Quotation Report'}
                             isShowPage={true}
                             isDownload={true}
+                            filter={filter_key}
                             ButtonDownloadComponent={
                                 <GeneratePdf
                                     content={pageRender()}

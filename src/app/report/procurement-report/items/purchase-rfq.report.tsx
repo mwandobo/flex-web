@@ -72,6 +72,9 @@ function PurchaseRfqReport() {
                     {label: 'Quotation', value: 2},
                     {label: 'Winner Selected', value: 3},
                     {label: 'Purchase Order', value: 4},
+                    {label: 'Invoice', value: 5},
+                    {label: 'Payment', value: 6},
+                    {label: 'Paid', value: 7},
                 ]}
                 isApprovalFilter={true}
             />
