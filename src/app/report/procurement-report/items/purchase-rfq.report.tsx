@@ -47,7 +47,6 @@ function PurchaseRfqReport() {
             try {
                 setLoading(true)
                 const final_url = createUrlWithFilters(url, filter_key)
-
                 const res = await get(final_url )
 
                 if ( res.status === 200) {
@@ -72,6 +71,7 @@ function PurchaseRfqReport() {
                 statusBody={[
                     {label: 'Pending', value: 1},
                     {label: 'Quotation', value: 2},
+                    {label: 'Purchase Order', value: 2},
                 ]}
                 isApprovalFilter={true}
             />

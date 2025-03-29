@@ -16,6 +16,8 @@ import TreeList from "@/components/list/tree-list.component";
 import {BID_COMPARISON_APPROVAL_SLUG, FINANCE_APPROVAL_SLUG, ITEM_APPROVAL_SLUG} from "@/utils/constant";
 import {useApprovalHook} from "@/hooks/useApprove";
 import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
+import {showConfirmationModal} from "@/utils/showAlertDialog";
+import Swal from "sweetalert2";
 
 const BidComparisonView = () => {
 
@@ -61,14 +63,30 @@ const BidComparisonView = () => {
         });
     };
 
-    const handleSubmit = async () => {
-        const body = {
-            winners: selectedCards
-        }
-        const response = await post(`bid-comparison/${id}/winners`, body, token)
+    // const handleSubmit = async () => {
+    //     const body = {
+    //         winners: selectedCards
+    //     }
+    //     const response = await post(`bid-comparison/${id}/winners`, body, token)
+    //
+    //     if (response.status === 200) {
+    //         setRefresh(!refresh)
+    //     }
+    // };
 
-        if (response.status === 200) {
-            setRefresh(!refresh)
+    const onSave = async (url: string) => {
+        try {
+            const res = await get(url, token);
+            if (res.status === 200) {
+                setRefresh(!refresh);
+            }
+        } catch (error: any) {
+            Swal.fire({
+                title: 'Error Occurred!',
+                text: error?.response?.data?.message,
+                icon: 'error',
+            }).then(() => setLoading(false))
+            console.log(error);
         }
     };
 
@@ -80,12 +98,22 @@ const BidComparisonView = () => {
         }
     };
 
-    const handleCreatePurchaseOrder = async () => {
-        const response = await get(`purchase-orders/rfq/${id}`, token)
+    const handleCreatePurchaseOrder = () => {
+        showConfirmationModal({
+            title: 'Are You Sure?',
+            text: `Are You Sure You Want To Create Purchase Order ?`,
+            onConfirm:() => onSave(`purchase-orders/rfq/${id}`),  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
 
-        if (response.status === 200) {
-            setRefresh(!refresh)
-        }
+    const handleSubmit = () => {
+        showConfirmationModal({
+            title: 'Are You Sure?',
+            text: `Are You Sure You Want To Submit Winner ?`,
+            onConfirm:() => onSave(`${url}/winners`),  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
     };
 
     const isSelected = (itemId: number, supplier: any) => {
