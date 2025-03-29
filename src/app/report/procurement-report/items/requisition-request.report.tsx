@@ -33,19 +33,19 @@ function RequisitionRequestReport() {
     const [data, setData] = useState<any>([])
     const [total, setTotal] = useState(0)
     const [loading, setLoading] = useState(false)
-    const [refresh, setRefresh] = useState(false)
+    const url = 'report/procurement/requisition-request'
+
+    const filter_key = 'requisition-request-report'
     const {state}  = useGlobalContextHook()
     const filters = state.filterBody;
-    const token = getValueFromLocalStorage('token')
-    const url = 'report/procurement/requisition-request'
-    const filter_key = 'requisition-request-report'
+
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true)
                 const final_url = createUrlWithFilters(url, filter_key)
-                const res = await get(final_url, token)
+                const res = await get(final_url)
 
                 if ( res.status === 200) {
                     setData(res.data.data.data)
@@ -60,7 +60,7 @@ function RequisitionRequestReport() {
             }
         };
         fetchData()
-    }, [refresh, filters])
+    }, [filters])
 
     const pageRender = () =>{
         return <div className={'mt-2'}>
@@ -94,7 +94,6 @@ function RequisitionRequestReport() {
     return (
         <ProtectedRoute>
             <>
-
                 {loading ? <p>Loading...</p>
                     :
                     <>
