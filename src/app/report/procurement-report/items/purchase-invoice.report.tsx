@@ -42,7 +42,6 @@ function PurchaseInvoiceReport() {
     const {state}  = useGlobalContextHook()
     const filters = state.filterBody;
 
-
     useEffect(() => {
         const fetchData = async () => {
             try {
