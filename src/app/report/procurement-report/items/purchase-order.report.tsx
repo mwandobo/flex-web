@@ -94,7 +94,6 @@ function PurchaseOrderReport() {
         </div>
     }
 
-
     return (
         <ProtectedRoute>
             <>
