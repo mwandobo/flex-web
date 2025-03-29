@@ -6,7 +6,6 @@ import {TableColumn} from "@/components/tables/normal-table";
 import PageHeader from "@/components/header/page-header";
 import GeneratePdf from "@/components/pdf/generate-pdf";
 import {get} from "@/utils/api";
-import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import CustomTable from "@/components/tables/flexible-normal-table";
 import moneyFormater from "@/components/moneyFormater";
 import ReportFilterComponent from "@/components/report-filter.component";
@@ -38,7 +37,7 @@ function PurchaseRfqReport() {
     const [loading, setLoading] = useState(false)
     const url = 'report/procurement/purchase-rfq'
 
-    const filter_key = 'purchase-rfq-report'
+    const filter_key = 'purchase-order-report'
     const {state}  = useGlobalContextHook()
     const filters = state.filterBody;
 
@@ -71,7 +70,8 @@ function PurchaseRfqReport() {
                 statusBody={[
                     {label: 'Pending', value: 1},
                     {label: 'Quotation', value: 2},
-                    {label: 'Purchase Order', value: 2},
+                    {label: 'Winner Selected', value: 3},
+                    {label: 'Purchase Order', value: 4},
                 ]}
                 isApprovalFilter={true}
             />

@@ -74,6 +74,40 @@ const BidComparisonView = () => {
     //     }
     // };
 
+
+    const handleFormSubmit = ( event?: any) => {
+        event?.preventDefault();  // Prevents page reload
+        showConfirmationModal({
+            title: 'Are You Sure?',
+            text: `Are You Sure You Want To Submit Winner ?`,
+            onConfirm: () => onFormSave(`${url}/winners`),  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
+
+
+    const onFormSave = async (path: string) => {
+        try {
+                const body = {
+                    winners: selectedCards
+                }
+                const response = await post(`bid-comparison/${id}/winners`, body, token)
+
+                if (response.status === 200) {
+                    setRefresh(!refresh)
+                }
+        } catch (error: any) {
+            Swal.fire({
+                title: 'Error Occurred!',
+                text: error?.response?.data?.message,
+                icon: 'error',
+            }).then(() => setLoading(false))
+
+            console.log(error);
+        }
+    };
+
+
     const onSave = async (url: string) => {
         try {
             const res = await get(url, token);
@@ -107,14 +141,6 @@ const BidComparisonView = () => {
         });
     };
 
-    const handleSubmit = () => {
-        showConfirmationModal({
-            title: 'Are You Sure?',
-            text: `Are You Sure You Want To Submit Winner ?`,
-            onConfirm:() => onSave(`${url}/winners`),  // Action to perform on confirmation
-            onCancel: () => console.log('User canceled the action'), // Optional cancel action
-        });
-    };
 
     const isSelected = (itemId: number, supplier: any) => {
         let status = false
@@ -166,7 +192,7 @@ const BidComparisonView = () => {
             {rfq?.status === 'quotation' &&
                 <ReusableButton
                     name={'Submit Winner'}
-                    onClick={() => handleSubmit()}
+                    onClick={() => handleFormSubmit()}
                     rounded={'md'}
                     padding={'p-3'}
                     shadow={'shadow-md'}
@@ -179,8 +205,7 @@ const BidComparisonView = () => {
                     <CheckCircle2 size={13}/>
                 </ReusableButton>
             }
-            {rfq?.status === 'purchase_order' &&
-
+            {rfq?.status === 'winner_selected' &&
                 <ReusableButton
                     name={'Re Choose Winner'}
                     onClick={() => handleRefreshWinner()}
@@ -197,7 +222,7 @@ const BidComparisonView = () => {
                 </ReusableButton>
 
             }
-            {rfq?.status === 'purchase_order' &&
+            {rfq?.status === 'winner_selected' &&
                 <ReusableButton
                     name={'Create Purchase Order'}
                     onClick={() => handleCreatePurchaseOrder()}
