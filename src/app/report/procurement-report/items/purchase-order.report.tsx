@@ -73,6 +73,7 @@ function PurchaseOrderReport() {
                 statusBody={[
                     {label: 'Pending', value: 1},
                     {label: 'Invoice', value: 2},
+                    {label: 'Paid', value: 2},
                 ]}
                 isApprovalFilter={true}
             />

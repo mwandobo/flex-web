@@ -71,6 +71,7 @@ function PurchaseInvoiceReport() {
                 statusBody={[
                     {label: 'Pending', value: 1},
                     {label: 'Payment', value: 2},
+                    {label: 'Paid', value: 3},
                 ]}
                 isApprovalFilter={true}
             />
