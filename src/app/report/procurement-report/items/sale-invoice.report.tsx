@@ -9,9 +9,13 @@ import {get} from "@/utils/api";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import CustomTable from "@/components/tables/flexible-normal-table";
 import moneyFormater from "@/components/moneyFormater";
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
+import {createUrlWithFilters} from "@/utils/report-filter.helper";
+import ReportFilterComponent from "@/components/report-filter.component";
 
 const columns = [
     {header: 'Invoice Code', accessor: 'formatted_code'},
+    {header: 'Date', accessor: 'formatted_created_date'},
     {header: 'SO Code', accessor: 'purchase_order_name'},
     {header: 'Rfq Code', accessor: 'rfq_name'},
     {header: 'Quotation Code', accessor: 'quotation_name'},
@@ -33,15 +37,18 @@ function SaleInvoiceReport() {
     const [data, setData] = useState<any>([])
     const [other, setOther] = useState<any>()
     const [loading, setLoading] = useState(false)
-    const [refresh, setRefresh] = useState(false)
-    const token = getValueFromLocalStorage('token')
     const url = 'report/procurement/sale-invoice'
+
+    const filter_key = 'sale-invoice-report'
+    const {state}  = useGlobalContextHook()
+    const filters = state.filterBody;
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true)
-                const res = await get(url, token)
+                const final_url = createUrlWithFilters(url, filter_key)
+                const res = await get(final_url )
 
                 if ( res.status === 200) {
                     setData(res.data.data.data)
@@ -56,18 +63,28 @@ function SaleInvoiceReport() {
             }
         };
         fetchData()
-    }, [refresh])
+    }, [filters])
 
 
 
     const pageRender = () =>{
         return <div className={'mt-2'}>
+            <ReportFilterComponent
+                from={filter_key}
+                statusBody={[
+                    {label: 'Pending', value: 1},
+                    {label: 'Payment', value: 2},
+                    {label: 'Paid', value: 3},
+                ]}
+                isApprovalFilter={true}
+            />
             <CustomTable
                 columns={columns}
                 data={data}
                 subTableColumns={subTableColumns}
                 subTableAccessor="payments"
             />
+
             <div className={'w-full flex justify-end mt-2'}>
                 <div>
                     <h3 className={'text-xs font-medium mb-1'}>Summary</h3>
@@ -96,6 +113,7 @@ function SaleInvoiceReport() {
                             subHeader={'Internal Invoice Report'}
                             isShowPage={true}
                             isDownload={true}
+                            filter={filter_key}
                             ButtonDownloadComponent={
                                 <GeneratePdf
                                     content={pageRender()}
