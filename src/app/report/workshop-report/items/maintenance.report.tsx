@@ -29,8 +29,6 @@ function MaintenanceReport() {
     const [data, setData] = useState<any>([])
     const [metadata, setMetadata] = useState<any>()
     const [loading, setLoading] = useState(false)
-    const [refresh, setRefresh] = useState(false)
-    const token = getValueFromLocalStorage('token')
     const url = 'report/workshop/maintenance'
 
     const filter_key = 'maintenance-report'
