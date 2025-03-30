@@ -9,15 +9,18 @@ import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import CustomTable from "@/components/tables/flexible-normal-table";
 import moneyFormater from "@/components/moneyFormater";
 import {TableColumn} from "@/components/tables/normal-table";
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
+import {createUrlWithFilters} from "@/utils/report-filter.helper";
+import ReportFilterComponent from "@/components/report-filter.component";
 
 const columns = [
     {header: 'Delivery Code', accessor: 'formatted_code'},
+    {header: 'Date', accessor: 'formatted_created_date'},
     {header: 'Type', accessor: 'type'},
     {header: 'Purchase Order', accessor: 'purchase_order_name'},
     {header: 'Rfq', accessor: 'rfq_name'},
     {header: 'Quotation Code', accessor: 'quotation_name'},
     {header: 'Delivery Cost', accessor: 'delivery_cost', isAlignRight: true, isMoney: true},
-    {header: 'Delivery Date', accessor: 'formatted_delivery_date'},
     {header: 'Delivery Address', accessor: 'delivery_address'},
     {header: 'Items', accessor: 'items_1', width: "23%"},
     {header: 'Status', accessor: 'status'},
@@ -37,11 +40,16 @@ function DeliveryReport() {
     const token = getValueFromLocalStorage('token')
     const url = 'report/procurement/delivery'
 
+    const filter_key = 'delivery-report'
+    const {state}  = useGlobalContextHook()
+    const filters = state.filterBody;
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true)
-                const res = await get(url, token)
+                const final_url = createUrlWithFilters(url, filter_key)
+                const res = await get(final_url )
 
                 if (res.status === 200) {
                     setData(res.data.data.data)
@@ -56,10 +64,19 @@ function DeliveryReport() {
             }
         };
         fetchData()
-    }, [refresh])
+    }, [filters])
 
     const pageRender = () => {
         return <div className={'mt-2'}>
+            <ReportFilterComponent
+                from={filter_key}
+                statusBody={[
+                    {label: 'Pending', value: 1},
+                    {label: 'Delivered', value: 2},
+                    {label: 'Inspected', value: 3},
+                ]}
+                isApprovalFilter={true}
+            />
             <CustomTable
                 columns={columns}
                 data={data}
@@ -88,6 +105,7 @@ function DeliveryReport() {
                             subHeader={'Deliveries Report'}
                             isShowPage={true}
                             isDownload={true}
+                            filter={filter_key}
                             ButtonDownloadComponent={
                                 <GeneratePdf
                                     content={pageRender()}
