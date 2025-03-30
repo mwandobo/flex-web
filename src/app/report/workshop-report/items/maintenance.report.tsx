@@ -9,9 +9,13 @@ import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import CustomTable from "@/components/tables/flexible-normal-table";
 import moneyFormater from "@/components/moneyFormater";
 import {TableColumn} from "@/components/tables/normal-table";
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
+import {createUrlWithFilters} from "@/utils/report-filter.helper";
+import ReportFilterComponent from "@/components/report-filter.component";
 
 const columns = [
     {header: 'Maintenance Code', accessor: 'formatted_code'},
+    {header: 'Date', accessor: 'formatted_created_date'},
     {header: 'Maintenance Type', accessor: 'maintenance_type'},
     {header: 'Item Type', accessor: 'formatted_item_type'},
     {header: 'Item Name', accessor: 'maintenance_item_name'},
@@ -29,11 +33,16 @@ function MaintenanceReport() {
     const token = getValueFromLocalStorage('token')
     const url = 'report/workshop/maintenance'
 
+    const filter_key = 'maintenance-report'
+    const {state}  = useGlobalContextHook()
+    const filters = state.filterBody;
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true)
-                const res = await get(url, token)
+                const final_url = createUrlWithFilters(url, filter_key)
+                const res = await get(final_url )
 
                 if (res.status === 200) {
                     setData(res.data.data.data)
@@ -48,10 +57,19 @@ function MaintenanceReport() {
             }
         };
         fetchData()
-    }, [refresh])
+    }, [filters])
 
     const pageRender = () => {
         return <div className={'mt-2'}>
+            <ReportFilterComponent
+                from={filter_key}
+                statusBody={[
+                    {label: 'Pending', value: 1},
+                    {label: 'In Progress', value: 2},
+                    {label: 'Completed', value: 3},
+                ]}
+                isApprovalFilter={true}
+            />
             <CustomTable
                 columns={columns}
                 data={data}
@@ -79,6 +97,7 @@ function MaintenanceReport() {
                             subHeader={'Maintenance Report'}
                             isShowPage={true}
                             isDownload={true}
+                            filter={filter_key}
                             ButtonDownloadComponent={
                                 <GeneratePdf
                                     content={pageRender()}
