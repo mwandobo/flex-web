@@ -11,10 +11,14 @@ import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 import {STORE_APPROVAL_SLUG} from "@/utils/constant";
 import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
+import {ReusableButton} from "@/components/button/reusable-button";
+import {CheckCircle2} from "lucide-react";
+import {showConfirmationModal} from "@/utils/showAlertDialog";
 
 const StoresView = () => {
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
+    const [refresh, setRefresh] = useState(false)
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
 
@@ -35,6 +39,26 @@ const StoresView = () => {
         from_id: id
     })
 
+    const onSave = async () => {
+        try {
+            const res = await get(`${url}/submit-draft`, token);
+            if (data && res.status === 200) {
+                setRefresh(!refresh);
+            }
+        } catch (error: any) {
+            console.log(error);
+        }
+    };
+
+    const handleSubmit = () => {
+        showConfirmationModal({
+            title: 'Are You Sure?',
+            text: `Are You Sure You Want To Submit Store: ${data.formatted_code}?`,
+            onConfirm: onSave,  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -53,7 +77,31 @@ const StoresView = () => {
             }
         };
         fetchData()
-    }, [])
+    }, [refresh])
+
+    const buttonsBody = () => {
+        return <>
+            {data?.status === 'pending' &&
+
+
+                <ReusableButton
+                    name={'Submit Store'}
+                    onClick={() => handleSubmit()}
+                    rounded={'md'}
+                    padding={'p-3'}
+                    shadow={'shadow-md'}
+                    bg_color={'bg-gray-50'}
+                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                    border={'border border-gray-300'}
+                    text_color={'text-gray-700'}
+                >
+                    <CheckCircle2 size={13}/>
+                </ReusableButton>
+            }
+        </>
+    }
+
 
     return (
 
@@ -76,11 +124,12 @@ const StoresView = () => {
                                         {label: 'Store Address', value: data?.address},
                                         {label: 'Store Keeper', value: data?.keeper_name},
                                         {label: 'Store Manager', value: data?.manager_name},
+                                        {label: 'Status', value: data?.status},
                                         {label: 'Description', value: data?.description},
                                     ]}
                                     titleA={`Store`}
                                     titleB={` ${data?.name} `}
-                                    OptionalElement={approvalsAndButtonsWrapper({})}
+                                    OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                                 />
                             </div>
                             <hr className="bg-gray-100"/>
