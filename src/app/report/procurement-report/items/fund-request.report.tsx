@@ -8,13 +8,17 @@ import {get} from "@/utils/api";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import CustomTable from "@/components/tables/flexible-normal-table";
 import moneyFormater from "@/components/moneyFormater";
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
+import {createUrlWithFilters} from "@/utils/report-filter.helper";
+import ReportFilterComponent from "@/components/report-filter.component";
 
 const columns = [
     {header: 'Cost Name', accessor: 'name'},
+    {header: 'Date', accessor: 'formatted_created_date'},
     {header: 'Description', accessor: 'purpose'},
     {header: 'Project Name', accessor: 'project_name'},
     {header: 'Activity Name', accessor: 'activity_name'},
-    {header: 'Requested Date', accessor: 'formatted_requested_date'},
+    // {header: 'Requested Date', accessor: 'formatted_requested_date'},
     {header: 'Dispatched Date', accessor: 'formatted_dispatched_date'},
     {header: 'Status', accessor: 'status'},
     {header: 'Requested Amount', accessor: 'amount', isAlignRight: true, isMoney: true},
@@ -27,15 +31,18 @@ function FundRequestReport() {
     const [data, setData] = useState<any>([])
     const [other, setOther] = useState<any>(0)
     const [loading, setLoading] = useState(false)
-    const [refresh, setRefresh] = useState(false)
-    const token = getValueFromLocalStorage('token')
     const url = 'report/procurement/fund-request'
+
+    const filter_key = 'fund-report'
+    const {state}  = useGlobalContextHook()
+    const filters = state.filterBody;
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true)
-                const res = await get(url, token)
+                const final_url = createUrlWithFilters(url, filter_key)
+                const res = await get(final_url )
 
                 if ( res.status === 200) {
                     setData(res.data.data.data)
@@ -54,10 +61,20 @@ function FundRequestReport() {
             }
         };
         fetchData()
-    }, [refresh])
+    }, [filters])
 
     const pageRender = () =>{
         return <div className={'mt-2'}>
+            <ReportFilterComponent
+                from={filter_key}
+                statusBody={[
+                    {label: 'Pending', value: 1},
+                    {label: 'Submitted', value: 2},
+                    {label: 'Partial Dispatched', value: 3},
+                    {label: 'Dispatched', value: 4},
+                ]}
+                isApprovalFilter={true}
+            />
             <CustomTable
                 columns={columns}
                 data={data}
@@ -87,6 +104,7 @@ function FundRequestReport() {
                         <PageHeader
                             subHeader={'Store Report'}
                             isShowPage={true}
+                            filter={filter_key}
                             isDownload={true}
                             ButtonDownloadComponent={
                                 <GeneratePdf

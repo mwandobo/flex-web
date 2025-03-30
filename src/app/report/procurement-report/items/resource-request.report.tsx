@@ -29,8 +29,6 @@ function ResourceRequestReport() {
     const [data, setData] = useState<any>([])
     const [total, setTotal] = useState(0)
     const [loading, setLoading] = useState(false)
-    const [refresh, setRefresh] = useState(false)
-    const token = getValueFromLocalStorage('token')
     const url = 'report/procurement/resource-request'
 
     const filter_key = 'resource-report'
