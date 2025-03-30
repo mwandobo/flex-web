@@ -8,9 +8,13 @@ import PageHeader from "@/components/header/page-header";
 import GeneratePdf from "@/components/pdf/generate-pdf";
 import {get} from "@/utils/api";
 import CustomTable from "@/components/tables/flexible-normal-table";
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
+import {createUrlWithFilters} from "@/utils/report-filter.helper";
+import ReportFilterComponent from "@/components/report-filter.component";
 
 const columns = [
     {header: 'Activity Name', accessor: 'activity_name'},
+    {header: 'Date', accessor: 'formatted_created_date'},
     {header: 'Task Name', accessor: 'name'},
     {header: 'Start Date', accessor: 'formatted_start_date'},
     {header: 'End Date', accessor: 'formatted_end_date'},
@@ -24,11 +28,16 @@ const TimesheetPersonnelShow = ({ params }: { params: { timesheetPersonnelId: st
     const id = params.timesheetPersonnelId
     const url = `report/timesheet/personnel/${id}`
 
+    const filter_key = 'timesheet-personnel-report'
+    const {state}  = useGlobalContextHook()
+    const filters = state.filterBody;
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true)
-                const res = await get(url)
+                const final_url = createUrlWithFilters(url, filter_key)
+                const res = await get(final_url )
 
                 if ( res.status === 200) {
                     console.log('response data' , res.data.data.data)
@@ -44,10 +53,17 @@ const TimesheetPersonnelShow = ({ params }: { params: { timesheetPersonnelId: st
             }
         };
         fetchData()
-    }, [])
+    }, [filters])
 
     const pageRender = () =>{
         return <div className={'mt-2'}>
+            <ReportFilterComponent
+                from={filter_key}
+                statusBody={[
+                    {label: 'Pending', value: 1},
+                ]}
+                isApprovalFilter={false}
+            />
             <CustomTable
                 columns={columns}
                 data={data}
@@ -65,6 +81,7 @@ const TimesheetPersonnelShow = ({ params }: { params: { timesheetPersonnelId: st
                             subHeader={`Timesheet Report for Employee ${personnel?.full_name}`}
                             isShowPage={true}
                             isDownload={true}
+                            filter={filter_key}
                             ButtonDownloadComponent={
                                 <GeneratePdf
                                     content={pageRender()}
