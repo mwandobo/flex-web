@@ -11,12 +11,15 @@ import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import PageHeader from "@/components/header/page-header-v1";
 import {CUSTOMER_APPROVAL_SLUG} from "@/utils/constant";
 import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
+import {ReusableButton} from "@/components/button/reusable-button";
+import {CheckCircle2} from "lucide-react";
+import {showConfirmationModal} from "@/utils/showAlertDialog";
 
 const CustomerView = () => {
 
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
-    const [refresh,] = useState(false)
+    const [refresh,setRefresh] = useState(false)
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
 
@@ -36,6 +39,26 @@ const CustomerView = () => {
         from: CUSTOMER_APPROVAL_SLUG,
         from_id: id
     })
+
+    const onSave = async () => {
+        try {
+            const res = await get(`${url}/submit-draft`, token);
+            if (data && res.status === 200) {
+                setRefresh(!refresh);
+            }
+        } catch (error: any) {
+            console.log(error);
+        }
+    };
+
+    const handleSubmit = () => {
+        showConfirmationModal({
+            title: 'Are You Sure?',
+            text: `Are You Sure You Want To Submit Customer: ${data.name}?`,
+            onConfirm: onSave,  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,8 +80,29 @@ const CustomerView = () => {
         fetchData()
     }, [refresh])
 
-    return (
 
+    const buttonsBody = () => {
+        return <>
+            {data?.status === 'pending' &&
+                <ReusableButton
+                    name={'Submit Service'}
+                    onClick={() => handleSubmit()}
+                    rounded={'md'}
+                    padding={'p-3'}
+                    shadow={'shadow-md'}
+                    bg_color={'bg-gray-50'}
+                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                    border={'border border-gray-300'}
+                    text_color={'text-gray-700'}
+                >
+                    <CheckCircle2 size={13}/>
+                </ReusableButton>
+            }
+        </>
+    }
+
+    return (
         <ProtectedRoute>
             {
                 loading ? <p>Loading...</p>
@@ -80,7 +124,7 @@ const CustomerView = () => {
                                     ]}
                                     titleA={`Customer`}
                                     titleB={` ${data?.name} `}
-                                    OptionalElement={approvalsAndButtonsWrapper({})}
+                                    OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                                 />
                             </div>
                         </MuiCardComponent>
