@@ -103,12 +103,7 @@ const SuppliersView = () => {
                 </ReusableButton>
             }
         </>
-
-
-
-
     }
-
 
     return (
 

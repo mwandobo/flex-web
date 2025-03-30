@@ -8,9 +8,13 @@ import {get} from "@/utils/api";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import CustomTable from "@/components/tables/flexible-normal-table";
 import moneyFormater from "@/components/moneyFormater";
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
+import {createUrlWithFilters} from "@/utils/report-filter.helper";
+import ReportFilterComponent from "@/components/report-filter.component";
 
 const columns = [
     {header: 'Supplier Name', accessor: 'name'},
+    {header: 'Date', accessor: 'formatted_created_date'},
     {header: 'Supplier Email', accessor: 'email'},
     {header: 'Supplier Phone', accessor: 'phone'},
     {header: 'Supplier Categories', accessor: 'category_name',},
@@ -21,15 +25,18 @@ function SupplierReport() {
     const [data, setData] = useState<any>([])
     const [total, setTotal] = useState(0)
     const [loading, setLoading] = useState(false)
-    const [refresh, setRefresh] = useState(false)
-    const token = getValueFromLocalStorage('token')
     const url = 'report/procurement/supplier'
+
+    const filter_key = 'supplier-report'
+    const {state}  = useGlobalContextHook()
+    const filters = state.filterBody;
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true)
-                const res = await get(url, token)
+                const final_url = createUrlWithFilters(url, filter_key)
+                const res = await get(final_url )
 
                 if ( res.status === 200) {
                     setData(res.data.data.data)
@@ -44,23 +51,22 @@ function SupplierReport() {
             }
         };
         fetchData()
-    }, [refresh])
+    }, [filters])
 
     const pageRender = () =>{
         return <div className={'mt-2'}>
+            <ReportFilterComponent
+                from={filter_key}
+                statusBody={[
+                    {label: 'Pending', value: 1},
+                    {label: 'Active', value: 2},
+                ]}
+                isApprovalFilter={true}
+            />
             <CustomTable
                 columns={columns}
                 data={data}
             />
-            {/*<div className={'w-full flex justify-end mt-2'}>*/}
-            {/*    <div>*/}
-            {/*        <h3 className={'text-xs font-medium'}>Summary</h3>*/}
-            {/*        <div className={'grid grid-cols-2 gap-2 text-xs font-medium'}>*/}
-            {/*            <p className={'border-r border-gray-400 pr-2'}> Total Amount:</p>*/}
-            {/*            <p>{moneyFormater({amount:total, isShowCurrency: true})}</p>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
         </div>
     }
 
@@ -74,6 +80,7 @@ function SupplierReport() {
                             subHeader={'Supplier Report'}
                             isShowPage={true}
                             isDownload={true}
+                            filter={filter_key}
                             ButtonDownloadComponent={
                                 <GeneratePdf
                                     content={pageRender()}
