@@ -83,10 +83,10 @@ const columns = [
         label: 'Item Quantity',
     },
     {
-        id: 'description',
+        id: 'status',
         numeric: false,
         disablePadding: false,
-        label: 'Description',
+        label: 'Status',
     }
 ]
 

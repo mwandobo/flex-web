@@ -15,6 +15,8 @@ import {useCrudOperator} from "@/hooks/crud/crud-operator";
 import {ITEM_APPROVAL_SLUG} from "@/utils/constant";
 import Warranty from "@/app/inventory/warranty/warranty";
 import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
+import {showConfirmationModal} from "@/utils/showAlertDialog";
+import ToastComponent from "@/components/popup/toast";
 
 const ItemsView = () => {
 
@@ -22,6 +24,7 @@ const ItemsView = () => {
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const token = getValueFromLocalStorage('token')
+    const [refresh, setRefresh] = useState(false)
 
     const {state, } = useGlobalContextHook()
     const { viewedItem} = state;
@@ -67,21 +70,68 @@ const ItemsView = () => {
         isApiV2: true
     })
 
+    const onSave = async () => {
+        try {
+            const res = await get(`${url}/submit-draft`, token);
+            if ( res.status === 200) {
+                setRefresh(!refresh);
+            }
+        } catch (error: any) {
+            console.log(error);
+           const errorMessage =  error?.response?.data?.message ?? error?.response?.data?.error
+            ToastComponent({type: 'error', text: errorMessage, duration: 1000, position: 'top-right' })
+        }
+    };
+
+    const handleSubmit = () => {
+        showConfirmationModal({
+            title: 'Are You Sure?',
+            text: `Are You Sure You Want To Submit Item Name: ${data.name}?`,
+            onConfirm: onSave,  // Action to perform on confirmation
+            onCancel: () => console.log('User canceled the action'), // Optional cancel action
+        });
+    };
+
     const buttonsBody = () => {
-        return <ReusableButton
-            name={'Add Item to Requisition Request'}
-            onClick={() => handleClick('create')}
-            rounded={'md'}
-            padding={'p-3'}
-            shadow={'shadow-md'}
-            bg_color={'bg-gray-50'}
-            hover={'hover:bg-gray-200 hover:border-gray-400'}
-            hover_text={'hover:text-gray-900 hover:font-semibold'}
-            border={'border border-gray-300'}
-            text_color={'text-gray-700'}
-        >
-            <CheckCircle2 size={13}/>
-        </ReusableButton>
+        return<>
+
+            {data?.status === 'pending' &&
+                <ReusableButton
+                    name={'Submit Item'}
+                    onClick={() => handleSubmit()}
+                    rounded={'md'}
+                    padding={'p-3'}
+                    shadow={'shadow-md'}
+                    bg_color={'bg-gray-50'}
+                    hover={'hover:bg-gray-200 hover:border-gray-400'}
+                    hover_text={'hover:text-gray-900 hover:font-semibold'}
+                    border={'border border-gray-300'}
+                    text_color={'text-gray-700'}
+                >
+                    <CheckCircle2 size={13}/>
+                </ReusableButton>
+            }
+            {data?.status === 'active' &&
+            <ReusableButton
+                name={'Add Item to Requisition Request'}
+                onClick={() => handleClick('create')}
+                rounded={'md'}
+                padding={'p-3'}
+                shadow={'shadow-md'}
+                bg_color={'bg-gray-50'}
+                hover={'hover:bg-gray-200 hover:border-gray-400'}
+                hover_text={'hover:text-gray-900 hover:font-semibold'}
+                border={'border border-gray-300'}
+                text_color={'text-gray-700'}
+            >
+                <CheckCircle2 size={13}/>
+            </ReusableButton>
+            }
+        </>
+
+
+
+
     }
 
 
@@ -103,7 +153,7 @@ const ItemsView = () => {
             }
         };
         fetchData()
-    }, [isStateChanged])
+    }, [isStateChanged, refresh])
 
     return (
 
@@ -124,6 +174,7 @@ const ItemsView = () => {
                                         {label: 'Item Category', value: data?.category_name},
                                         {label: 'Quantity', value: data?.quantity},
                                         {label: 'Price', value: data?.price},
+                                        {label: 'Status', value: data?.status},
                                         {label: 'Description', value: data?.description},
                                     ]}
                                     titleA={`Item`}
@@ -132,7 +183,9 @@ const ItemsView = () => {
                                 />
                             </div>
                             <hr className="bg-gray-100"/>
+                            {data.status === 'active' &&
                             <Warranty from={'item'} from_id={id} is_warranted={data.is_warranted}/>
+                            }
                         </MuiCardComponent>
                         {createdForm()}
                     </>

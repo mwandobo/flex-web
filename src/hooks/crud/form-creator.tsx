@@ -4,7 +4,7 @@ import {baseURL, post, put, remove} from "@/utils/api"
 import {ReactNode, useEffect, useState} from "react"
 import Swal from "sweetalert2"
 import {gracefulApprovalUpdater} from "@/utils/actions/update-approvals.helper";
-import ToastComponent from "@/components/tables/toast";
+import ToastComponent from "@/components/popup/toast";
 
 interface Props {
     isModalOpen: boolean

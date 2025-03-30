@@ -141,12 +141,14 @@ export const usePopulateTable = ({
                     }
 
                     const hideButton = () => {
+
                         if (isNeedApprove && isAnyLevelApproved && latestApproveStatus === 'approve') {
                             return true;
                         }
 
                         return !(!obj?.status || obj?.status === 'pending');
                     };
+
 
                     obj.actions = <CrudButtonsComponent
                         hide_approve={true}

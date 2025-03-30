@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { getValueFromLocalStorage, setValueLocalStorage } from "@/utils/actions/local-starage";
 import { useGlobalContextHook } from "@/hooks/useGlobalContextHook";
-import ToastComponent from "@/components/tables/toast";
+import ToastComponent from "@/components/popup/toast";
 
 function WebSocketComponent() {
     const { state, dispatch } = useGlobalContextHook();
@@ -33,7 +33,7 @@ function WebSocketComponent() {
             if (Number(user?.id) === Number(notified_personnel_id)) {
                 const newNotes = [data, ...(state?.notificationBody?.notifications || []) ];
                 handleNotificationDispatch(newNotes);
-                ToastComponent({text: title, duration: 1000, position: 'top-right'})
+                ToastComponent({type:'success', text: title, duration: 1000, position: 'top-right'})
             }
         };
 
