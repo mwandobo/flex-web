@@ -68,6 +68,7 @@ function PaymentReport() {
                 from={filter_key}
                 statusBody={[
                     {label: 'Pending', value: 1},
+                    {label: 'Paid', value: 1},
                 ]}
                 isApprovalFilter={true}
             />
