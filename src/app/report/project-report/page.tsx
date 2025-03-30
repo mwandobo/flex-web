@@ -8,9 +8,13 @@ import {get} from "@/utils/api";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import CustomTable from "@/components/tables/flexible-normal-table";
 import moneyFormater from "@/components/moneyFormater";
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
+import ReportFilterComponent from "@/components/report-filter.component";
+import {createUrlWithFilters} from "@/utils/report-filter.helper";
 
 const columns = [
     {header: 'Project Name', accessor: 'name'},
+    {header: 'Date', accessor: 'formatted_created_date'},
     {header: 'Start Date', accessor: 'start_date'},
     {header: 'End Date', accessor: 'end_date'},
     {header: 'Owner', accessor: 'owner'},
@@ -26,15 +30,19 @@ function ProjectReport() {
     const [data, setData] = useState<any>([])
     const [metadata, setMetaData] = useState<any>()
     const [loading, setLoading] = useState(false)
-    const [refresh, setRefresh] = useState(false)
     const token = getValueFromLocalStorage('token')
     const url = 'report/project/project'
+
+    const filter_key = 'project-report'
+    const {state}  = useGlobalContextHook()
+    const filters = state.filterBody;
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true)
-                const res = await get(url, token)
+                const final_url = createUrlWithFilters(url, filter_key)
+                const res = await get(final_url )
 
                 if ( res.status === 200) {
                     setData(res.data.data.data)
@@ -49,10 +57,18 @@ function ProjectReport() {
             }
         };
         fetchData()
-    }, [refresh])
+    }, [filters])
 
     const pageRender = () =>{
         return <div className={'mt-2'}>
+            <ReportFilterComponent
+                from={filter_key}
+                statusBody={[
+                    {label: 'In Progress', value: 1},
+                    {label: 'Closed', value: 2},
+                ]}
+                isApprovalFilter={true}
+            />
             <CustomTable
                 columns={columns}
                 data={data}
@@ -86,6 +102,7 @@ function ProjectReport() {
                             subHeader={'Project Report'}
                             isShowPage={true}
                             isDownload={true}
+                            filter={filter_key}
                             ButtonDownloadComponent={
                                 <GeneratePdf
                                     content={pageRender()}
