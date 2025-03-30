@@ -83,6 +83,12 @@ const columns = [
         disablePadding: false,
         label: 'Supplier Categories',
     },
+    {
+        id: 'status',
+        numeric: false,
+        disablePadding: false,
+        label: 'Status',
+    },
 ]
 
 function Suppliers() {
