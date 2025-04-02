@@ -246,7 +246,7 @@ const items: ISidebarItem[] = [
         icon: ShieldEllipsis ,
         items: [
             {
-                name: 'Deparments',
+                name: 'Departments',
                 path: '/admnistration/departments',
                 permission: 'departments-list',
                 icon: Table

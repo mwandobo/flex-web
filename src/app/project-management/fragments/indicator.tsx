@@ -6,14 +6,12 @@ import { usePageData } from '@/hooks/use-page/use-page-data'
 import React from 'react'
 import IndicatorView from "@/app/project-management/fragments/indicator-view";
 
-
 interface Props {
     from?: string | null
     from_id?: string | null
     means_of_verification?: string | null
     project_id?: string | null
     isHideAdd?: boolean
-
 }
 
 function Indicator({
@@ -56,15 +54,54 @@ function Indicator({
             isError: false,
             errorMessage: ''
         },
+
         {
-            name: 'collected_date',
+            name: 'audience',
             type: 'text',
-            label: 'Collected Data',
+            label: 'Audience',
             value: '',
             required: true,
             isError: false,
             errorMessage: ''
         },
+        {
+            name: 'frequency',
+            type: 'text',
+            label: 'Frequency',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+        {
+            name: 'collection_method',
+            type: 'textArea',
+            label: 'Collection Method',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+        {
+            name: 'responsibilities',
+            type: 'textArea',
+            label: 'Responsibility',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+        {
+            name: 'description',
+            type: 'textArea',
+            label: 'Description',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+
+
     ]
 
     const columns = [
@@ -86,7 +123,6 @@ function Indicator({
             disablePadding: false,
             label: 'From',
             isHidden: ['output', 'activity', 'goal', 'outcome'].includes(from)
-
         },
 
         {
