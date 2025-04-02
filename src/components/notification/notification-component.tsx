@@ -1,16 +1,18 @@
 'use client';
 
 import React, {useEffect, useState} from 'react';
-import {Bell, Circle, MailOpen, Trash} from 'lucide-react';
+import {Bell, Circle, MailOpen, SquareArrowOutUpRight, Trash} from 'lucide-react';
 import DropdownComponent from '@/components/dropdown/dropdown.component';
 import {useGlobalContextHook} from '@/hooks/useGlobalContextHook';
 import {getValueFromLocalStorage, setValueLocalStorage} from '@/utils/actions/local-starage';
 import {get, remove} from "@/utils/api";
+import {useRouter} from "next/navigation";
 
 const NotificationComponent = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [expandedNotification, setExpandedNotification] = useState<number | null>(null); // Track expanded notification
     const {state, dispatch} = useGlobalContextHook();
+    const router = useRouter()
     const token = getValueFromLocalStorage("token");
 
     const {notificationBody} = state;
@@ -98,6 +100,11 @@ const NotificationComponent = () => {
         }
     };
 
+
+    const handleViewClick = (path: string) => {
+            router.push(path)
+    }
+
     return (
         <div className={''}>
             <button
@@ -166,9 +173,13 @@ const NotificationComponent = () => {
                                     {expandedNotification === index && (
                                         <div className="mt-2 text-gray-700 ps-4">
                                             <p className={`border  ${index % 2 === 0 ? 'border-gray-200' : 'border-gray-300'} p-1 ps-2 rounded-md`}>{note?.description }</p>
-                                            <div className={'flex gap-3 justify-end'}>
-                                                <p style={{fontSize: '9px'}}>Sender: {note?.user_name || 'Unknown'}</p>
-                                                <p style={{fontSize: '9px'}}>Sent On: {note?.formatted_date || 'Unknown'}</p>
+                                            <div className={'flex gap-3 justify-between'}>
+                                                <button onClick={() =>handleViewClick(note.redirect_url)} style={{fontSize: '9px'}} className={'text-blue-500 flex gap-1 items-center'}>view <SquareArrowOutUpRight size={10} /></button>
+                                                <div className={'flex gap-3 justify-end'}>
+                                                    <p style={{fontSize: '9px'}}>Sender: {note?.user_name || 'Unknown'}</p>
+                                                    <p style={{fontSize: '9px'}}>Sent
+                                                        On: {note?.formatted_date || 'Unknown'}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     )}
