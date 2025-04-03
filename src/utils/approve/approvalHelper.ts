@@ -68,10 +68,6 @@ export const getApprovals = (approval_slug: string, from: string, from_id: strin
     let isAnyLevelApproved = false
 
     const mappedApproval = getMappedApproval(approval_slug);
-
-    console.log('mappedApproval', mappedApproval )
-
-
     if (mappedApproval && levels.length > 0) {
         isNeedApprove = true
     }
