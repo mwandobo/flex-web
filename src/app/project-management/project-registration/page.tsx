@@ -28,14 +28,27 @@ function Project() {
             isError: false,
             errorMessage: ''
         },
+        // {
+        //     name: 'pillar',
+        //     type: 'text',
+        //     label: 'Project Pillar',
+        //     value: '',
+        //     required: true,
+        //     isError: false,
+        //     errorMessage: ''
+        // },
+
         {
-            name: 'pillar',
-            type: 'text',
-            label: 'Project Pillar',
+            name: 'type_id',
+            type: 'select',
+            label: `Project Pillar`,
             value: '',
+            optionsUrlData: `settings?group=project`,
+            optionDataKey: 'departments',
             required: true,
             isError: false,
-            errorMessage: ''
+            errorMessage: '',
+            control_for: ''
         },
 
         {

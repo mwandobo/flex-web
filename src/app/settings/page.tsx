@@ -14,7 +14,7 @@ const SettingItems = [
     // { name: 'sponsorship-type', title: 'Sponsorship Types', item: <SettingItem group={'sponsorship'} /> },
     { name: 'measurement-type', title: 'Indicator Measurements Types', item: <SettingItem group={'measurement'} /> },
     // { name: 'assignment-type', title: 'Resource Types', item: <SettingItem group={'assignment'} /> },
-    { name: 'project-type', title: 'Project Types', item: <SettingItem group={'project'} /> },
+    { name: 'project-type', title: 'Project Pillars', item: <SettingItem group={'project'} /> },
 ];
 
 function ConfigurationPage() {

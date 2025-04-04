@@ -117,7 +117,7 @@ interface Props {
 
 export default function MuiTable({ columns, data, from }: Props) {
     const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<number>(0); // Changed to use column index
+    const [orderBy, setOrderBy] = React.useState<number>(-1); // Changed to use column index
     const [selected, setSelected] = React.useState<readonly number[]>([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);

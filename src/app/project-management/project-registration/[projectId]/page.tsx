@@ -197,6 +197,7 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
                                 data={[
                                     {label: 'Code', value: data?.code},
                                     {label: 'Project Name', value: data?.name},
+                                    {label: 'Project Pillar', value: data?.type},
                                     {label: 'Project Location', value: data?.location},
                                     {label: 'Project Owner', value: data?.owner},
                                     {label: 'Start Date', value: data.formatted_start_date},
