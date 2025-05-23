@@ -225,7 +225,7 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
                     {
                         payload.map((item: any, index: any) =>
                             <div key={index} className="flex ">
-                                <div className="grid grid-cols-8 w-full text-xs">
+                                    <div className={`grid grid-cols-8 w-full text-xs ${index !== payload.length - 1 && 'border-b border-gray-200'} `}>
                                     <p className="border-r border-gray-300 ps-3  py-1">{index + 1}</p>
                                     <p className="border-r border-gray-300 ps-3 py-1">{item.formatted_code}</p>
                                     <p className="border-r border-gray-300 ps-3 py-1">{item.name}</p>

@@ -421,11 +421,11 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                     </div>
                     {
                         item1.inputs ?
-                            <>
+                            <div className={'border-r border-l border-gray-500'}>
                                 {
                                     item1.inputs?.map((item, index) =>
                                         <div key={index}
-                                            className={`grid grid-cols-5 border-r border-l border-gray-500`}>
+                                            className={`grid grid-cols-5 ${index !== item1.inputs.length -1 && 'border-b border-gray-500'}`}>
                                             <div
                                                 className="flex flex-col justify-center items-center border-r border-gray-500 p-1">
                                                 <p className="text-xs ">
@@ -433,13 +433,13 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                                                 </p>
                                             </div>
                                             <div
-                                                className="flex flex-col justify-center items-center border-r border-gray-500 p-1">
+                                                className="flex flex-col justify-center items-center border-r  border-gray-500 p-1">
                                                 <p className="text-xs ">
                                                     {item.name}
                                                 </p>
                                             </div>
                                             <div
-                                                className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 }`}>
+                                                className={`flex flex-col justify-center items-center border-r  border-gray-500 p-1 }`}>
                                                 <p className="text-xs">{FormattedMoney({
                                                     amount: item.amount,
                                                     isHideCurrency: true
@@ -453,7 +453,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                                                 })}</p>
                                             </div>
                                             <div
-                                                className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 }`}>
+                                                className={`flex flex-col justify-center items-center  border-gray-500 p-1 }`}>
                                                 <p style={{
                                                     fontSize: '0.625rem',
                                                     fontWeight: 600
@@ -465,7 +465,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                                         </div>
                                     )
                                 }
-                            </>
+                            </div>
                             :
                             <div
                                 className={`grid grid-cols-5 border-r border-l border-gray-500`}>
