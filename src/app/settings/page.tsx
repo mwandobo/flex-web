@@ -15,6 +15,7 @@ const SettingItems = [
     { name: 'measurement-type', title: 'Indicator Measurements Types', item: <SettingItem group={'measurement'} /> },
     // { name: 'assignment-type', title: 'Resource Types', item: <SettingItem group={'assignment'} /> },
     { name: 'project-type', title: 'Project Pillars', item: <SettingItem group={'project'} /> },
+    { name: 'communication-channels', title: 'Communication Channels', item: <SettingItem group={'communication_channel'} /> },
 ];
 
 function ConfigurationPage() {

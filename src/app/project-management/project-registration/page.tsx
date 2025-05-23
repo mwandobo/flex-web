@@ -50,6 +50,18 @@ function Project() {
             errorMessage: '',
             control_for: ''
         },
+        {
+            name: 'communication_channel_id',
+            type: 'select',
+            label: `Communication Channel`,
+            value: '',
+            optionsUrlData: `settings?group=communication_channel`,
+            optionDataKey: 'departments',
+            required: true,
+            isError: false,
+            errorMessage: '',
+            control_for: ''
+        },
 
         {
             name: 'start_date',
@@ -140,7 +152,7 @@ function Project() {
             label: 'Project Name',
         },
         {
-            id: 'pillar',
+            id: 'type',
             numeric: false,
             disablePadding: false,
             label: 'Project Pillar',

@@ -200,6 +200,7 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
                                     {label: 'Project Pillar', value: data?.type},
                                     {label: 'Project Location', value: data?.location},
                                     {label: 'Project Owner', value: data?.owner},
+                                    {label: 'Communication Channel', value: data?.communication_channel},
                                     {label: 'Start Date', value: data.formatted_start_date},
                                     {label: 'End Date', value: data.formatted_end_date},
                                     {
