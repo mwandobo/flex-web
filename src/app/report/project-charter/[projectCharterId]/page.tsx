@@ -3,22 +3,20 @@
 import ProtectedRoute from '@/components/authentication/protected-route'
 import PageHeader from '@/components/header/page-header'
 import GeneratePdf from '@/components/pdf/generate-pdf'
-import { getValueFromLocalStorage } from '@/utils/actions/local-starage'
-import { baseURL, get } from '@/utils/api'
+import {  get } from '@/utils/api'
 import React, { useEffect, useState } from 'react'
 
 const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }) => {
     const id = params.projectCharterId
     const [data, setData] = useState<any>(null)
     const [loading, setLoading] = useState(false)
-    const token = getValueFromLocalStorage('token')
 
     const url = `reports/project-charter/show/${id}`
     useEffect(() => {
         const fetchData = async () => {
             if (id) {
                 setLoading(true)
-                const res = await get(url, token)
+                const res = await get(url)
                 if (res && res.status === 200) {
                     setData(res.data.data)
                     setLoading(false)
@@ -26,7 +24,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
             }
         };
         fetchData()
-    }, [url, token])
+    }, [url, id])
 
     const project = data
 
@@ -264,7 +262,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                 project?.costs?.length > 0 ?
                                     <>
                                         {
-                                            project?.costs?.map((item, index) =>
+                                            project?.costs?.map(item =>
                                                 <div key={item.id} className="flex border-l  border-b border-gray-500">
                                                     <p className="flex-grow w-48 p-1 border-r border-gray-500">{item.purpose}</p>
                                                     <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.amount}</p>
@@ -294,7 +292,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                     <>
                                         {
                                             project?.resources?.map((item, index) =>
-                                                <div key={item.id} className="flex border-l  border-b border-gray-500">
+                                                <div key={index} className="flex border-l  border-b border-gray-500">
                                                     <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.name}</p>
                                                     <p className="flex-grow w-48 p-1 border-r border-gray-500">{item.details}</p>
                                                 </div>
@@ -356,7 +354,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                         <>
                                             {
                                                 project?.assignments?.map((item, index) =>
-                                                    <div key={item.id} className="flex border-l  border-b border-gray-500">
+                                                    <div key={index} className="flex border-l  border-b border-gray-500">
                                                         <p className="flex-grow w-48 p-1 border-r border-gray-500">{item.personnel_department}</p>
                                                         <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.phone}</p>
                                                         <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.description}</p>
@@ -388,7 +386,7 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                                     <>
                                         {
                                             project?.approvals?.map((item, index) =>
-                                                <div key={item.id} className="flex border-l  border-b border-gray-500">
+                                                <div key={index} className="flex border-l  border-b border-gray-500">
                                                     <p className="flex-grow w-48 p-1 border-r border-gray-500">{item.personnel_department}</p>
                                                     <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.phone}</p>
                                                     <p className="flex-grow w-24 p-1 border-r border-gray-500">{item.description}</p>
