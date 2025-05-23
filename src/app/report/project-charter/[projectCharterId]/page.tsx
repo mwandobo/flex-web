@@ -70,16 +70,21 @@ const ProjectCharterShow = ({ params }: { params: { projectCharterId: string } }
                             <p className='w-32 mr-1'>Prepared by: </p>
                             <p className='font-medium'>{project?.prepared_by} </p>
                         </div>
-                        <div className='flex'>
+                        <div className='flex mb-1'>
                             <p className='w-32 mr-1'>Version:</p>
                             <p className='font-medium'>1.00 </p>
                         </div>
+                        <div className='flex mb-1'>
+                            <p className='w-36 mr-1'>Communication Channel: </p>
+                            <p className='font-medium'>{project?.communication_channel} </p>
+                        </div>
+
                     </div>
                 </div>
                 <div className='w-full flex flex-col mb-3'>
                     <h4>2. Project Stakeholders</h4>
                     <div className='ml-12'>
-                        <div className="flex border-l border-t border-b border-gray-500 font-semibold">
+                    <div className="flex border-l border-t border-b border-gray-500 font-semibold">
                             <p className="flex-shrink-0 w-12 p-1 border-r border-gray-500"></p>
                             <p className="flex-grow w-48 p-1 border-r border-gray-500">Position</p>
                             <p className="flex-grow w-24 p-1 border-r border-gray-500">Name/Title/Organization</p>
