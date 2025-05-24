@@ -25,7 +25,7 @@ function SettingItem({group}: Props) {
             disablePadding: false,
             label: 'Access Point',
         },
-    ]
+    ].filter(Boolean);
 
     const formInputs = [
         {
