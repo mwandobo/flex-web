@@ -9,7 +9,6 @@ import MuiTab from "@/components/tabs/mui-tab";
 import {get} from "@/utils/api";
 import React, {useEffect, useState} from "react";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
-import Assumption from "../../fragments/assumption";
 import Resource from "../../fragments/resource";
 import Risk from "../../fragments/risk";
 import {useRouter} from "next/navigation";
@@ -158,6 +157,20 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
         />,
     ];
 
+    const communicationChannels = (data: any) => {
+        return (
+            <div className="flex flex-col text-xs">
+                {data && data.map((item, index) => (
+                    <div key={index} className="flex justify-between">
+                        <span className="font-medium">{item.name}</span>
+                        <span className="text-gray-600">{item.location}</span>
+                    </div>
+                ))}
+            </div>
+        );
+    };
+
+
     const buttonsBody = () => {
         return <>
             {data?.status === 'pending' &&
@@ -200,7 +213,7 @@ const ProjectShow = ({params}: { params: { projectId: string } }) => {
                                     {label: 'Project Pillar', value: data?.type},
                                     {label: 'Project Location', value: data?.location},
                                     {label: 'Project Owner', value: data?.owner},
-                                    {label: 'Communication Channel', value: data?.communication_channel},
+                                    {label: 'Communication Channel', value: communicationChannels(data.communication_channels)},
                                     {label: 'Start Date', value: data.formatted_start_date},
                                     {label: 'End Date', value: data.formatted_end_date},
                                     {

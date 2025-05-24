@@ -51,8 +51,8 @@ function Project() {
             control_for: ''
         },
         {
-            name: 'communication_channel_id',
-            type: 'select',
+            name: 'communication_channel_ids',
+            type: 'multi-select',
             label: `Communication Channel`,
             value: '',
             optionsUrlData: `settings?group=communication_channel`,

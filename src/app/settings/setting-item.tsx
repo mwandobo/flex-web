@@ -18,6 +18,13 @@ function SettingItem({group}: Props) {
             disablePadding: false,
             label: 'Name',
         },
+        group === 'communication_channel' &&
+        {
+            id: 'location',
+            numeric: false,
+            disablePadding: false,
+            label: 'Access Point',
+        },
     ]
 
     const formInputs = [
@@ -25,6 +32,16 @@ function SettingItem({group}: Props) {
             name: 'name',
             type: 'text',
             label: 'Name',
+            value: '',
+            required: true,
+            isError: false,
+            errorMessage: ''
+        },
+        group === 'communication_channel' &&
+        {
+            name: 'location',
+            type: 'text',
+            label: 'Access Point',
             value: '',
             required: true,
             isError: false,
