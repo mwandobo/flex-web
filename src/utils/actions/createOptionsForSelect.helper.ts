@@ -21,6 +21,13 @@ const CreateOptionsForselectHelper = (payload?: any[], from?: string) => {
         })
     }
 
+    if (payload && payload.length && from === 'employee') {
+        payload.map(user => {
+            const data = { label: `${user.full_name}`, value: user.id }
+            output.push(data)
+        })
+    }
+
     if (payload && payload.length && from === 'workshop-service') {
         payload.map(user => {
             const data = { label: `${user.purchase_order_name} -${user.name}  `, value: user.order_item_id }
@@ -34,8 +41,6 @@ const CreateOptionsForselectHelper = (payload?: any[], from?: string) => {
             output.push(data)
         })
     }
-
-
 
     if (payload && payload.length && from === 'approvals') {
         payload.map(approval => {

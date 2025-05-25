@@ -19,6 +19,7 @@ interface Props {
     }[],
     isApprovalFilter?: boolean
     byProject?: boolean
+    byEmployee?: boolean
 }
 
 export default function ReportFilterComponent({
@@ -26,7 +27,8 @@ export default function ReportFilterComponent({
                                                   statusBody,
                                                   isApprovalFilter,
                                                   isHideDateFilter,
-                                                  byProject
+                                                  byProject,
+                                                  byEmployee
                                               }: Props) {
     const {dispatch, state} = useGlobalContextHook();
     const [start_date, setStartDate] = useState<string>('');
@@ -34,6 +36,7 @@ export default function ReportFilterComponent({
     const [status, setStatus] = useState<string | undefined>();
     const [approval_status, setApprovalStatus] = useState<number | undefined>();
     const [project_ids, setProjectIds] = useState<number[] | undefined>();
+    const [employee_ids, setEmployeeIds] = useState<number[] | undefined>();
     const filter = state.filter;
 
     const handleFilter = () => {
@@ -44,7 +47,8 @@ export default function ReportFilterComponent({
                 end_date && {name: 'end_date', value: end_date},
                 status && {name: 'status', value: status},
                 approval_status && {name: 'approval_status', value: approval_status},
-                project_ids && {name: 'project_ids', value: project_ids}
+                project_ids && {name: 'project_ids', value: project_ids},
+                employee_ids && {name: 'employee_ids', value: employee_ids}
             ].filter(Boolean) // Remove null/undefined values
         };
         dispatch({type: 'SET_FILTER_BODY', payload: body})
@@ -56,7 +60,7 @@ export default function ReportFilterComponent({
     };
 
     const areAllFieldsEmpty = () => {
-        return !start_date && !end_date && !status && !approval_status && !project_ids;
+        return !start_date && !end_date && !status && !approval_status && !project_ids && !employee_ids;
     };
 
     const handleInputChange = (e: any, from?: any) => {
@@ -74,6 +78,9 @@ export default function ReportFilterComponent({
         }
         if (from === 'project_ids') {
             setProjectIds(e.target.value)
+        }
+        if (from === 'employee_ids') {
+            setEmployeeIds(e.target.value)
         }
     }
 
@@ -116,6 +123,11 @@ export default function ReportFilterComponent({
             const project = items.find(item => item.name === 'project_ids')
             if (project) {
                 setProjectIds(project.value)
+            }
+
+            const employee = items.find(item => item.name === 'employee_ids')
+            if (employee) {
+                setEmployeeIds(employee.value)
             }
 
             const approvalStatus = items.find(item => item.name === 'approval_status')
@@ -215,6 +227,21 @@ export default function ReportFilterComponent({
                                     labelStyle={"row"}
                                     isSmall={true}
                                     value={project_ids}
+                                />
+                            </div>
+                        }
+                        {byEmployee &&
+                            <div className={'mb-2 w-full'}>
+                                <MuiMultiSelectSelect
+                                    handleChange={handleInputChange}
+                                    optionsUrlData={`employee`}
+                                    optionDataKey= {'employee'}
+                                    from={'employee_ids'}
+                                    label={"Select Employees"}
+                                    placeholder={'Select Employees'}
+                                    labelStyle={"row"}
+                                    isSmall={true}
+                                    value={employee_ids}
                                 />
                             </div>
                         }

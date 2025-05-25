@@ -62,6 +62,7 @@ function ProjectReport() {
                 ]}
                 isApprovalFilter={true}
                 byProject={true}
+                byEmployee={true}
             />
             <CustomTable
                 columns={columns}
