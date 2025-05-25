@@ -5,7 +5,7 @@ import {getValueFromLocalStorage, removeValueFromLocalStorage} from "@/utils/act
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import ProfileDropdown from "@/components/dropdown/profile-dropdown.component";
 import NotificationComponent from "@/components/notification/notification-component";
-import {Menu} from "lucide-react";
+import {Menu, X} from "lucide-react";
 
 function Header() {
     const router = useRouter();
@@ -38,15 +38,17 @@ function Header() {
     }
 
     return (
-        <nav className={`w-full flex ${hideSideBar ? 'justify-between': 'justify-end'} md:justify-end p-2 py-3 border-b border-gray-200 bg-white`}>
-
-            <div className={`flex md:hidden ${!hideSideBar && 'hidden'}  items-center`}>
-                <button className={'me-3'} onClick={toggleSideBar}>   <Menu size={40} strokeWidth={2}/>
+        <nav className="w-full flex justify-between p-2 py-3 border-b border-gray-200 bg-white">
+            {/* Logo + toggle (only for small screens) */}
+            <div className={`flex items-center md:ps-8`}>
+                <button onClick={toggleSideBar} className="me-3 md:hidden">
+                    {hideSideBar ?<X size={32} strokeWidth={2}/> : <Menu size={32} strokeWidth={2}/> }
                 </button>
-                <img className={`h-10 w-fit`} src="/logo.png" alt="logo"/>
+                <img src="/logo.png" alt="logo" className="h-10 w-auto"/>
             </div>
 
-            <div className="flex items-center justify-end me-8 gap-2">
+            {/* Right section */}
+            <div className="flex items-center justify-end gap-2 me-4">
                 <NotificationComponent/>
                 <ProfileDropdown name={currentUser?.email} handleLogout={handleLogout}/>
             </div>

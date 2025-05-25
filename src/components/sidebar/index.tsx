@@ -16,7 +16,6 @@ import {
     User,
     Users,
     UserCheck,
-    X,
     Calculator,
     FileIcon,
     FileSliders,
@@ -37,7 +36,6 @@ import {
 import React from 'react'
 import SidebarItem from './item'
 import {checkPermissions} from '@/utils/actions/check-permissions'
-import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 
 interface ISidebarItem {
     name: string
@@ -309,32 +307,17 @@ const items: ISidebarItem[] = [
 ]
 
 function Sidebar() {
-    const {state, dispatch} = useGlobalContextHook()
-    const {hideSideBar} = state;
-
-    const toggleSideBar = () => {
-        dispatch({type: "UPDATE_HIDE_SIDEBAR", payload: !hideSideBar})
-    }
-
     return (
-        <div className={`${hideSideBar && 'hidden'} md:block md:border-e border-gray-200 w-80 h-full`}>
+        <div className={`w-full md:w-1/4 md:block md:border-e border-gray-200 h-[86vh] overflow-y-auto`}>
             <div className='h-full'>
-                <div className={'flex py-4 ps-4 items-center bg-white h-[4.6rem]'}>
-                    <button className={'md:hidden me-3'} onClick={toggleSideBar}>   <X size={40} strokeWidth={2}/>
-                    </button>
-                    <img className={`h-10 w-fit`} src="/logo.png" alt="logo"/>
-                </div>
-                <div className={`bg-white px-2 `}>
-                    <hr className={'bg-gray-200'}/>
-                    <div className=" flex-col h-[87vh] pt-10 pb-4 pe-4 overflow-auto scrollbar-thin">
+                <div className='bg-white px-2 h-full'>
+                    <hr className='bg-gray-200'/>
+                    <div className="flex-col h-full pt-10 pb-4 pe-4 overflow-auto scrollbar-thin">
                         {
                             items.map(item =>
-                                <>
-                                    {
-                                        checkPermissions(item?.permission) &&
+                                    checkPermissions(item?.permission) && (
                                         <SidebarItem key={item.path} item={item}/>
-                                    }
-                                </>
+                                    )
                             )
                         }
                     </div>
