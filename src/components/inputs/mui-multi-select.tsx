@@ -35,7 +35,9 @@ export default function MuiMultiSelectSelect({
                                                  isSmall,
                                                  value,
                                              }: Props) {
-    const [selected, setSelected] = useState<number[]>([]);
+
+    console.log('value', value)
+    const [selected, setSelected] = useState<number[]>(value ?? []);
     const [options, setOptions] = useState<any[]>([]);
     const token = getValueFromLocalStorage('token');
 

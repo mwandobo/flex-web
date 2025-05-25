@@ -47,9 +47,6 @@ export default function ReportFilterComponent({
                 project_ids && {name: 'project_ids', value: project_ids}
             ].filter(Boolean) // Remove null/undefined values
         };
-
-        console.log(body)
-
         dispatch({type: 'SET_FILTER_BODY', payload: body})
     };
 
@@ -76,8 +73,6 @@ export default function ReportFilterComponent({
             setApprovalStatus(e.target.value)
         }
         if (from === 'project_ids') {
-            console.log('form e', e.target)
-
             setProjectIds(e.target.value)
         }
     }
@@ -219,7 +214,7 @@ export default function ReportFilterComponent({
                                     placeholder={'Select Projects'}
                                     labelStyle={"row"}
                                     isSmall={true}
-                                    value={status}
+                                    value={project_ids}
                                 />
                             </div>
                         }
