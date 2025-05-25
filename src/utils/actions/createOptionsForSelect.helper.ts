@@ -1,4 +1,4 @@
-const CreateOptionsForselectHelper = (payload?: any[], from?: string, id?: string) => {
+const CreateOptionsForselectHelper = (payload?: any[], from?: string) => {
     let output: any[] = []
     if (payload && payload.length && from === 'departments') {
         payload.map(department => {
@@ -71,6 +71,15 @@ const CreateOptionsForselectHelper = (payload?: any[], from?: string, id?: strin
             output.push(data)
         })
     }
+
+    if (payload && payload.length && from === 'code_name') {
+        payload.map(item => {
+            const data = { label: `${item.formatted_code ?? item.code } - ${item.name}`, value: item.id }
+            output.push(data)
+        })
+    }
+
+
 
     return output
 }

@@ -2,30 +2,20 @@
 
 import {
     Activity,
-    Ligature,
-    AlignHorizontalJustifyStart,
     Armchair,
     Book,
     FolderKanban,
     FolderOpenDot,
-    Gauge,
     HardDrive,
     LayoutDashboard,
     LucideIcon,
     NotebookPen,
     RollerCoaster,
-    Scale,
     Settings,
-    Settings2,
     Table,
     User,
-    UserCog,
-    UserRound,
-    UserRoundCog,
     Users,
     UserCheck,
-    Bell,
-    Menu,
     X,
     Calculator,
     FileIcon,
@@ -42,7 +32,7 @@ import {
     Store,
     BookKey,
     ShieldEllipsis,
-    CalendarDays, Calendar, Proportions
+    CalendarDays, Calendar, Proportions, BookOpenCheck
 } from 'lucide-react'
 import React from 'react'
 import SidebarItem from './item'
@@ -114,6 +104,12 @@ const items: ISidebarItem[] = [
                 path: '/project-management/timesheet-management',
                 permission: 'timesheet-list',
                 icon: CalendarDays
+            },
+            {
+                name: 'Lessons Learned',
+                path: '/project-management/lessons',
+                permission: 'lesson-list',
+                icon: BookOpenCheck
             },
         ]
     },
