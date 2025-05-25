@@ -163,6 +163,12 @@ const items: ISidebarItem[] = [
                 icon: Proportions
             },
             {
+                name: 'Lessons Learned Report',
+                path: '/report/lessons-learned',
+                permission: 'projects-list',
+                icon: Proportions
+            },
+            {
                 name: 'Procurement Reports',
                 path: '/report/procurement-report',
                 permission: 'projects-list',

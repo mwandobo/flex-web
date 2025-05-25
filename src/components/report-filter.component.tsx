@@ -8,6 +8,7 @@ import {BadgeX, CircleCheck, RefreshCcwDot, X} from "lucide-react";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import MuiSelectLocal from "@/components/inputs/mui-select-local";
+import MuiMultiSelectSelect from "@/components/inputs/mui-multi-select";
 
 interface Props {
     from: string,
@@ -17,20 +18,22 @@ interface Props {
         value: number,
     }[],
     isApprovalFilter?: boolean
+    byProject?: boolean
 }
 
 export default function ReportFilterComponent({
                                                   from,
                                                   statusBody,
                                                   isApprovalFilter,
-                                                  isHideDateFilter
+                                                  isHideDateFilter,
+                                                  byProject
                                               }: Props) {
     const {dispatch, state} = useGlobalContextHook();
     const [start_date, setStartDate] = useState<string>('');
     const [end_date, setEndDate] = useState<string>('');
     const [status, setStatus] = useState<string | undefined>();
     const [approval_status, setApprovalStatus] = useState<number | undefined>();
-
+    const [project_ids, setProjectIds] = useState<number[] | undefined>();
     const filter = state.filter;
 
     const handleFilter = () => {
@@ -40,9 +43,12 @@ export default function ReportFilterComponent({
                 start_date && {name: 'start_date', value: start_date},
                 end_date && {name: 'end_date', value: end_date},
                 status && {name: 'status', value: status},
-                approval_status && {name: 'approval_status', value: approval_status}
+                approval_status && {name: 'approval_status', value: approval_status},
+                project_ids && {name: 'project_ids', value: project_ids}
             ].filter(Boolean) // Remove null/undefined values
         };
+
+        console.log(body)
 
         dispatch({type: 'SET_FILTER_BODY', payload: body})
     };
@@ -53,7 +59,7 @@ export default function ReportFilterComponent({
     };
 
     const areAllFieldsEmpty = () => {
-        return !start_date && !end_date && !status && !approval_status;
+        return !start_date && !end_date && !status && !approval_status && !project_ids;
     };
 
     const handleInputChange = (e: any, from?: any) => {
@@ -68,6 +74,11 @@ export default function ReportFilterComponent({
         }
         if (from === 'approvalStatus') {
             setApprovalStatus(e.target.value)
+        }
+        if (from === 'project_ids') {
+            console.log('form e', e.target)
+
+            setProjectIds(e.target.value)
         }
     }
 
@@ -107,10 +118,14 @@ export default function ReportFilterComponent({
                 setStatus(status.value)
             }
 
+            const project = items.find(item => item.name === 'project_ids')
+            if (project) {
+                setProjectIds(project.value)
+            }
+
             const approvalStatus = items.find(item => item.name === 'approval_status')
 
             if (approvalStatus) {
-
                 setApprovalStatus(approvalStatus.value)
             }
         }
@@ -190,6 +205,21 @@ export default function ReportFilterComponent({
                                         {label: "Approved", value:'2'},
                                         {label: "DisApproved", value: '3'}
                                     ]}
+                                />
+                            </div>
+                        }
+                        {byProject &&
+                            <div className={'mb-2 w-full'}>
+                                <MuiMultiSelectSelect
+                                    handleChange={handleInputChange}
+                                    optionsUrlData={`project`}
+                                    optionDataKey= {'code_name'}
+                                    from={'project_ids'}
+                                    label={"Select Projects"}
+                                    placeholder={'Select Projects'}
+                                    labelStyle={"row"}
+                                    isSmall={true}
+                                    value={status}
                                 />
                             </div>
                         }
