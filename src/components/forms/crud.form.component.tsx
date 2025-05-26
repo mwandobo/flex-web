@@ -7,7 +7,7 @@ import TextArea from "../inputs/text-area"
 import TextFieldComponent from "../inputs/text-field"
 import PopupModal from "../modal/popup-modal"
 import MuiMultiSelectSelect from "@/components/inputs/mui-multi-select";
-import {ReactNode, useState} from "react"
+import {ReactNode} from "react"
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import FileInputComponent from "@/components/inputs/file-input.component";
 import MuiSelectLocal from "@/components/inputs/mui-select-local";
@@ -24,7 +24,7 @@ interface Props {
     handleInputChange?: (e: any, from?: any, control_for?: string) => void
     isDisabled?: boolean
     modalBodyString?: string
-    size?: string
+    size?: 'sm' | 'md' | 'lg';
     onSaveButtonName?: string
     handleSubmit: () => void,
     isShowAddPriceButton?: boolean,
@@ -49,9 +49,15 @@ const CrudFormComponent = ({
     const add_price = getValueFromLocalStorage('add-price')
 
     const sizeGrid = () => {
-        if(size === "md") {return 2}
-        if(size === "lg") {return 3}
-        if(size === "sm") {return 1}
+        if (size === "md") {
+            return 2
+        }
+        if (size === "lg") {
+            return 3
+        }
+        if (size === "sm") {
+            return 1
+        }
         return 1
     }
 
@@ -68,12 +74,12 @@ const CrudFormComponent = ({
                 {
                     isForm
                         ?
-                        <div className={`
-  grid gap-2
-  grid-cols-1
-  ${size === 'md' ? 'md:grid-cols-2' : ''}
-  ${size === 'lg' ? 'lg:grid-cols-3' : ''}
-`}>
+                        <div
+                            // className={`w-full grid gap-2 grid-cols-1 ${size === 'md' && 'md:grid-cols-2' } ${size === 'lg' && 'lg:grid-cols-3' }`}>
+                            // className={`w-full grid gap-2 grid-cols-1`}
+
+                            className={`w-full grid gap-2 grid-cols-1 ${size === 'md' ? 'md:grid-cols-2' : size === 'lg' ? 'md:grid-cols-3' : ''}`}>
+
                             {
                                 itHasCustomForm && !add_price ? (
                                     customForm
