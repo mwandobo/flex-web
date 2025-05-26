@@ -202,11 +202,11 @@ function Dashboard() {
                                             checkPermissions('dashboard-assigned-tasks')
                                         )
                                         &&
-                                        <div className='flex gap-2'>
-                                            <div className={'w-2/3'}>
+                                        <div className='flex flex-col lg:flex-row gap-2'>
+                                            <div className={'lg:w-2/3'}>
                                                 {
                                                     checkPermissions('dashboard-project-stats') &&
-                                                    <div className={'grid grid-cols-5 gap-2 '}>
+                                                    <div className={'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 '}>
                                                         {items.map((item, index) => (
                                                             <div key={index}
                                                                  className={'bg-white h-20 flex flex-col justify-center items-center shadow-md rounded-md border border-gray-200'}>
@@ -233,7 +233,7 @@ function Dashboard() {
                                             {
                                                 checkPermissions('dashboard-assigned-tasks') && data?.assignedTasks &&
                                                 <div
-                                                    className="w-1/3 bg-white p-2 border border-gray-200 shadow-md rounded-md">
+                                                    className="lg:w-1/3 bg-white p-2 border border-gray-200 shadow-md rounded-md">
                                                     <div className="flex flex-col border-b border-gray-100">
                                                         <h3 className="mb-2 font-semibold">Assigned Tasks</h3>
 
@@ -265,7 +265,7 @@ function Dashboard() {
                                             <h3 className={'mb-2 font-semibold'}>Sales Dashboard</h3>
                                             {checkPermissions('dashboard-sales-stats') &&
                                                 <div className={'bg-white p-2'}>
-                                                    <div className={'grid grid-cols-6 gap-2 '}>
+                                                    <div className={'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 '}>
                                                         {salesStats.map((item, index) => (
                                                             <div key={index}
                                                                  className={'bg-white h-20 flex flex-col justify-center items-center border border-gray-200 shadow-md rounded-md'}>
@@ -276,12 +276,12 @@ function Dashboard() {
                                                     </div>
                                                 </div>}
 
-                                            <div className={'flex mt-2 gap-2 w-full'}>
+                                            <div className={'flex flex-col lg:flex-row mt-2 gap-2 w-full'}>
                                                 {
                                                     checkPermissions('dashboard-sales-vs-purchase') &&
                                                     data?.salesVsPurchase &&
                                                     <div
-                                                        className={'bg-white w-2/5 shadow-md rounded-md p-2 border border-gray-200'}>
+                                                        className={'bg-white lg:w-2/5 shadow-md rounded-md p-2 border border-gray-200'}>
                                                         <h3 className={'mb-2 mt-2 font-semibold'}>Sales Vs Purchase</h3>
                                                         <div
                                                             className={'flex justify-center items-center w-full h-full'}>
@@ -295,7 +295,7 @@ function Dashboard() {
                                                     checkPermissions('dashboard-project-expense') &&
                                                     data?.projectExpenseStats &&
                                                     <div
-                                                        className={'w-2/5 border border-gray-200 p-2 shadow-md rounded-md'}>
+                                                        className={'lg:w-2/5 border border-gray-200 p-2 shadow-md rounded-md'}>
                                                         <h3 className={'mb-2 font-semibold'}>Project Expenses </h3>
                                                         <BarChartComponent data={data?.projectExpenseStats}/>
                                                     </div>
@@ -304,7 +304,7 @@ function Dashboard() {
                                                     checkPermissions('dashboard-budget-summary') &&
                                                     budgetData?.length > 0 &&
                                                     <div
-                                                        className="flex w-1/5 flex-col bg-white shadow-md rounded-md border border-gray-200 p-4">
+                                                        className="flex lg:w-1/5 flex-col bg-white shadow-md rounded-md border border-gray-200 p-4">
                                                         <h3 className={'font-medium'}>Budget Summary for All
                                                             Projects:</h3>
 
