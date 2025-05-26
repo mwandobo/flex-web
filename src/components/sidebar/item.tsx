@@ -6,6 +6,7 @@ import React, { useMemo, useState } from 'react'
 import SubMenuItem from './submenu-item'
 import { setValueLocalStorage } from '@/utils/actions/local-starage'
 import { checkPermissions } from '@/utils/actions/check-permissions'
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 
 interface ISidebarItem {
     name: string
@@ -29,6 +30,7 @@ function SidebarItem({ item }: { item: ISidebarItem }) {
     const [expanded, setExpanded] = useState(false)
     const router = useRouter()
     const pathName = usePathname()
+    const { dispatch} = useGlobalContextHook()
 
     const onclick = () => {
         if (items && items.length > 0) {
@@ -40,6 +42,10 @@ function SidebarItem({ item }: { item: ISidebarItem }) {
             if(path=== '/project-management/project-planning'){
                 setValueLocalStorage('selected_plan_item', 'goal' )
                 setValueLocalStorage('selected_plan_item_id', null )
+            }
+
+            if (typeof window !== "undefined" && window.innerWidth < 768) {
+                dispatch({ type: "UPDATE_HIDE_SIDEBAR", payload: true })
             }
         }
     }

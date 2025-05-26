@@ -11,7 +11,7 @@ function Header() {
     const router = useRouter();
     const token = getValueFromLocalStorage('token') || '';
     const {state, dispatch} = useGlobalContextHook()
-    const {currentUser, hideSideBar} = state;
+    const {currentUser, isSideBarHidden} = state;
 
     useEffect(() => {
         const getUserInfo = () => {
@@ -34,7 +34,7 @@ function Header() {
     }
 
     const toggleSideBar = () => {
-            dispatch({type: "UPDATE_HIDE_SIDEBAR", payload: !hideSideBar})
+            dispatch({type: "UPDATE_HIDE_SIDEBAR", payload: !isSideBarHidden})
     }
 
     return (
@@ -42,7 +42,7 @@ function Header() {
             {/* Logo + toggle (only for small screens) */}
             <div className={`flex items-center md:ps-8`}>
                 <button onClick={toggleSideBar} className="me-3 md:hidden">
-                    {hideSideBar ?<X size={32} strokeWidth={2}/> : <Menu size={32} strokeWidth={2}/> }
+                    {isSideBarHidden ?<Menu size={32} strokeWidth={2}/>  : <X size={32} strokeWidth={2}/> }
                 </button>
                 <img src="/logo.png" alt="logo" className="h-10 w-auto"/>
             </div>

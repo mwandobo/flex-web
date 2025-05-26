@@ -38,7 +38,7 @@ export default function RootLayout({
                     <div className={'flex flex-col'}>
                         <div className={'flex w-full flex-col'}>
                             <Header/>
-                            <div className={'flex'}>
+                            <div className={'flex flex-col md:flex-row'}>
                                 <Sidebar/>
                                 {/* Main content area */}
                                 <div className={'flex w-full flex-col'}>

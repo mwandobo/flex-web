@@ -36,6 +36,7 @@ import {
 import React from 'react'
 import SidebarItem from './item'
 import {checkPermissions} from '@/utils/actions/check-permissions'
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 
 interface ISidebarItem {
     name: string
@@ -307,12 +308,15 @@ const items: ISidebarItem[] = [
 ]
 
 function Sidebar() {
+    const {state} = useGlobalContextHook()
+    const { isSideBarHidden} = state;
+
     return (
-        <div className={`w-full md:w-1/4 md:block md:border-e border-gray-200 h-[86vh] overflow-y-auto`}>
-            <div className='h-full'>
-                <div className='bg-white px-2 h-full'>
+        <div className={`${isSideBarHidden ? 'hidden': 'block'} w-full md:w-1/4 md:block md:border-e border-gray-200 h-[86vh] overflow-y-auto`}>
+            <div className='h-full w-full'>
+                <div className='bg-white px-2 h-full w-full'>
                     <hr className='bg-gray-200'/>
-                    <div className="flex-col h-full pt-10 pb-4 pe-4 overflow-auto scrollbar-thin">
+                    <div className="flex-col h-full w-full pt-10 pb-4 pe-4 overflow-auto scrollbar-thin">
                         {
                             items.map(item =>
                                     checkPermissions(item?.permission) && (
@@ -321,7 +325,7 @@ function Sidebar() {
                             )
                         }
                     </div>
-                </div>
+                 </div>
             </div>
         </div>
     )

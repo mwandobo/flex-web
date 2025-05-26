@@ -4,8 +4,7 @@ import { setValueLocalStorage } from '@/utils/actions/local-starage'
 import { ChevronDown, LucideIcon } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useMemo, useState } from 'react'
-
-
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 
 interface ISubItem {
     name: string
@@ -14,16 +13,19 @@ interface ISubItem {
     group?: string
 }
 
-
 function SubMenuItem({ item }: { item: ISubItem }) {
     const { name, icon: Icon, path, group } = item
     const router = useRouter()
     const pathName = usePathname()
+    const { dispatch} = useGlobalContextHook()
 
     const onclick = () => {
         router.push(path)
         if (group && path !== pathName) {
             setValueLocalStorage('group', group);
+        }
+        if (typeof window !== "undefined" && window.innerWidth < 768) {
+            dispatch({ type: "UPDATE_HIDE_SIDEBAR", payload: true })
         }
     }
 

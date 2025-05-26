@@ -40,7 +40,7 @@ type State = {
     evaluationForm
     selectedSubSidebarItem: string
     inEvaluation: boolean
-    hideSideBar: boolean
+    isSideBarHidden: boolean
     viewItemRefreshAfterApproval: boolean
     viewedItem
     notificationBody
@@ -91,7 +91,7 @@ const initialState: State = {
     viewedItem: initialViewedItem,
     notificationBody: initialNotificationBody,
     inEvaluation: false,
-    hideSideBar: true,
+    isSideBarHidden: true,
     slideOverContent: initialSlideOverContent,
     filterBody: initialFilteringBody,
     filter: ''
@@ -158,7 +158,7 @@ export const updateContextReducer = (state: State, action: Action): State => {
         case 'UPDATE_HIDE_SIDEBAR':
             return {
                 ...state,
-                hideSideBar: action.payload
+                isSideBarHidden: action.payload
             };
         case 'UPDATE_NOTIFICATION_BODY':
             return {
