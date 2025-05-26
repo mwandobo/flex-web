@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, {ReactNode} from 'react';
 
 interface Props {
     isOpen: boolean
@@ -11,27 +11,33 @@ interface Props {
 }
 
 const PopupModal = ({
-    isOpen,
-    onClose,
-    children,
-    title,
+                        isOpen,
+                        onClose,
+                        children,
+                        title,
                         size,
-    isDisabled
-}: Props) => {
+                        isDisabled
+                    }: Props) => {
 
     const sizeWidth = () => {
-        if(size === "md") {return 'w-3/4'}
-        if(size === "lg") {return 'w-full'}
-        if(size === "sm") {return 'w-1/2'}
-        return 'w-1/2'
-    }
+        switch (size) {
+            case "md":
+                return 'w-full md:w-3/4';
+            case "lg":
+                return 'w-full';
+            case "sm":
+                return 'w-full md:w-1/2';
+            default:
+                return 'w-full md:w-1/2';
+        }
+    };
 
     if (!isOpen) return null;
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
             <div className="absolute inset-0 bg-black opacity-50"></div>
-            <div className={`relative ${sizeWidth()}  max-h-full ps-64 pe-6`}>
-                <div className="relative bg-white rounded-lg shadow dark:bg-white max-h-[90vh] overflow-y-auto">
+            <div className={`relative ${sizeWidth()}  max-h-full ps-4 pe-4 md:ps-64 md:pe-6`}>
+                <div className="relative bg-white rounded-lg shadow max-h-[90vh] overflow-y-auto">
                     {!isDisabled && <button
                         type="button"
                         onClick={onClose}

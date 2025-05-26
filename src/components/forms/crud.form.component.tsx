@@ -55,7 +55,6 @@ const CrudFormComponent = ({
         return 1
     }
 
-
     return <PopupModal
         isOpen={isModalOpen}
         onSaveButtonName={'Save'}
@@ -69,15 +68,19 @@ const CrudFormComponent = ({
                 {
                     isForm
                         ?
-                      <div className={`grid grid-cols-${sizeGrid()} w-full gap-2`}
-                           style={{ gridTemplateColumns: `repeat(${sizeGrid()}, 1fr)`, gap: "10px" }}>
+                        <div className={`
+  grid gap-2
+  grid-cols-1
+  ${size === 'md' ? 'md:grid-cols-2' : ''}
+  ${size === 'lg' ? 'lg:grid-cols-3' : ''}
+`}>
                             {
                                 itHasCustomForm && !add_price ? (
                                     customForm
                                 ) : (
                                     // If itHasCustomForm is false, map over formInputs
                                     formInputs && formInputs.length > 0 && formInputs.map((item, index) => (
-                                        <>{ !item.isRemoved &&
+                                        <>{!item.isRemoved &&
                                             <div className="" key={index}>
                                                 {item?.type === 'text' && (
                                                     <TextFieldComponent
@@ -151,7 +154,7 @@ const CrudFormComponent = ({
                                                     />
                                                 )}
 
-                                                {item?.type === 'date'  && (
+                                                {item?.type === 'date' && (
                                                     <MuiDate
                                                         handleDateChange={handleInputChange}
                                                         from={item?.name}
