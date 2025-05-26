@@ -2,9 +2,9 @@
 import ProtectedRoute from "@/components/authentication/protected-route";
 import MuiCardComponent from "@/components/card/mui-card.component";
 import PageHeader from "@/components/header/page-header";
-import { get } from "@/utils/api";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import {get} from "@/utils/api";
+import {useRouter} from "next/navigation";
+import {useEffect, useState} from "react";
 import Goal from "../fragments/goal/goal";
 import GoalShow from "../fragments/goal/goal-view";
 import Outcome from "../fragments/outcome/outcome";
@@ -15,7 +15,7 @@ import OutputShow from "../fragments/output/output-view";
 import ActivityShow from "../fragments/activity/activity-view";
 import {getValueFromLocalStorage, setValueLocalStorage} from "@/utils/actions/local-starage";
 
-const ProjectPlanningShow = ({ params }: { params: { planId: string } }) => {
+const ProjectPlanningShow = ({params}: { params: { planId: string } }) => {
     const router = useRouter()
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
@@ -29,6 +29,13 @@ const ProjectPlanningShow = ({ params }: { params: { planId: string } }) => {
     const navigateToLogin = () => {
         return router.push('/login')
     }
+
+    const items = [
+        {title: 'Goal', routes: ['goal', 'goal/show'], click: 'goal', length: data.goals?.length},
+        {title: 'Outcome', routes: ['outcome', 'outcome/show'], click: 'outcome', length: data.outcomes?.length},
+        {title: 'Output', routes: ['output', 'output/show'], click: 'output', length: data.outputs?.length},
+        {title: 'Activity', routes: ['activity', 'activity/show'], click: 'activity', length: data.activities?.length},
+    ]
 
     useEffect(() => {
         const fetchData = async () => {
@@ -54,8 +61,8 @@ const ProjectPlanningShow = ({ params }: { params: { planId: string } }) => {
     const handleCardClick = (cardName: string, id?: string) => {
         setSelected(cardName)
         setSelectedId(id)
-        setValueLocalStorage('selected_plan_item', cardName )
-        setValueLocalStorage('selected_plan_item_id', id )
+        setValueLocalStorage('selected_plan_item', cardName)
+        setValueLocalStorage('selected_plan_item_id', id)
     }
 
     useEffect(() => {
@@ -82,8 +89,8 @@ const ProjectPlanningShow = ({ params }: { params: { planId: string } }) => {
                     <>
                         <PageHeader
                             links={[
-                                { name: 'Project Planning', linkTo: '/projects', permission: '' },
-                                { name: 'Show', linkTo: '/projects/show', permission: '' },
+                                {name: 'Project Planning', linkTo: '/projects', permission: ''},
+                                {name: 'Show', linkTo: '/projects/show', permission: ''},
                             ]}
                             isShowPage={true}
                             showrefresh={true}
@@ -91,36 +98,17 @@ const ProjectPlanningShow = ({ params }: { params: { planId: string } }) => {
                         <MuiCardComponent
                         >
                             <div className={`mt-3 p-5`}>
-                                <div className="flex gap-3 items-center">
-                                    <div
-                                        className={` ${['goal', 'goal/show'].includes(selected) ? 'bg-gray-500 text-white text-2xl font-bold w-2/6 h-40 hover:h-40' : 'bg-gray-300  w-1/4 h-32 hover:h-40'}  flex flex-col justify-center items-center cursor-pointer rounded-sm shadow-md`}
-                                        onClick={() => handleCardClick('goal')}
-                                    >
-                                        <h3>Goals</h3>
-                                        <p>{data.goals?.length}</p>
-                                    </div>
-                                    <div
-                                        className={` ${['outcome', 'outcome/show'].includes(selected) ? 'bg-gray-500 text-white text-2xl font-bold w-2/6 h-40 hover:h-40' : 'bg-gray-300  w-1/4 h-32 hover:h-40'}  flex flex-col justify-center items-center cursor-pointer rounded-sm shadow-md`}
-                                        onClick={() => handleCardClick('outcome')}
-                                    >
-                                        <h3>Outcomes</h3>
-                                        <p>{data?.outcomes?.length}</p>
-                                    </div>
-                                    <div
-                                        className={` ${['output', 'output/show'].includes(selected) ? 'bg-gray-500 text-white text-2xl font-bold w-2/6 h-40 hover:h-40' : 'bg-gray-300  w-1/4 h-32 hover:h-40'}  flex flex-col justify-center items-center cursor-pointer rounded-sm shadow-md`}
-                                        onClick={() => handleCardClick('output')}
-                                    >
-                                        <h3>Outputs</h3>
-                                        <p>{data?.outputs?.length}</p>
-                                    </div>
-                                    <div
-                                        className={` ${['activity', 'activity/show'].includes(selected) ? 'bg-gray-500 text-white text-2xl font-bold w-2/6 h-40 hover:h-40' : 'bg-gray-300  w-1/4 h-32 hover:h-40'}  flex flex-col justify-center items-center cursor-pointer rounded-sm shadow-md`}
-                                        onClick={() => handleCardClick('activity')}
-                                    >
-                                        <h3>Activities</h3>
-                                        <p>{data?.activities?.length}</p>
-                                    </div>
-
+                                <div className="grid grid-cols-2 gap-1 md:grid-cols-4 md:gap-3 items-center">
+                                    {items.map((item, index) =>
+                                        <div
+                                            key={index}
+                                            className={` ${item.routes.includes(selected) ? 'bg-gray-500 text-white text-2xl font-bold ' : 'bg-gray-300 '} w-full h-32 hover:h-36 flex flex-col justify-center items-center cursor-pointer rounded-sm shadow-md`}
+                                            onClick={() => handleCardClick(item.click)}
+                                        >
+                                            <h3>{item.title}</h3>
+                                            <p>{item.length}</p>
+                                        </div>)
+                                    }
                                 </div>
                                 <div className={`mt-3 p-2`}>
                                     {selected === 'goal' &&
