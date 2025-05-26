@@ -6,6 +6,9 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import HydrationZustand from "./Hydrated";
 import {GlobalContextProvider} from "@/context/GlobalContext";
+import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
+import React from "react";
+import MainComponentWrapper from "@/components/sidebar/main-component-wrapper";
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -22,12 +25,13 @@ export const metadata: Metadata = {
     },
 };
 
+interface Props {
+    children: React.ReactNode
+}
 
-export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
-    children: React.ReactNode;
-}>) {
+
+export default function RootLayout({children}: Props) {
+    const isSideBarHidden = getValueFromLocalStorage('isSideBarHidden');
 
     return (
         <html lang="en">
@@ -40,16 +44,10 @@ export default function RootLayout({
                             <Header/>
                             <div className={'flex flex-col md:flex-row'}>
                                 <Sidebar/>
-                                {/* Main content area */}
-                                <div className={'flex w-full flex-col'}>
-                                    <div className="bg-gray-200 pt-6 px-4 ">
-                                        <div className="bg-white p-3 h-[82vh] overflow-auto rounded-md">
-                                            {children}
-                                        </div>
-                                    </div>
-                                </div>
+                                <MainComponentWrapper>
+                                    {children}
+                                </MainComponentWrapper>
                             </div>
-
                         </div>
                         <Footer/>
                     </div>
