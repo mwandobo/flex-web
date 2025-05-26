@@ -12,7 +12,7 @@ type Props = {
 function AuthSkeletonComponent({children, loading, subtitle}: Props) {
     return (
 
-        <div className='w-screen h-screen fixed top-0 left-0 flex items-center justify-center bg-gradient-to-r from-slate-300 to-slate-500 z-50'>
+        <div className=' flex items-center justify-center bg-gradient-to-r from-slate-300 to-slate-500 z-50'>
             <div
                 className=" border border-gray-300 bg-white shadow-2xl rounded-xl w-96"
             >

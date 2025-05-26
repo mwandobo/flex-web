@@ -1,7 +1,6 @@
 import type {Metadata} from "next";
 import {Inter} from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/sidebar";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import HydrationZustand from "./Hydrated";
@@ -9,6 +8,7 @@ import {GlobalContextProvider} from "@/context/GlobalContext";
 import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import React from "react";
 import MainComponentWrapper from "@/components/sidebar/main-component-wrapper";
+import Sidebar from "@/components/sidebar/sidebar";
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -31,7 +31,6 @@ interface Props {
 
 
 export default function RootLayout({children}: Props) {
-    const isSideBarHidden = getValueFromLocalStorage('isSideBarHidden');
 
     return (
         <html lang="en">
@@ -42,7 +41,7 @@ export default function RootLayout({children}: Props) {
                     <div className={'flex flex-col'}>
                         <div className={'flex w-full flex-col'}>
                             <Header/>
-                            <div className={'flex flex-col md:flex-row'}>
+                            <div className={'flex flex-col md:flex-row w-full'}>
                                 <Sidebar/>
                                 <MainComponentWrapper>
                                     {children}

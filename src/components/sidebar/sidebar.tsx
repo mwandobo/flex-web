@@ -312,7 +312,7 @@ function Sidebar() {
     const { isSideBarHidden} = state;
 
     return (
-        <div className={`${isSideBarHidden ? 'hidden': 'block'} w-full md:w-1/4 md:block md:border-e border-gray-200 h-[86vh] overflow-y-auto`}>
+            <div className={`${isSideBarHidden ? 'hidden': 'block'} md:flex w-full md:w-[50vw] md:border-e border-gray-200 h-[86vh] overflow-y-auto`}>
             <div className='h-full w-full'>
                 <div className='bg-white px-2 h-full w-full'>
                     <hr className='bg-gray-200'/>
