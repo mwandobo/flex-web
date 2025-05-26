@@ -4,3 +4,4 @@ approval notification
 email sent successfully notes
 
 custom hide action table
+slider in mobile

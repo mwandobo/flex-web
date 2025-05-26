@@ -236,9 +236,9 @@ export const useApprovalsAndButtonsHook = ({
         return (
             <>
                 {isNeedApprove ? (
-                    <>
+                    <div className={'flex flex-col md:flex-row gap-2 w-full items-end'}>
                         {latestApproveStatus && isLastLevel ? (
-                            <div className={'flex w-full justify-between items-center'}>
+                            <div className={'flex me-4 justify-between items-center'}>
                                 <p className={`text-xs p-1 mt-2`}>
                                     {latestApproveStatus === "approve" ? (
                                         <span className='bg-green-100 p-2 rounded-sm'>Approved</span>
@@ -312,7 +312,7 @@ export const useApprovalsAndButtonsHook = ({
                                 />
                             </SlideOver>
                         </div>
-                    </>
+                    </div>
                 ) : buttonBody
                 }
             </>

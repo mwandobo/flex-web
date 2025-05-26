@@ -48,7 +48,7 @@ const ViewCardComponent = ({
                 </div>
             </div>
 
-            <div className='grid grid-cols-3'>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
                 {data.map((item, index) => (
                <>{ item.label &&
                    <div key={index} className="flex justify-center bg-gray-100 p-2 mb-1 ">
