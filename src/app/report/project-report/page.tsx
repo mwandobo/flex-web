@@ -20,9 +20,9 @@ const columns = [
     {header: 'Owner', accessor: 'owner'},
     {header: 'Status', accessor: 'status'},
     {header: 'Progress', accessor: 'progress_status'},
-    {header: 'Total Budget', accessor: 'total_budget',isAlignRight: true, isMoney: true},
-    {header: 'Total Expenses (Tzs)', accessor: 'total_expense',  isAlignRight: true, isMoney: true},
-    {header: 'Total Asset Value (Tzs)', accessor: 'total_asset_value', isAlignRight: true, isMoney: true },
+    {header: 'Total Budget', accessor: 'total_budget', isAlignRight: true, isMoney: true},
+    {header: 'Total Expenses (Tzs)', accessor: 'total_expense', isAlignRight: true, isMoney: true},
+    {header: 'Total Asset Value (Tzs)', accessor: 'total_asset_value', isAlignRight: true, isMoney: true},
     {header: 'Total Sale (Tzs)', accessor: 'total_sale', isAlignRight: true, isMoney: true},
 ];
 
@@ -34,7 +34,7 @@ function ProjectReport() {
     const url = 'report/project/project'
 
     const filter_key = 'project-report'
-    const {state}  = useGlobalContextHook()
+    const {state} = useGlobalContextHook()
     const filters = state.filterBody;
 
     useEffect(() => {
@@ -42,9 +42,9 @@ function ProjectReport() {
             try {
                 setLoading(true)
                 const final_url = createUrlWithFilters(url, filter_key)
-                const res = await get(final_url )
+                const res = await get(final_url)
 
-                if ( res.status === 200) {
+                if (res.status === 200) {
                     setData(res.data.data.data)
                     setMetaData(res.data.data.metadata)
                     setLoading(false)
@@ -59,8 +59,9 @@ function ProjectReport() {
         fetchData()
     }, [filters])
 
-    const pageRender = () =>{
+    const pageRender = () => {
         return <div className={'mt-2'}>
+
             <ReportFilterComponent
                 from={filter_key}
                 statusBody={[
@@ -69,22 +70,26 @@ function ProjectReport() {
                 ]}
                 isApprovalFilter={true}
             />
-            <CustomTable
-                columns={columns}
-                data={data}
-            />
-            <div className={'w-full flex justify-end mt-2'}>
-                <div>
-                    <h3 className={'text-xs font-medium'}>Summary</h3>
-                    <div className={'grid grid-cols-2 gap-2 text-xs font-medium'}>
-                        <p className={'border-r border-gray-400 pr-2'}> Total Budget:</p>
-                        <p>{moneyFormater({amount: metadata?.total_budget, isShowCurrency: true})}</p>
-                        <p className={'border-r border-gray-400 pr-2'}> Total Expense:</p>
-                        <p>{moneyFormater({amount: metadata?.total_expense, isShowCurrency: true})}</p>
-                        <p className={'border-r border-gray-400 pr-2'}> Total Asset Value:</p>
-                        <p>{moneyFormater({amount: metadata?.total_asset, isShowCurrency: true})}</p>
-                        <p className={'border-r border-gray-400 pr-2'}> Total Sale:</p>
-                        <p>{moneyFormater({amount: metadata?.total_sale, isShowCurrency: true})}</p>
+            <div className="overflow-x-auto">
+                <div className="min-w-[750px]">
+                    <CustomTable
+                        columns={columns}
+                        data={data}
+                    />
+                    <div className={'w-full flex justify-end mt-2'}>
+                        <div>
+                            <h3 className={'text-xs font-medium'}>Summary</h3>
+                            <div className={'grid grid-cols-2 gap-2 text-xs font-medium'}>
+                                <p className={'border-r border-gray-400 pr-2'}> Total Budget:</p>
+                                <p>{moneyFormater({amount: metadata?.total_budget, isShowCurrency: true})}</p>
+                                <p className={'border-r border-gray-400 pr-2'}> Total Expense:</p>
+                                <p>{moneyFormater({amount: metadata?.total_expense, isShowCurrency: true})}</p>
+                                <p className={'border-r border-gray-400 pr-2'}> Total Asset Value:</p>
+                                <p>{moneyFormater({amount: metadata?.total_asset, isShowCurrency: true})}</p>
+                                <p className={'border-r border-gray-400 pr-2'}> Total Sale:</p>
+                                <p>{moneyFormater({amount: metadata?.total_sale, isShowCurrency: true})}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

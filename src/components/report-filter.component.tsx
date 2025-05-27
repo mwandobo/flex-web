@@ -147,12 +147,12 @@ export default function ReportFilterComponent({
     return (<>
             {filter && filter === from &&
                 <div className={'w-full mb-6 flex justify-end  p-2 '}>
-                    <div className="w-1/2 border border-gray-100 p-2 flex flex-col items-end">
+                    <div className="md:w-1/2 border border-gray-100 p-2 flex flex-col items-end">
                         <button onClick={handleFilters} className={'mb-3'}>
                             <BadgeX size={18} strokeWidth={2} className={'text-gray-700'}/>
                         </button>
                         {!isHideDateFilter &&
-                            <div className={'flex w-full mb-1'}>
+                            <div className={'flex w-full mb-1 gap-1'}>
                                 <MuiDate
                                     handleDateChange={handleInputChange}
                                     from={'start_date'}

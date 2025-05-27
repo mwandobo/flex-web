@@ -72,10 +72,10 @@ export default function MuiDate({
     };
 
     return (
-        <div className="w-full">
+        <div className="w-full ">
             {labelStyle === "row" ? (
-                <div className="flex w-full justify-center items-center gap-2">
-                    <p className="min-w-[100px] max-w-[150px] text-right text-xs font-medium text-gray-700 truncate flex flex-col justify-center">
+                <div className="flex w-full gap-2">
+                    <p className="md:min-w-[100px] min-w-[50px] max-w-[150px] text-right  text-xs font-medium text-gray-700 truncate flex flex-col justify-center">
                         {label}
                     </p>
                     <div className="flex-1">
