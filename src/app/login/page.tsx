@@ -133,6 +133,7 @@ export default function LoginPage() {
                         onChange={handleChange}
                         isError={false}
                         errorMessage={''}
+                        isColumn={true}
                     />
                     <TextFieldComponent
                         placeholder={'password'}
@@ -142,10 +143,11 @@ export default function LoginPage() {
                         onChange={handleChange}
                         isError={false}
                         type='password'
+                        isColumn={true}
                         errorMessage={''}
                     />
-                    <div className="flex flex-col items-end gap-2 mb-6">
-                        <button className={'text-xs hover:text-blue-500'}  onClick={handleForgotPassword}>Forgot Password?</button>
+                    <div className="flex flex-col items-end gap-2 mb-6 ">
+                        <button className={'text-xs hover:text-blue-500 py-2'}  onClick={handleForgotPassword}>Forgot Password?</button>
                         <div className={'w-full flex justify-center'}>
                             <button
                                 onClick={handleSubmit}

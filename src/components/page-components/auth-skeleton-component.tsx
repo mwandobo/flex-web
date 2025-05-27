@@ -31,7 +31,7 @@ function AuthSkeletonComponent({children, loading, subtitle, title}: Props) {
                                     <div className='w-full flex flex-col items-center gap-8'>
                                         <h4 className={'text-4xl text-gray-700 font-semibold '}>{title ?? subtitle}</h4>
                                         <h4 className={'text-sm font-semibold text-gray-400'}>{subtitle}</h4>
-                                        <div className={'w-full mt-8'}>
+                                        <div className={'w-full '}>
                                             {children}
                                         </div>
                                     </div>
