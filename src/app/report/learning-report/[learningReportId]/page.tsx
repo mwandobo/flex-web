@@ -1,16 +1,16 @@
 "use client"
 import ProtectedRoute from "@/components/authentication/protected-route";
 import PageHeader from "@/components/header/page-header";
-import { baseURL, get, post } from "@/utils/api";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { getValueFromLocalStorage, } from "@/utils/actions/local-starage";
+import {get} from "@/utils/api";
+import {useRouter} from "next/navigation";
+import {useEffect, useState} from "react";
+import {getValueFromLocalStorage,} from "@/utils/actions/local-starage";
 import NoDataComponent from "@/components/status/no-data";
-import { capitalizeFirstWord } from "@/utils/actions/string-manipulations";
+import {capitalizeFirstWord} from "@/utils/actions/string-manipulations";
 import FormattedMoney from "@/components/moneyFormater";
 import GeneratePdf from "@/components/pdf/generate-pdf";
 
-const LearningReportShow = ({ params }: { params: { learningReportId: string } }) => {
+const LearningReportShow = ({params}: { params: { learningReportId: string } }) => {
     const router = useRouter()
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
@@ -32,7 +32,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                 const res = await get(url, token)
 
                 if (res.status === 200) {
-                    setData( res.data.data)
+                    setData(res.data.data)
                     setLoading(false)
                 }
 
@@ -234,11 +234,11 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
     const customTableFunction = () => {
         switch (evaluatedItem) {
             case 'output':
-                return { data: data?.outputs }
+                return {data: data?.outputs}
             case 'activity':
-                return { data: data?.activities }
+                return {data: data?.activities}
             case 'combined':
-                return { data: data?.outputs }
+                return {data: data?.outputs}
             default:
                 break
         }
@@ -272,7 +272,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
         const isFirst = index === 0;
         return < >
             <div key={index}
-                className={`grid grid-cols-6 ${!isFirst ? 'border-t' : 'border-t'} border-b border-r border-l border-gray-500`}>
+                 className={`grid grid-cols-6 ${!isFirst ? 'border-t' : 'border-t'} border-b border-r border-l border-gray-500`}>
                 <div
                     className="flex flex-col justify-center items-center  border-r border-gray-500 p-1">
                     <p className="text-xs ">
@@ -312,7 +312,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
 
             <div className="border-l border-gray-500">
                 <div className="border-b border-gray-500"
-                    style={{ marginLeft: "240px" }}>
+                     style={{marginLeft: "240px"}}>
                     <div
                         className="flex flex-col col-span-5 justify-center items-start p-1 border-r border-l border-gray-500 ">
                         <p className="text-sm font-semibold ">
@@ -330,7 +330,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                                     const isLast = index === indicatorColumns.length - 1;
                                     return (
                                         <div key={index}
-                                            className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
+                                             className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
                                             <p className="text-xs ">
                                                 {item.label}
                                             </p>
@@ -342,7 +342,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                         const isLast = index === item1?.indicators.length - 1;
                         return (
                             <div key={index}
-                                className={`grid grid-cols-6 border-r border-l border-gray-500`}>
+                                 className={`grid grid-cols-6 border-r border-l border-gray-500`}>
                                 <div
                                     className={`flex flex-col justify-center items-center border-r border-gray-500 p-1 ${!isLast ? 'border-b' : ''}`}>
                                     <p className="text-xs ">
@@ -392,7 +392,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
             </div>
             <div className="border-l border-gray-500">
                 <div className=""
-                    style={{ marginLeft: "240px" }}>
+                     style={{marginLeft: "240px"}}>
                     <div
                         className="flex flex-col col-span-5 justify-center items-start p-1 border-r border-l border-gray-500 ">
                         <p className="text-sm font-semibold ">
@@ -410,7 +410,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                                     const isLast = index === inputColumns(item1.learning_type).length - 1;
                                     return (
                                         <div key={index}
-                                            className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
+                                             className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
                                             <p className="text-xs ">
                                                 {item.label}
                                             </p>
@@ -425,7 +425,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                                 {
                                     item1.inputs?.map((item, index) =>
                                         <div key={index}
-                                            className={`grid grid-cols-5 ${index !== item1.inputs.length -1 && 'border-b border-gray-500'}`}>
+                                             className={`grid grid-cols-5 ${index !== item1.inputs.length - 1 && 'border-b border-gray-500'}`}>
                                             <div
                                                 className="flex flex-col justify-center items-center border-r border-gray-500 p-1">
                                                 <p className="text-xs ">
@@ -518,46 +518,49 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
         return (
             <div className="flex flex-col p-4 h-full w-full bg-white">
                 <div className="bg-white px-2 ">
-                    <h3 className="text-left font-semibold mb-1"> {reportHeader()} </h3>
-                    {
-                        customTableFunction()?.data?.length > 0 ?
-                            <div>
-                                <div
-                                    className="grid grid-cols-6 border border-gray-500  bg-gray-200 ">
-                                    {columns.map((item, index) => {
-                                        const isLast = index === columns.length - 1;
-                                        return (
-                                            <div key={index}
-                                                className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
-                                                <p className="text-xs ">
-                                                    {item.label}
-                                                </p>
-                                            </div>
-                                        )
-                                    }
-                                    )}
-                                </div>
-                                <div className="border-b border-gray-500">
-                                    {
-                                        customTableFunction()?.data?.map((item1, index) => {
-                                            return (
-                                                < >
-                                                    {itemRender(item1, index)}
-                                                    {evaluatedItem === "combined" && item1.activities && item1.activities.length > 0 && item1.activities.map((activity: any, index: any) => {
-                                                        return <>
-                                                            {itemRender(activity, index)}
-                                                        </>
-                                                    })}
-                                                </>
-                                            )
-                                        }
-                                        )}
-                                </div>
-                            </div>
-                            : <NoDataComponent />
-                    }
+                    <div className="overflow-x-auto">
+                        <div className="min-w-[750px]">
+                            <h3 className="text-left font-semibold mb-1"> {reportHeader()} </h3>
+                            {
+                                customTableFunction()?.data?.length > 0 ?
+                                    <div>
+                                        <div
+                                            className="grid grid-cols-6 border border-gray-500  bg-gray-200 ">
+                                            {columns.map((item, index) => {
+                                                    const isLast = index === columns.length - 1;
+                                                    return (
+                                                        <div key={index}
+                                                             className={`flex flex-col justify-center items-center ${!isLast ? 'border-r' : ''}  border-gray-500 pl-1`}>
+                                                            <p className="text-xs ">
+                                                                {item.label}
+                                                            </p>
+                                                        </div>
+                                                    )
+                                                }
+                                            )}
+                                        </div>
+                                        <div className="border-b border-gray-500">
+                                            {
+                                                customTableFunction()?.data?.map((item1, index) => {
+                                                        return (
+                                                            < >
+                                                                {itemRender(item1, index)}
+                                                                {evaluatedItem === "combined" && item1.activities && item1.activities.length > 0 && item1.activities.map((activity: any, index: any) => {
+                                                                    return <>
+                                                                        {itemRender(activity, index)}
+                                                                    </>
+                                                                })}
+                                                            </>
+                                                        )
+                                                    }
+                                                )}
+                                        </div>
+                                    </div>
+                                    : <NoDataComponent/>
+                            }
+                        </div>
+                    </div>
                 </div>
-
             </div>
         );
     }
@@ -565,11 +568,11 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
     const pageRenderHtml = () => {
         return (
             <div className="bg-white h-full ">
-                <div className="flex ">
-                    <div className="flex flex-col w-36 mt-4 ml-4 p-2">
-                        <h4 className="text-sm font-semibold mb-2">Learning Items</h4>
+                <div className="flex flex-col md:flex-row">
+                    <div className="flex flex-col w-36 font-semibold ml-4 p-2">
+                        <h4 className="text-sm ">Learning Items</h4>
                         <div className="flex flex-col justify-between h-full">
-                            <div className="flex flex-col ml-3 text-xs gap-1 cursor-pointer py-5">
+                            <div className="flex flex-col ml-3 text-xs gap-1 cursor-pointer py-2">
                                 {
                                     learningItems.map((item, index) =>
                                         <p
@@ -599,8 +602,8 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                     <div className="flex flex-col">
                         <PageHeader
                             links={[
-                                { name: 'Project Learning Report', linkTo: '/report/learning-report', permission: '' },
-                                { name: 'Show', linkTo: '/projects/show', permission: '' },
+                                {name: 'Project Learning Report', linkTo: '/report/learning-report', permission: ''},
+                                {name: 'Show', linkTo: '/projects/show', permission: ''},
                             ]}
                             isShowPage={true}
                             isDownload={true}
@@ -608,7 +611,7 @@ const LearningReportShow = ({ params }: { params: { learningReportId: string } }
                                 content={pageBody()}
                                 fileName="MyDocument.pdf"
                                 buttonLabel="Generate PDF"
-                            />} />
+                            />}/>
                         {pageRenderHtml()}
                     </div>
             }
