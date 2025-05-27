@@ -75,11 +75,7 @@ const CrudFormComponent = ({
                     isForm
                         ?
                         <div
-                            // className={`w-full grid gap-2 grid-cols-1 ${size === 'md' && 'md:grid-cols-2' } ${size === 'lg' && 'lg:grid-cols-3' }`}>
-                            // className={`w-full grid gap-2 grid-cols-1`}
-
-                            className={`w-full grid gap-2 grid-cols-1 ${size === 'md' ? 'md:grid-cols-2' : size === 'lg' ? 'md:grid-cols-3' : ''}`}>
-
+                            className={`w-full grid gap-2 grid-cols-1 ${size === 'md' ? 'md:grid-cols-2' : size === 'lg' ? 'md:grid-cols-3' : ''} mt-4`}>
                             {
                                 itHasCustomForm && !add_price ? (
                                     customForm
