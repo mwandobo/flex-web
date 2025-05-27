@@ -393,9 +393,6 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
                         />
                         <div className="flex h-full w-full">
                             <div className="flex flex-col md:flex-row w-full text-xs p-2">
-                                {/*<div className="flex flex-col w-64 mt-4 ml-4 p-2">*/}
-                                {/*    <h4 className="text-sm font-semibold mb-2">Evaluation Items</h4>*/}
-
                                 <div className="basis-[14%] font-semibold mb-4">
                                     <h4 className="text-sm  mb-2">Evaluation Items</h4>
                                     <div className="flex flex-col gap-1 cursor-pointer">
@@ -423,25 +420,7 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
                                             </button>
                                         }
                                     </div>
-
-
-                                    {/*<div className="flex flex-col justify-between h-full">*/}
-                                    {/*    <div className="flex flex-col ml-3 text-sm gap-1 cursor-pointer py-5">*/}
-                                    {/*        <p*/}
-                                    {/*            className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'goal' && 'bg-sidebar-background text-sidebar-active'} `}*/}
-                                    {/*            onClick={() => handleEvaluationItemChange('goal')}>*/}
-                                    {/*            Goals*/}
-                                    {/*        </p>*/}
-                                    {/*        <p*/}
-                                    {/*            className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'outcome' && 'bg-sidebar-background text-sidebar-active'}`}*/}
-                                    {/*            onClick={() => handleEvaluationItemChange('outcome')}>*/}
-                                    {/*            Outcomes*/}
-                                    {/*        </p>*/}
-                                    {/*    </div>*/}
-                                    {/*</div>*/}
-
                                 </div>
-
 
                                 <div className="basis-[86%] bg-gray-200 p-2">
                                     <div className="bg-white p-2 w-full">                                    {
