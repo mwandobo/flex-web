@@ -9,6 +9,7 @@ import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import React from "react";
 import MainComponentWrapper from "@/components/sidebar/main-component-wrapper";
 import Sidebar from "@/components/sidebar/sidebar";
+import SlideOverRender from "@/components/slide-over/slide-over-render.component";
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -49,6 +50,7 @@ export default function RootLayout({children}: Props) {
                             </div>
                         </div>
                         <Footer/>
+                        <SlideOverRender/>
                     </div>
                 </GlobalContextProvider>
             </HydrationZustand>

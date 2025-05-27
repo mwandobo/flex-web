@@ -126,10 +126,6 @@ export const useApprovalsAndButtonsHook = ({
 
             if (latestLevel) {
                 try {
-
-
-                    console.log('mappedApproval', mappedApproval)
-
                     const approvedItemForLatestLevel = await getApprovedItemByLevelId(latestLevel?.id);
                     if (approvedItemForLatestLevel) {
                         setIsLastLevel(true);

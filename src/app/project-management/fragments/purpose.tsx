@@ -60,8 +60,6 @@ function Purpose(
 
     const url = `project_purpose?project_id=${project.id}`
 
-    console.log(isHideAdd)
-
     const {
         loading,
         createdForm,
