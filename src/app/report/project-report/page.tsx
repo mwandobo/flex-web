@@ -76,23 +76,24 @@ function ProjectReport() {
                         columns={columns}
                         data={data}
                     />
-                    <div className={'w-full flex justify-end mt-2'}>
-                        <div>
-                            <h3 className={'text-xs font-medium'}>Summary</h3>
-                            <div className={'grid grid-cols-2 gap-2 text-xs font-medium'}>
-                                <p className={'border-r border-gray-400 pr-2'}> Total Budget:</p>
-                                <p>{moneyFormater({amount: metadata?.total_budget, isShowCurrency: true})}</p>
-                                <p className={'border-r border-gray-400 pr-2'}> Total Expense:</p>
-                                <p>{moneyFormater({amount: metadata?.total_expense, isShowCurrency: true})}</p>
-                                <p className={'border-r border-gray-400 pr-2'}> Total Asset Value:</p>
-                                <p>{moneyFormater({amount: metadata?.total_asset, isShowCurrency: true})}</p>
-                                <p className={'border-r border-gray-400 pr-2'}> Total Sale:</p>
-                                <p>{moneyFormater({amount: metadata?.total_sale, isShowCurrency: true})}</p>
-                            </div>
-                        </div>
+                </div>
+            </div>
+            <div className={'w-full flex justify-end mt-2'}>
+                <div>
+                    <h3 className={'text-xs font-medium'}>Summary</h3>
+                    <div className={'grid grid-cols-2 gap-2 text-xs font-medium'}>
+                        <p className={'border-r border-gray-400 pr-2'}> Total Budget:</p>
+                        <p>{moneyFormater({amount: metadata?.total_budget, isShowCurrency: true})}</p>
+                        <p className={'border-r border-gray-400 pr-2'}> Total Expense:</p>
+                        <p>{moneyFormater({amount: metadata?.total_expense, isShowCurrency: true})}</p>
+                        <p className={'border-r border-gray-400 pr-2'}> Total Asset Value:</p>
+                        <p>{moneyFormater({amount: metadata?.total_asset, isShowCurrency: true})}</p>
+                        <p className={'border-r border-gray-400 pr-2'}> Total Sale:</p>
+                        <p>{moneyFormater({amount: metadata?.total_sale, isShowCurrency: true})}</p>
                     </div>
                 </div>
             </div>
+
         </div>
     }
 
