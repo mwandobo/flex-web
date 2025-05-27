@@ -121,7 +121,8 @@ export default function LoginPage() {
     return (
         <AuthSkeletonComponent
             loading={loading}
-            subtitle={'Welcome Back ...'}
+            title={'Welcome Back'}
+            subtitle={'Enter your Email and Password to Access your Account'}
         >
                 <>
                     <TextFieldComponent

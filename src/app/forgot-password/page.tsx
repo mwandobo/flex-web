@@ -59,6 +59,7 @@ export default function ForgotPasswordPage() {
     return (
         <AuthSkeletonComponent
             loading={loading}
+            title={'Forgot Password'}
             subtitle={'Enter your Email to get Recovery Email'}
         >
                         <>
