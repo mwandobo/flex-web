@@ -5,9 +5,7 @@ import React, {useEffect, useState} from 'react'
 import PageHeader from "@/components/header/page-header";
 import GeneratePdf from "@/components/pdf/generate-pdf";
 import {get} from "@/utils/api";
-import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import CustomTable from "@/components/tables/flexible-normal-table";
-import moneyFormater from "@/components/moneyFormater";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import ReportFilterComponent from "@/components/report-filter.component";
 import {createUrlWithFilters} from "@/utils/report-filter.helper";
@@ -27,7 +25,7 @@ function ProjectReport() {
     const [loading, setLoading] = useState(false)
     const url = 'report/project/lessons-learned'
     const filter_key = 'lessons-learned'
-    const {state}  = useGlobalContextHook()
+    const {state} = useGlobalContextHook()
     const filters = state.filterBody;
 
     useEffect(() => {
@@ -35,9 +33,9 @@ function ProjectReport() {
             try {
                 setLoading(true)
                 const final_url = createUrlWithFilters(url, filter_key)
-                const res = await get(final_url )
+                const res = await get(final_url)
 
-                if ( res.status === 200) {
+                if (res.status === 200) {
                     setData(res.data.data.data)
                     setMetaData(res.data.data.metadata)
                     setLoading(false)
@@ -52,7 +50,7 @@ function ProjectReport() {
         fetchData()
     }, [filters])
 
-    const pageRender = () =>{
+    const pageRender = () => {
         return <div className={'mt-2'}>
             <ReportFilterComponent
                 from={filter_key}
@@ -64,10 +62,14 @@ function ProjectReport() {
                 byProject={true}
                 byEmployee={true}
             />
-            <CustomTable
-                columns={columns}
-                data={data}
-            />
+            <div className="overflow-x-auto">
+                <div className="min-w-[750px]">
+                    <CustomTable
+                        columns={columns}
+                        data={data}
+                    />
+                </div>
+            </div>
         </div>
     }
 
