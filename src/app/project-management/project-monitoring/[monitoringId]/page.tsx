@@ -7,9 +7,10 @@ import {useEffect, useState} from "react";
 import LinearWithValueLabel from "@/components/bars/progressBar";
 import CircularWithValueLabel from "@/components/bars/circularBar";
 import {getValueFromLocalStorage, setValueLocalStorage} from "@/utils/actions/local-starage";
-import {BetweenHorizontalStart, ChevronDown, ChevronUp, CircleCheckBig, ClipboardCheck, OctagonX} from "lucide-react";
+import {BetweenHorizontalStart, ChevronDown, ChevronUp, CircleCheckBig, OctagonX} from "lucide-react";
 import FormattedMoney from "@/components/moneyFormater";
 import swal from "sweetalert2";
+import {capitalizeFirstWord} from "@/utils/actions/string-manipulations";
 
 const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) => {
     const router = useRouter()
@@ -60,8 +61,8 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
     }
 
     const handleItemExpand = (index: number) => {
-        setExpandedItem(index === expandedV1Item ? null :index )
-        setValueLocalStorage('expanded_monitoring_item', index === expandedV1Item ? null :index);
+        setExpandedItem(index === expandedV1Item ? null : index)
+        setValueLocalStorage('expanded_monitoring_item', index === expandedV1Item ? null : index);
     };
 
     const isExpanded = (item: any, index: number) => {
@@ -69,7 +70,7 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
     };
 
     const handleFormInputChange = (e: any, indicator: any, from: string) => {
-        if(isNaN(e.target.value)){
+        if (isNaN(e.target.value)) {
             swal.fire({
                 title: 'Error Occured!',
                 text: "Provide Numbers Only",
@@ -97,10 +98,10 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
     const handleSubmitCollectedData = async () => {
         if (formPayload) {
             // Ensure either cost or quantity exists and is a valid number
-            const { cost, quantity } = formPayload;
+            const {cost, quantity} = formPayload;
             const isValid =
-                (cost !== undefined  && !isNaN(cost)) ||
-                (quantity !== undefined  && !isNaN(quantity));
+                (cost !== undefined && !isNaN(cost)) ||
+                (quantity !== undefined && !isNaN(quantity));
 
             if (!isValid) {
                 swal.fire({
@@ -203,7 +204,8 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
                     {
                         payload.map((item: any, index: any) =>
                             <div key={index} className="flex ">
-                                <div className={`grid grid-cols-8 w-full text-xs ${index !== payload.length - 1 && 'border-b border-gray-200'} `}>
+                                <div
+                                    className={`grid grid-cols-8 w-full text-xs ${index !== payload.length - 1 && 'border-b border-gray-200'} `}>
                                     <p className="border-r border-gray-300 ps-3  py-1">{index + 1}</p>
                                     <p className="border-r border-gray-300 ps-3 py-1">{item.formatted_code}</p>
                                     <p className="border-r border-gray-300 ps-3 py-1">{item.name}</p>
@@ -256,7 +258,6 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
     }
 
     const inputBodyCreator = (payload: any[], parentIndex: number) => {
-
         if (payload?.length <= 0) {
             return <p>No Inputs</p>
         }
@@ -280,7 +281,8 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
                         {
                             payload && payload.map((item: any, index: any) =>
                                 <div key={index} className="flex flex-col ">
-                                        <div className={`grid grid-cols-7 w-full text-xs ${index !== payload.length - 1 && 'border-b border-gray-200'} `}>
+                                    <div
+                                        className={`grid grid-cols-7 w-full text-xs ${index !== payload.length - 1 && 'border-b border-gray-200'} `}>
                                         <p className="border-r border-gray-300 ps-2 py-1">{index + 1}</p>
                                         <p className="border-r border-gray-300 ps-2 py-1">{item.type}</p>
                                         <p className="border-r border-gray-300 ps-2 py-1">{item.name}</p>
@@ -341,77 +343,103 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
 
     const pageRender = (payload: any, from?: string) => {
         if (payload && Object.keys(payload).length > 0 && payload.data && payload.data.length > 0) {
-            return <div className="flex">
-                <div className="w-full flex flex-col">
-                    <div className="bg-gray-300 ">
-                        <div className="flex w-full text-xs font-semibold">
-                            <p className="w-[5%] border-e border-gray-400 p-2 text-start">#</p>
-                            <p className="w-[15%] border-e border-gray-400 p-2 text-start">Code</p>
-                            <p className="w-[20%] border-e border-gray-400 p-2 text-start">Name</p>
-                            <p className="w-[17%] border-e border-gray-400 p-2 text-end">Budget (Tzs)</p>
-                            <p className="w-[18%] border-e border-gray-400 p-2 text-end">Expense (Tzs)</p>
-                            <p className="w-[20%] p-2 text-start">Progress</p>
-                            <p className="w-[5%] p-2"></p>
+            return (
+                <div className="flex w-full">
+                    <div className="w-full flex flex-col">
+                        {/* Scrollable wrapper for columns */}
+                        <div className="overflow-x-auto">
+                            <div className="min-w-[750px]"> {/* Adjust width to fit all columns */}
+                                <div className="bg-gray-300">
+                                    <div className="flex w-full text-xs font-semibold">
+                                        {/* Column Headers */}
+                                        <p className="w-[5%] border-e border-gray-400 p-2 text-start">#</p>
+                                        <p className="w-[15%] border-e border-gray-400 p-2 text-start">Code</p>
+                                        <p className="w-[20%] border-e border-gray-400 p-2 text-start">Name</p>
+                                        <p className="w-[17%] border-e border-gray-400 p-2 text-end">Budget (Tzs)</p>
+                                        <p className="w-[18%] border-e border-gray-400 p-2 text-end">Expense (Tzs)</p>
+                                        <p className="w-[20%] p-2 text-start">Progress</p>
+                                        <p className="w-[5%] p-2"></p>
+                                    </div>
+                                </div>
+
+                                <div className="w-full bg-white">
+                                    {payload.data.map((item: any, index: any) => (
+                                        <div
+                                            key={index}
+                                            className="flex w-full even:bg-gray-100 border border-gray-300 mb-2 pt-3"
+                                        >
+                                            <p
+                                                className={`w-[55px] h-full flex justify-center items-center ${
+                                                    isExpanded(item, index) && 'text-lg font-semibold'
+                                                }`}
+                                            >
+                                                {index + 1}
+                                            </p>
+                                            <div className="flex w-full flex-col border-gray-300">
+                                                <div className="flex w-full text-xs mb-3">
+                                                    <p className="w-[16%] border-s border-e border-b border-t border-gray-300 p-2 text-start">
+                                                        {item.formatted_code}
+                                                    </p>
+                                                    <p className="w-[21%] border-e border-b border-t border-gray-300 p-2 text-start">
+                                                        {item.name}
+                                                    </p>
+                                                    <p className="w-[18%] border-e border-b border-t border-gray-300 p-2 text-end">
+                                                        {FormattedMoney({
+                                                            amount: item.total_cost,
+                                                            isHideCurrency: true,
+                                                        })}
+                                                    </p>
+                                                    <p className="w-[18.8%] border-e border-b border-t border-gray-300 p-2 text-end">
+                                                        {FormattedMoney({
+                                                            amount: item.occured_cost,
+                                                            isHideCurrency: true,
+                                                        })}
+                                                    </p>
+                                                    <p className="w-[20%] p-2 border-b border-t border-gray-300 text-start">
+                                                        {progressRender(item.progress)}
+                                                    </p>
+                                                    <p
+                                                        className="w-[5%] p-2 border-b border-t border-e border-gray-300"
+                                                        onClick={() => handleItemExpand(index)}
+                                                    >
+                                                        {isExpanded(item, index) ? (
+                                                            <ChevronUp className="text-gray-900" strokeWidth={3}
+                                                                       size={20}/>
+                                                        ) : (
+                                                            <ChevronDown className="text-gray-400" size={20}/>
+                                                        )}
+                                                    </p>
+                                                </div>
+                                                <>
+                                                    {isExpanded(item, index) && (
+                                                        <div
+                                                            className="mb-6 pe-4">{indicatorBodyCreator(item.indicators, index)}</div>
+                                                    )}
+                                                    {isExpanded(item, index) && selected === 'activities' && (
+                                                        <div
+                                                            className="mb-4 pe-4">{inputBodyCreator(item.inputs, index)}</div>
+                                                    )}
+                                                </>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div className="w-full bg-white">
-                        {
-                            payload.data.map((item: any, index: any) =>
-                                <div key={index} className={'flex w-full even:bg-gray-100 border border-gray-300 mb-2 pt-3'}>
-                                    <p className={`w-[55px] h-full flex justify-center items-center ${isExpanded(item, index) && 'text-lg font-semibold'}`}>{index + 1}</p>
-                                    <div className="flex w-full flex-col  border-gray-300 ">
-                                        <div className="flex w-full text-xs mb-3">
-                                            <p className="w-[16%] border-s border-e border-b border-t  border-gray-300 p-2 text-start">{item.formatted_code}</p>
-                                            <p className="w-[21%] border-e border-b border-t  border-gray-300 p-2 text-start">{item.name}</p>
-                                            <p className="w-[18%] border-e border-b border-t  border-gray-300 p-2 text-end">{FormattedMoney({
-                                                amount: item.total_cost,
-                                                isHideCurrency: true
-                                            })}</p>
-                                            <p className="w-[18.8%] border-e border-b border-t  border-gray-300 p-2 text-end">{FormattedMoney({
-                                                amount: item.occured_cost,
-                                                isHideCurrency: true
-                                            })}</p>
-                                            <p className="w-[20%] p-2 border-b border-t border-gray-300  text-start">{progressRender(item.progress)}</p>
-                                            <p className={`w-[5%] p-2 border-b border-t border-e border-gray-300 `}
-                                               onClick={() => handleItemExpand(index)}
-                                            >
-                                                {isExpanded(item, index) ?
-                                                    <ChevronUp className="text-gray-900" strokeWidth={3} size={20}/> :
-                                                    <ChevronDown className="text-gray-400" size={20}/>}
-                                            </p>
-                                        </div>
-                                        <>
-                                            {
-                                                isExpanded(item, index) &&
-                                                <div className="mb-6 pe-4 ">
-                                                    {indicatorBodyCreator(item.indicators, index)}
-                                                </div>
-                                            }
-                                            {
-                                                isExpanded(item, index) && selected === 'activities' &&
-                                                <div className="mb-4 pe-4">
-                                                    {inputBodyCreator(item.inputs, index)}
-                                                </div>
-                                            }
-                                        </>
-                                    </div>
-
-                                </div>
-                            )
-                        }
-                    </div>
                 </div>
-            </div>
+            )
         }
-
     }
+
+    const monitoringItems = ['outputs', 'activities'];
 
     return (
         <ProtectedRoute>
             {
                 loading ? <p>Loading...</p>
                     :
-                    <div className="flex flex-col">
+                    <div className="flex flex-col w-full">
                         <PageHeader
                             links={[
                                 {name: 'Project Monitoring', linkTo: '/project-monitoring', permission: ''},
@@ -419,58 +447,56 @@ const ProjectMonitoringShow = ({params}: { params: { monitoringId: string } }) =
                             ]}
                             isShowPage={true}
                         />
-                        <div className="bg-white ">
-                            <div className="flex ">
-                                <div className="flex flex-col w-48 mt-4 ml-4 p-2">
-                                    <h4 className="text-sm font-semibold mb-2">Monitoring Items</h4>
-                                    <div className="flex flex-col ml-3 text-sm gap-1 cursor-pointer">
-                                        <p
-                                            className={`p-1 hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'outputs' && 'bg-sidebar-background text-sidebar-active'}`}
-                                            onClick={() => handleMonitoringItemChange('outputs')}>
-                                            Outputs
-                                        </p>
-                                        <p
-                                            className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'activities' && 'bg-sidebar-background text-sidebar-active'}`}
-                                            onClick={() => handleMonitoringItemChange('activities')}>
-                                            Activities
-                                        </p>
+                        <div className="flex h-full w-full">
+                            <div className="flex flex-col md:flex-row w-full text-xs p-2">
+                                <div className="basis-[14%] font-semibold mb-4">
+                                    <h4 className="text-sm  mb-2">Monitoring Items</h4>
+                                    <div className="flex flex-col gap-1 cursor-pointer">
+                                        {monitoringItems.map(item => (
+                                            <p
+                                                key={item}
+                                                className={`p-1 hover:bg-sidebar-background hover:text-sidebar-active ${
+                                                    selected === item && 'bg-sidebar-background text-sidebar-active'
+                                                }`}
+                                                onClick={() => handleMonitoringItemChange(item)}
+                                            >
+                                                {capitalizeFirstWord(item)}
+                                            </p>
+                                        ))}
                                     </div>
                                 </div>
-                                <div className="flex flex-col p-4 h-full w-full bg-gray-100">
-                                    {
-                                        payload.map((pay, index) =>
-                                            <div key={index} className="">
-                                                {pay.type === selected &&
-                                                    <>  {pay.data.length > 0 ?
-                                                        <div key={index}
-                                                             className="h-full relative bg-white shadow-md w-full p-6">
-                                                            <div className="flex justify-between">
-                                                                <h3 className=" text-sm font-semibold">{pay.name}</h3>
-                                                                <div
-                                                                    className="flex justify-center gap-3 items-center">
-
-                                                                    <CircularWithValueLabel
-                                                                        value={Number(pay.progress)}/>
+                                <div className="basis-[86%] bg-gray-200 p-2">
+                                    <div className="bg-white p-2 w-full">
+                                        {
+                                            payload.map((pay, index) =>
+                                                <div key={index} className="w-full">
+                                                    {pay.type === selected &&
+                                                        <>  {pay.data.length > 0 ?
+                                                            <div key={index}
+                                                                 className="h-full w-full ">
+                                                                <div className="flex w-full justify-between">
+                                                                    <h3 className="text-sm font-semibold">{pay.name}</h3>
+                                                                    <div className="">
+                                                                        <CircularWithValueLabel
+                                                                            value={Number(pay.progress)}/>
+                                                                    </div>
+                                                                </div>
+                                                                {pay.data?.length > 0 && pageRender(pay, pay.type)}
+                                                            </div> :
+                                                            <div
+                                                                className="w-full h-36 flex justify-center items-center ">
+                                                                <div className="animate-pulse">
+                                                                    <OctagonX/>
+                                                                    <p>No data</p>
                                                                 </div>
                                                             </div>
-                                                            {pay.data?.length > 0 &&
-                                                                <>
-                                                                    {pageRender(pay, pay.type)}
-                                                                </>
-                                                            }
-                                                        </div> :
-                                                        <div className="w-full h-36 flex justify-center items-center ">
-                                                            <div className="animate-pulse">
-                                                                <OctagonX/>
-                                                                <p>No data</p>
-                                                            </div>
-                                                        </div>
+                                                        }
+                                                        </>
                                                     }
-                                                    </>
-                                                }
-                                            </div>
-                                        )
-                                    }
+                                                </div>
+                                            )
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>

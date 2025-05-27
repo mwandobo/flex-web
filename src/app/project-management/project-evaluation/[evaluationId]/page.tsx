@@ -9,6 +9,7 @@ import {Check, ClipboardCheck, OctagonX} from "lucide-react";
 import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 import swal from 'sweetalert2';
 import FormattedMoney from "@/components/moneyFormater";
+import {capitalizeFirstWord} from "@/utils/actions/string-manipulations";
 
 const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) => {
     const [payload, setPayload] = useState<any[]>([])
@@ -135,7 +136,7 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
 
     const validator = () =>
         evaluationForm.data.every(
-            (item: any) =>  !isNaN(item.value) && item.value > 0
+            (item: any) => !isNaN(item.value) && item.value > 0
         );
 
     const url = `project_evaluation/show/${id}`
@@ -225,7 +226,8 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
                     {
                         payload.map((item: any, index: any) =>
                             <div key={index} className="flex ">
-                                    <div className={`grid grid-cols-8 w-full text-xs ${index !== payload.length - 1 && 'border-b border-gray-200'} `}>
+                                <div
+                                    className={`grid grid-cols-8 w-full text-xs ${index !== payload.length - 1 && 'border-b border-gray-200'} `}>
                                     <p className="border-r border-gray-300 ps-3  py-1">{index + 1}</p>
                                     <p className="border-r border-gray-300 ps-3 py-1">{item.formatted_code}</p>
                                     <p className="border-r border-gray-300 ps-3 py-1">{item.name}</p>
@@ -312,93 +314,102 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
     const pageRender = (payload: any, from?: string) => {
 
         if (payload && Object.keys(payload).length > 0 && payload.data && payload.data.length > 0) {
-            return <div className="flex">
+            return <div className="flex w-full">
                 <div className="w-full flex flex-col">
-                    <div className="bg-gray-300 ">
-                        <div className="flex w-full text-xs font-semibold">
-                            <p className="w-[5%] border-e border-gray-400 p-2 text-start">#</p>
-                            <p className="w-[15%] border-e border-gray-400 p-2 text-start">Code</p>
-                            <p className="w-[21%] border-e border-gray-400 p-2 text-start">Name</p>
-                            <p className="w-[18%] border-e border-gray-400 p-2 text-end">Budget (Tzs)</p>
-                            <p className="w-[19%] border-e border-gray-400 p-2 text-end">Expense (Tzs)</p>
-                            <p className="w-[23%] p-2 text-start">Progress</p>
+                    <div className="overflow-x-auto">
+                        <div className="min-w-[750px]">
+                            <div className="bg-gray-300 ">
+                                <div className="flex w-full text-xs font-semibold">
+                                    <p className="w-[5%] border-e border-gray-400 p-2 text-start">#</p>
+                                    <p className="w-[15%] border-e border-gray-400 p-2 text-start">Code</p>
+                                    <p className="w-[21%] border-e border-gray-400 p-2 text-start">Name</p>
+                                    <p className="w-[18%] border-e border-gray-400 p-2 text-end">Budget (Tzs)</p>
+                                    <p className="w-[19%] border-e border-gray-400 p-2 text-end">Expense (Tzs)</p>
+                                    <p className="w-[23%] p-2 text-start">Progress</p>
 
-                            <p className="w-[5%]  p-2"></p>
-                        </div>
-                    </div>
-                    <div className="w-full bg-white">
-                        {
-                            payload.data.map((item: any, index: any) =>
-                                <div key={index}
-                                     className={'flex w-full even:bg-gray-100 border border-gray-300 mb-2 pt-3'}>
-                                    <p className={`w-[55px] h-full flex justify-center items-center ${inEvaluation && 'text-lg font-semibold'}`}>{index + 1}</p>
-                                    <div className="flex w-full flex-col  border-gray-300 ">
-                                        <div className="flex w-full text-xs mb-3">
-                                            <p className="w-[14.8%] border-s border-e border-b border-t  border-gray-300 p-2 text-start">{item.formatted_code}</p>
-                                            <p className="w-[20.8%] border-e border-b border-t  border-gray-300 p-2 text-start">{item.name}</p>
-                                            <p className="w-[18%] border-e border-b border-t  border-gray-300 p-2 text-end">{FormattedMoney({
-                                                amount: item.total_cost,
-                                                isHideCurrency: true
-                                            })}</p>
-                                            <p className="w-[18.8%] border-e border-b border-t  border-gray-300 p-2 text-end">{FormattedMoney({
-                                                amount: item.occured_cost,
-                                                isHideCurrency: true
-                                            })}</p>
-                                            <p className="w-[26%] p-2 border-b border-t border-e border-gray-300  text-start">{progressRender(item.progress)}</p>
-                                        </div>
-                                        <div className={'mb-2 pe-4'}>
-                                            {
-                                                inEvaluation &&
-                                                <div className="mb-6 ">
-                                                    {indicatorBodyCreator(item.indicators, index)}
-                                                </div>
-                                            }
-                                            {inEvaluation &&
-                                                < div className="">
-                                                    {inputBodyCreator(item, from)}
-                                                </div>
-                                            }
-                                        </div>
-                                    </div>
+                                    <p className="w-[5%]  p-2"></p>
                                 </div>
-                            )
-                        }
+                            </div>
+                            <div className="w-full bg-white">
+                                {
+                                    payload.data.map((item: any, index: any) =>
+                                        <div key={index}
+                                             className={'flex w-full even:bg-gray-100 border border-gray-300 mb-2 pt-3'}>
+                                            <p className={`w-[55px] h-full flex justify-center items-center ${inEvaluation && 'text-lg font-semibold'}`}>{index + 1}</p>
+                                            <div className="flex w-full flex-col  border-gray-300 ">
+                                                <div className="flex w-full text-xs mb-3">
+                                                    <p className="w-[14.8%] border-s border-e border-b border-t  border-gray-300 p-2 text-start">{item.formatted_code}</p>
+                                                    <p className="w-[20.8%] border-e border-b border-t  border-gray-300 p-2 text-start">{item.name}</p>
+                                                    <p className="w-[18%] border-e border-b border-t  border-gray-300 p-2 text-end">{FormattedMoney({
+                                                        amount: item.total_cost,
+                                                        isHideCurrency: true
+                                                    })}</p>
+                                                    <p className="w-[18.8%] border-e border-b border-t  border-gray-300 p-2 text-end">{FormattedMoney({
+                                                        amount: item.occured_cost,
+                                                        isHideCurrency: true
+                                                    })}</p>
+                                                    <p className="w-[26%] p-2 border-b border-t border-e border-gray-300  text-start">{progressRender(item.progress)}</p>
+                                                </div>
+                                                <div className={'mb-2 pe-4'}>
+                                                    {
+                                                        inEvaluation &&
+                                                        <div className="mb-6 ">
+                                                            {indicatorBodyCreator(item.indicators, index)}
+                                                        </div>
+                                                    }
+                                                    {inEvaluation &&
+                                                        < div className="">
+                                                            {inputBodyCreator(item, from)}
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         }
     }
 
+    const evaluationItems = ['goal', 'outcome'];
+
+
     return (
         <ProtectedRoute>
             {
                 loading ? <p>Loading...</p>
                     :
-                    <div className="flex flex-col h-full">
+                    <div className="flex flex-col w-full">
                         <PageHeader
                             links={[
-                                {name: 'Project Evaluation', linkTo: '/project-monitoring', permission: ''},
+                                {name: 'Project Evaluation', linkTo: '/project-evaluation', permission: ''},
                                 {name: 'Show', linkTo: '/projects/show', permission: ''},
                             ]}
                             isShowPage={true}
                         />
-                        <div className="bg-white h-full ">
-                            <div className="flex ">
-                                <div className="flex flex-col w-64 mt-4 ml-4 p-2">
-                                    <h4 className="text-sm font-semibold mb-2">Evaluation Items</h4>
-                                    <div className="flex flex-col justify-between h-full">
-                                        <div className="flex flex-col ml-3 text-sm gap-1 cursor-pointer py-5">
+                        <div className="flex h-full w-full">
+                            <div className="flex flex-col md:flex-row w-full text-xs p-2">
+                                {/*<div className="flex flex-col w-64 mt-4 ml-4 p-2">*/}
+                                {/*    <h4 className="text-sm font-semibold mb-2">Evaluation Items</h4>*/}
+
+                                <div className="basis-[14%] font-semibold mb-4">
+                                    <h4 className="text-sm  mb-2">Evaluation Items</h4>
+                                    <div className="flex flex-col gap-1 cursor-pointer">
+                                        {evaluationItems.map(item => (
                                             <p
-                                                className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'goal' && 'bg-sidebar-background text-sidebar-active'} `}
-                                                onClick={() => handleEvaluationItemChange('goal')}>
-                                                Goals
+                                                key={item}
+                                                className={`p-1 hover:bg-sidebar-background hover:text-sidebar-active ${
+                                                    selected === item && 'bg-sidebar-background text-sidebar-active'
+                                                }`}
+                                                onClick={() => handleEvaluationItemChange(item)}
+                                            >
+                                                {`${capitalizeFirstWord(item)}s`}
                                             </p>
-                                            <p
-                                                className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'outcome' && 'bg-sidebar-background text-sidebar-active'}`}
-                                                onClick={() => handleEvaluationItemChange('outcome')}>
-                                                Outcomes
-                                            </p>
-                                        </div>
+                                        ))}
                                     </div>
                                     <div className="flex justify-end">
                                         {
@@ -412,20 +423,39 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
                                             </button>
                                         }
                                     </div>
+
+
+                                    {/*<div className="flex flex-col justify-between h-full">*/}
+                                    {/*    <div className="flex flex-col ml-3 text-sm gap-1 cursor-pointer py-5">*/}
+                                    {/*        <p*/}
+                                    {/*            className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'goal' && 'bg-sidebar-background text-sidebar-active'} `}*/}
+                                    {/*            onClick={() => handleEvaluationItemChange('goal')}>*/}
+                                    {/*            Goals*/}
+                                    {/*        </p>*/}
+                                    {/*        <p*/}
+                                    {/*            className={`p-1  hover:bg-sidebar-background hover:text-sidebar-active ${selected === 'outcome' && 'bg-sidebar-background text-sidebar-active'}`}*/}
+                                    {/*            onClick={() => handleEvaluationItemChange('outcome')}>*/}
+                                    {/*            Outcomes*/}
+                                    {/*        </p>*/}
+                                    {/*    </div>*/}
+                                    {/*</div>*/}
+
                                 </div>
-                                <div className="flex flex-col p-4 h-full w-full bg-gray-100">
-                                    {
+
+
+                                <div className="basis-[86%] bg-gray-200 p-2">
+                                    <div className="bg-white p-2 w-full">                                    {
                                         payload.map((pay, index) =>
-                                            <div key={index} className="h-full">
+                                            <div key={index} className="w-full">
                                                 {pay.type === selected &&
                                                     <>  {pay.data.length > 0 ?
 
                                                         <div key={index}
-                                                             className="h-full relative bg-white shadow-md w-full p-6">
-                                                            <div className="flex justify-between">
+                                                             className="h-full  w-full">
+                                                            <div className="flex w-full justify-between">
                                                                 <h3 className="p-1 font-semibold">{pay.name}</h3>
                                                                 <div
-                                                                    className="flex justify-center gap-3 items-center p-2">
+                                                                    className=" p-2">
                                                                     <button
                                                                         className={`border flex items-center text-sm text-white  border-gray-300 px-2 py-1 ${inEvaluation ? 'bg-gray-400' : 'bg-gray-500 '} shadow-md hover:shadow-lg transition-shadow duration-300`}
                                                                         onClick={() => handleCollectAction()}
@@ -439,11 +469,7 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
 
                                                                 </div>
                                                             </div>
-                                                            {pay.data?.length > 0 &&
-                                                                <>
-                                                                    {pageRender(pay, pay.type)}
-                                                                </>
-                                                            }
+                                                            {pay.data?.length > 0 && pageRender(pay, pay.type)}
                                                         </div>
                                                         :
                                                         <div className="w-full h-36 flex justify-center items-center ">
@@ -458,6 +484,7 @@ const ProjectEvaluationShow = ({params}: { params: { evaluationId: string } }) =
                                             </div>
                                         )
                                     }
+                                    </div>
                                 </div>
                             </div>
                         </div>
