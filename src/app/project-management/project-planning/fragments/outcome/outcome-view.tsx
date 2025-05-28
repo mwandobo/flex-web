@@ -52,7 +52,6 @@ const OutcomeShow = (
             key={'outcome'}
             project_id={project?.id}
             outcome_id={outcome_id}
-            selectedViewCard="output/show"
             callBackFunction={callBackFunction}
             isHideAdd={project?.status === 'closed'}
         />,

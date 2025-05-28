@@ -56,7 +56,6 @@ const OutputShow = (
             project={project}
             project_id={project_id}
             output_id={output_id}
-            selectedViewCard="activity/show"
             callBackFunction={callBackFunction}
             isHideAdd={project?.status === 'closed'}
         />,
@@ -80,7 +79,6 @@ const OutputShow = (
             project={project}
         />,
     ];
-
 
     return (
         <ProtectedRoute>

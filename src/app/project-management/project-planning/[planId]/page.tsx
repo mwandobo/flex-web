@@ -13,14 +13,16 @@ import Output from "../fragments/output/output";
 import Activity from "../fragments/activity/activity";
 import OutputShow from "../fragments/output/output-view";
 import ActivityShow from "../fragments/activity/activity-view";
-import {getValueFromLocalStorage, setValueLocalStorage} from "@/utils/actions/local-starage";
+import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
+import {useGlobalContextHook} from "@/hooks/useGlobalContextHook";
 
 const ProjectPlanningShow = ({params}: { params: { planId: string } }) => {
     const router = useRouter()
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
-    const [selected, setSelected] = useState('')
-    const [selectedId, setSelectedId] = useState<any>('')
+    const {state, dispatch} = useGlobalContextHook()
+    const selected = state.planningItem.from
+    const selectedId = state.planningItem.id
 
     const token = getValueFromLocalStorage('token')
 
@@ -59,25 +61,16 @@ const ProjectPlanningShow = ({params}: { params: { planId: string } }) => {
 
 
     const handleCardClick = (cardName: string, id?: string) => {
-        setSelected(cardName)
-        setSelectedId(id)
-        setValueLocalStorage('selected_plan_item', cardName)
-        setValueLocalStorage('selected_plan_item_id', id)
+        if (cardName) {
+            dispatch({type: 'SET_PLANNING_ITEM', payload: {id, from: cardName}})
+        }
     }
 
     useEffect(() => {
         // Retrieve values from local storage
-        const selected_plan_item = getValueFromLocalStorage('selected_plan_item');
-        const selected_plan_item_id = getValueFromLocalStorage('selected_plan_item_id');
-
-        if (selected_plan_item?.endsWith('/show')) {
-            const modified_plan_item = selected_plan_item.substring(0, selected_plan_item.lastIndexOf('/show'));
-            setSelected(modified_plan_item);
-            setSelectedId(null);
-        } else {
-            // Update the state with the original values if no modification is needed
-            setSelected(selected_plan_item);
-            setSelectedId(selected_plan_item_id);
+        const selected_plan_item = getValueFromLocalStorage('planningItem');
+        if(selected_plan_item){
+            dispatch({type: 'SET_PLANNING_ITEM', payload: JSON.parse(selected_plan_item)})
         }
     }, []);
 
@@ -116,7 +109,6 @@ const ProjectPlanningShow = ({params}: { params: { planId: string } }) => {
                                             project={data?.project}
                                             isHideAdd={data?.project?.status === 'closed'}
                                             callBackFunction={handleCardClick}
-                                            selectedViewCard={'goal/show'}
                                         />}
                                     {selected === 'goal/show' &&
                                         < GoalShow
@@ -130,7 +122,6 @@ const ProjectPlanningShow = ({params}: { params: { planId: string } }) => {
                                             project_id={data?.project?.id}
                                             callBackFunction={handleCardClick}
                                             goal_id={selectedId}
-                                            selectedViewCard={'outcome/show'}
                                             isHideAdd={true}
                                         />
                                     }
@@ -146,7 +137,6 @@ const ProjectPlanningShow = ({params}: { params: { planId: string } }) => {
                                             project_id={data?.project?.id}
                                             callBackFunction={handleCardClick}
                                             outcome_id={selectedId}
-                                            selectedViewCard={'output/show'}
                                             isHideAdd={true}
                                         />
                                     }
@@ -165,7 +155,6 @@ const ProjectPlanningShow = ({params}: { params: { planId: string } }) => {
                                             project_id={data?.project?.id}
                                             callBackFunction={handleCardClick}
                                             output_id={selectedId}
-                                            selectedViewCard={'activity/show'}
                                             isHideAdd={true}
                                         />
                                     }

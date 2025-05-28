@@ -2,24 +2,21 @@
 
 import ProtectedRoute from '@/components/authentication/protected-route'
 import PageHeader from '@/components/header/page-header'
-import { usePageData } from '@/hooks/use-page/use-page-data'
-import { useGlobalContextHook } from '@/hooks/useGlobalContextHook'
-import React, { useEffect } from 'react'
-import {is} from "date-fns/locale";
+import {usePageData} from '@/hooks/use-page/use-page-data'
+import React from 'react'
 
 interface Props {
     callBackFunction?: (selectedCard: string, id?: string) => void
-    selectedViewCard?: string
     project?: any
     isHideAdd?: boolean
 }
+
 function Goal({
-    project,
-    selectedViewCard,
-    callBackFunction,
+                  project,
+                  callBackFunction,
                   isHideAdd
 
-}: Props) {
+              }: Props) {
     const _deptFormInputs = [
         {
             name: 'name',
@@ -115,13 +112,6 @@ function Goal({
 
     const url = `project_goal?project_id=${project?.id}`
 
-    const { dispatch } = useGlobalContextHook()
-
-    const planningCallbackFunction = () => {
-        if (count || count === 0) {
-            dispatch({ type: "UPDATE_PLANNING_PAYLOAD", payload: { value: count, for: "goals" } })
-        }
-    }
 
     const {
         loading,
@@ -137,8 +127,6 @@ function Goal({
         viewUrl: '/project-management/project-registration/view?id=',
         state_properties: [],
         callBackFunction: callBackFunction,
-        selectedViewCard: selectedViewCard,
-        planningCallbackFunction: planningCallbackFunction,
         isApiV2: true,
         isMaintainViewNavigationForV1: true,
         isHideEdit: isHideAdd,
@@ -155,7 +143,7 @@ function Goal({
                             handleClick={handleClick}
                             subHeader={`Goals / List`}
                             isHideAdd={isHideAdd}
-                            links={[]} />
+                            links={[]}/>
                         {tabular()}
                         {createdForm()}
                     </>

@@ -3,19 +3,16 @@
 import ProtectedRoute from '@/components/authentication/protected-route'
 import PageHeader from '@/components/header/page-header'
 import { usePageData } from '@/hooks/use-page/use-page-data'
-import { useGlobalContextHook } from '@/hooks/useGlobalContextHook'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 interface Props {
     callBackFunction?: (selectedCard: string, id?: string) => void
-    selectedViewCard?: string
     project_id?: string | null
     goal_id?: string | null
     isHideAdd?: boolean
 }
 function Outcome({
     project_id,
-    selectedViewCard,
     callBackFunction,
     goal_id,
     isHideAdd
@@ -116,31 +113,19 @@ function Outcome({
 
     const url = `project_outcome?project_id=${project_id}&goal_id=${goal_id}`
 
-    const { dispatch } = useGlobalContextHook()
-
-    const planningCallbackFunction = () => {
-        if (count || count === 0) {
-            dispatch({ type: "UPDATE_PLANNING_PAYLOAD", payload: { value: count, for: "outcomes" } })
-        }
-    }
-
     const {
         loading,
         createdForm,
         handleClick,
         tabular,
-        count
     } = usePageData({
-
         columns: _columns,
         formInputs: _deptFormInputs,
         url: url,
         modalTitle: 'Project Outcome',
         viewUrl: '/project-management/project-registration/view?id=',
         state_properties: [],
-        planningCallbackFunction: planningCallbackFunction,
         callBackFunction: callBackFunction,
-        selectedViewCard: selectedViewCard,
         isApiV2: true,
         isMaintainViewNavigationForV1: true,
         isHideEdit: isHideAdd,

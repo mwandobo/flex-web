@@ -30,12 +30,12 @@ const NotificationComponent = () => {
     }, []);
 
     const toggleIsDropdownOpen = () => {
-         setIsDropdownOpen(!isDropdownOpen);
+        setIsDropdownOpen(!isDropdownOpen);
     };
 
     const handleNotificationDispatch = (notifications: any[]) => {
         const notificationPayload = {
-            count: notifications.filter((note: any) => !note.is_read ).length,
+            count: notifications.filter((note: any) => !note.is_read).length,
             notifications: notifications,
         };
 
@@ -81,7 +81,7 @@ const NotificationComponent = () => {
             const updatedNotificationResult = await get(`notifications/read-all`, token);
             if (updatedNotificationResult.status === 200) {
                 const newNotes = notes.map(note => {
-                    return {...note, is_read: true }
+                    return {...note, is_read: true}
                 })
                 handleNotificationDispatch(newNotes)
             }
@@ -102,14 +102,27 @@ const NotificationComponent = () => {
     };
 
 
-    const handleViewClick = (path: string) => {
-        if(!path){
+    const handleViewClick = (notificationBody: any) => {
+        console.log('notificationBody', notificationBody )
+        const {redirect_url, group, state_redirect_url, for_id} = notificationBody
+        if (!redirect_url) {
             return ToastComponent({
                 type: 'error',
-                text: 'Department Not Available'
+                text: 'Something went Wrong. Data not Available'
             })
         }
-            router.push(path)
+
+        if (group) {
+            switch (group) {
+                case 'plan':
+                    console.log('case plan')
+                    const redirect_body = {id: for_id, from: state_redirect_url}
+                    dispatch({type: 'SET_PLANNING_ITEM', payload: redirect_body})
+            }
+        }
+
+        router.push(redirect_url)
+        setIsDropdownOpen(false);
     }
 
     return (
@@ -179,9 +192,11 @@ const NotificationComponent = () => {
                                     {/* Expanded details */}
                                     {expandedNotification === index && (
                                         <div className="mt-2 text-gray-700 ps-4">
-                                            <p className={`border  ${index % 2 === 0 ? 'border-gray-200' : 'border-gray-300'} p-1 ps-2 rounded-md`}>{note?.description }</p>
+                                            <p className={`border  ${index % 2 === 0 ? 'border-gray-200' : 'border-gray-300'} p-1 ps-2 rounded-md`}>{note?.description}</p>
                                             <div className={'flex gap-3 justify-between'}>
-                                                <button onClick={() =>handleViewClick(note.redirect_url)} style={{fontSize: '9px'}} className={'text-blue-500 flex gap-1 items-center'}>view <SquareArrowOutUpRight size={10} /></button>
+                                                <button onClick={() => handleViewClick(note)} style={{fontSize: '9px'}}
+                                                        className={'text-blue-500 flex gap-1 items-center'}>view <SquareArrowOutUpRight
+                                                    size={10}/></button>
                                                 <div className={'flex gap-3 justify-end'}>
                                                     <p style={{fontSize: '9px'}}>Sender: {note?.user_name || 'Unknown'}</p>
                                                     <p style={{fontSize: '9px'}}>Sent

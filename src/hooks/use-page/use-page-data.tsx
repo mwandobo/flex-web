@@ -19,8 +19,6 @@ interface Props {
     isFormLoading?: boolean
     state_properties?: any[]
     callBackFunction?: (selectedCard: string, id?: string) => void
-    planningCallbackFunction?: () => void
-    selectedViewCard?: string
     show_assign?: boolean
     permission?: string;
     isHideShow?: boolean;
@@ -48,11 +46,9 @@ export const usePageData = ({
                                 viewUrl,
                                 state_properties,
                                 callBackFunction,
-                                planningCallbackFunction,
                                 addPriceFormInputData,
                                 itHasCustomForm,
                                 customForm,
-                                selectedViewCard,
                                 isFormData,
                                 show_assign,
                                 permission,
@@ -90,7 +86,6 @@ export const usePageData = ({
         incomingModalTitle: modalTitle,
         viewUrl,
         state_properties,
-        selectedViewCard,
         callBackFunction,
         emailNotificationBody,
         from,
@@ -146,11 +141,6 @@ export const usePageData = ({
             fetchData()
         }
     }, [isStateChanged, ...state_properties])
-
-
-    useEffect(() => {
-        planningCallbackFunction && planningCallbackFunction()
-    }, [data])
 
     return {
         loading,

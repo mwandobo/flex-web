@@ -3,28 +3,23 @@
 import ProtectedRoute from '@/components/authentication/protected-route'
 import PageHeader from '@/components/header/page-header'
 import { usePageData } from '@/hooks/use-page/use-page-data'
-import { useGlobalContextHook } from '@/hooks/useGlobalContextHook'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 interface Props {
     callBackFunction?: (selectedCard: string, id?: string) => void
-    selectedViewCard?: string
     project_id?: string | null
     project?: any
     output_id?: string | null
     isHideAdd?: boolean
-
 }
+
 function Activity({
     project_id,
-    selectedViewCard,
     callBackFunction,
     output_id,
     project,
     isHideAdd
-
 }: Props) {
-
     const _deptFormInputs = [
         {
             name: 'name',
@@ -142,14 +137,6 @@ function Activity({
 
     const url = `activity?project_id=${project_id}&output_id=${output_id}`
 
-    const { dispatch } = useGlobalContextHook()
-
-    const planningCallbackFunction = () => {
-        if (count || count === 0) {
-            dispatch({ type: "UPDATE_PLANNING_PAYLOAD", payload: { value: count, for: "activities" } })
-        }
-    }
-
     const {
         loading,
         createdForm,
@@ -164,14 +151,11 @@ function Activity({
         viewUrl: '/project-management/project-planning/view?id=',
         state_properties: [],
         callBackFunction: callBackFunction,
-        planningCallbackFunction: planningCallbackFunction,
-        selectedViewCard: selectedViewCard,
         isMaintainViewNavigationForV1: true,
         isHideEdit: isHideAdd,
         isHideDelete: isHideAdd,
         isApiV2:true
     })
-
 
     return (
         <ProtectedRoute>

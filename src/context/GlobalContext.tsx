@@ -18,6 +18,12 @@ interface viewedItem {
     from: string
 }
 
+
+interface planningItem {
+    id?: string,
+    from: string
+}
+
 interface notificationBody {
     count: string,
     notifications: any
@@ -44,6 +50,7 @@ type State = {
     viewItemRefreshAfterApproval: boolean
     viewedItem
     notificationBody
+    planningItem,
     slideOverContent
     filterBody
     filter: string
@@ -57,6 +64,11 @@ type Action = {
 type Dispatch = (action: Action) => void;
 
 const initialViewedItem: viewedItem = {
+    id: '',
+    from: ''
+}
+
+const initialPlanningItem: planningItem = {
     id: '',
     from: ''
 }
@@ -94,6 +106,7 @@ const initialState: State = {
     isSideBarHidden: true,
     slideOverContent: initialSlideOverContent,
     filterBody: initialFilteringBody,
+    planningItem: initialPlanningItem,
     filter: ''
 };
 
@@ -130,6 +143,12 @@ export const updateContextReducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 viewedItem: action.payload
+            };
+        case 'SET_PLANNING_ITEM':
+            setValueLocalStorage('planningItem',JSON.stringify( action.payload))
+            return {
+                ...state,
+                planningItem: action.payload
             };
         case 'SET_FILTER_BODY':
             setValueLocalStorage('filters',JSON.stringify( action.payload))

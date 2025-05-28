@@ -13,7 +13,6 @@ interface Props {
     viewUrl: string
     state_properties: any[]
     callBackFunction?: (selectedCard: string, id?: string) => void
-    selectedViewCard?: string,
     emailNotificationBody?: any
     from?: string
     isApiV2?: boolean
@@ -34,7 +33,6 @@ export const useCrudOperator = (
         state_properties,
         callBackFunction,
         isFormData,
-        selectedViewCard,
         from,
         itHasCustomForm,
         sliderComponent,
@@ -278,6 +276,8 @@ export const useCrudOperator = (
         if (type.toLowerCase() === 'show') {
             handleNotificationPayload('show');
 
+            console.log('show')
+
 
             if (sliderComponent) {
                 dispatch({
@@ -298,16 +298,17 @@ export const useCrudOperator = (
             }
 
             if (callBackFunction) {
-                if (selectedViewCard === 'goal/show') {
+                const selectedViewCard = state?.planningItem?.from
+
+                if (selectedViewCard === 'goal') {
                     callBackFunction('goal/show', payload?.id);
-                } else if (selectedViewCard === 'outcome/show') {
+                } else if (['outcome', 'goal/show' ].includes(selectedViewCard) ) {
                     callBackFunction('outcome/show', payload?.id);
-                } else if (selectedViewCard === 'output/show') {
+                // } else if (selectedViewCard === 'output') {
+                } else if (['output', 'outcome/show' ].includes(selectedViewCard) ) {
                     callBackFunction('output/show', payload?.id);
-                } else if (selectedViewCard === 'activity/show') {
+                } else if (['activity', 'output/show' ].includes(selectedViewCard) ) {
                     callBackFunction('activity/show', payload?.id);
-                } else if (selectedViewCard === 'task/show') {
-                    callBackFunction('task/show', payload?.id);
                 }
             } else {
                 const newUrl = insertIdBeforeQueryParams(`${viewUrl}`, payload?.id);
