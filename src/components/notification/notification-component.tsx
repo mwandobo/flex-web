@@ -7,6 +7,7 @@ import {useGlobalContextHook} from '@/hooks/useGlobalContextHook';
 import {getValueFromLocalStorage, setValueLocalStorage} from '@/utils/actions/local-starage';
 import {get, remove} from "@/utils/api";
 import {useRouter} from "next/navigation";
+import ToastComponent from "@/components/popup/toast";
 
 const NotificationComponent = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -102,6 +103,12 @@ const NotificationComponent = () => {
 
 
     const handleViewClick = (path: string) => {
+        if(!path){
+            return ToastComponent({
+                type: 'error',
+                text: 'Department Not Available'
+            })
+        }
             router.push(path)
     }
 
