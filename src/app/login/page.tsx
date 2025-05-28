@@ -1,4 +1,4 @@
-"use client"
+ "use client"
 
 import React, {useState} from 'react'
 import {useRouter} from 'next/navigation'
@@ -123,41 +123,43 @@ export default function LoginPage() {
             loading={loading}
             title={'Welcome Back'}
             subtitle={'Enter your Email and Password to Access your Account'}
-            subtitle1={'Log in to access your CRM dashboard and manage your projects.'}
         >
-                <>
-                    <TextFieldComponent
-                        placeholder={'email'}
-                        from={'email'}
-                        label={'Email'}
-                        value={email}
-                        onChange={handleChange}
-                        isError={false}
-                        errorMessage={''}
-                        isColumn={true}
-                    />
-                    <TextFieldComponent
-                        placeholder={'password'}
-                        from={'password'}
-                        label={"Password"}
-                        value={password}
-                        onChange={handleChange}
-                        isError={false}
-                        type='password'
-                        isColumn={true}
-                        errorMessage={''}
-                    />
-                    <div className="flex flex-col items-end gap-2 mb-6 ">
-                        <button className={'text-xs hover:text-blue-500 py-2'}  onClick={handleForgotPassword}>Forgot Password?</button>
-                        <div className={'w-full flex justify-center'}>
-                            <button
-                                onClick={handleSubmit}
-                                className={'flex w-[100%] border border-gray-200 p-2 rounded-2xl shadow-lg justify-center bg-gray-200 hover:bg-gray-300  gap-3'}>Login <LogIn/>
-                            </button>
-
-                        </div>
+            <>
+                <TextFieldComponent
+                    placeholder={'email'}
+                    from={'email'}
+                    label={'Email'}
+                    value={email}
+                    onChange={handleChange}
+                    isError={false}
+                    errorMessage={''}
+                    isColumn={true}
+                />
+                <TextFieldComponent
+                    placeholder={'password'}
+                    from={'password'}
+                    label={"Password"}
+                    value={password}
+                    onChange={handleChange}
+                    isError={false}
+                    type='password'
+                    isColumn={true}
+                    errorMessage={''}
+                />
+                <div className="flex flex-col items-end gap-2 mb-6 text-white">
+                    <button className="text-xs hover:underline py-2" onClick={handleForgotPassword}>
+                        Forgot Password?
+                    </button>
+                    <div className="w-full flex justify-center">
+                        <button
+                            onClick={handleSubmit}
+                            className="flex w-full border border-blue-800 p-2 rounded-2xl shadow-lg justify-center bg-[#0c55d7] hover:bg-[#0a4bc2] text-white gap-3">
+                            Login <LogIn/>
+                        </button>
                     </div>
-                </>
+                </div>
+
+            </>
 
         </AuthSkeletonComponent>
     )
