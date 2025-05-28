@@ -123,6 +123,7 @@ export default function LoginPage() {
             loading={loading}
             title={'Welcome Back'}
             subtitle={'Enter your Email and Password to Access your Account'}
+            subtitle1={'Log in to access your CRM dashboard and manage your projects.'}
         >
                 <>
                     <TextFieldComponent
