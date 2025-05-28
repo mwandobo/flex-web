@@ -103,7 +103,6 @@ const NotificationComponent = () => {
 
 
     const handleViewClick = (notificationBody: any) => {
-        console.log('notificationBody', notificationBody )
         const {redirect_url, group, state_redirect_url, for_id} = notificationBody
         if (!redirect_url) {
             return ToastComponent({
@@ -115,7 +114,6 @@ const NotificationComponent = () => {
         if (group) {
             switch (group) {
                 case 'plan':
-                    console.log('case plan')
                     const redirect_body = {id: for_id, from: state_redirect_url}
                     dispatch({type: 'SET_PLANNING_ITEM', payload: redirect_body})
             }

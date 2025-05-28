@@ -32,8 +32,6 @@ const GoalShow = (
 ) => {
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
-    console.log('project project project', project)
-
     const token = getValueFromLocalStorage('token')
 
     useEffect(() => {

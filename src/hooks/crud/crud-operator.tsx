@@ -275,10 +275,6 @@ export const useCrudOperator = (
 
         if (type.toLowerCase() === 'show') {
             handleNotificationPayload('show');
-
-            console.log('show')
-
-
             if (sliderComponent) {
                 dispatch({
                     type: 'UPDATE_SLIDE_OVER_CONTENT',
