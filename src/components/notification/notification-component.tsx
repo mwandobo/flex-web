@@ -116,6 +116,12 @@ const NotificationComponent = () => {
                 case 'plan':
                     const redirect_body = {id: for_id, from: state_redirect_url}
                     dispatch({type: 'SET_PLANNING_ITEM', payload: redirect_body})
+                    break;
+                case 'procurement':
+                     const body = {id: for_id, from: state_redirect_url}
+                    dispatch({type: "SET_SUB_SIDEBAR_ITEM", payload: state_redirect_url});
+                    dispatch({type: "SET_SUB_VIEW_ITEM", payload:body });
+                    break;
             }
         }
 

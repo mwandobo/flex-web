@@ -146,6 +146,8 @@ export const usePopulateTable = ({
                             return true;
                         }
 
+
+
                         return !(!obj?.status || obj?.status === 'pending');
                     };
 
@@ -158,8 +160,8 @@ export const usePopulateTable = ({
                         isShowAddPriceButton={isShowAddPriceButton}
                         permission={permission}
                         hide_view={isHideShow}
-                        hide_edit={isHideEdit || hideButton()}
-                        hide_delete={isHideDelete || hideButton()}
+                        hide_edit={isHideEdit === undefined ? hideButton() : isHideEdit}
+                        hide_delete={isHideDelete === undefined ? hideButton() : isHideDelete}
                     />
 
                     return sortObjectValuesByHeaders(obj, createRowHeaderArray())

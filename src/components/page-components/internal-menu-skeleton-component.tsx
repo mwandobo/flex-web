@@ -25,8 +25,6 @@ function InternalMenuSkeletonComponent({pageItems, title, subtitle}: InventoryPr
 
     const handleMonitoringItemChange = (item: string) => {
         dispatch({type: "SET_SUB_SIDEBAR_ITEM", payload: item});
-        setValueLocalStorage('selected_sub_sidebar_item', item);
-        setValueLocalStorage('sub_view_item', JSON.stringify({id: '', from: ''}));
         dispatch({type: "SET_SUB_VIEW_ITEM", payload: {id: '', from: ''}});
     };
 

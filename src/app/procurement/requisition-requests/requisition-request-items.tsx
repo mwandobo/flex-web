@@ -48,8 +48,6 @@ interface Props {
 function RequisitionRequestItem({requisition_request_id, status}: Props) {
     const permission = 'requisition_request_item'
 
-    console.log('status',status)
-
     const {
         loading,
         createdForm,
@@ -68,7 +66,7 @@ function RequisitionRequestItem({requisition_request_id, status}: Props) {
         from: 'requisition-requests',
         isHideShow:true,
         isHideDelete:true,
-        isHideEdit: status !== 'pending'
+        isHideEdit:false
     })
 
     return (
@@ -82,7 +80,6 @@ function RequisitionRequestItem({requisition_request_id, status}: Props) {
                                 title={"Requested Items"}
                                 handleClick={handleClick}
                                 isShowAddButton={false}
-
                                />
                             {tabular()}
                             {createdForm()}
