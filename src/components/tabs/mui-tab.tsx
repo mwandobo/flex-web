@@ -45,7 +45,7 @@ interface Props {
 
 export default function MuiTab({
     children,
-    nodes,
+    nodes ,
     columns
 }: Props) {
     const [value, setValue] = React.useState(0);

@@ -45,4 +45,10 @@ export const EMPLOYEE_APPROVAL_SLUG = "employee_approval"
 export const EXTERNAL_USER_APPROVAL_SLUG = "external_user_approval"
 export const ROLE_APPROVAL_SLUG = "role_approval"
 
+export const ACTIVITY_APPROVAL_SLUG = "activity_approval"
+export const OUTPUT_APPROVAL_SLUG = "output_approval"
+export const OUTCOME_APPROVAL_SLUG = "outcome_approval"
+export const GOAL_APPROVAL_SLUG = "goal_approval"
+
+
 // permissions

@@ -7,13 +7,15 @@ import ViewCardComponent from "@/components/card/view.card.component";
 import PageHeader from "@/components/header/page-header";
 import MuiTab from "@/components/tabs/mui-tab";
 import { get } from "@/utils/api";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Activity from "../activity/activity";
 import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
 import { statusFormatter } from "@/utils/actions/status-formatter";
 import FormattedMoney from "@/components/moneyFormater";
 import Assignment from "@/app/project-management/fragments/assignment";
 import AssumptionConstraint from "@/app/project-management/fragments/assumption_constraint";
+import {useApprovalsAndButtonsHook} from "@/hooks/useApprovalAndButtons.hook";
+import {OUTPUT_APPROVAL_SLUG} from "@/utils/constant";
 
 interface Props {
     callBackFunction?: (selectedCard: string, id?: string) => void
@@ -35,6 +37,22 @@ const OutputShow = (
     const [data, setData] = useState<any>([])
     const [loading, setLoading] = useState(false)
     const token = getValueFromLocalStorage('token')
+
+    const {
+        isNeedApprove,
+        isLastLevel,
+        latestApproveStatus,
+        approvalsAndButtonsWrapper,
+    } = useApprovalsAndButtonsHook({
+        approval_slug: OUTPUT_APPROVAL_SLUG,
+        from: OUTPUT_APPROVAL_SLUG,
+        from_id: output_id
+    })
+
+    const approveStatus = () => {
+        if (data.status !== 'pending') return true;
+        return (!isNeedApprove || (isLastLevel && latestApproveStatus === 'approve'))
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -80,6 +98,12 @@ const OutputShow = (
         />,
     ];
 
+    const buttonsBody = () => {
+        return <>
+
+        </>
+    }
+
     return (
         <ProtectedRoute>
             {
@@ -108,18 +132,19 @@ const OutputShow = (
                                 ]}
                                 titleA="Project Outputs"
                                 titleB={data?.name}
+                                OptionalElement={approvalsAndButtonsWrapper({buttonBody: buttonsBody()})}
                             />
                         </MuiCardComponent>
                         {/* {Number(passedData?.status) === 1 && */}
                         <MuiCardComponent>
                             <MuiTab
-                                columns={[
+                                columns={ approveStatus() && [
                                     "Activities",
                                     "Indicators",
                                     "Assignments",
                                     "Assumptions",
                                 ]}
-                                nodes={nodes}
+                                nodes={ approveStatus() && nodes}
                             >
                             </MuiTab>
                         </MuiCardComponent>
