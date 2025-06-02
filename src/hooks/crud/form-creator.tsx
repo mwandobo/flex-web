@@ -446,7 +446,7 @@ export const useCrudFormCreator = ({
 
     }, [modalBodyArray, ...state_properties])
 
-    const createdForm = (size?: string) => {
+    const createdForm = (size?: any) => {
 
         return < CrudFormComponent
             isModalOpen={isModalOpen}

@@ -136,12 +136,12 @@ export const updateContextReducer = (state: State, action: Action): State => {
             };
         case 'SET_SUB_SIDEBAR_ITEM':
             setValueLocalStorage('selected_sub_sidebar_item', action.payload);
-            setValueLocalStorage('sub_view_item', JSON.stringify({id: '', from: ''}));
             return {
                 ...state,
                 selectedSubSidebarItem: action.payload
             };
         case 'SET_SUB_VIEW_ITEM':
+            setValueLocalStorage('sub_view_item', JSON.stringify(action.payload));
             return {
                 ...state,
                 viewedItem: action.payload

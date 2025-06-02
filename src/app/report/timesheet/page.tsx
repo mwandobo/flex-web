@@ -10,9 +10,9 @@ import TimesheetPersonnel from "@/app/report/timesheet/timesheet-personnel";
 
 function Timesheet() {
     const nodes: React.ReactNode[] = [
-        <TimesheetPersonnel
+        <TimesheetPersonnel key={'personnel'}
         />,
-        <TimesheetDepartment
+        <TimesheetDepartment key={'department'}
         />,
     ];
 
