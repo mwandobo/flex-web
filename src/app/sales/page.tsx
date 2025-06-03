@@ -21,8 +21,8 @@ const SalesItems = [
     {name: 'rfq', title: 'Rfq', item: <SalesRfq/>, itemView: <SalesRfqView/>},
     {name: 'customer', title: 'Customers', item: <Customer/>, itemView: <CustomerView/>},
     {name: 'quotation', title: 'Quotations', item: <SalesQuotation/>, itemView: <SalesQuotationView/>},
-    {name: 'Orders', title: 'Orders', item: <Order/>, itemView: <OrderView/>},
-    {name: 'Pricing', title: 'Pricing', item: <Pricing/>, itemView: <PricingView/>},
+    {name: 'order', title: 'Orders', item: <Order/>, itemView: <OrderView/>},
+    {name: 'pricing', title: 'Pricing', item: <Pricing/>, itemView: <PricingView/>},
     {name: 'Sold Items', title: 'Sold Items', item: <SoldItems/>, itemView: <SoldItemsView/>},
 ];
 
