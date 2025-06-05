@@ -206,7 +206,7 @@ export const usePageData = ({
         } else {
             fetchData()
         }
-    }, [rowsPerPage, filterKey, page])
+    }, [rowsPerPage, filterKey, page, url])
 
 
 
