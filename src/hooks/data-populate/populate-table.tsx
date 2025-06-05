@@ -3,6 +3,7 @@ import FormattedMoney from "@/components/moneyFormater"
 import ProgressStatus from "@/components/status/progress"
 import MuiTable from "@/components/tables/mui-table"
 import {getApprovals} from "@/utils/approve/approvalHelper";
+import MuiTableFrontEndPagination from "@/components/tables/mui-table-front-end-pagination";
 
 interface Props {
     columns: any[]
@@ -24,6 +25,8 @@ interface Props {
     updatePage: (page: number) => void
     updateRowsPerPage: (rowsPerPage: number) => void
     updateFilterKey: (filterKey: string) => void
+    tablePaginationType?: string
+
 }
 
 export const usePopulateTable = ({
@@ -45,8 +48,8 @@ export const usePopulateTable = ({
                                      updateRowsPerPage,
                                      filterKey,
                                      updateFilterKey,
-                                     totalRecords
-
+                                     totalRecords,
+                                     tablePaginationType
                                  }: Props) => {
 
 
@@ -188,7 +191,14 @@ export const usePopulateTable = ({
 
     const tabular = () => {
         return (
-            <div className={'w-full'}>
+            <div className={'w-full'}>{
+                tablePaginationType === 'front-end' ?
+                    <MuiTableFrontEndPagination
+
+                        data={createRowData()}
+                        columns={createRowHeader()}
+                    /> :
+
                 <MuiTable
                     data={createRowData()}
                     columns={createRowHeader()}
@@ -200,6 +210,8 @@ export const usePopulateTable = ({
                     updateFilterKey={updateFilterKey}
                     totalRecords={totalRecords}
                 />
+
+            }
             </div>
         )
     }

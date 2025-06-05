@@ -83,7 +83,7 @@ interface Props {
     from?: string;
 }
 
-export default function MuiTable({ columns, data, from }: Props) {
+export default function MuiTableFrontEndPagination({ columns, data, from }: Props) {
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<number>(-1); // Changed to use column index
     const [selected, setSelected] = React.useState<readonly number[]>([]);

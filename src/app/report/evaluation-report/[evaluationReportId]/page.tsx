@@ -8,6 +8,7 @@ import { getValueFromLocalStorage, } from "@/utils/actions/local-starage";
 import { useGlobalContextHook } from "@/hooks/useGlobalContextHook";
 import MuiTable from "@/components/tables/mui-table";
 import CrudButtonsComponent from "@/components/crud-operator-buttons";
+import MuiTableFrontEndPagination from "@/components/tables/mui-table-front-end-pagination";
 
 const EvaluationReportShow = ({ params }: { params: { evaluationReportId: string } }) => {
     const router = useRouter()
@@ -120,7 +121,7 @@ const EvaluationReportShow = ({ params }: { params: { evaluationReportId: string
                         />
                         <div className="bg-white ">
                             <h3>Indicator Evaluation</h3>
-                            <MuiTable
+                            <MuiTableFrontEndPagination
                                 data={customTableFunction()}
                                 columns={columns}
                             />

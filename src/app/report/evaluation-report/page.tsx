@@ -62,7 +62,8 @@ function EvaluationReport() {
         state_properties: [],
         permission: permission,
         isHideDelete: true,
-        isHideEdit: true
+        isHideEdit: true,
+        tablePaginationType: 'front-end'
     })
 
 

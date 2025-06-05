@@ -36,7 +36,8 @@ interface Props {
     itHasCustomForm?: boolean
     customForm?: ReactNode;
     isFormData?: boolean,
-    sliderComponent?: any
+    sliderComponent?: any,
+    tablePaginationType?: 'front-end' | 'back-end'
 }
 
 export const usePageData = ({
@@ -64,7 +65,8 @@ export const usePageData = ({
                                 isApiV2,
                                 isMaintainViewNavigationForV1,
                                 approval_slug,
-                                sliderComponent
+                                sliderComponent,
+                                tablePaginationType = 'back-end'
                             }: Props
 ) => {
     const [loading, setLoading] = useState(false)
@@ -134,7 +136,8 @@ export const usePageData = ({
         updateRowsPerPage,
         updatePage,
         updateFilterKey,
-        totalRecords
+        totalRecords,
+        tablePaginationType
     })
 
     const ensureURL = (url: string, baseURL: string) => {
