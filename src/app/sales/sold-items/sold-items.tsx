@@ -76,6 +76,7 @@ function SoldItems() {
         isHideDelete:true,
         isHideEdit: true,
         from: 'item',
+        tablePaginationType: 'front-end'
         // approval_slug: ITEM_APPROVAL_SLUG
     })
 
