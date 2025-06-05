@@ -169,28 +169,13 @@ export const usePageData = ({
                 }
 
                 const finalUrl = parsedUrl.toString();
-
-                console.log('finalUrl', finalUrl)
-
                 const res = await get(finalUrl)
-
-
-
                 if (res.status === 200) {
-
-
-
                     await gracefulApprovalUpdater(from, approval_slug)
-
-
                     setData(res.data.data)
-
-
-                    //
                     if (res.data?.pagination?.total) {
                         setTotalRecords(res.data?.pagination?.total)
                     }
-
                     setLoading(false)
                 }
 
@@ -207,9 +192,6 @@ export const usePageData = ({
             fetchData()
         }
     }, [rowsPerPage, filterKey, page, url])
-
-
-
 
     return {
         loading,
