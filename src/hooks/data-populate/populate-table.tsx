@@ -17,6 +17,13 @@ interface Props {
     isShowAddPriceButton?: boolean;
     from?: string;
     approval_slug?: string;
+    page: number;
+    filterKey?: string;
+    rowsPerPage: number;
+    totalRecords?: number;
+    updatePage: (page: number) => void
+    updateRowsPerPage: (rowsPerPage: number) => void
+    updateFilterKey: (filterKey: string) => void
 }
 
 export const usePopulateTable = ({
@@ -31,8 +38,20 @@ export const usePopulateTable = ({
                                      isHideActions,
                                      isShowAddPriceButton,
                                      approval_slug,
-                                     from
+                                     from,
+                                     page,
+                                     rowsPerPage,
+                                     updatePage,
+                                     updateRowsPerPage,
+                                     filterKey,
+                                     updateFilterKey,
+                                     totalRecords
+
                                  }: Props) => {
+
+    console.log('totalRecords', totalRecords)
+
+
     const createRowHeader = () => {
         let newColumns: any[] = []
 
@@ -147,7 +166,6 @@ export const usePopulateTable = ({
                         }
 
 
-
                         return !(!obj?.status || obj?.status === 'pending');
                     };
 
@@ -176,6 +194,13 @@ export const usePopulateTable = ({
                 <MuiTable
                     data={createRowData()}
                     columns={createRowHeader()}
+                    page={page}
+                    rowsPerPage={rowsPerPage}
+                    updatePage={updatePage}
+                    updateRowsPerPage={updateRowsPerPage}
+                    filterKey={filterKey}
+                    updateFilterKey={updateFilterKey}
+                    totalRecords={totalRecords}
                 />
             </div>
         )

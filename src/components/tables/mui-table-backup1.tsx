@@ -9,9 +9,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
-import {visuallyHidden} from '@mui/utils';
-import {ReusableButton} from "@/components/button/reusable-button";
-import {Search} from "lucide-react";
+import { visuallyHidden } from '@mui/utils';
 
 type Order = 'asc' | 'desc';
 
@@ -25,7 +23,7 @@ interface EnhancedTableProps {
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-    const {order, orderBy, onRequestSort, columns} = props;
+    const { order, orderBy, numSelected, rowCount, onRequestSort, columns } = props;
 
     const createSortHandler = (property: number) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
@@ -83,34 +81,15 @@ interface Props {
     columns: any[];
     data: any[][];
     from?: string;
-    page: number;
-    filterKey?: string;
-    totalRecords?: number;
-    rowsPerPage: number;
-    updatePage: (page: number) => void
-    updateRowsPerPage: (rowsPerPage: number) => void
-    updateFilterKey: (filterKey: string) => void
 }
 
-export default function MuiTable({
-                                     columns,
-                                     data,
-                                     from,
-                                     rowsPerPage,
-                                     page,
-                                     updateRowsPerPage,
-                                     updatePage,
-                                     updateFilterKey,
-                                     totalRecords,
-    filterKey
-                                 }: Props) {
+export default function MuiTable({ columns, data, from }: Props) {
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<number>(-1); // Changed to use column index
     const [selected, setSelected] = React.useState<readonly number[]>([]);
-    const [searchKey, setSearchKey] = React.useState('');
+    const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
-
-
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -122,11 +101,12 @@ export default function MuiTable({
     };
 
     const handleChangePage = (event: unknown, newPage: number) => {
-        updatePage(newPage)
+        setPage(newPage);
     };
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        updateRowsPerPage(parseInt(event.target.value, 10));
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
     };
 
     const isSelected = (index: number) => selected.indexOf(index) !== -1;
@@ -147,45 +127,11 @@ export default function MuiTable({
     }, [data, order, orderBy, page, rowsPerPage]);
 
     return (
-        <Box sx={{width: '100%', marginTop: '10px'}}>
-            <div className={'flex w-full justify-end mb-2'}>
-                <div className={'flex w-1/4 gap-2'}>
-                    <input
-                        type="text"
-                        placeholder="Search..."
-                        style={{
-                            padding: '6px 12px',
-                            fontSize: '14px',
-                            borderRadius: '4px',
-                            border: '1px solid #ccc',
-                            flex: 1,
-                        }}
-                        value={searchKey}
-                        onChange={(e) => setSearchKey(e.target.value)}
-                    />
-
-                    <ReusableButton
-                        name={'Search'}
-                        onClick={() => updateFilterKey(searchKey)}
-                        rounded={'md'}
-                        padding={'p-3'}
-                        shadow={'shadow-md'}
-                        bg_color={'bg-gray-50'}
-                        hover={'hover:bg-gray-200 hover:border-gray-400'}
-                        hover_text={'hover:text-gray-900 hover:font-semibold'}
-                        border={'border border-gray-300'}
-                        text_color={'text-gray-700'}
-                    >
-                        <Search size={13}/>
-                    </ReusableButton>
-
-                </div>
-
-            </div>
-            <Paper sx={{width: '100%', mb: 2}}>
+        <Box sx={{ width: '100%', marginTop: '10px' }}>
+            <Paper sx={{ width: '100%', mb: 2 }}>
                 <TableContainer>
                     <Table
-                        sx={{minWidth: `${from === 'monitoring' ? 50 : 750}`}}
+                        sx={{ minWidth: `${from === 'monitoring' ? 50 : 750}` }}
                         aria-labelledby="tableTitle"
                         size={'small'}
                     >
@@ -206,13 +152,13 @@ export default function MuiTable({
                                     tabIndex={-1}
                                     key={index}
                                     selected={isSelected(index)}
-                                    sx={{padding: '50px'}}
+                                    sx={{ padding: '50px' }}
                                 >
                                     <TableCell
                                         component="th"
                                         id={`enhanced-table-checkbox-${index}`}
                                         scope="row"
-                                        sx={{marginRight: "1px solid black"}}
+                                        sx={{ marginRight: "1px solid black" }}
                                     >
                                         {page * rowsPerPage + index + 1}
                                     </TableCell>
@@ -231,8 +177,8 @@ export default function MuiTable({
                                 </TableRow>
                             ))}
                             {emptyRows > 0 && (
-                                <TableRow style={{height: (dense ? 33 : 53) * emptyRows}}>
-                                    <TableCell colSpan={columns.length + 1}/>
+                                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                                    <TableCell colSpan={columns.length + 1} />
                                 </TableRow>
                             )}
                         </TableBody>
@@ -241,7 +187,7 @@ export default function MuiTable({
                 {from !== "monitoring" && <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
-                    count={totalRecords ?? data.length}
+                    count={data.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}

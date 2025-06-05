@@ -5,3 +5,6 @@ email sent successfully notes
 
 custom hide action table
 slider in mobile
+
+
+persist search key
