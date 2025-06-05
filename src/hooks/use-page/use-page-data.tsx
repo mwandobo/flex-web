@@ -70,7 +70,7 @@ export const usePageData = ({
     const [loading, setLoading] = useState(false)
     const [data, setData] = useState<any[]>([])
     const token = getValueFromLocalStorage('token', null)
-    const [page, setPage] = React.useState(0);
+    const [page, setPage] = React.useState(1);
     const [totalRecords, setTotalRecords] = React.useState(0);
     const [filterKey, setFilterKey] = useState('');
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -167,13 +167,20 @@ export const usePageData = ({
 
                 const finalUrl = parsedUrl.toString();
 
-                const res = await get(finalUrl, token)
+                console.log('finalUrl', finalUrl)
+
+                const res = await get(finalUrl)
+
+
 
                 if (res.status === 200) {
 
+
+
                     await gracefulApprovalUpdater(from, approval_slug)
+
+
                     setData(res.data.data)
-                    setTotalRecords(12)
 
 
                     //

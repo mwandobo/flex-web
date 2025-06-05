@@ -108,7 +108,6 @@ export default function MuiTable({
     const [orderBy, setOrderBy] = React.useState<number>(-1); // Changed to use column index
     const [selected, setSelected] = React.useState<readonly number[]>([]);
     const [searchKey, setSearchKey] = React.useState('');
-    const [dense, setDense] = React.useState(false);
 
 
 
@@ -122,7 +121,7 @@ export default function MuiTable({
     };
 
     const handleChangePage = (event: unknown, newPage: number) => {
-        updatePage(newPage)
+        updatePage(++newPage)
     };
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,10 +130,8 @@ export default function MuiTable({
 
     const isSelected = (index: number) => selected.indexOf(index) !== -1;
 
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
-
     const visibleRows = React.useMemo(() => {
-        const sortedData = [...data].sort((a, b) => {
+        return [...data].sort((a, b) => {
             const valueA = String(a[orderBy] || '').toLowerCase();
             const valueB = String(b[orderBy] || '').toLowerCase();
 
@@ -143,7 +140,7 @@ export default function MuiTable({
             }
             return valueA.localeCompare(valueB);
         });
-        return sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
     }, [data, order, orderBy, page, rowsPerPage]);
 
     return (
@@ -214,7 +211,7 @@ export default function MuiTable({
                                         scope="row"
                                         sx={{marginRight: "1px solid black"}}
                                     >
-                                        {page * rowsPerPage + index + 1}
+                                        {(page - 1) * rowsPerPage + index + 1}
                                     </TableCell>
                                     {row.map((cell, cellIndex) => (
                                         <TableCell
@@ -230,11 +227,6 @@ export default function MuiTable({
                                     ))}
                                 </TableRow>
                             ))}
-                            {emptyRows > 0 && (
-                                <TableRow style={{height: (dense ? 33 : 53) * emptyRows}}>
-                                    <TableCell colSpan={columns.length + 1}/>
-                                </TableRow>
-                            )}
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -243,7 +235,7 @@ export default function MuiTable({
                     component="div"
                     count={totalRecords ?? data.length}
                     rowsPerPage={rowsPerPage}
-                    page={page}
+                    page={(page -1)}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />}

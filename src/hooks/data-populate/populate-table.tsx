@@ -49,8 +49,6 @@ export const usePopulateTable = ({
 
                                  }: Props) => {
 
-    console.log('totalRecords', totalRecords)
-
 
     const createRowHeader = () => {
         let newColumns: any[] = []
