@@ -5,7 +5,6 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import HydrationZustand from "./Hydrated";
 import {GlobalContextProvider} from "@/context/GlobalContext";
-import {getValueFromLocalStorage} from "@/utils/actions/local-starage";
 import React from "react";
 import MainComponentWrapper from "@/components/sidebar/main-component-wrapper";
 import Sidebar from "@/components/sidebar/sidebar";
