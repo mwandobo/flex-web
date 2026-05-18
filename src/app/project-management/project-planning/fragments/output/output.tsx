@@ -121,7 +121,6 @@ function Output({
         createdForm,
         handleClick,
         tabular,
-        count
     } = usePageData({
 
         columns: _columns,

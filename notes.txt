@@ -1,0 +1,4 @@
+run the consumer.js from dist folder
+using node u can just do as folllows
+
+ node dist/consumer.js

@@ -318,7 +318,7 @@ export const useCrudOperator = (
         if (type.toLowerCase() === 'assign') {
             router.push(`roles/assign/${payload?.id}`);
         }
-    };
+    }; 
 
     return {
         handleClick,

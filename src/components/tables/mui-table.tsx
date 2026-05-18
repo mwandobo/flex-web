@@ -83,13 +83,13 @@ interface Props {
     columns: any[];
     data: any[][];
     from?: string;
-    page: number;
+    page?: number;
     filterKey?: string;
     totalRecords?: number;
-    rowsPerPage: number;
-    updatePage: (page: number) => void
-    updateRowsPerPage: (rowsPerPage: number) => void
-    updateFilterKey: (filterKey: string) => void
+    rowsPerPage?: number;
+    updatePage?: (page: number) => void
+    updateRowsPerPage?: (rowsPerPage: number) => void
+    updateFilterKey?: (filterKey: string) => void
 }
 
 export default function MuiTable({

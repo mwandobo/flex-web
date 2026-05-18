@@ -37,70 +37,53 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var amqp = require('amqplib');
 var WebSocket1 = require('ws');
 var wss = new WebSocket1.Server({ port: 8083 }); // WebSocket server on port 8080
-function connectToRabbitMQ() {
-    return __awaiter(this, void 0, void 0, function () {
-        var connection, channel_1, queue, error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 4, , 5]);
-                    return [4 /*yield*/, amqp.connect('amqp://localhost')];
-                case 1:
-                    connection = _a.sent();
-                    return [4 /*yield*/, connection.createChannel()];
-                case 2:
-                    channel_1 = _a.sent();
-                    queue = 'default';
-                    return [4 /*yield*/, channel_1.assertQueue(queue, { durable: true })];
-                case 3:
-                    _a.sent();
-                    console.log('Waiting for messages in %s. To exit press CTRL+C', queue);
-                    channel_1.consume(queue, function (msg) {
-                        if (msg) {
-                            console.log('Received raw message:', msg.content.toString());
-                            try {
-                                var message = JSON.parse(msg.content.toString());
-                                if (message && message.data && message.data.command) {
-                                    var serializedCommand = message.data.command;
-                                    // Extract the message part from the serialized command string
-                                    var regex = /s:\d+:"message";s:\d+:"(.*?)";/;
-                                    var match = regex.exec(serializedCommand);
-                                    if (match && match[1]) {
-                                        var jsonString = match[1]; // Extract the JSON string
-                                        // Now parse it as a JSON object
-                                        try {
-                                            var parsedData_1 = JSON.parse(jsonString);
-                                            // Send it to WebSocket clients
-                                            wss.clients.forEach(function (client) {
-                                                if (client.readyState === WebSocket1.OPEN) {
-                                                    client.send(JSON.stringify(parsedData_1));
-                                                }
-                                            });
-                                        }
-                                        catch (jsonError) {
-                                            console.error('Error parsing JSON:', jsonError);
-                                        }
-                                    }
-                                    else {
-                                        console.error('Failed to extract JSON string from serialized command');
-                                    }
-                                    channel_1.ack(msg);
-                                }
-                            }
-                            catch (error) {
-                                console.error('Error processing message:', error);
-                                channel_1.nack(msg); // Optionally nack the message to retry processing
-                            }
-                        }
-                    });
-                    return [3 /*break*/, 5];
-                case 4:
-                    error_1 = _a.sent();
-                    console.error('Error in consuming message from RabbitMQ', error_1);
-                    return [3 /*break*/, 5];
-                case 5: return [2 /*return*/];
+
+
+async function connectToRabbitMQ() {
+    try {
+        const connection = await amqp.connect('amqp://guest:guest@127.0.0.1:5672/', {
+            heartbeat: 60,
+            timeout: 30000,
+            frameMax: 8192          // ← This is the fix
+        });
+
+        console.log('✅ Successfully connected to RabbitMQ');
+
+        connection.on('error', (err) => {
+            console.error('Connection error:', err);
+        });
+
+        connection.on('close', () => {
+            console.warn('RabbitMQ connection closed. Reconnecting...');
+            setTimeout(connectToRabbitMQ, 5000);
+        });
+
+        const channel = await connection.createChannel();
+        const queue = 'default';
+ 
+        await channel.assertQueue(queue, { durable: true });
+        console.log('✅ Connected and waiting for messages in queue:', queue);
+
+        channel.consume(queue, (msg) => {
+            if (msg) {
+                try {
+                    console.log('Received raw:', msg.content.toString());
+                    
+                    // Your existing parsing logic here...
+                    // (keep the rest of your message processing code)
+
+                    channel.ack(msg);
+                } catch (err) {
+                    console.error('Processing error:', err);
+                    channel.nack(msg, false, true);
+                }
             }
         });
-    });
+
+    } catch (error) {
+        console.error('Failed to connect to RabbitMQ:', error.message);
+        setTimeout(connectToRabbitMQ, 5000);
+    }
 }
+ 
 connectToRabbitMQ();

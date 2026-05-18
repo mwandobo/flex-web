@@ -118,7 +118,6 @@ function Goal({
         createdForm,
         handleClick,
         tabular,
-        count
     } = usePageData({
         columns: _columns,
         formInputs: _deptFormInputs,

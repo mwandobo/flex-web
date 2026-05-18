@@ -191,7 +191,7 @@ export const usePageData = ({
         } else {
             fetchData()
         }
-    }, [rowsPerPage, filterKey, page, url])
+    }, [rowsPerPage, filterKey, page, url, isStateChanged])
 
     return {
         loading,

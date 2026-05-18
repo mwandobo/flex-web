@@ -142,7 +142,6 @@ function Activity({
         createdForm,
         handleClick,
         tabular,
-        count
     } = usePageData({
         columns: _columns,
         formInputs: _deptFormInputs,

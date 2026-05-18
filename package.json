@@ -18,7 +18,7 @@
     "@mui/material": "^5.15.15",
     "@mui/x-date-pickers": "^7.1.1",
     "@tanstack/react-table": "^8.15.3",
-    "amqplib": "^0.10.4",
+    "amqplib": "^2.0.1",
     "apexcharts": "^3.49.0",
     "axios": "^1.6.8",
     "date-fns": "^3.6.0",
@@ -45,6 +45,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.10.8",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
