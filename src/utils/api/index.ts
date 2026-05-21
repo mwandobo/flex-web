@@ -2,7 +2,9 @@ import axios, { AxiosResponse } from 'axios';
 import { getValueFromLocalStorage } from "@/utils/actions/local-starage";
 import requestQueue from "@/utils/rest-queue";
 //
-export const baseURL = 'http://localhost/flex-api/public/api';
+// export const baseURL = 'http://localhost/flex-api/public/api';
+export const baseURL = process.env.NEXT_PUBLIC_BASE_URL as string;
+
 export const nextBaseURL = 'http://localhost:3000';
 
 // Axios instance
